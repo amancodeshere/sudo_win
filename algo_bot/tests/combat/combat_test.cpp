@@ -3,25 +3,27 @@
 #include "sudo_win/config/config.h"
 
 #include "../engine_fixture.h"
-#include "../test_support.h"
 
-namespace sudo_win::test {
+#include <catch2/catch.hpp>
 
-auto run_combat_tests(TestSuite& suite) -> void {
-    auto fixture = EngineFixture{};
-    auto combat = Combat{};
+TEST_CASE("combat risk scoring") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    auto combat = sudo_win::Combat{};
     auto const destination = unswbc::Position{6, 5};
 
     fixture.controller.get_tile({7, 5})->dragon_part
         = unswbc::DragonPart{{7, 5}, 4, unswbc::Team::B, unswbc::Direction::WEST, true};
 
-    auto const collector_risk = combat.destination_risk(fixture.controller, destination, Role::collector);
-    suite.expect(collector_risk == config::score_enemy_head_risk + config::score_enemy_head_late_risk,
-                 "combat applies turn-order risk for an enemy acting later");
+    SECTION("enemy acting later adds turn-order risk") {
+        auto const risk = combat.destination_risk(fixture.controller, destination, sudo_win::Role::collector);
+        CHECK(risk == sudo_win::config::score_enemy_head_risk + sudo_win::config::score_enemy_head_late_risk);
+    }
 
-    auto const champion_risk = combat.destination_risk(fixture.controller, destination, Role::champion);
-    suite.expect(champion_risk == collector_risk * config::score_champion_risk_multiplier,
-                 "champion combat risk is amplified");
+    SECTION("champion risk is amplified") {
+        auto const collector_risk
+            = combat.destination_risk(fixture.controller, destination, sudo_win::Role::collector);
+        auto const champion_risk
+            = combat.destination_risk(fixture.controller, destination, sudo_win::Role::champion);
+        CHECK(champion_risk == collector_risk * sudo_win::config::score_champion_risk_multiplier);
+    }
 }
-
-} // namespace sudo_win::test

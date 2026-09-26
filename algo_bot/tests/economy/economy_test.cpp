@@ -5,24 +5,22 @@
 #include "sudo_win/world/world_model.h"
 
 #include "../engine_fixture.h"
-#include "../test_support.h"
 
-namespace sudo_win::test {
+#include <catch2/catch.hpp>
 
-auto run_economy_tests(TestSuite& suite) -> void {
-    auto fixture = EngineFixture{};
+TEST_CASE("economy destination scoring") {
+    auto fixture = sudo_win::test::EngineFixture{};
     auto const destination = unswbc::Position{6, 5};
     fixture.controller.get_tile(destination)->pearl = true;
     fixture.controller.get_tile(destination)->pearl_time = 3;
 
-    auto world = WorldModel{fixture.game};
+    auto world = sudo_win::WorldModel{fixture.game};
     world.update(fixture.controller, fixture.game);
-    auto economy = Economy{};
-    auto pathfinding = Pathfinding{};
+    auto economy = sudo_win::Economy{};
+    auto pathfinding = sudo_win::Pathfinding{};
 
-    auto const score = economy.score_destination(fixture.controller, world, pathfinding, destination);
-    suite.expect(score >= config::score_immediate_pearl,
-                 "economy gives immediate pearls dominant positive value");
+    SECTION("immediate pearls receive dominant positive value") {
+        auto const score = economy.score_destination(fixture.controller, world, pathfinding, destination);
+        CHECK(score >= sudo_win::config::score_immediate_pearl);
+    }
 }
-
-} // namespace sudo_win::test

@@ -65,9 +65,11 @@ target_link_libraries(sudo_win PRIVATE sudo_win_bot)
 
 enable_testing()
 
+add_library(catch2_main STATIC lib/catch2_main.cpp)
+target_include_directories(catch2_main SYSTEM PUBLIC lib)
+
 add_executable(
     sudo_win_tests
-    tests/test_main.cpp
     tests/combat/combat_test.cpp
     tests/economy/economy_test.cpp
     tests/endgame/endgame_test.cpp
@@ -81,6 +83,6 @@ add_executable(
     tests/world/world_model_test.cpp
 )
 target_include_directories(sudo_win_tests PRIVATE tests)
-target_link_libraries(sudo_win_tests PRIVATE sudo_win_bot)
+target_link_libraries(sudo_win_tests PRIVATE sudo_win_bot catch2_main)
 
 add_test(NAME sudo_win_tests COMMAND sudo_win_tests)

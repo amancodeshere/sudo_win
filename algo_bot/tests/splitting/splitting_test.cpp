@@ -1,17 +1,15 @@
 #include "sudo_win/splitting/splitting.h"
 
 #include "../engine_fixture.h"
-#include "../test_support.h"
 
-namespace sudo_win::test {
+#include <catch2/catch.hpp>
 
-auto run_splitting_tests(TestSuite& suite) -> void {
-    auto fixture = EngineFixture{};
+TEST_CASE("stable splitting policy") {
+    auto fixture = sudo_win::test::EngineFixture{};
     fixture.controller.length = 20;
-    auto policy = SplittingPolicy{};
+    auto policy = sudo_win::SplittingPolicy{};
 
-    suite.expect(!policy.consider(fixture.controller, fixture.game, Role::collector, 49).has_value(),
-                 "splitting remains disabled in the stable baseline");
+    SECTION("splitting remains disabled") {
+        CHECK_FALSE(policy.consider(fixture.controller, fixture.game, sudo_win::Role::collector, 49).has_value());
+    }
 }
-
-} // namespace sudo_win::test

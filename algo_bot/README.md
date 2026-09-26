@@ -9,6 +9,9 @@ algo_bot/
 ├── CMakeLists.txt
 ├── bot.toml
 ├── helper.hpp
+├── lib/
+│   ├── catch2/catch.hpp
+│   └── catch2_main.cpp
 ├── include/sudo_win/
 │   ├── bot/
 │   ├── combat/
@@ -56,8 +59,9 @@ cmake --build /tmp/sudo-win-build
 ctest --test-dir /tmp/sudo-win-build --output-on-failure
 ```
 
-The CMake build enables strict warnings, treats warnings as errors, and enables
-AddressSanitizer and UndefinedBehaviorSanitizer in debug-style builds.
+The CMake build enables strict warnings, treats warnings as errors, enables
+AddressSanitizer and UndefinedBehaviorSanitizer in debug-style builds, and runs
+the Catch2 test suite through CTest.
 
 ## Run a Match
 

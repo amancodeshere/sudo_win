@@ -3,32 +3,33 @@
 #include "sudo_win/config/config.h"
 
 #include "../engine_fixture.h"
-#include "../test_support.h"
 
-namespace sudo_win::test {
+#include <catch2/catch.hpp>
 
-auto run_endgame_tests(TestSuite& suite) -> void {
-    auto fixture = EngineFixture{};
-    auto endgame = Endgame{};
+TEST_CASE("endgame phase and survival weighting") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    auto endgame = sudo_win::Endgame{};
 
-    fixture.game.round_num = config::endgame_start_round - 1;
-    suite.expect(!endgame.active(fixture.game), "endgame remains inactive before its threshold");
+    SECTION("phase activates at the configured threshold") {
+        fixture.game.round_num = sudo_win::config::endgame_start_round - 1;
+        CHECK_FALSE(endgame.active(fixture.game));
 
-    fixture.game.round_num = config::endgame_start_round;
-    suite.expect(endgame.active(fixture.game), "endgame activates at its threshold");
+        fixture.game.round_num = sudo_win::config::endgame_start_round;
+        CHECK(endgame.active(fixture.game));
+    }
 
-    auto const collector_score = endgame.score_destination(fixture.controller,
-                                                           fixture.game,
-                                                           Role::collector,
-                                                           10,
-                                                           -100);
-    auto const champion_score = endgame.score_destination(fixture.controller,
-                                                          fixture.game,
-                                                          Role::champion,
-                                                          10,
-                                                          -100);
-    suite.expect(champion_score == collector_score * 2,
-                 "champion receives stronger endgame survival weighting");
+    SECTION("champion receives stronger survival weighting") {
+        fixture.game.round_num = sudo_win::config::endgame_start_round;
+        auto const collector_score = endgame.score_destination(fixture.controller,
+                                                               fixture.game,
+                                                               sudo_win::Role::collector,
+                                                               10,
+                                                               -100);
+        auto const champion_score = endgame.score_destination(fixture.controller,
+                                                              fixture.game,
+                                                              sudo_win::Role::champion,
+                                                              10,
+                                                              -100);
+        CHECK(champion_score == collector_score * 2);
+    }
 }
-
-} // namespace sudo_win::test

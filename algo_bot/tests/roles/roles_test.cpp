@@ -1,22 +1,24 @@
 #include "sudo_win/roles/roles.h"
 
 #include "../engine_fixture.h"
-#include "../test_support.h"
 
-namespace sudo_win::test {
+#include <catch2/catch.hpp>
 
-auto run_roles_tests(TestSuite& suite) -> void {
-    auto fixture = EngineFixture{};
-    auto roles = RoleManager{};
+TEST_CASE("role assignment and scoring") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    auto roles = sudo_win::RoleManager{};
 
-    suite.expect(roles.choose_role(fixture.controller, fixture.game) == Role::champion,
-                 "dragon zero begins as champion");
+    SECTION("dragon zero begins as champion") {
+        CHECK(roles.choose_role(fixture.controller, fixture.game) == sudo_win::Role::champion);
+    }
 
-    fixture.controller.head.dragon_id = 1;
-    suite.expect(roles.choose_role(fixture.controller, fixture.game) == Role::scout,
-                 "non-champion IDs receive deterministic roles");
-    suite.expect(roles.score_move(Role::scout, 0, 3, 0) > roles.score_move(Role::collector, 0, 3, 0),
-                 "scouts value exploration frontiers more than collectors");
+    SECTION("non-champion IDs receive deterministic roles") {
+        fixture.controller.head.dragon_id = 1;
+        CHECK(roles.choose_role(fixture.controller, fixture.game) == sudo_win::Role::scout);
+    }
+
+    SECTION("scouts value exploration more than collectors") {
+        CHECK(roles.score_move(sudo_win::Role::scout, 0, 3, 0)
+              > roles.score_move(sudo_win::Role::collector, 0, 3, 0));
+    }
 }
-
-} // namespace sudo_win::test
