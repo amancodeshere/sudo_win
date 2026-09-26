@@ -35,7 +35,7 @@ Status labels used throughout this guide:
 
 | Area | Status | Implemented now | Still needed |
 | --- | --- | --- | --- |
-| Build and tests | **IMPLEMENTED** | Strict C++20 CMake build, sanitizers, vendored Catch2, CTest, and feature-level tests | Automated multi-seed match runner and performance reporting |
+| Build and tests | **IMPLEMENTED** | Strict C++20 CMake build, sanitizers, vendored Catch2, CTest, feature-level tests, and GCC/Clang GitHub Actions CI | Automated multi-seed match runner and performance reporting |
 | Engine loop | **IMPLEMENTED** | State update, planning, one action per turn, and a deterministic emergency fallback | Narrow exception boundary and verified crash-safe final emission |
 | Geometry | **IMPLEMENTED** for baseline | Direction indexing, wrapping, toroidal distances, and symmetry transforms | Portal transition helpers and broader topology edge cases |
 | World model | **PARTIAL** | Remembers visible tiles, edges, pearls, occupants, and observed portal endpoints | Staleness/confidence policy, symmetry inference, enemy tracks, and team reports |
@@ -416,7 +416,9 @@ Reserve enough budget to emit a valid action even if search is stopped early.
 ### Stage 0: Harness and Invariants
 
 **Status: PARTIAL.** The generated helper, CMake build, Catch2 suite, sanitizer
-configuration, and submission manifest exist.
+configuration, submission manifest, and GCC/Clang GitHub Actions workflow
+exist. CI tests every relevant push and pull request. Tested release artifacts
+are produced for `main` and manual workflow runs.
 
 **Still required:**
 
@@ -627,6 +629,7 @@ Completed foundation work:
 - [x] Create the conventional `include`, `src`, `tests`, `lib`, and `util`
   layout.
 - [x] Add strict C++20 CMake, sanitizers, CTest, and vendored Catch2 tests.
+- [x] Add GCC/Clang pull-request CI and gated release artifacts.
 - [x] Generate and integrate `helper.hpp`.
 - [x] Build a runnable ordinary-movement baseline.
 - [x] Complete at least one sandboxed self-match with the production bot.

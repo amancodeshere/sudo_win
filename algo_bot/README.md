@@ -63,6 +63,24 @@ The CMake build enables strict warnings, treats warnings as errors, enables
 AddressSanitizer and UndefinedBehaviorSanitizer in debug-style builds, and runs
 the Catch2 test suite through CTest.
 
+## Continuous Integration
+
+GitHub Actions runs the complete Catch2 suite with both GCC and Clang for every
+pull request, plus every push that changes `algo_bot` or its workflow. Both jobs
+use the Debug configuration, so AddressSanitizer and UndefinedBehaviorSanitizer
+fail the workflow when they detect a runtime error.
+
+Pushes to `main` and manual workflow runs also build and test the Release
+configuration, then upload a 14-day artifact containing the Linux executable
+and the submission sources. The delivery job runs only after both compiler test
+jobs pass. It does not submit the bot to the competition server.
+
+Before merging, require the following checks in the repository's branch
+protection settings:
+
+- `Algorithm Bot CI / GCC Debug + sanitizers`;
+- `Algorithm Bot CI / Clang Debug + sanitizers`.
+
 ## Run a Match
 
 ```bash

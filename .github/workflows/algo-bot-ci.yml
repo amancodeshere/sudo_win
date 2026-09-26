@@ -1,0 +1,119 @@
+name: Algorithm Bot CI
+
+on:
+  push:
+    paths:
+      - "algo_bot/**"
+      - ".github/workflows/algo-bot-ci.yml"
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: algo-bot-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: GCC Debug + sanitizers
+            id: gcc-debug
+            cc: gcc
+            cxx: g++
+          - name: Clang Debug + sanitizers
+            id: clang-debug
+            cc: clang
+            cxx: clang++
+    env:
+      CC: ${{ matrix.cc }}
+      CXX: ${{ matrix.cxx }}
+      BUILD_DIRECTORY: ${{ github.workspace }}/build/${{ matrix.id }}
+      ASAN_OPTIONS: detect_leaks=1:halt_on_error=1
+      UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Configure
+        run: >-
+          cmake
+          -S algo_bot
+          -B "$BUILD_DIRECTORY"
+          -G Ninja
+          -DCMAKE_BUILD_TYPE=Debug
+
+      - name: Build
+        run: cmake --build "$BUILD_DIRECTORY" --parallel 2
+
+      - name: Run Catch2 tests
+        run: >-
+          ctest
+          --test-dir "$BUILD_DIRECTORY"
+          --output-on-failure
+          --no-tests=error
+
+      - name: Upload failure logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.id }}-test-logs
+          path: ${{ env.BUILD_DIRECTORY }}/Testing/Temporary/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  delivery:
+    name: Build submission artifact
+    needs: test
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      BUILD_DIRECTORY: ${{ github.workspace }}/build/release
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Configure release build
+        run: >-
+          cmake
+          -S algo_bot
+          -B "$BUILD_DIRECTORY"
+          -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build release bot and tests
+        run: cmake --build "$BUILD_DIRECTORY" --parallel 2
+
+      - name: Run release tests
+        run: >-
+          ctest
+          --test-dir "$BUILD_DIRECTORY"
+          --output-on-failure
+          --no-tests=error
+
+      - name: Package submission sources
+        run: |
+          mkdir -p dist/sudo-win-algo-bot
+          cp algo_bot/bot.toml algo_bot/helper.hpp dist/sudo-win-algo-bot/
+          cp -R algo_bot/include algo_bot/src dist/sudo-win-algo-bot/
+          tar -C dist -czf dist/sudo-win-algo-bot.tar.gz sudo-win-algo-bot
+
+      - name: Upload tested bot
+        uses: actions/upload-artifact@v4
+        with:
+          name: sudo-win-algo-bot-${{ github.sha }}
+          path: |
+            dist/sudo-win-algo-bot.tar.gz
+            ${{ env.BUILD_DIRECTORY }}/sudo_win
+          if-no-files-found: error
+          retention-days: 14
