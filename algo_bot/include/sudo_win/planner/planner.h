@@ -1,0 +1,36 @@
+#ifndef SUDO_WIN_PLANNER_PLANNER_H
+#define SUDO_WIN_PLANNER_PLANNER_H
+
+#include "../combat/combat.h"
+#include "../economy/economy.h"
+#include "../endgame/endgame.h"
+#include "../pathfinding/pathfinding.h"
+#include "../roles/roles.h"
+#include "../safety/safety.h"
+#include "../splitting/splitting.h"
+#include "../types/types.h"
+
+namespace sudo_win {
+
+class WorldModel;
+
+class Planner {
+public:
+    [[nodiscard]] auto choose_action(unswbc::Controller const& controller,
+                                     unswbc::Game const& game,
+                                     WorldModel const& world,
+                                     Role role) const -> PlannedAction;
+
+private:
+    Safety safety_;
+    Pathfinding pathfinding_;
+    Economy economy_;
+    RoleManager roles_;
+    Combat combat_;
+    SplittingPolicy splitting_;
+    Endgame endgame_;
+};
+
+} // namespace sudo_win
+
+#endif // SUDO_WIN_PLANNER_PLANNER_H
