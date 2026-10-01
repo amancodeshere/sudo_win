@@ -1,4 +1,5 @@
 #include "sudo_win/planner/simulation.h"
+#include "sudo_win/world/world_model.h"
 #include "../engine_fixture.h"
 #include <catch2/catch.hpp>
 
@@ -55,6 +56,23 @@ TEST_CASE("body simulation follows collision growth and sprint ordering") {
         partial.body.front() = {6, 7};
         CHECK_FALSE(simulation.advance(fixture.controller, partial, unswbc::Direction::WEST));
     }
+}
+
+TEST_CASE("remembered mobility distinguishes closed terrain from unseen frontiers") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller, fixture.game);
+    auto simulation = sudo_win::Simulation{};
+    auto const state = simulation.initial_state(fixture.controller, &world);
+    CHECK(simulation.remembered_mobility(fixture.controller, state, world).open_frontier);
+    for (auto const direction : unswbc::Direction::get_direction_list()) {
+        fixture.controller.get_tile({5, 5})->get_edge(direction)
+            = unswbc::Edge{false, unswbc::EdgeType::KELP};
+    }
+    world.update(fixture.controller, fixture.game);
+    auto const closed = simulation.remembered_mobility(fixture.controller, state, world);
+    CHECK_FALSE(closed.open_frontier);
+    CHECK(closed.area == 1);
 }
 
 TEST_CASE("simulation consumes a pearl only once on a looping route") {

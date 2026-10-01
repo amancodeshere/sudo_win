@@ -42,6 +42,11 @@ auto Planner::choose_action(unswbc::Controller const& controller,
 
         auto candidate = MoveCandidate{direction};
         candidate.mobility_score = reachable_area * config::score_reachable_tile;
+        auto const mobility = simulation.remembered_mobility(controller, next, world);
+        candidate.mobility_score += mobility.area * config::score_remembered_tile;
+        if (!mobility.open_frontier && mobility.area < static_cast<int>(next.body.size()) + 3) {
+            candidate.mobility_score += config::score_closed_pocket;
+        }
         candidate.economy_score = economy_.score_destination(controller, world, pathfinding_, destination);
         auto const length_gain = static_cast<int>(next.body.size()) - controller.get_length();
         auto const* tile = controller.get_tile(destination);

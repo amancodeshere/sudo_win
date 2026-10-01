@@ -10,6 +10,27 @@ spec.loader.exec_module(benchmark)
 
 
 class BenchmarkTests(unittest.TestCase):
+    @staticmethod
+    def observation(length=3):
+        lines = ["ID 0", "TEAM A", "MAP 10 10", "UNIT_LIMIT 64", "ROUND 1", "DIR N",
+                 f"LENGTH {length}", "UNIT_COUNT 1", "NUM_MSGS 0", "ECHOES 0 0 0 0 0"]
+        lines += [f"{x} {y} 0 -1" for y in range(2, 9) for x in range(2, 9)]
+        lines += ["DRAGON_BODIES 3", "A 0 5 5 N 1", "A 0 5 6 N 0", "A 0 5 7 N 0"]
+        lines += [". . . . . . ."] * 8 + [". . . . . . . ."] * 7
+        return "\n".join(lines) + "\n"
+
+    def test_visible_collision_gate_checks_own_body_and_sprint_intermediate_steps(self):
+        observation = self.observation()
+        safe = benchmark.visible_action_check(observation, "MOVE N\n")
+        self.assertFalse(safe["avoidable_collision"])
+        blocked = benchmark.visible_action_check(observation, "MOVE S\n")
+        self.assertTrue(blocked["avoidable_collision"])
+        self.assertEqual(blocked["fatal_step"], 1)
+        reverse = benchmark.visible_action_check(observation, "MOVE NS\n")
+        self.assertTrue(reverse["avoidable_collision"])
+        self.assertEqual(reverse["fatal_step"], 2)
+        short = benchmark.visible_action_check(self.observation(2), "MOVE NN\n")
+        self.assertEqual(short["fatal_reason"], "unaffordable sprint")
     def test_submission_excludes_test_sources_and_hashes_headers(self):
         with tempfile.TemporaryDirectory() as work:
             root = pathlib.Path(work)

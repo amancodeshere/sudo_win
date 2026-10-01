@@ -54,6 +54,106 @@ def action_metrics(output: bytes) -> tuple[dict[str, int], str | None]:
     return {}, f"malformed action: {action}"
 
 
+def visible_action_check(stdin: str, stdout: str) -> dict:
+    """Independent protocol check of visible collisions and sprint payments.
+
+    Unknown portal destinations/body ranks remain uncertain. This does not
+    predict future enemy actions or claim a safe move is strategically good.
+    """
+    lines = stdin.splitlines()
+    identity = int(next(line.split()[1] for line in lines if line.startswith("ID ")))
+    width, height = map(int, next(line.split()[1:] for line in lines if line.startswith("MAP ")))
+    length = int(next(line.split()[1] for line in lines if line.startswith("LENGTH ")))
+    start = next(i for i, line in enumerate(lines) if re.fullmatch(r"-?\d+ -?\d+ [01] -?\d+", line))
+    tiles = [tuple(map(int, line.split())) for line in lines[start:start + 49]]
+    pearl_tiles = {(x, y) for x, y, pearl, _ in tiles if pearl}
+    body_start = start + 49
+    count = int(lines[body_start].split()[1])
+    parts = [line.split() for line in lines[body_start + 1:body_start + 1 + count]]
+    occupants = {(int(p[2]), int(p[3])): int(p[1]) for p in parts}
+    own = {(int(p[2]), int(p[3])): p[4] for p in parts if int(p[1]) == identity}
+    head = next((int(p[2]), int(p[3])) for p in parts if int(p[1]) == identity and p[5] == "1")
+    base_x, base_y = tiles[0][:2]
+    edge_start = body_start + 1 + count
+    edges, portals = {}, {}
+    for orientation, rows, columns, offset in (("H", 8, 7, 0), ("V", 7, 8, 8)):
+        for row in range(rows):
+            for column, token in enumerate(lines[edge_start + offset + row].split()[:columns]):
+                key = (orientation, (base_x + column) % width, (base_y + row) % height)
+                edges[key] = token
+                if token.isdigit():
+                    portals.setdefault(token, set()).add(key)
+    offsets = {"N": (0, -1), "E": (1, 0), "S": (0, 1), "W": (-1, 0)}
+
+    def destination(position, direction):
+        x, y = position
+        boundary = (("H", x, y) if direction == "N" else
+                    ("H", x, (y + 1) % height) if direction == "S" else
+                    ("V", x, y) if direction == "W" else ("V", (x + 1) % width, y))
+        token = edges.get(boundary)
+        if token == "w":
+            return None, "wall"
+        if token is None:
+            return None, "unknown"
+        dx, dy = offsets[direction]
+        if token == ".":
+            return ((x + dx) % width, (y + dy) % height), "known"
+        ends = portals.get(token, set())
+        if len(ends) != 2:
+            return None, "unknown"
+        partner = next(edge for edge in ends if edge != boundary)
+        if partner[0] != boundary[0]:
+            return None, "unknown"
+        _, x, y = partner
+        return ((x - (direction == "W")) % width, (y - (direction == "N")) % height), "known"
+
+    reasons = {}
+    visible_positions = {(x, y) for x, y, _, _ in tiles}
+    for direction in offsets:
+        target, kind = destination(head, direction)
+        reasons[direction] = kind if target is None else "unknown" if target not in visible_positions else (
+            "occupied" if target in occupants else "safe")
+    safe = [direction for direction, reason in reasons.items() if reason == "safe"]
+    action = next((line for line in stdout.splitlines() if line.startswith("MOVE ")), None)
+    result = {"safe_directions": safe, "first_step_reasons": reasons, "avoidable_collision": False}
+    if action is None:
+        return result
+    ranked = [head]
+    while len(ranked) < length:
+        previous = ranked[-1]
+        segment = next((p for p, direction in own.items() if p not in ranked
+                        and destination(p, direction)[0] == previous), None)
+        if segment is None:
+            break
+        ranked.append(segment)
+    unranked = set(own) - set(ranked)
+    ranked += [None] * (length - len(ranked))
+    eaten = set()
+    for step, direction in enumerate(action.split()[1]):
+        if step and len(ranked) <= 2:
+            result.update(fatal_step=step + 1, fatal_reason="unaffordable sprint", avoidable_collision=bool(safe))
+            break
+        target, kind = destination(ranked[0], direction)
+        if target is None:
+            if kind == "wall":
+                result.update(fatal_step=step + 1, fatal_reason=kind, avoidable_collision=bool(safe))
+            break
+        if target in ranked or (target in unranked and step == 0) or (
+                target in occupants and occupants[target] != identity):
+            result.update(fatal_step=step + 1, fatal_reason="occupied", avoidable_collision=bool(safe))
+            break
+        if target in unranked or target not in visible_positions:
+            break
+        ranked.insert(0, target)
+        if target in pearl_tiles and target not in eaten:
+            eaten.add(target)
+        else:
+            ranked.pop()
+        if step:
+            ranked.pop()
+    return result
+
+
 def match(engine, map_path, bots, seed, sandbox, replay_path):
     from unswbc.bot import Bot, Pool
     from unswbc.engine import DEBUG_ALL, DEBUG_LIMITS
@@ -98,7 +198,13 @@ def match(engine, map_path, bots, seed, sandbox, replay_path):
 
         def death(dragon_id, round_num, reason):
             diagnostic = replay_path.with_suffix(f".death-{dragon_id}-{round_num}.json")
-            diagnostic.write_text(json.dumps(last_turn.get(dragon_id, {}), indent=2) + "\n")
+            trace = last_turn.get(dragon_id, {})
+            if trace:
+                trace["visible_check"] = visible_action_check(trace["stdin"], trace["stdout"])
+                if trace["visible_check"]["avoidable_collision"]:
+                    errors.append({"id": dragon_id, "team": teams[dragon_id],
+                                   "error": "avoidable visible collision", "diagnostic": str(diagnostic)})
+            diagnostic.write_text(json.dumps(trace, indent=2) + "\n")
             deaths.append({"id": dragon_id, "team": teams[dragon_id], "round": round_num, "reason": reason,
                            "diagnostic": str(diagnostic)})
             worker = live.pop(dragon_id, None)

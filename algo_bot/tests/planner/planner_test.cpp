@@ -30,6 +30,35 @@ TEST_CASE("baseline planner") {
     }
 }
 
+TEST_CASE("a long dragon avoids a closed pocket beyond the search horizon") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.length = 20;
+    auto const pocket = std::vector<unswbc::Position>{
+        {6, 5}, {6, 4}, {6, 3}, {7, 3}, {7, 4}, {7, 5},
+        {7, 6}, {6, 6}, {6, 7}, {7, 7}, {8, 7}};
+    for (auto const p : pocket) {
+        for (auto const direction : unswbc::Direction::get_direction_list()) {
+            auto const neighbour = p.add_dir(direction);
+            if (std::find(pocket.begin(), pocket.end(), neighbour) != pocket.end()
+                || (p == unswbc::Position{6, 5} && neighbour == fixture.controller.get_position())) {
+                continue;
+            }
+            fixture.controller.get_tile(p)->get_edge(direction)
+                = unswbc::Edge{false, unswbc::EdgeType::KELP};
+            if (auto* tile = fixture.controller.get_tile(neighbour)) {
+                tile->get_edge(direction.get_opposite()) = unswbc::Edge{false, unswbc::EdgeType::KELP};
+            }
+        }
+    }
+    fixture.controller.get_tile({6, 5})->pearl = true;
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller, fixture.game);
+    auto const action = sudo_win::Planner{}.choose_action(fixture.controller, fixture.game,
+                                                          world, sudo_win::Role::collector);
+    REQUIRE(!action.steps.empty());
+    CHECK(action.steps.front() != unswbc::Direction::EAST);
+}
+
 TEST_CASE("planner validates and prices every step of short pearl sprints") {
     auto fixture = sudo_win::test::EngineFixture{};
     for (auto& tile : fixture.controller.vision.tiles) {

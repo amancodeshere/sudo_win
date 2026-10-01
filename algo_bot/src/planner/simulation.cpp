@@ -1,5 +1,6 @@
 #include "../../include/sudo_win/planner/simulation.h"
 #include "../../include/sudo_win/world/world_model.h"
+#include "../../include/sudo_win/config/config.h"
 
 #include <algorithm>
 
@@ -147,6 +148,53 @@ auto Simulation::reachable_positions(unswbc::Controller const& controller,
         }
     }
     return queue;
+}
+
+auto Simulation::remembered_mobility(unswbc::Controller const& controller,
+                                      SimulationState const& state, WorldModel const& world) const -> MobilityEstimate {
+    auto const area = static_cast<std::size_t>(world.width() * world.height());
+    auto blocked = std::vector<bool>(area, false);
+    auto visited = std::vector<bool>(area, false);
+    auto const index = [&world](unswbc::Position p) {
+        return static_cast<std::size_t>(p.y * world.width() + p.x);
+    };
+    auto const mark_body = [&](std::vector<unswbc::Position> const& positions) {
+        for (auto const p : positions) {
+            if (p.x >= 0 && p.y >= 0) {
+                blocked[index(p)] = true;
+            }
+        }
+    };
+    mark_body(state.body);
+    mark_body(state.unranked_body);
+    for (auto const& tile : controller.get_tiles()) {
+        auto const* part = tile.get_dragon();
+        if (part != nullptr && part->get_id() != controller.get_id()) {
+            blocked[index(tile.get_position())] = true;
+        }
+    }
+    auto queue = std::vector<unswbc::Position>{state.body.front()};
+    visited[index(queue.front())] = true;
+    auto frontier = false;
+    for (std::size_t cursor = 0; cursor < queue.size() && cursor < config::mobility_node_budget; ++cursor) {
+        for (auto const direction : unswbc::Direction::get_direction_list()) {
+            auto const next = world.transition(queue[cursor], direction);
+            if (!next || blocked[index(*next)]) {
+                continue;
+            }
+            if (!world.has_seen(*next)) {
+                frontier = true;
+                continue;
+            }
+            if (!visited[index(*next)]) {
+                visited[index(*next)] = true;
+                queue.push_back(*next);
+            }
+        }
+    }
+    // A bounded flood fill is a lower bound, never proof of a closed pocket.
+    frontier = frontier || queue.size() > config::mobility_node_budget;
+    return {static_cast<int>(std::min(queue.size(), static_cast<std::size_t>(config::mobility_node_budget))), frontier};
 }
 
 } // namespace sudo_win

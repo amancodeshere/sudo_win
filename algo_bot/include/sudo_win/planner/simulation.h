@@ -17,6 +17,11 @@ struct SimulationState {
     int pearls = 0;
 };
 
+struct MobilityEstimate {
+    int area = 0;
+    bool open_frontier = false;
+};
+
 class Simulation {
 public:
     [[nodiscard]] auto initial_state(unswbc::Controller const& controller,
@@ -37,6 +42,9 @@ public:
     [[nodiscard]] auto reachable_positions(unswbc::Controller const& controller,
                                            SimulationState const& state,
                                            WorldModel const* world = nullptr) const -> std::vector<unswbc::Position>;
+    [[nodiscard]] auto remembered_mobility(unswbc::Controller const& controller,
+                                           SimulationState const& state,
+                                           WorldModel const& world) const -> MobilityEstimate;
 };
 
 } // namespace sudo_win
