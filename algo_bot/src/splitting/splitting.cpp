@@ -29,7 +29,11 @@ auto SplittingPolicy::rescue(unswbc::Controller const& controller,
             child.body.assign(initial.body.rbegin(), initial.body.rbegin() + child_size);
             child.unranked_body.assign(initial.body.begin(), initial.body.end() - child_size);
             auto view = controller;
-            view.get_tile(child.body.front())->dragon_part.reset();
+            auto* child_head = view.get_tile(child.body.front());
+            if (child_head == nullptr) {
+                continue;
+            }
+            child_head->dragon_part.reset();
             if (Combat{}.threat_level(view, child.body.front(), &world) == ThreatLevel::direct) {
                 continue;
             }
@@ -98,8 +102,13 @@ auto SplittingPolicy::consider(unswbc::Controller const& controller,
         auto view = controller;
         // Post-split heads must be treated as attackable, rather than as the
         // old body obstacles that a movement simulation would reject.
-        view.get_tile(parent.body.front())->dragon_part.reset();
-        view.get_tile(child.body.front())->dragon_part.reset();
+        auto* parent_head = view.get_tile(parent.body.front());
+        auto* child_head = view.get_tile(child.body.front());
+        if (parent_head == nullptr || child_head == nullptr) {
+            continue;
+        }
+        parent_head->dragon_part.reset();
+        child_head->dragon_part.reset();
         auto const combat = Combat{};
         if (combat.threat_level(view, parent.body.front(), world) != ThreatLevel::none
             || combat.threat_level(view, child.body.front(), world) != ThreatLevel::none) {
