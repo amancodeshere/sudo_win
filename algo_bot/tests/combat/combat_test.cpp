@@ -50,3 +50,12 @@ TEST_CASE("an enemy cannot cross its own body to threaten a destination") {
         {6, 5}, 4, unswbc::Team::B, unswbc::Direction::EAST, false};
     CHECK(sudo_win::Combat{}.threat_level(fixture.controller, {5, 5}) == sudo_win::ThreatLevel::none);
 }
+
+TEST_CASE("cached threat map accumulates independent possible attacks") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.tile({7,5}).dragon_part = unswbc::DragonPart{{7,5},4,unswbc::Team::B,unswbc::Direction::WEST,true};
+    fixture.tile({3,5}).dragon_part = unswbc::DragonPart{{3,5},5,unswbc::Team::B,unswbc::Direction::EAST,true};
+    auto const map = sudo_win::Combat{}.threats(fixture.controller);
+    CHECK(map[56].level == sudo_win::ThreatLevel::direct);
+    CHECK(map[55].score == 2 * sudo_win::config::score_possible_enemy_sprint);
+}

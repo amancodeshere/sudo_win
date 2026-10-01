@@ -9,8 +9,15 @@ class WorldModel;
 
 enum class ThreatLevel { none, possible_sprint, direct };
 
+struct ThreatAssessment {
+    ThreatLevel level = ThreatLevel::none;
+    int score = 0;
+};
+
 class Combat {
 public:
+    [[nodiscard]] auto threats(unswbc::Controller const& controller,
+                               WorldModel const* world = nullptr) const -> std::vector<ThreatAssessment>;
     [[nodiscard]] auto threat_level(unswbc::Controller const& controller,
                                     unswbc::Position destination,
                                     WorldModel const* world = nullptr) const -> ThreatLevel;

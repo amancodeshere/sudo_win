@@ -6,84 +6,96 @@
 
 namespace sudo_win {
 
-namespace {
-[[nodiscard]] auto enemy_threat(unswbc::Controller const& controller,
-                                unswbc::DragonPart const& enemy,
-                                unswbc::Position destination, WorldModel const* world) -> ThreatLevel {
-    auto opponent = controller;
-    opponent.head = enemy;
-    auto observed_length = 0;
+auto Combat::threats(unswbc::Controller const& controller, WorldModel const* world) const
+    -> std::vector<ThreatAssessment> {
+    auto const width = unswbc::game->width;
+    auto const area = static_cast<std::size_t>(width * unswbc::game->height);
+    auto result = std::vector<ThreatAssessment>(area);
+    auto const index = [width](unswbc::Position p) {
+        return static_cast<std::size_t>(p.y * width + p.x);
+    };
     for (auto const& tile : controller.get_tiles()) {
-        auto const* part = tile.get_dragon();
-        if (part != nullptr && part->get_id() == enemy.get_id()) {
-            ++observed_length;
-        }
-    }
-    // Enemy length is not transmitted. Price a possible short sprint as
-    // uncertainty, rather than pretending observed segments are its full body.
-    opponent.length = std::max(3, observed_length);
-    auto const simulation = Simulation{};
-    auto const initial = simulation.initial_state(opponent, world);
-    auto threat = ThreatLevel::none;
-    for (auto const first : unswbc::Direction::get_direction_list()) {
-        auto const next = simulation.advance(opponent, initial, first, false, world);
-        if (!next) {
+        auto const* enemy = tile.get_dragon();
+        if (enemy == nullptr || !enemy->is_head() || enemy->get_team() == controller.get_team()) {
             continue;
         }
-        if (next->body.front() == destination) {
-            return ThreatLevel::direct;
+        auto opponent = controller;
+        opponent.head = *enemy;
+        auto observed_length = 0;
+        for (auto const& observed : controller.get_tiles()) {
+            auto const* part = observed.get_dragon();
+            observed_length += part != nullptr && part->get_id() == enemy->get_id();
         }
-        for (auto const second : unswbc::Direction::get_direction_list()) {
-            auto const sprint = simulation.advance(opponent, *next, second, true, world);
-            if (sprint && sprint->body.front() == destination) {
-                threat = ThreatLevel::possible_sprint;
+        // Partial enemy bodies give a lower bound, not the real sprint budget.
+        // Price a possible second step without treating partial length as exact.
+        opponent.length = std::max(3, observed_length);
+        auto const simulation = Simulation{};
+        auto const initial = simulation.initial_state(opponent, world);
+        auto distances = std::vector<int>(area, 0);
+        struct SearchNode { SimulationState state; int steps; };
+        auto queue = std::vector<SearchNode>{};
+        for (auto const direction : unswbc::Direction::get_direction_list()) {
+            if (auto const next = simulation.advance(opponent, initial, direction, false, world)) {
+                distances[index(next->body.front())] = 1;
+                queue.push_back({*next, 1});
             }
         }
-    }
-    return threat;
-}
-} // namespace
-
-auto Combat::threat_level(unswbc::Controller const& controller,
-                           unswbc::Position destination, WorldModel const* world) const -> ThreatLevel {
-    auto result = ThreatLevel::none;
-    for (auto const& tile : controller.get_tiles()) {
-        auto const* part = tile.get_dragon();
-        if (part == nullptr || !part->is_head() || part->get_team() == controller.get_team()) {
-            continue;
+        auto budget = 128;
+        for (std::size_t cursor = 0; cursor < queue.size() && budget > 0; ++cursor) {
+            auto const node = queue[cursor];
+            if (node.steps >= 2) {
+                continue;
+            }
+            for (auto const direction : unswbc::Direction::get_direction_list()) {
+                if (budget-- <= 0) {
+                    break;
+                }
+                auto const next = simulation.advance(opponent, node.state, direction, true, world);
+                if (!next) {
+                    continue;
+                }
+                auto const destination = index(next->body.front());
+                auto& distance = distances[destination];
+                if (distance == 0) {
+                    distance = node.steps + 1;
+                }
+                queue.push_back({*next, node.steps + 1});
+            }
         }
-        auto const threat = enemy_threat(controller, *part, destination, world);
-        if (threat == ThreatLevel::direct) {
-            return threat;
-        }
-        if (threat == ThreatLevel::possible_sprint) {
-            result = threat;
+        for (std::size_t i = 0; i < area; ++i) {
+            auto const steps = distances[i];
+            if (steps == 0) {
+                continue;
+            }
+            auto& assessment = result[i];
+            if (steps == 1) {
+                assessment.level = ThreatLevel::direct;
+                assessment.score += config::score_enemy_head_risk;
+                if (enemy->get_id() > controller.get_id()) {
+                    assessment.score += config::score_enemy_head_late_risk;
+                }
+            } else {
+                if (assessment.level == ThreatLevel::none) {
+                    assessment.level = ThreatLevel::possible_sprint;
+                }
+                assessment.score += config::score_possible_enemy_sprint;
+            }
         }
     }
     return result;
 }
 
+auto Combat::threat_level(unswbc::Controller const& controller,
+                           unswbc::Position destination, WorldModel const* world) const -> ThreatLevel {
+    auto const map = threats(controller, world);
+    return map[static_cast<std::size_t>(destination.y * unswbc::game->width + destination.x)].level;
+}
+
 auto Combat::destination_risk(unswbc::Controller const& controller,
                               unswbc::Position destination,
                               Role role, WorldModel const* world) const -> int {
-    auto score = 0;
-    for (auto const& tile : controller.get_tiles()) {
-        auto const* part = tile.get_dragon();
-        if (part == nullptr || !part->is_head() || part->get_team() == controller.get_team()) {
-            continue;
-        }
-
-        auto const threat = enemy_threat(controller, *part, destination, world);
-        if (threat == ThreatLevel::direct) {
-            score += config::score_enemy_head_risk;
-            if (part->get_id() > controller.get_id()) {
-                score += config::score_enemy_head_late_risk;
-            }
-        } else if (threat == ThreatLevel::possible_sprint) {
-            score += config::score_possible_enemy_sprint;
-        }
-    }
-
+    auto const map = threats(controller, world);
+    auto score = map[static_cast<std::size_t>(destination.y * unswbc::game->width + destination.x)].score;
     if (role == Role::champion) {
         score *= config::score_champion_risk_multiplier;
     }

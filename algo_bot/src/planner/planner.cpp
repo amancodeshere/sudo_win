@@ -14,6 +14,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     auto best = PlannedAction{};
     auto largest_reachable_area = 0;
     auto const simulation = Simulation{};
+    auto const threats = combat_.threats(controller, &world);
     auto const initial = simulation.initial_state(controller, &world);
     auto best_survival = -1;
     auto best_safety_class = -1;
@@ -71,8 +72,9 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             candidate.exploration_score += config::score_recent_visit;
         }
         candidate.exploration_score += world.unseen_neighbour_count(destination) * config::score_frontier;
-        candidate.combat_score = combat_.destination_risk(controller, destination, role, &world);
-        auto const threatened = combat_.threat_level(controller, destination, &world) == ThreatLevel::direct;
+        auto const& threat = threats[static_cast<std::size_t>(destination.y * world.width() + destination.x)];
+        candidate.combat_score = threat.score * (role == Role::champion ? config::score_champion_risk_multiplier : 1);
+        auto const threatened = threat.level == ThreatLevel::direct;
         auto const safety_class = survival == 0 ? 0 : threatened ? 1 : 2;
         if (sprint && length_gain < 0 && safety_class <= best_safety_class) {
             return;
