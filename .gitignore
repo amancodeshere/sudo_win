@@ -75,3 +75,8 @@ replays/
 # ide files
 .idea/
 .vscode/
+
+# local API credentials
+.env
+.env.*
+!.env.example
