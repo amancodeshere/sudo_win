@@ -10,6 +10,58 @@
 
 namespace sudo_win {
 
+auto SplittingPolicy::rescue(unswbc::Controller const& controller,
+                             WorldModel const& world,
+                             bool certainly_trapped) const -> std::optional<PlannedAction> {
+    if (!controller.can_split(unswbc::Constants::MIN_SIZE)) {
+        return std::nullopt;
+    }
+    auto const simulation = Simulation{};
+    auto const initial = simulation.initial_state(controller, &world);
+    auto const complete = initial.unranked_body.empty()
+        && std::none_of(initial.body.begin(), initial.body.end(), [](auto p) { return p.x < 0 || p.y < 0; });
+    auto best = std::optional<PlannedAction>{};
+    auto best_depth = 0;
+    if (complete) {
+        for (auto child_size = unswbc::Constants::MIN_SIZE;
+             child_size <= controller.get_length() - unswbc::Constants::MIN_SIZE; ++child_size) {
+            auto child = SimulationState{};
+            child.body.assign(initial.body.rbegin(), initial.body.rbegin() + child_size);
+            child.unranked_body.assign(initial.body.begin(), initial.body.end() - child_size);
+            auto view = controller;
+            view.get_tile(child.body.front())->dragon_part.reset();
+            if (Combat{}.threat_level(view, child.body.front(), &world) == ThreatLevel::direct) {
+                continue;
+            }
+            auto budget = 128;
+            auto const depth = simulation.survival_depth(controller, child, 4, budget, &world);
+            if (depth < 2 || depth <= best_depth) {
+                continue;
+            }
+            best_depth = depth;
+            best = PlannedAction{};
+            best->kind = ActionKind::split;
+            best->split_size = child_size;
+            best->score = depth * config::score_immediate_pearl;
+            best->reason = "reverse trapped tail into escaping child";
+            if (depth == 4) {
+                break;
+            }
+        }
+    }
+    if (!best && certainly_trapped) {
+        // Movement is already fatal. A legal split keeps both snakes alive for
+        // this action and gives the reversed tail an immediate escape attempt.
+        // This fallback makes no claim about an unseen child's safety.
+        best = PlannedAction{};
+        best->kind = ActionKind::split;
+        best->split_size = unswbc::Constants::MIN_SIZE;
+        best->score = 0;
+        best->reason = "last-resort legal split instead of certain collision";
+    }
+    return best;
+}
+
 auto SplittingPolicy::consider(unswbc::Controller const& controller,
                                unswbc::Game const& game,
                                Role role,

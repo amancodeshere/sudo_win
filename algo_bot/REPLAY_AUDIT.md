@@ -6,7 +6,11 @@ Results: **24 wins, 51 losses**. Of the losses, 42 ended by elimination and 9 at
 
 61 deaths happened in the first ten rounds. Slithery Fight starts one snake with no legal movement; always moving guarantees its loss. Long snakes also become trapped on Autarky and Prisoners Dilemma. Last-turn movement fixes cannot recover these states; rescue splits and earlier trap detection are needed. Opponent populations often grow to dozens through splitting, while our version never splits.
 
+Nine head-to-head pairs were between two of our own snakes, accounting for 18 deaths. A trapped snake's fallback must avoid taking an ally down with it.
+
 The strongest opportunities are legal rescue splits, better growth-versus-space planning, longer enemy threat horizons, and population investment that protects the longest snake. Round-limit scoring uses the longest surviving snake, then total length; reckless population growth is not itself a winning condition.
+
+Rescue splitting passed 29 C++ test cases and 8 Python checks. In 12 judge-sandbox games on Slithery Fight, Autarky, and Prisoners Dilemma (seeds 61/62, both colours), the rescue candidate beat the exact submitted source 9–3. No invalid actions, avoidable visible collisions, or timeouts were detected; maximum CPU consumption across both bots was 47,027,686 points. These are controlled validation games, not new ladder results.
 
 Per-game evidence (original team perspective):
 

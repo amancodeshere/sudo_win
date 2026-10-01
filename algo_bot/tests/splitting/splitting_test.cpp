@@ -85,3 +85,39 @@ TEST_CASE("experimental splits require safe parent child and separate pearl inco
         CHECK_FALSE(candidate());
     }
 }
+
+TEST_CASE("trapped snakes reverse their tails rather than collide") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.length = 6;
+    auto const body = std::vector<unswbc::Position>{{5,5},{5,6},{4,6},{4,5},{4,4},{5,4}};
+    for (std::size_t i = 0; i < body.size(); ++i) {
+        auto heading = unswbc::Direction{unswbc::Direction::NORTH};
+        if (i > 0) {
+            for (auto const dir : unswbc::Direction::get_direction_list()) {
+                if (body[i].add_dir(dir) == body[i-1]) { heading = dir; break; }
+            }
+        }
+        fixture.tile(body[i]).dragon_part = unswbc::DragonPart{body[i],0,unswbc::Team::A,heading,i==0};
+    }
+    fixture.tile({5,5}).get_edge(unswbc::Direction::EAST) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    SECTION("the visible tail has a certified escape") {
+        auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::champion);
+        REQUIRE(action.kind == sudo_win::ActionKind::split);
+        CHECK(fixture.controller.can_split(action.split_size));
+    }
+    SECTION("a full team never emits an invalid rescue split") {
+        fixture.controller.unit_count = fixture.controller.unit_limit;
+        CHECK_FALSE(sudo_win::SplittingPolicy{}.rescue(fixture.controller,world,true));
+    }
+    SECTION("unknown tails are only split when movement is already fatal") {
+        fixture.tile({4,6}).dragon_part.reset();
+        CHECK_FALSE(sudo_win::SplittingPolicy{}.rescue(fixture.controller,world,false));
+        REQUIRE(sudo_win::SplittingPolicy{}.rescue(fixture.controller,world,true));
+    }
+    SECTION("short snakes cannot pay for two legal bodies") {
+        fixture.controller.length = 3;
+        CHECK_FALSE(sudo_win::SplittingPolicy{}.rescue(fixture.controller,world,true));
+    }
+}

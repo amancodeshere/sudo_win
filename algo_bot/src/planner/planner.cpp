@@ -143,6 +143,12 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         }
     }
 
+    if (best_survival <= 1) {
+        if (auto const rescue = splitting_.rescue(controller, world, best.steps.empty())) {
+            return *rescue;
+        }
+    }
+
     if (auto const split = splitting_.consider(controller, game, role, largest_reachable_area, &world, splitting_enabled_);
         split.has_value() && split->score > best.score) {
         return *split;
