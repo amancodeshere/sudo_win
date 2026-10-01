@@ -152,6 +152,24 @@ Test the resulting directory through `benchmark.py` before uploading. If the
 toolkit is already authenticated, `unswbc submit build/submission-stable` submits
 the sources. Packaging and CI do not submit automatically.
 
+## Download Competition Replays
+
+From the repository root, load your git-ignored API credentials and download
+available games into `replays/`:
+
+```bash
+set -a
+source .env
+set +a
+python3 algo_bot/util/download_replays.py
+```
+
+The downloader expands each series into individual games, preserves existing
+replays, and saves battle results plus a download summary alongside the files.
+Rerun it to fetch new games. The API returns at most 200 recent series; reaching
+that limit produces a warning rather than claiming the entire history was saved.
+Open `.replay` files in the VS Code Battledragon Replay viewer.
+
 ## Current Strategy
 
 The stable bot uses persistent map memory, remembered pearl/frontier routing,
