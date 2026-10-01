@@ -34,6 +34,13 @@ class BenchmarkTests(unittest.TestCase):
         self.assertEqual(benchmark.percentile([4, 1, 9], 50), 4)
         self.assertEqual(benchmark.percentile([], 95), 0)
 
+    def test_action_metrics_require_one_well_formed_action(self):
+        self.assertEqual(benchmark.action_metrics(b"MOVE NES\nPROTOCOL 3\n")[0],
+                         {"sprint": 1, "movement_steps": 3})
+        self.assertEqual(benchmark.action_metrics(b"SPLIT 3\n")[0], {"split": 1, "split_segments": 3})
+        for bad in (b"", b"MOVE N\nMOVE E\n", b"MOVE banana\n", b"SPLIT -2\n"):
+            self.assertIsNotNone(benchmark.action_metrics(bad)[1])
+
 
 if __name__ == "__main__":
     unittest.main()

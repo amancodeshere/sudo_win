@@ -16,12 +16,17 @@ class WorldModel;
 
 class Planner {
 public:
+    explicit Planner(bool sprinting = config::enable_sprinting,
+                     bool splitting = config::enable_splitting)
+    : sprinting_{sprinting}, splitting_enabled_{splitting} {}
     [[nodiscard]] auto choose_action(unswbc::Controller const& controller,
                                      unswbc::Game const& game,
                                      WorldModel const& world,
                                      Role role) const -> PlannedAction;
 
 private:
+    bool sprinting_;
+    bool splitting_enabled_;
     mutable std::optional<unswbc::Position> target_;
     mutable int target_round_ = -1;
     Safety safety_;

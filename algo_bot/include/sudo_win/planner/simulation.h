@@ -34,6 +34,9 @@ public:
     [[nodiscard]] auto reachable_area(unswbc::Controller const& controller,
                                       SimulationState const& state,
                                       WorldModel const* world = nullptr) const -> int;
+    [[nodiscard]] auto reachable_positions(unswbc::Controller const& controller,
+                                           SimulationState const& state,
+                                           WorldModel const* world = nullptr) const -> std::vector<unswbc::Position>;
 };
 
 } // namespace sudo_win

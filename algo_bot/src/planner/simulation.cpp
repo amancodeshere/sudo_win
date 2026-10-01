@@ -114,6 +114,12 @@ auto Simulation::survival_depth(unswbc::Controller const& controller,
 
 auto Simulation::reachable_area(unswbc::Controller const& controller,
                                  SimulationState const& state, WorldModel const* world) const -> int {
+    return static_cast<int>(reachable_positions(controller, state, world).size());
+}
+
+auto Simulation::reachable_positions(unswbc::Controller const& controller,
+                                      SimulationState const& state, WorldModel const* world) const
+    -> std::vector<unswbc::Position> {
     auto queue = std::vector<unswbc::Position>{state.body.front()};
     for (std::size_t cursor = 0; cursor < queue.size(); ++cursor) {
         auto const current = queue[cursor];
@@ -140,7 +146,7 @@ auto Simulation::reachable_area(unswbc::Controller const& controller,
             queue.push_back(*target);
         }
     }
-    return static_cast<int>(queue.size());
+    return queue;
 }
 
 } // namespace sudo_win

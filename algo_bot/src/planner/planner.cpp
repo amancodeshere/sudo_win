@@ -110,7 +110,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             consider(*next, {direction});
         }
     }
-    if (config::enable_sprinting) {
+    if (sprinting_) {
         auto remaining_nodes = config::sprint_node_budget;
         auto const expand = [&](auto const& self, SimulationState const& state,
                                 std::vector<unswbc::Direction> const& steps) -> void {
@@ -138,7 +138,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         }
     }
 
-    if (auto const split = splitting_.consider(controller, game, role, largest_reachable_area);
+    if (auto const split = splitting_.consider(controller, game, role, largest_reachable_area, &world, splitting_enabled_);
         split.has_value() && split->score > best.score) {
         return *split;
     }

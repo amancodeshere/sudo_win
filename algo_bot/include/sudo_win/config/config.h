@@ -22,8 +22,10 @@ inline constexpr auto score_route_progress = 7000;
 inline constexpr auto score_recent_visit = -3000;
 
 inline constexpr auto endgame_start_round = 425;
-inline constexpr auto split_min_length = 10;
-inline constexpr auto soft_unit_cap = 12;
+inline constexpr auto split_min_length = 14;
+inline constexpr auto split_stop_round = 300;
+inline constexpr auto score_split_segment_cost = 12000;
+inline constexpr auto soft_unit_cap = 4;
 
 inline constexpr auto score_immediate_pearl = 50000;
 inline constexpr auto score_reachable_tile = 1000;

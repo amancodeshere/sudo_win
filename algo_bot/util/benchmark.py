@@ -9,6 +9,7 @@ import hashlib
 import importlib.metadata
 import json
 import pathlib
+import re
 import shutil
 import statistics
 import tempfile
@@ -39,6 +40,20 @@ def percentile(values: list[int], percent: int) -> int:
     return ordered[max(0, (len(ordered) * percent + 99) // 100 - 1)]
 
 
+def action_metrics(output: bytes) -> tuple[dict[str, int], str | None]:
+    actions = [line for line in output.decode(errors="replace").splitlines()
+               if line.startswith(("MOVE ", "SPLIT "))]
+    if len(actions) != 1:
+        return {}, f"expected one final action, received {len(actions)}"
+    action = actions[0]
+    if re.fullmatch(r"MOVE [NESW]+", action):
+        steps = len(action.split()[1])
+        return {"move" if steps == 1 else "sprint": 1, "movement_steps": steps}, None
+    if re.fullmatch(r"SPLIT [0-9]+", action):
+        return {"split": 1, "split_segments": int(action.split()[1])}, None
+    return {}, f"malformed action: {action}"
+
+
 def match(engine, map_path, bots, seed, sandbox, replay_path):
     from unswbc.bot import Bot, Pool
     from unswbc.engine import DEBUG_ALL, DEBUG_LIMITS
@@ -48,6 +63,8 @@ def match(engine, map_path, bots, seed, sandbox, replay_path):
     errors, deaths, notices = [], [], []
     peaks = {"A": 0, "B": 0}
     turns = {"A": 0, "B": 0}
+    actions = {"A": Counter(), "B": Counter()}
+    initial_blocks, last_turn = {}, {}
     bot_type, pool_type = (SandboxBot, WasmPool) if sandbox else (Bot, Pool)
     try:
         for team, bot in zip(("A", "B"), bots):
@@ -56,6 +73,7 @@ def match(engine, map_path, bots, seed, sandbox, replay_path):
         def spawn(dragon_id, init):
             team = next(line.split()[1] for line in init.decode().splitlines() if line.startswith("TEAM "))
             teams[dragon_id] = team
+            initial_blocks[dragon_id] = init.decode()
             live[dragon_id] = bot_type(pools[team], init=init, name=str(dragon_id))
 
         def reply(dragon_id, block):
@@ -65,6 +83,12 @@ def match(engine, map_path, bots, seed, sandbox, replay_path):
                     peaks[team] = max(peaks[team], int(line.split()[1]))
             turns[team] += 1
             output = worker.ask(block)
+            last_turn[dragon_id] = {"stdin": initial_blocks[dragon_id] + block.decode(),
+                                   "stdout": output.decode(errors="replace")}
+            metrics, action_error = action_metrics(output)
+            actions[team].update(metrics)
+            if action_error:
+                errors.append({"id": dragon_id, "team": team, "error": action_error})
             if worker.error:
                 errors.append({"id": dragon_id, "team": team, "error": worker.error})
             metrics = getattr(worker, "live", None)
@@ -73,7 +97,10 @@ def match(engine, map_path, bots, seed, sandbox, replay_path):
             return output
 
         def death(dragon_id, round_num, reason):
-            deaths.append({"id": dragon_id, "team": teams[dragon_id], "round": round_num, "reason": reason})
+            diagnostic = replay_path.with_suffix(f".death-{dragon_id}-{round_num}.json")
+            diagnostic.write_text(json.dumps(last_turn.get(dragon_id, {}), indent=2) + "\n")
+            deaths.append({"id": dragon_id, "team": teams[dragon_id], "round": round_num, "reason": reason,
+                           "diagnostic": str(diagnostic)})
             worker = live.pop(dragon_id, None)
             if worker:
                 worker.stop()
@@ -89,6 +116,7 @@ def match(engine, map_path, bots, seed, sandbox, replay_path):
             "replay": str(replay_path), "replay_sha256": hashlib.sha256(replay).hexdigest(),
             "errors": errors, "deaths": deaths, "notices": notices,
             "peak_observed_length": peaks, "turns": turns,
+            "actions": {team: dict(counts) for team, counts in actions.items()},
             "points": {team: {"p50": percentile(v, 50), "p95": percentile(v, 95),
                                "max": max(v, default=0)} for team, v in points.items()},
         }
@@ -162,6 +190,10 @@ def main() -> int:
                "mode": "native-unmetered" if args.native else "sandbox",
                "max_points": max((p["max"] for r in records for p in r["points"].values()), default=0),
                "median_rounds": statistics.median(r["rounds"] + 1 for r in records)}
+    candidate_actions = Counter()
+    for record in records:
+        candidate_actions.update(record["actions"][record["candidate_team"]])
+    summary["candidate_actions"] = dict(candidate_actions)
     (args.output / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
     print(json.dumps(summary, indent=2))
     return int(failed)
