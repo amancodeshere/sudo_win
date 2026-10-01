@@ -27,6 +27,7 @@ struct OccupantKnowledge {
 struct CellKnowledge {
     bool seen = false;
     int last_seen_round = -1;
+    int last_visited_round = -1;
     bool has_pearl = false;
     int pearl_time = -1;
     std::array<EdgeKnowledge, 4> edges{};

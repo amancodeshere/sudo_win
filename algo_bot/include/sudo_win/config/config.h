@@ -9,6 +9,11 @@ inline constexpr auto enable_sonar = false;
 inline constexpr auto enable_indicators = false;
 inline constexpr auto survival_search_depth = 4;
 inline constexpr auto survival_node_budget = 256;
+inline constexpr auto routing_node_budget = 2048U;
+inline constexpr auto pearl_memory_max_age = 16;
+inline constexpr auto target_max_age = 8;
+inline constexpr auto score_route_progress = 7000;
+inline constexpr auto score_recent_visit = -3000;
 
 inline constexpr auto endgame_start_round = 425;
 inline constexpr auto split_min_length = 10;

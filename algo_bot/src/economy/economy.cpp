@@ -10,10 +10,10 @@
 namespace sudo_win {
 
 auto Economy::score_destination(unswbc::Controller const& controller,
-                                WorldModel const& world,
+                                WorldModel const&,
                                 Pathfinding const& pathfinding,
                                 unswbc::Position destination) const -> int {
-    auto score = world.unseen_neighbour_count(destination) * config::score_frontier;
+    auto score = 0;
     auto const* tile = controller.get_tile(destination);
     if (tile == nullptr) {
         return score;

@@ -16,6 +16,18 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     auto const simulation = Simulation{};
     auto const initial = simulation.initial_state(controller);
     auto best_survival = -1;
+    if (game.get_round_num() - target_round_ > config::target_max_age) {
+        target_.reset();
+    }
+    auto const route = pathfinding_.remembered_target(controller, world, game.get_round_num(), target_);
+    if (route) {
+        if (!target_ || *target_ != route->target) {
+            target_round_ = game.get_round_num();
+        }
+        target_ = route->target;
+    } else {
+        target_.reset();
+    }
 
     for (auto const direction : safe_moves) {
         auto const next = simulation.advance(controller, initial, direction);
@@ -32,7 +44,15 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         auto candidate = MoveCandidate{direction};
         candidate.mobility_score = reachable_area * config::score_reachable_tile;
         candidate.economy_score = economy_.score_destination(controller, world, pathfinding_, destination);
-        candidate.exploration_score = world.unseen_neighbour_count(destination) * config::score_frontier;
+        if (route && route->first_direction == direction) {
+            candidate.economy_score += config::score_route_progress + route->value;
+        }
+        auto const last_visit = world.cell(destination).last_visited_round;
+        if (last_visit >= 0 && game.get_round_num() - last_visit < 4
+            && !world.cell(destination).has_pearl) {
+            candidate.exploration_score += config::score_recent_visit;
+        }
+        candidate.exploration_score += world.unseen_neighbour_count(destination) * config::score_frontier;
         candidate.combat_score = combat_.destination_risk(controller, destination, role);
         candidate.role_score = roles_.score_move(role,
                                                  reachable_area,

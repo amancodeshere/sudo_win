@@ -1,6 +1,10 @@
 #include "../../include/sudo_win/pathfinding/pathfinding.h"
+#include "../../include/sudo_win/world/world_model.h"
+#include "../../include/sudo_win/geometry/geometry.h"
+#include "../../include/sudo_win/config/config.h"
 
 #include <limits>
+#include <algorithm>
 #include <queue>
 #include <unordered_map>
 #include <unordered_set>
@@ -24,6 +28,76 @@ namespace {
 }
 
 } // namespace
+
+auto Pathfinding::remembered_target(unswbc::Controller const& controller,
+                                    WorldModel const& world,
+                                    int round,
+                                    std::optional<unswbc::Position> preferred) const
+    -> std::optional<TargetRoute> {
+    auto const area = static_cast<std::size_t>(world.width() * world.height());
+    auto distance = std::vector<int>(area, -1);
+    auto first = std::vector<unswbc::Direction>(area, unswbc::Direction::NORTH);
+    auto queue = std::vector<unswbc::Position>{controller.get_position()};
+    auto const index = [&world](unswbc::Position p) {
+        return static_cast<std::size_t>(p.y * world.width() + p.x);
+    };
+    distance[index(queue.front())] = 0;
+    auto best = std::optional<TargetRoute>{};
+    auto previous = std::optional<TargetRoute>{};
+    for (std::size_t cursor = 0; cursor < queue.size() && cursor < config::routing_node_budget; ++cursor) {
+        auto const current = queue[cursor];
+        auto const current_index = index(current);
+        auto const steps = distance[current_index];
+        auto const& cell = world.cell(current);
+        auto const age = round - cell.last_seen_round;
+        auto const pearl = cell.has_pearl && age <= config::pearl_memory_max_age;
+        auto const spawning = !cell.has_pearl && cell.pearl_time >= 0 && age <= 2
+                           && cell.pearl_time - age <= steps + 1;
+        auto frontier = 0;
+        for (auto const direction : unswbc::Direction::get_direction_list()) {
+            auto const& edge = cell.edges[geometry::direction_index(direction)];
+            if (edge.seen && edge.type == unswbc::EdgeType::EMPTY
+                && !world.has_seen(current.add_dir(direction))) {
+                ++frontier;
+            }
+        }
+        if (steps > 0 && (pearl || spawning || frontier > 0)) {
+            auto value = (pearl ? 24000 : spawning ? 8000 : frontier * 2400) / (steps + 1);
+            if (cell.last_visited_round >= 0 && round - cell.last_visited_round < 8) {
+                value /= 4;
+            }
+            auto const candidate = TargetRoute{current, first[current_index], steps, value, pearl || spawning};
+            if (!best || candidate.value > best->value) {
+                best = candidate;
+            }
+            if (preferred && current == *preferred) {
+                previous = candidate;
+            }
+        }
+        for (auto const direction : unswbc::Direction::get_direction_list()) {
+            auto const& edge = cell.edges[geometry::direction_index(direction)];
+            if (!edge.seen || edge.type != unswbc::EdgeType::EMPTY) {
+                continue;
+            }
+            auto const next = current.add_dir(direction);
+            auto const next_index = index(next);
+            auto const* visible = controller.get_tile(next);
+            // Dynamic occupancy is authoritative only in the current observation.
+            if (!world.has_seen(next) || distance[next_index] >= 0
+                || (visible != nullptr && visible->get_dragon() != nullptr)) {
+                continue;
+            }
+            distance[next_index] = steps + 1;
+            first[next_index] = steps == 0 ? direction : first[current_index];
+            queue.push_back(next);
+        }
+    }
+    // Keep a viable target unless an alternative is substantially better.
+    if (previous && best && previous->value * 5 >= best->value * 4) {
+        return previous;
+    }
+    return best;
+}
 
 auto Pathfinding::visible_reachable_area(unswbc::Controller const& controller,
                                          unswbc::Position start) const -> int {

@@ -13,6 +13,7 @@ WorldModel::WorldModel(unswbc::Game const& game)
 , cells_(static_cast<std::size_t>(game.width * game.height)) {}
 
 auto WorldModel::update(unswbc::Controller const& controller, unswbc::Game const& game) -> void {
+    cells_[index(controller.get_position())].last_visited_round = game.get_round_num();
     for (auto const& tile : controller.get_tiles()) {
         auto& remembered = cells_[index(tile.get_position())];
         remembered.seen = true;

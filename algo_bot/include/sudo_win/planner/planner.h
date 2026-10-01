@@ -22,6 +22,8 @@ public:
                                      Role role) const -> PlannedAction;
 
 private:
+    mutable std::optional<unswbc::Position> target_;
+    mutable int target_round_ = -1;
     Safety safety_;
     Pathfinding pathfinding_;
     Economy economy_;
