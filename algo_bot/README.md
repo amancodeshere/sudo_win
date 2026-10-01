@@ -170,6 +170,16 @@ Rerun it to fetch new games. The API returns at most 200 recent series; reaching
 that limit produces a warning rather than claiming the entire history was saved.
 Open `.replay` files in the VS Code Battledragon Replay viewer.
 
+After installing `util/requirements.txt`, audit every downloaded replay with:
+
+```bash
+python3 algo_bot/util/analyze_replays.py --output build/replay-audit
+```
+
+This verifies reconstructed final standings and exports per-game death evidence,
+CPU measurements, maps, and compressed visible turn inputs. See `REPLAY_AUDIT.md`
+for the review of our first 75 competition games.
+
 ## Current Strategy
 
 The stable bot uses persistent map memory, remembered pearl/frontier routing,
