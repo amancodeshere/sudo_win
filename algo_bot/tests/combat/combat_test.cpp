@@ -27,3 +27,26 @@ TEST_CASE("combat risk scoring") {
         CHECK(champion_risk == collector_risk * sudo_win::config::score_champion_risk_multiplier);
     }
 }
+
+TEST_CASE("combat distinguishes legal threats from proximity behind walls") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    auto combat = sudo_win::Combat{};
+    fixture.controller.get_tile({7, 5})->dragon_part = unswbc::DragonPart{
+        {7, 5}, 4, unswbc::Team::B, unswbc::Direction::WEST, true};
+    CHECK(combat.threat_level(fixture.controller, {6, 5}) == sudo_win::ThreatLevel::direct);
+    fixture.controller.get_tile({7, 5})->get_edge(unswbc::Direction::WEST)
+        = unswbc::Edge{false, unswbc::EdgeType::KELP};
+    CHECK(combat.threat_level(fixture.controller, {6, 5}) == sudo_win::ThreatLevel::none);
+    CHECK(combat.destination_risk(fixture.controller, {6, 5}, sudo_win::Role::collector) == 0);
+    // Reachable in two steps, though the unreported enemy length may be too short.
+    CHECK(combat.threat_level(fixture.controller, {6, 4}) == sudo_win::ThreatLevel::possible_sprint);
+}
+
+TEST_CASE("an enemy cannot cross its own body to threaten a destination") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.get_tile({7, 5})->dragon_part = unswbc::DragonPart{
+        {7, 5}, 4, unswbc::Team::B, unswbc::Direction::EAST, true};
+    fixture.controller.get_tile({6, 5})->dragon_part = unswbc::DragonPart{
+        {6, 5}, 4, unswbc::Team::B, unswbc::Direction::EAST, false};
+    CHECK(sudo_win::Combat{}.threat_level(fixture.controller, {5, 5}) == sudo_win::ThreatLevel::none);
+}

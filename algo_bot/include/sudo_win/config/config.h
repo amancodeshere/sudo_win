@@ -27,8 +27,9 @@ inline constexpr auto score_frontier = 180;
 inline constexpr auto score_facing_continuity = 80;
 inline constexpr auto score_reverse = -600;
 inline constexpr auto score_future_pearl_step = 40;
-inline constexpr auto score_enemy_head_risk = -12000;
-inline constexpr auto score_enemy_head_late_risk = -30000;
+inline constexpr auto score_enemy_head_risk = -120000;
+inline constexpr auto score_enemy_head_late_risk = -60000;
+inline constexpr auto score_possible_enemy_sprint = -30000;
 inline constexpr auto score_champion_risk_multiplier = 2;
 
 inline constexpr auto sonar_secret = 0xD6E8FEB86659FD93ULL;

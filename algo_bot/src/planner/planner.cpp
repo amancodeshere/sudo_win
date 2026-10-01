@@ -16,6 +16,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     auto const simulation = Simulation{};
     auto const initial = simulation.initial_state(controller);
     auto best_survival = -1;
+    auto best_safety_class = -1;
     if (game.get_round_num() - target_round_ > config::target_max_age) {
         target_.reset();
     }
@@ -54,6 +55,8 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         }
         candidate.exploration_score += world.unseen_neighbour_count(destination) * config::score_frontier;
         candidate.combat_score = combat_.destination_risk(controller, destination, role);
+        auto const threatened = combat_.threat_level(controller, destination) == ThreatLevel::direct;
+        auto const safety_class = survival == 0 ? 0 : threatened ? 1 : 2;
         candidate.role_score = roles_.score_move(role,
                                                  reachable_area,
                                                  world.unseen_neighbour_count(destination),
@@ -71,7 +74,10 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             candidate.mobility_score += config::score_reverse;
         }
 
-        if (survival > best_survival || (survival == best_survival && candidate.total_score() > best.score)) {
+        if (safety_class > best_safety_class
+            || (safety_class == best_safety_class && (survival > best_survival
+                || (survival == best_survival && candidate.total_score() > best.score)))) {
+            best_safety_class = safety_class;
             best_survival = survival;
             best.kind = ActionKind::move;
             best.steps = {direction};
