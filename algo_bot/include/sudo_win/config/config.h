@@ -15,6 +15,9 @@ inline constexpr auto score_sprint_tempo = 1200;
 inline constexpr auto routing_node_budget = 2048U;
 inline constexpr auto pearl_memory_max_age = 16;
 inline constexpr auto target_max_age = 8;
+inline constexpr auto ally_estimate_max_age = 8;
+inline constexpr auto champion_hysteresis = 2;
+inline constexpr auto endgame_ramp_round = 400;
 inline constexpr auto score_route_progress = 7000;
 inline constexpr auto score_recent_visit = -3000;
 

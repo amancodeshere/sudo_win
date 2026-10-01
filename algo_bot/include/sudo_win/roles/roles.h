@@ -3,6 +3,7 @@
 
 #include "../engine/helper.h"
 #include "../types/types.h"
+#include <unordered_map>
 
 namespace sudo_win {
 
@@ -14,6 +15,10 @@ public:
                                   int reachable_area,
                                   int frontier_count,
                                   int combat_score) const -> int;
+private:
+    struct LengthEstimate { int length; int round; };
+    mutable std::unordered_map<int, LengthEstimate> allies_;
+    mutable int champion_id_ = -1;
 };
 
 } // namespace sudo_win
