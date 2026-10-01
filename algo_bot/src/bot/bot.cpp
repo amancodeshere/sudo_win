@@ -3,6 +3,7 @@
 #include "../../include/sudo_win/config/config.h"
 
 #include <string>
+#include <exception>
 
 namespace sudo_win {
 
@@ -10,6 +11,10 @@ Bot::Bot(unswbc::Game const& game)
 : world_{game} {}
 
 auto Bot::execute_turn(unswbc::Controller& controller, unswbc::Game const& game) -> void {
+    auto action = PlannedAction{};
+#ifndef SUDO_WIN_DEVELOPMENT
+    try {
+#endif
     world_.update(controller, game);
 
     for (auto const payload : controller.get_sonar_messages()) {
@@ -20,7 +25,14 @@ auto Bot::execute_turn(unswbc::Controller& controller, unswbc::Game const& game)
     }
 
     auto const role = roles_.choose_role(controller, game);
-    auto const action = planner_.choose_action(controller, game, world_, role);
+    action = planner_.choose_action(controller, game, world_, role);
+#ifndef SUDO_WIN_DEVELOPMENT
+    } catch (std::exception const&) {
+        // No action has been emitted yet. Keep the competition reply valid.
+        controller.make_move(Safety{}.least_bad_fallback(controller));
+        return;
+    }
+#endif
 
     if (config::enable_indicators) {
         controller.set_indicator_string(std::string{action.reason});

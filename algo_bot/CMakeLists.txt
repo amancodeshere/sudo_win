@@ -50,6 +50,7 @@ set(SUDO_WIN_SOURCES
     src/geometry/geometry.cpp
     src/pathfinding/pathfinding.cpp
     src/planner/planner.cpp
+    src/planner/simulation.cpp
     src/roles/roles.cpp
     src/safety/safety.cpp
     src/sonar/sonar.cpp
@@ -59,6 +60,7 @@ set(SUDO_WIN_SOURCES
 
 add_library(sudo_win_bot STATIC ${SUDO_WIN_SOURCES})
 target_include_directories(sudo_win_bot PUBLIC include)
+target_compile_definitions(sudo_win_bot PRIVATE "$<$<CONFIG:Debug,RelWithDebInfo>:SUDO_WIN_DEVELOPMENT>")
 
 add_executable(sudo_win src/main.cpp)
 target_link_libraries(sudo_win PRIVATE sudo_win_bot)
@@ -76,6 +78,7 @@ add_executable(
     tests/geometry/geometry_test.cpp
     tests/pathfinding/pathfinding_test.cpp
     tests/planner/planner_test.cpp
+    tests/planner/simulation_test.cpp
     tests/roles/roles_test.cpp
     tests/safety/safety_test.cpp
     tests/sonar/sonar_test.cpp

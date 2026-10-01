@@ -30,3 +30,33 @@ TEST_CASE("standard movement safety") {
         CHECK_FALSE(safety.is_safe_standard_move(fixture.controller, unswbc::Direction::EAST));
     }
 }
+
+TEST_CASE("fallback ranks safe and uncertain escapes ahead of fatal moves") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    auto safety = sudo_win::Safety{};
+    fixture.controller.get_tile({5, 4})->dragon_part = unswbc::DragonPart{
+        {5, 4}, 0, unswbc::Team::A, unswbc::Direction::SOUTH, false};
+    CHECK(safety.standard_move_reason(fixture.controller, unswbc::Direction::NORTH)
+          == sudo_win::SafetyReason::occupied);
+    CHECK(safety.least_bad_fallback(fixture.controller) != unswbc::Direction::NORTH);
+    for (auto const direction : {unswbc::Direction::EAST, unswbc::Direction::SOUTH}) {
+        fixture.controller.get_tile({5, 5})->get_edge(direction)
+            = unswbc::Edge{false, unswbc::EdgeType::KELP};
+    }
+    fixture.controller.get_tile({5, 5})->get_edge(unswbc::Direction::WEST)
+        = unswbc::Edge{false, unswbc::EdgeType::PORTAL, 1};
+    CHECK(safety.least_bad_fallback(fixture.controller) == unswbc::Direction::WEST);
+}
+
+TEST_CASE("safety resolves wrapped destinations including own body") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.position = {0, 5};
+    fixture.controller.vision.tiles.emplace_back(unswbc::Position{0, 5});
+    fixture.controller.vision.tiles.emplace_back(unswbc::Position{9, 5});
+    fixture.controller.vision = unswbc::Vision{fixture.controller.vision.tiles};
+    auto safety = sudo_win::Safety{};
+    CHECK(safety.is_safe_standard_move(fixture.controller, unswbc::Direction::WEST));
+    fixture.controller.get_tile({9, 5})->dragon_part = unswbc::DragonPart{
+        {9, 5}, 0, unswbc::Team::A, unswbc::Direction::EAST, false};
+    CHECK_FALSE(safety.is_safe_standard_move(fixture.controller, unswbc::Direction::WEST));
+}

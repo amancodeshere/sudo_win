@@ -7,6 +7,8 @@ inline constexpr auto enable_sprinting = false;
 inline constexpr auto enable_splitting = false;
 inline constexpr auto enable_sonar = false;
 inline constexpr auto enable_indicators = false;
+inline constexpr auto survival_search_depth = 4;
+inline constexpr auto survival_node_budget = 256;
 
 inline constexpr auto endgame_start_round = 425;
 inline constexpr auto split_min_length = 10;

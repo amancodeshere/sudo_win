@@ -7,8 +7,12 @@
 
 namespace sudo_win {
 
+enum class SafetyReason { safe, wall, occupied, unknown_tile, unknown_portal };
+
 class Safety {
 public:
+    [[nodiscard]] auto standard_move_reason(unswbc::Controller const& controller,
+                                            unswbc::Direction direction) const -> SafetyReason;
     [[nodiscard]] auto is_safe_standard_move(unswbc::Controller const& controller,
                                              unswbc::Direction direction) const -> bool;
     [[nodiscard]] auto safe_standard_moves(unswbc::Controller const& controller) const

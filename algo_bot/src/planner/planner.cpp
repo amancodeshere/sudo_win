@@ -1,6 +1,7 @@
 #include "../../include/sudo_win/planner/planner.h"
 
 #include "../../include/sudo_win/config/config.h"
+#include "../../include/sudo_win/planner/simulation.h"
 #include "../../include/sudo_win/world/world_model.h"
 
 namespace sudo_win {
@@ -12,8 +13,18 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     auto const safe_moves = safety_.safe_standard_moves(controller);
     auto best = PlannedAction{};
     auto largest_reachable_area = 0;
+    auto const simulation = Simulation{};
+    auto const initial = simulation.initial_state(controller);
+    auto best_survival = -1;
 
     for (auto const direction : safe_moves) {
+        auto const next = simulation.advance(controller, initial, direction);
+        if (!next) {
+            continue;
+        }
+        auto budget = config::survival_node_budget;
+        auto const survival = simulation.survival_depth(controller, *next,
+                                                         config::survival_search_depth, budget);
         auto const destination = controller.get_position().add_dir(direction);
         auto const reachable_area = pathfinding_.visible_reachable_area(controller, destination);
         largest_reachable_area = reachable_area > largest_reachable_area ? reachable_area : largest_reachable_area;
@@ -40,7 +51,8 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             candidate.mobility_score += config::score_reverse;
         }
 
-        if (candidate.total_score() > best.score) {
+        if (survival > best_survival || (survival == best_survival && candidate.total_score() > best.score)) {
+            best_survival = survival;
             best.kind = ActionKind::move;
             best.steps = {direction};
             best.score = candidate.total_score();

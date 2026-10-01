@@ -28,3 +28,19 @@ TEST_CASE("baseline planner") {
         CHECK(action.steps.front() == unswbc::Direction::EAST);
     }
 }
+
+TEST_CASE("planner prefers an escape over a pearl in a closed pocket") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.get_tile({6, 5})->pearl = true;
+    for (auto const direction : {unswbc::Direction::NORTH, unswbc::Direction::EAST,
+                                 unswbc::Direction::SOUTH}) {
+        fixture.controller.get_tile({6, 5})->get_edge(direction)
+            = unswbc::Edge{false, unswbc::EdgeType::KELP};
+    }
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller, fixture.game);
+    auto const action = sudo_win::Planner{}.choose_action(fixture.controller, fixture.game,
+                                                          world, sudo_win::Role::collector);
+    REQUIRE(action.steps.size() == 1);
+    CHECK(action.steps.front() != unswbc::Direction::EAST);
+}
