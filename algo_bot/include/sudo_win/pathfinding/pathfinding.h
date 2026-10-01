@@ -24,9 +24,11 @@ public:
                                          std::optional<unswbc::Position> preferred = std::nullopt) const
         -> std::optional<TargetRoute>;
     [[nodiscard]] auto visible_reachable_area(unswbc::Controller const& controller,
-                                              unswbc::Position start) const -> int;
+                                              unswbc::Position start,
+                                              WorldModel const* world = nullptr) const -> int;
     [[nodiscard]] auto visible_pearl_distance(unswbc::Controller const& controller,
-                                              unswbc::Position start) const -> int;
+                                              unswbc::Position start,
+                                              WorldModel const* world = nullptr) const -> int;
 };
 
 } // namespace sudo_win

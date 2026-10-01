@@ -7,6 +7,7 @@
 #include <vector>
 
 namespace sudo_win {
+class WorldModel;
 
 struct SimulationState {
     // Head first. Unseen segments have the sentinel {-1, -1}.
@@ -18,15 +19,18 @@ struct SimulationState {
 
 class Simulation {
 public:
-    [[nodiscard]] auto initial_state(unswbc::Controller const& controller) const -> SimulationState;
+    [[nodiscard]] auto initial_state(unswbc::Controller const& controller,
+                                     WorldModel const* world = nullptr) const -> SimulationState;
     [[nodiscard]] auto advance(unswbc::Controller const& controller,
                                SimulationState const& state,
                                unswbc::Direction direction,
-                               bool pay_sprint = false) const -> std::optional<SimulationState>;
+                               bool pay_sprint = false,
+                               WorldModel const* world = nullptr) const -> std::optional<SimulationState>;
     [[nodiscard]] auto survival_depth(unswbc::Controller const& controller,
                                       SimulationState const& state,
                                       int remaining_depth,
-                                      int& node_budget) const -> int;
+                                      int& node_budget,
+                                      WorldModel const* world = nullptr) const -> int;
 };
 
 } // namespace sudo_win

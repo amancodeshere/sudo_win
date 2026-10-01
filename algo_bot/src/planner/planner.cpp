@@ -10,11 +10,11 @@ auto Planner::choose_action(unswbc::Controller const& controller,
                             unswbc::Game const& game,
                             WorldModel const& world,
                             Role role) const -> PlannedAction {
-    auto const safe_moves = safety_.safe_standard_moves(controller);
+    auto const safe_moves = safety_.safe_standard_moves(controller, &world);
     auto best = PlannedAction{};
     auto largest_reachable_area = 0;
     auto const simulation = Simulation{};
-    auto const initial = simulation.initial_state(controller);
+    auto const initial = simulation.initial_state(controller, &world);
     auto best_survival = -1;
     auto best_safety_class = -1;
     if (game.get_round_num() - target_round_ > config::target_max_age) {
@@ -31,15 +31,15 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     }
 
     for (auto const direction : safe_moves) {
-        auto const next = simulation.advance(controller, initial, direction);
+        auto const next = simulation.advance(controller, initial, direction, false, &world);
         if (!next) {
             continue;
         }
         auto budget = config::survival_node_budget;
         auto const survival = simulation.survival_depth(controller, *next,
-                                                         config::survival_search_depth, budget);
-        auto const destination = controller.get_position().add_dir(direction);
-        auto const reachable_area = pathfinding_.visible_reachable_area(controller, destination);
+                                                         config::survival_search_depth, budget, &world);
+        auto const destination = next->body.front();
+        auto const reachable_area = pathfinding_.visible_reachable_area(controller, destination, &world);
         largest_reachable_area = reachable_area > largest_reachable_area ? reachable_area : largest_reachable_area;
 
         auto candidate = MoveCandidate{direction};
@@ -54,8 +54,8 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             candidate.exploration_score += config::score_recent_visit;
         }
         candidate.exploration_score += world.unseen_neighbour_count(destination) * config::score_frontier;
-        candidate.combat_score = combat_.destination_risk(controller, destination, role);
-        auto const threatened = combat_.threat_level(controller, destination) == ThreatLevel::direct;
+        candidate.combat_score = combat_.destination_risk(controller, destination, role, &world);
+        auto const threatened = combat_.threat_level(controller, destination, &world) == ThreatLevel::direct;
         auto const safety_class = survival == 0 ? 0 : threatened ? 1 : 2;
         candidate.role_score = roles_.score_move(role,
                                                  reachable_area,

@@ -5,16 +5,19 @@
 #include "../types/types.h"
 
 namespace sudo_win {
+class WorldModel;
 
 enum class ThreatLevel { none, possible_sprint, direct };
 
 class Combat {
 public:
     [[nodiscard]] auto threat_level(unswbc::Controller const& controller,
-                                    unswbc::Position destination) const -> ThreatLevel;
+                                    unswbc::Position destination,
+                                    WorldModel const* world = nullptr) const -> ThreatLevel;
     [[nodiscard]] auto destination_risk(unswbc::Controller const& controller,
                                         unswbc::Position destination,
-                                        Role role) const -> int;
+                                        Role role,
+                                        WorldModel const* world = nullptr) const -> int;
 };
 
 } // namespace sudo_win

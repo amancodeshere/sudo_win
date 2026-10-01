@@ -1,14 +1,15 @@
 #include "../../include/sudo_win/safety/safety.h"
+#include "../../include/sudo_win/world/world_model.h"
 
 namespace sudo_win {
 
 auto Safety::is_safe_standard_move(unswbc::Controller const& controller,
-                                   unswbc::Direction direction) const -> bool {
-    return standard_move_reason(controller, direction) == SafetyReason::safe;
+                                   unswbc::Direction direction, WorldModel const* world) const -> bool {
+    return standard_move_reason(controller, direction, world) == SafetyReason::safe;
 }
 
 auto Safety::standard_move_reason(unswbc::Controller const& controller,
-                                  unswbc::Direction direction) const -> SafetyReason {
+                                  unswbc::Direction direction, WorldModel const* world) const -> SafetyReason {
     auto const* origin = controller.get_tile(controller.get_position());
     if (origin == nullptr) {
         return SafetyReason::unknown_tile;
@@ -18,23 +19,28 @@ auto Safety::standard_move_reason(unswbc::Controller const& controller,
     if (!edge.is_passable()) {
         return SafetyReason::wall;
     }
+    auto target = controller.get_position().add_dir(direction);
     if (edge.is_portal()) {
-        return SafetyReason::unknown_portal;
+        auto const exit = world != nullptr ? world->transition(controller.get_position(), direction) : std::nullopt;
+        if (!exit) {
+            return SafetyReason::unknown_portal;
+        }
+        target = *exit;
     }
 
-    auto const* destination = controller.get_tile(controller.get_position().add_dir(direction));
+    auto const* destination = controller.get_tile(target);
     if (destination == nullptr) {
         return SafetyReason::unknown_tile;
     }
     return destination->get_dragon() == nullptr ? SafetyReason::safe : SafetyReason::occupied;
 }
 
-auto Safety::safe_standard_moves(unswbc::Controller const& controller) const
+auto Safety::safe_standard_moves(unswbc::Controller const& controller, WorldModel const* world) const
     -> std::vector<unswbc::Direction> {
     auto moves = std::vector<unswbc::Direction>{};
     moves.reserve(4);
     for (auto const direction : unswbc::Direction::get_direction_list()) {
-        if (is_safe_standard_move(controller, direction)) {
+        if (is_safe_standard_move(controller, direction, world)) {
             moves.push_back(direction);
         }
     }

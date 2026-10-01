@@ -12,19 +12,22 @@
 namespace sudo_win {
 namespace {
 
-[[nodiscard]] auto can_traverse(unswbc::Controller const& controller,
+[[nodiscard]] auto traversable_destination(unswbc::Controller const& controller,
                                 unswbc::Position from,
-                                unswbc::Direction direction) -> bool {
+                                unswbc::Direction direction,
+                                WorldModel const* world) -> std::optional<unswbc::Position> {
     auto const* tile = controller.get_tile(from);
     if (tile == nullptr) {
-        return false;
+        return std::nullopt;
     }
     auto const& edge = tile->get_edge(direction);
-    if (!edge.is_passable() || edge.is_portal()) {
-        return false;
+    if (!edge.is_passable()) {
+        return std::nullopt;
     }
-    auto const* next = controller.get_tile(from.add_dir(direction));
-    return next != nullptr && next->get_dragon() == nullptr;
+    auto const target = edge.is_portal() ? (world != nullptr ? world->transition(from, direction) : std::nullopt)
+                                        : std::optional{from.add_dir(direction)};
+    auto const* next = target ? controller.get_tile(*target) : nullptr;
+    return next != nullptr && next->get_dragon() == nullptr ? target : std::nullopt;
 }
 
 } // namespace
@@ -75,11 +78,11 @@ auto Pathfinding::remembered_target(unswbc::Controller const& controller,
             }
         }
         for (auto const direction : unswbc::Direction::get_direction_list()) {
-            auto const& edge = cell.edges[geometry::direction_index(direction)];
-            if (!edge.seen || edge.type != unswbc::EdgeType::EMPTY) {
+            auto const target = world.transition(current, direction);
+            if (!target) {
                 continue;
             }
-            auto const next = current.add_dir(direction);
+            auto const next = *target;
             auto const next_index = index(next);
             auto const* visible = controller.get_tile(next);
             // Dynamic occupancy is authoritative only in the current observation.
@@ -100,7 +103,7 @@ auto Pathfinding::remembered_target(unswbc::Controller const& controller,
 }
 
 auto Pathfinding::visible_reachable_area(unswbc::Controller const& controller,
-                                         unswbc::Position start) const -> int {
+                                         unswbc::Position start, WorldModel const* world) const -> int {
     auto frontier = std::queue<unswbc::Position>{};
     auto visited = std::unordered_set<unswbc::Position, unswbc::PositionHash>{};
     frontier.push(start);
@@ -111,10 +114,11 @@ auto Pathfinding::visible_reachable_area(unswbc::Controller const& controller,
         frontier.pop();
 
         for (auto const direction : unswbc::Direction::get_direction_list()) {
-            if (!can_traverse(controller, current, direction)) {
+            auto const target = traversable_destination(controller, current, direction, world);
+            if (!target) {
                 continue;
             }
-            auto const next = current.add_dir(direction);
+            auto const next = *target;
             if (visited.insert(next).second) {
                 frontier.push(next);
             }
@@ -124,7 +128,7 @@ auto Pathfinding::visible_reachable_area(unswbc::Controller const& controller,
 }
 
 auto Pathfinding::visible_pearl_distance(unswbc::Controller const& controller,
-                                         unswbc::Position start) const -> int {
+                                         unswbc::Position start, WorldModel const* world) const -> int {
     auto frontier = std::queue<unswbc::Position>{};
     auto distance = std::unordered_map<unswbc::Position, int, unswbc::PositionHash>{};
     frontier.push(start);
@@ -141,10 +145,11 @@ auto Pathfinding::visible_pearl_distance(unswbc::Controller const& controller,
         }
 
         for (auto const direction : unswbc::Direction::get_direction_list()) {
-            if (!can_traverse(controller, current, direction)) {
+            auto const target = traversable_destination(controller, current, direction, world);
+            if (!target) {
                 continue;
             }
-            auto const next = current.add_dir(direction);
+            auto const next = *target;
             if (!distance.contains(next)) {
                 distance.emplace(next, current_distance + 1);
                 frontier.push(next);

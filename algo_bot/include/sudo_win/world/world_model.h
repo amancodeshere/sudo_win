@@ -49,6 +49,8 @@ public:
     [[nodiscard]] auto has_seen(unswbc::Position position) const -> bool;
     [[nodiscard]] auto unseen_neighbour_count(unswbc::Position position) const -> int;
     [[nodiscard]] auto portal_endpoints(int portal_id) const -> std::vector<PortalEndpoint> const*;
+    [[nodiscard]] auto transition(unswbc::Position from, unswbc::Direction direction) const
+        -> std::optional<unswbc::Position>;
     [[nodiscard]] auto width() const -> int;
     [[nodiscard]] auto height() const -> int;
 

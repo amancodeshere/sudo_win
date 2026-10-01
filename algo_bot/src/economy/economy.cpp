@@ -10,7 +10,7 @@
 namespace sudo_win {
 
 auto Economy::score_destination(unswbc::Controller const& controller,
-                                WorldModel const&,
+                                WorldModel const& world,
                                 Pathfinding const& pathfinding,
                                 unswbc::Position destination) const -> int {
     auto score = 0;
@@ -26,7 +26,7 @@ auto Economy::score_destination(unswbc::Controller const& controller,
         score += std::max(0, 20 - tile->get_pearl_time()) * config::score_future_pearl_step;
     }
 
-    auto const distance = pathfinding.visible_pearl_distance(controller, destination);
+    auto const distance = pathfinding.visible_pearl_distance(controller, destination, &world);
     if (distance != std::numeric_limits<int>::max()) {
         score += std::max(0, config::score_nearby_pearl_base - distance * config::score_nearby_pearl_step);
     }

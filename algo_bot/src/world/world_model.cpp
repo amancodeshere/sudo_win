@@ -6,6 +6,17 @@
 #include <cstddef>
 
 namespace sudo_win {
+namespace {
+[[nodiscard]] auto canonical_endpoint(PortalEndpoint endpoint) -> PortalEndpoint {
+    if (endpoint.direction == unswbc::Direction::SOUTH) {
+        return {endpoint.position.add_dir(endpoint.direction), unswbc::Direction::NORTH};
+    }
+    if (endpoint.direction == unswbc::Direction::EAST) {
+        return {endpoint.position.add_dir(endpoint.direction), unswbc::Direction::WEST};
+    }
+    return endpoint;
+}
+} // namespace
 
 WorldModel::WorldModel(unswbc::Game const& game)
 : width_{game.width}
@@ -68,6 +79,31 @@ auto WorldModel::portal_endpoints(int portal_id) const -> std::vector<PortalEndp
     return found == portals_.end() ? nullptr : &found->second;
 }
 
+auto WorldModel::transition(unswbc::Position from, unswbc::Direction direction) const
+    -> std::optional<unswbc::Position> {
+    auto const& edge = cell(from).edges[geometry::direction_index(direction)];
+    if (!edge.seen || edge.type == unswbc::EdgeType::KELP) {
+        return std::nullopt;
+    }
+    if (edge.type == unswbc::EdgeType::EMPTY) {
+        return from.add_dir(direction);
+    }
+    auto const* endpoints = portal_endpoints(edge.portal_id);
+    if (endpoints == nullptr || endpoints->size() != 2
+        || endpoints->front().direction != endpoints->back().direction) {
+        return std::nullopt;
+    }
+    auto const source = canonical_endpoint({from, direction});
+    for (std::size_t i = 0; i < endpoints->size(); ++i) {
+        if ((*endpoints)[i].position == source.position && (*endpoints)[i].direction == source.direction) {
+            auto const partner = (*endpoints)[1 - i].position;
+            return direction == unswbc::Direction::NORTH || direction == unswbc::Direction::WEST
+                 ? partner.add_dir(direction) : partner;
+        }
+    }
+    return std::nullopt;
+}
+
 auto WorldModel::width() const -> int {
     return width_;
 }
@@ -83,6 +119,7 @@ auto WorldModel::index(unswbc::Position position) const -> std::size_t {
 }
 
 auto WorldModel::remember_portal(int portal_id, PortalEndpoint endpoint) -> void {
+    endpoint = canonical_endpoint(endpoint);
     auto& endpoints = portals_[portal_id];
     auto const duplicate = std::ranges::any_of(endpoints, [&](PortalEndpoint const& existing) {
         return existing.position == endpoint.position && existing.direction == endpoint.direction;
