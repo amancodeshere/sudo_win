@@ -30,21 +30,33 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         target_.reset();
     }
 
-    for (auto const direction : safe_moves) {
-        auto const next = simulation.advance(controller, initial, direction, false, &world);
-        if (!next) {
-            continue;
-        }
+    auto const consider = [&](SimulationState const& next, std::vector<unswbc::Direction> const& steps) {
+        auto const direction = steps.front();
+        auto const sprint = steps.size() > 1;
         auto budget = config::survival_node_budget;
-        auto const survival = simulation.survival_depth(controller, *next,
+        auto const survival = simulation.survival_depth(controller, next,
                                                          config::survival_search_depth, budget, &world);
-        auto const destination = next->body.front();
-        auto const reachable_area = pathfinding_.visible_reachable_area(controller, destination, &world);
+        auto const destination = next.body.front();
+        auto const reachable_area = simulation.reachable_area(controller, next, &world);
         largest_reachable_area = reachable_area > largest_reachable_area ? reachable_area : largest_reachable_area;
 
         auto candidate = MoveCandidate{direction};
         candidate.mobility_score = reachable_area * config::score_reachable_tile;
         candidate.economy_score = economy_.score_destination(controller, world, pathfinding_, destination);
+        auto const length_gain = static_cast<int>(next.body.size()) - controller.get_length();
+        auto const* tile = controller.get_tile(destination);
+        // Economy scores the endpoint pearl; replace that with the full route's
+        // net growth, including every extra-step payment and intermediate pearl.
+        candidate.economy_score += length_gain * config::score_immediate_pearl;
+        if (tile != nullptr && tile->has_pearl()) {
+            candidate.economy_score -= config::score_immediate_pearl;
+        }
+        if (sprint) {
+            auto const first_target = world.transition(controller.get_position(), direction);
+            auto const* first_tile = first_target ? controller.get_tile(*first_target) : nullptr;
+            auto const first_pearl = first_tile != nullptr && first_tile->has_pearl() ? 1 : 0;
+            candidate.economy_score += (next.pearls - first_pearl) * config::score_sprint_tempo;
+        }
         if (route && route->first_direction == direction) {
             candidate.economy_score += config::score_route_progress + route->value;
         }
@@ -57,6 +69,13 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         candidate.combat_score = combat_.destination_risk(controller, destination, role, &world);
         auto const threatened = combat_.threat_level(controller, destination, &world) == ThreatLevel::direct;
         auto const safety_class = survival == 0 ? 0 : threatened ? 1 : 2;
+        if (sprint && length_gain < 0 && safety_class <= best_safety_class) {
+            return;
+        }
+        if (sprint && length_gain <= 0 && (role == Role::champion || endgame_.active(game))
+            && safety_class <= best_safety_class) {
+            return;
+        }
         candidate.role_score = roles_.score_move(role,
                                                  reachable_area,
                                                  world.unseen_neighbour_count(destination),
@@ -79,10 +98,43 @@ auto Planner::choose_action(unswbc::Controller const& controller,
                 || (survival == best_survival && candidate.total_score() > best.score)))) {
             best_safety_class = safety_class;
             best_survival = survival;
-            best.kind = ActionKind::move;
-            best.steps = {direction};
+            best.kind = sprint ? ActionKind::sprint : ActionKind::move;
+            best.steps = steps;
             best.score = candidate.total_score();
-            best.reason = "best safe move";
+            best.reason = sprint ? "validated short sprint" : "best safe move";
+        }
+    };
+
+    for (auto const direction : safe_moves) {
+        if (auto const next = simulation.advance(controller, initial, direction, false, &world)) {
+            consider(*next, {direction});
+        }
+    }
+    if (config::enable_sprinting) {
+        auto remaining_nodes = config::sprint_node_budget;
+        auto const expand = [&](auto const& self, SimulationState const& state,
+                                std::vector<unswbc::Direction> const& steps) -> void {
+            if (steps.size() >= config::max_sprint_steps || remaining_nodes <= 0) {
+                return;
+            }
+            for (auto const direction : unswbc::Direction::get_direction_list()) {
+                if (remaining_nodes-- <= 0) {
+                    break;
+                }
+                auto const next = simulation.advance(controller, state, direction, true, &world);
+                if (!next) {
+                    continue;
+                }
+                auto extended = steps;
+                extended.push_back(direction);
+                consider(*next, extended);
+                self(self, *next, extended);
+            }
+        };
+        for (auto const direction : safe_moves) {
+            if (auto const next = simulation.advance(controller, initial, direction, false, &world)) {
+                expand(expand, *next, {direction});
+            }
         }
     }
 

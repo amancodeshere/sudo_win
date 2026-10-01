@@ -112,4 +112,35 @@ auto Simulation::survival_depth(unswbc::Controller const& controller,
     return best;
 }
 
+auto Simulation::reachable_area(unswbc::Controller const& controller,
+                                 SimulationState const& state, WorldModel const* world) const -> int {
+    auto queue = std::vector<unswbc::Position>{state.body.front()};
+    for (std::size_t cursor = 0; cursor < queue.size(); ++cursor) {
+        auto const current = queue[cursor];
+        auto const* origin = controller.get_tile(current);
+        if (origin == nullptr) {
+            continue;
+        }
+        for (auto const direction : unswbc::Direction::get_direction_list()) {
+            auto const& edge = origin->get_edge(direction);
+            if (!edge.is_passable()) {
+                continue;
+            }
+            auto const target = edge.is_portal() ? (world != nullptr ? world->transition(current, direction) : std::nullopt)
+                                                : std::optional{current.add_dir(direction)};
+            if (!target || contains(queue, *target) || contains(state.body, *target)
+                || contains(state.unranked_body, *target)) {
+                continue;
+            }
+            auto const* tile = controller.get_tile(*target);
+            if (tile == nullptr || (tile->get_dragon() != nullptr
+                && tile->get_dragon()->get_id() != controller.get_id())) {
+                continue;
+            }
+            queue.push_back(*target);
+        }
+    }
+    return static_cast<int>(queue.size());
+}
+
 } // namespace sudo_win

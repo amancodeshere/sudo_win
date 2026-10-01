@@ -31,6 +31,9 @@ public:
                                       int remaining_depth,
                                       int& node_budget,
                                       WorldModel const* world = nullptr) const -> int;
+    [[nodiscard]] auto reachable_area(unswbc::Controller const& controller,
+                                      SimulationState const& state,
+                                      WorldModel const* world = nullptr) const -> int;
 };
 
 } // namespace sudo_win

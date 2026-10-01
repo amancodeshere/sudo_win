@@ -3,12 +3,15 @@
 
 namespace sudo_win::config {
 
-inline constexpr auto enable_sprinting = false;
+inline constexpr auto enable_sprinting = true;
 inline constexpr auto enable_splitting = false;
 inline constexpr auto enable_sonar = false;
 inline constexpr auto enable_indicators = false;
 inline constexpr auto survival_search_depth = 4;
 inline constexpr auto survival_node_budget = 256;
+inline constexpr auto max_sprint_steps = 3U;
+inline constexpr auto sprint_node_budget = 84;
+inline constexpr auto score_sprint_tempo = 1200;
 inline constexpr auto routing_node_budget = 2048U;
 inline constexpr auto pearl_memory_max_age = 16;
 inline constexpr auto target_max_age = 8;
