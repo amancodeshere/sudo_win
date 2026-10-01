@@ -144,7 +144,8 @@ This produces a clean bot directory, `build/submission-stable.zip`, and a JSON
 checksum/flag manifest. Choose a fresh output name for later builds. Profiles
 are applied to the copy, leaving source configuration unchanged:
 
-- `stable`: configured sprint policy, splitting/sonar/indicators disabled;
+- `stable`: configured sprints and rescue splits; investment splitting, sonar,
+  and indicators disabled;
 - `no-sprint`: stable strategy with sprint generation disabled for ablations;
 - `experimental`: enables the resource-backed split policy.
 
@@ -180,6 +181,19 @@ This verifies reconstructed final standings and exports per-game death evidence,
 CPU measurements, maps, and compressed visible turn inputs. See `REPLAY_AUDIT.md`
 for the review of our first 75 competition games.
 
+To check that a performance-only change preserves actions on every exported
+observation, compare two native executable builds:
+
+```bash
+python3 algo_bot/util/compare_replay_turns.py /path/to/before /path/to/after \
+  --output build/replay-audit/behavior-comparison.json
+```
+
+The verified 2 October upload is `build/submission-replay-final.zip`; the source
+directory is `build/submission-replay-final/`. Its checksums and validation scope
+are recorded in `VALIDATION.md`. Uploading a new version and activating it are
+separate API operations; local preparation does neither.
+
 ## Current Strategy
 
 The stable bot uses persistent map memory, remembered pearl/frontier routing,
@@ -189,8 +203,12 @@ caution, and validated two-/three-step sprints. Known portal exits must be visib
 and empty before execution. Search has fixed node budgets; sandbox evaluation
 checks the judge's actual CPU points.
 
-Resource-backed splitting is implemented but remains experimental and disabled
-by default. Sonar reports are decoded but still not applied or transmitted.
+Legal rescue splitting is available when movement is already fatal or a short
+escape search finds an escaping reversed tail. If the tail is unseen, the
+last-resort split is a survival attempt, not a certified safe child. Fatal
+fallbacks protect allied heads. Resource-backed investment splitting remains
+experimental and disabled by default. Sonar reports are decoded but still not
+applied or transmitted.
 The competition build has a planning exception fallback; Debug/RelWithDebInfo
 builds expose exceptions to catch development errors.
 

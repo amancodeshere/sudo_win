@@ -93,3 +93,209 @@ Per-game evidence (original team perspective):
 | 820083 | Default | slither hither | win | none | hitSelf: 1 |
 
 Detailed JSON evidence, maps, and reconstructed visible turn inputs are generated in `build/replay-audit/`. They are ignored build artifacts. Reconstructed observations are diagnostic fixtures; changed choices alter later observations, so replaying those inputs is not proof of winning the original match. Closed-loop games against source-available opponents are required before promoting changes. Opponent sources are not included in downloaded replays.
+
+## Individual loss explanations
+
+### Game 819740 — Slithery Fight vs Uhm?
+
+Our final snake, ID 6 with 9 segments, died in round 324 from hitOtherBody. Its last observation had 0 known empty adjacent escape directions. 4 of our snakes died in the first ten rounds. 6 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move.
+
+### Game 819741 — Devil vs Uhm?
+
+Our final snake, ID 1 with 4 segments, died in round 132 from hitSelf. Its last observation had 0 known empty adjacent escape directions. 1 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819743 — Default vs Uhm?
+
+At round 500, our longest surviving snake was 10 segments versus 15; total length was 10 versus 170. The longer opposing champion decided the loss; extra short snakes alone would not have won it. Growth changes were tested separately and rejected when they lost more controlled games; this matchup still needs stronger farming or champion protection.
+
+### Game 819770 — Portals vs 1
+
+Our final snake, ID 2 with 3 segments, died in round 117 from hitHeadToHead. Snake 0 caused the collision with a recorded 1-step move. Its last observation had 2 known empty adjacent escape directions. 1 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. 1 friendly head-collision pair(s) also lost two allies together; the new fatal fallback protects allied heads. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819771 — Slithery Fight vs 1
+
+Our final snake, ID 7 with 5 segments, died in round 135 from hitHeadToHead. Snake 168 caused the collision with a recorded 2-step move. Its last observation had 2 known empty adjacent escape directions. 4 of our snakes died in the first ten rounds. 5 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819772 — Queen Of Spades vs 1
+
+Our final snake, ID 0 with 2 segments, died in round 133 from hitHeadToHead. Snake 14 caused the collision with a recorded 1-step move. Its last observation had 3 known empty adjacent escape directions. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819773 — Prisoners Dilemma vs 1
+
+Our final snake, ID 5 with 2 segments, died in round 152 from hitHeadToHead. Snake 43 caused the collision with a recorded 1-step move. Its last observation had 2 known empty adjacent escape directions. 1 of our snakes died in the first ten rounds. 1 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819774 — Devil vs 1
+
+Our final snake, ID 0 with 10 segments, died in round 80 from hitHeadToHead. Its last observation had 0 known empty adjacent escape directions. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819775 — Queen Of Spades vs Loremipsum
+
+Our final snake, ID 1 with 15 segments, died in round 381 from hitHeadToHead. Snake 8 caused the collision with a recorded 1-step move. Its last observation had 3 known empty adjacent escape directions. 1 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819776 — Prisoners Dilemma vs Loremipsum
+
+Our final snake, ID 4 with 11 segments, died in round 176 from hitSelf. Its last observation had 0 known empty adjacent escape directions. 1 of our snakes died in the first ten rounds. 2 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819777 — Default vs Loremipsum
+
+Our final snake, ID 3 with 16 segments, died in round 349 from hitHeadToHead. Snake 29 caused the collision with a recorded 2-step move. Its last observation had 2 known empty adjacent escape directions. 2 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819778 — Portals vs Loremipsum
+
+Our final snake, ID 2 with 3 segments, died in round 117 from hitHeadToHead. Snake 0 caused the collision with a recorded 1-step move. Its last observation had 2 known empty adjacent escape directions. 1 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. 1 friendly head-collision pair(s) also lost two allies together; the new fatal fallback protects allied heads. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819779 — Schooltime vs Loremipsum
+
+Our final snake, ID 5 with 41 segments, died in round 277 from hitSelf. Its last observation had 0 known empty adjacent escape directions. 2 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819795 — Devil vs Uhm?
+
+Our final snake, ID 3 with 16 segments, died in round 274 from hitHeadToHead. Its last observation had 0 known empty adjacent escape directions. 1 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819796 — Portals vs Uhm?
+
+Our final snake, ID 2 with 3 segments, died in round 117 from hitHeadToHead. Snake 0 caused the collision with a recorded 1-step move. Its last observation had 2 known empty adjacent escape directions. 1 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. 1 friendly head-collision pair(s) also lost two allies together; the new fatal fallback protects allied heads. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819797 — Prisoners Dilemma vs Uhm?
+
+Our final snake, ID 5 with 20 segments, died in round 349 from hitSelf. Its last observation had 0 known empty adjacent escape directions. 1 of our snakes died in the first ten rounds. 3 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move.
+
+### Game 819798 — Trophy vs Uhm?
+
+Our final snake, ID 2 with 38 segments, died in round 199 from hitSelf. Its last observation had 0 known empty adjacent escape directions. 2 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move.
+
+### Game 819799 — Autarky vs Uhm?
+
+At round 500, our longest surviving snake was 12 segments versus 18; total length was 20 versus 199. The longer opposing champion decided the loss; extra short snakes alone would not have won it. 1 of our snakes died in the first ten rounds. 2 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. Growth changes were tested separately and rejected when they lost more controlled games; this matchup still needs stronger farming or champion protection.
+
+### Game 819822 — Default vs kraken
+
+Our final snake, ID 2 with 24 segments, died in round 389 from hitOtherBody. Its last observation had 0 known empty adjacent escape directions. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819823 — Slithery Fight vs kraken
+
+At round 500, our longest surviving snake was 4 segments versus 20; total length was 4 versus 184. The longer opposing champion decided the loss; extra short snakes alone would not have won it. 4 of our snakes died in the first ten rounds. 5 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. Growth changes were tested separately and rejected when they lost more controlled games; this matchup still needs stronger farming or champion protection.
+
+### Game 819824 — Schooltime vs kraken
+
+Our final snake, ID 4 with 11 segments, died in round 160 from hitHeadToHead. Snake 38 caused the collision with a recorded 2-step move. Its last observation had 2 known empty adjacent escape directions. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819847 — Prisoners Dilemma vs Thermal Throttle
+
+Our final snake, ID 3 with 7 segments, died in round 379 from hitOtherBody. Its last observation had 0 known empty adjacent escape directions. 1 of our snakes died in the first ten rounds. 2 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move.
+
+### Game 819849 — Trauma vs Thermal Throttle
+
+Our final snake, ID 1 with 17 segments, died in round 300 from hitHeadToHead. Snake 3 caused the collision with a recorded 1-step move. Its last observation had 2 known empty adjacent escape directions. 1 friendly head-collision pair(s) also lost two allies together; the new fatal fallback protects allied heads. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819898 — Slithery Fight vs Uhm?
+
+Our final snake, ID 10 with 34 segments, died in round 439 from hitSelf. Its last observation had 0 known empty adjacent escape directions. 4 of our snakes died in the first ten rounds. 6 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819900 — Autarky vs Uhm?
+
+At round 500, our longest surviving snake was 7 segments versus 21; total length was 7 versus 234. The longer opposing champion decided the loss; extra short snakes alone would not have won it. 1 of our snakes died in the first ten rounds. 2 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. 1 friendly head-collision pair(s) also lost two allies together; the new fatal fallback protects allied heads. Growth changes were tested separately and rejected when they lost more controlled games; this matchup still needs stronger farming or champion protection.
+
+### Game 819901 — Queen Of Spades vs Uhm?
+
+Our final snake, ID 3 with 12 segments, died in round 381 from hitOtherBody. Its last observation had 0 known empty adjacent escape directions.
+
+### Game 819913 — Queen Of Spades vs Just Reboot Normalize
+
+Our final snake, ID 1 with 12 segments, died in round 375 from hitHeadToHead. Snake 35 caused the collision with a recorded 3-step move. Its last observation had 2 known empty adjacent escape directions. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819914 — Default vs Just Reboot Normalize
+
+Our final snake, ID 6 with 17 segments, died in round 265 from hitOtherBody. Its last observation had 0 known empty adjacent escape directions. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819916 — Autarky vs Just Reboot Normalize
+
+Our final snake, ID 6 with 11 segments, died in round 441 from hitHeadToHead. Snake 72 caused the collision with a recorded 4-step move. Its last observation had 2 known empty adjacent escape directions. 1 of our snakes died in the first ten rounds. 2 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. 1 friendly head-collision pair(s) also lost two allies together; the new fatal fallback protects allied heads. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819917 — Schooltime vs Just Reboot Normalize
+
+Our final snake, ID 1 with 14 segments, died in round 153 from hitHeadToHead. Snake 59 caused the collision with a recorded 4-step move. Its last observation had 2 known empty adjacent escape directions. 1 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819946 — Devil vs wawow830
+
+Our final snake, ID 4 with 17 segments, died in round 98 from hitHeadToHead. Snake 65 caused the collision with a recorded 2-step move. Its last observation had 2 known empty adjacent escape directions. 2 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819948 — Schooltime vs wawow830
+
+Our final snake, ID 2 with 24 segments, died in round 194 from hitHeadToHead. Snake 3 caused the collision with a recorded 2-step move. Its last observation had 1 known empty adjacent escape directions. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819949 — Slithery Fight vs wawow830
+
+Our final snake, ID 7 with 15 segments, died in round 198 from hitHeadToHead. Snake 228 caused the collision with a recorded 2-step move. Its last observation had 2 known empty adjacent escape directions. 4 of our snakes died in the first ten rounds. 4 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819950 — Queen Of Spades vs wawow830
+
+Our final snake, ID 0 with 27 segments, died in round 361 from hitHeadToHead. Snake 141 caused the collision with a recorded 2-step move. Its last observation had 2 known empty adjacent escape directions. 1 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819984 — Prisoners Dilemma vs winner
+
+Our final snake, ID 2 with 13 segments, died in round 173 from hitOtherBody. Its last observation had 0 known empty adjacent escape directions. 1 of our snakes died in the first ten rounds. 3 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move.
+
+### Game 819987 — Devil vs winner
+
+Our final snake, ID 1 with 31 segments, died in round 129 from hitSelf. Its last observation had 0 known empty adjacent escape directions. 3 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move.
+
+### Game 819988 — Trauma vs winner
+
+At round 500, our longest surviving snake was 24 segments versus 38; total length was 36 versus 38. The longer opposing champion decided the loss; extra short snakes alone would not have won it. Growth changes were tested separately and rejected when they lost more controlled games; this matchup still needs stronger farming or champion protection.
+
+### Game 819994 — Queen Of Spades vs Uhm?
+
+At round 500, our longest surviving snake was 11 segments versus 11; total length was 11 versus 92. The longest-snake scores tied, so total length decided the loss. 1 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. Growth changes were tested separately and rejected when they lost more controlled games; this matchup still needs stronger farming or champion protection.
+
+### Game 819995 — Schooltime vs Uhm?
+
+Our final snake, ID 1 with 16 segments, died in round 496 from hitSelf. Its last observation had 0 known empty adjacent escape directions. 2 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move.
+
+### Game 819996 — Slithery Fight vs Uhm?
+
+Our final snake, ID 6 with 7 segments, died in round 398 from hitSelf. Its last observation had 0 known empty adjacent escape directions. 4 of our snakes died in the first ten rounds. 6 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move.
+
+### Game 819997 — Devil vs Uhm?
+
+Our final snake, ID 1 with 12 segments, died in round 180 from hitSelf. Its last observation had 0 known empty adjacent escape directions. 1 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 819998 — Autarky vs Uhm?
+
+Our final snake, ID 2 with 6 segments, died in round 343 from hitSelf. Its last observation had 0 known empty adjacent escape directions. 1 of our snakes died in the first ten rounds. 4 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. 1 friendly head-collision pair(s) also lost two allies together; the new fatal fallback protects allied heads. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 820026 — Portals vs code Ex
+
+Our final snake, ID 2 with 3 segments, died in round 117 from hitHeadToHead. Snake 0 caused the collision with a recorded 1-step move. Its last observation had 2 known empty adjacent escape directions. 1 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. 1 friendly head-collision pair(s) also lost two allies together; the new fatal fallback protects allied heads. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 820039 — Autarky vs Loremipsum
+
+At round 500, our longest surviving snake was 10 segments versus 16; total length was 10 versus 129. The longer opposing champion decided the loss; extra short snakes alone would not have won it. 1 of our snakes died in the first ten rounds. 1 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. Growth changes were tested separately and rejected when they lost more controlled games; this matchup still needs stronger farming or champion protection.
+
+### Game 820040 — Slithery Fight vs Loremipsum
+
+Our final snake, ID 10 with 9 segments, died in round 262 from hitSelf. Its last observation had 0 known empty adjacent escape directions. 4 of our snakes died in the first ten rounds. 6 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 820041 — Trophy vs Loremipsum
+
+Our final snake, ID 3 with 19 segments, died in round 182 from hitHeadToHead. Snake 10 caused the collision with a recorded 2-step move. Its last observation had 1 known empty adjacent escape directions. 1 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.
+
+### Game 820042 — Default vs Loremipsum
+
+At round 500, our longest surviving snake was 9 segments versus 17; total length was 9 versus 148. The longer opposing champion decided the loss; extra short snakes alone would not have won it. 1 of our snakes died in the first ten rounds. Growth changes were tested separately and rejected when they lost more controlled games; this matchup still needs stronger farming or champion protection.
+
+### Game 820043 — Queen Of Spades vs Loremipsum
+
+Our final snake, ID 1 with 19 segments, died in round 166 from hitSelf. Its last observation had 0 known empty adjacent escape directions. 2 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move.
+
+### Game 820059 — Slithery Fight vs kraken
+
+At round 500, our longest surviving snake was 4 segments versus 13; total length was 4 versus 115. The longer opposing champion decided the loss; extra short snakes alone would not have won it. 4 of our snakes died in the first ten rounds. 5 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. Growth changes were tested separately and rejected when they lost more controlled games; this matchup still needs stronger farming or champion protection.
+
+### Game 820063 — Schooltime vs kraken
+
+Our final snake, ID 3 with 24 segments, died in round 246 from hitSelf. Its last observation had 0 known empty adjacent escape directions. 3 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move.
+
+### Game 820079 — Portals vs slither hither
+
+Our final snake, ID 2 with 3 segments, died in round 117 from hitHeadToHead. Snake 0 caused the collision with a recorded 1-step move. Its last observation had 2 known empty adjacent escape directions. 1 self-collision deaths show the importance of reversing trapped tails through legal rescue splits instead of forcing a move. 1 friendly head-collision pair(s) also lost two allies together; the new fatal fallback protects allied heads. Broader sprint-threat policies were trialled but reduced overall wins, so they were not promoted; this remains a tactical weakness.

@@ -170,7 +170,7 @@ def analyze(path, metadata, output):
             identity = e['id']
             d = board.dragons.pop(identity)
             deaths.append({"id":identity,"team":d['team'],"round":round_num,"reason":e['reason'],
-                           "length":len(d['body']),"last_turn":last_turn.get(identity)})
+                           "length":len(d['body']),"acting_id":actor,"last_turn":last_turn.get(identity)})
         elif kind in ('engineLog','dragonLog') and board.dragons.get(e['id'],{}).get('team') == ours:
             logs.append({'round':round_num, **e})
     result = replay.result.to_dict()
