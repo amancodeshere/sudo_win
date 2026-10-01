@@ -90,6 +90,38 @@ unswbc run --sandbox -v maps/arena.map algo_bot algo_bot
 Always use `--sandbox` for performance checks. Ordinary local runs do not apply
 the judge's CPU-point budget.
 
+## Reproducible Benchmarks
+
+Install the pinned match dependency into a virtual environment:
+
+```bash
+uv venv /tmp/sudo-win-bench-env
+uv pip install --python /tmp/sudo-win-bench-env/bin/python -r algo_bot/util/requirements.txt
+/tmp/sudo-win-bench-env/bin/python -m unittest discover -s algo_bot/util/tests
+```
+
+Preserve the old submission sources as a separate bot directory, then compare:
+
+```bash
+XDG_CACHE_HOME=/tmp/sudo-win-cache /tmp/sudo-win-bench-env/bin/python \
+  algo_bot/util/benchmark.py algo_bot /tmp/sudo-win-baseline \
+  --seeds 1 2 3 --both-colours --repeat 2 --output /tmp/sudo-win-results
+```
+
+With no `--maps`, every map bundled with toolkit 1.2.2 is used. Narrow iteration
+with `--maps maps/arena.map`. Runs use the judge sandbox by default and compile
+only manifest-selected files, excluding Catch2 and test entry points. Each
+output directory must be fresh. JSONL records include source/map fingerprints,
+colour, seed, winner, final team total lengths, deaths, errors, CPU p50/p95/max,
+peak observed lengths, and replay hashes. Repeated replays must match exactly.
+The command fails on runtime errors, no-valid-action deaths, nondeterminism, or
+turns exceeding the default 90-million-point margin. Other collision deaths are
+recorded for comparison, rather than assumed avoidable.
+
+`--native` is a faster diagnostic mode and cannot verify CPU budgets. Peak
+observed length is sampled before actions; it is not final longest-dragon length.
+The engine still determines wins using its actual scoring rules.
+
 ## Baseline
 
 The current implementation provides persistent visible map memory, conservative
