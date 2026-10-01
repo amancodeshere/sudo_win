@@ -69,6 +69,7 @@ enable_testing()
 
 add_library(catch2_main STATIC lib/catch2_main.cpp)
 target_include_directories(catch2_main SYSTEM PUBLIC lib)
+target_compile_definitions(catch2_main PUBLIC CATCH_CONFIG_NO_COUNTER)
 
 add_executable(
     sudo_win_tests
