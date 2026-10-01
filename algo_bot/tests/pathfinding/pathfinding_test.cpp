@@ -14,15 +14,15 @@ TEST_CASE("visible pathfinding") {
     }
 
     SECTION("BFS finds the nearest visible pearl") {
-        fixture.controller.get_tile({7, 5})->pearl = true;
+        fixture.tile({7, 5}).pearl = true;
         CHECK(pathfinding.visible_pearl_distance(fixture.controller, {6, 5}) == 1);
     }
 
     SECTION("BFS routes around a blocked direct edge") {
-        fixture.controller.get_tile({7, 5})->pearl = true;
-        fixture.controller.get_tile({6, 5})->get_edge(unswbc::Direction::EAST)
+        fixture.tile({7, 5}).pearl = true;
+        fixture.tile({6, 5}).get_edge(unswbc::Direction::EAST)
             = unswbc::Edge{false, unswbc::EdgeType::KELP};
-        fixture.controller.get_tile({7, 5})->get_edge(unswbc::Direction::WEST)
+        fixture.tile({7, 5}).get_edge(unswbc::Direction::WEST)
             = unswbc::Edge{false, unswbc::EdgeType::KELP};
         CHECK(pathfinding.visible_pearl_distance(fixture.controller, {6, 5}) == 3);
     }
@@ -33,7 +33,7 @@ TEST_CASE("remembered routes retain targets and reject stale or blocked pearls")
     for (auto& tile : fixture.controller.vision.tiles) {
         tile.pearl_time = -1;
     }
-    fixture.controller.get_tile({8, 5})->pearl = true;
+    fixture.tile({8, 5}).pearl = true;
     auto world = sudo_win::WorldModel{fixture.game};
     world.update(fixture.controller, fixture.game);
     auto pathfinding = sudo_win::Pathfinding{};
@@ -55,7 +55,7 @@ TEST_CASE("remembered routes retain targets and reject stale or blocked pearls")
         CHECK_FALSE(route->pearl);
     }
     SECTION("newly observed obstacles invalidate a direct route") {
-        fixture.controller.get_tile({5, 5})->get_edge(unswbc::Direction::EAST)
+        fixture.tile({5, 5}).get_edge(unswbc::Direction::EAST)
             = unswbc::Edge{false, unswbc::EdgeType::KELP};
         world.update(fixture.controller, fixture.game);
         auto const route = pathfinding.remembered_target(fixture.controller, world, 1);
@@ -63,15 +63,15 @@ TEST_CASE("remembered routes retain targets and reject stale or blocked pearls")
         CHECK(route->first_direction != unswbc::Direction::EAST);
     }
     SECTION("a preferred equally valuable target prevents direction switching") {
-        fixture.controller.get_tile({8, 5})->pearl = false;
-        fixture.controller.get_tile({7, 5})->pearl = true;
-        fixture.controller.get_tile({5, 7})->pearl = true;
+        fixture.tile({8, 5}).pearl = false;
+        fixture.tile({7, 5}).pearl = true;
+        fixture.tile({5, 7}).pearl = true;
         world.update(fixture.controller, fixture.game);
         auto const route = pathfinding.remembered_target(fixture.controller, world, 1, unswbc::Position{5, 7});
         REQUIRE(route);
         CHECK(route->target == unswbc::Position{5, 7});
         CHECK(route->first_direction == unswbc::Direction::SOUTH);
-        fixture.controller.get_tile({5, 7})->pearl = false;
+        fixture.tile({5, 7}).pearl = false;
         world.update(fixture.controller, fixture.game);
         auto const replaced = pathfinding.remembered_target(fixture.controller, world, 1, route->target);
         REQUIRE(replaced);

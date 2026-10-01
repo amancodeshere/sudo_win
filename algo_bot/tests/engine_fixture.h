@@ -4,6 +4,7 @@
 #include "sudo_win/engine/helper.h"
 
 #include <vector>
+#include <stdexcept>
 
 namespace sudo_win::test {
 
@@ -27,6 +28,14 @@ public:
 
     unswbc::Game game;
     unswbc::Controller controller;
+
+    [[nodiscard]] auto tile(unswbc::Position position) -> unswbc::Tile& {
+        auto* result = controller.get_tile(position);
+        if (result == nullptr) {
+            throw std::out_of_range{"test fixture position is outside its vision"};
+        }
+        return *result;
+    }
 
 private:
     [[nodiscard]] static auto make_vision() -> unswbc::Vision {

@@ -11,7 +11,7 @@ TEST_CASE("combat risk scoring") {
     auto combat = sudo_win::Combat{};
     auto const destination = unswbc::Position{6, 5};
 
-    fixture.controller.get_tile({7, 5})->dragon_part
+    fixture.tile({7, 5}).dragon_part
         = unswbc::DragonPart{{7, 5}, 4, unswbc::Team::B, unswbc::Direction::WEST, true};
 
     SECTION("enemy acting later adds turn-order risk") {
@@ -31,10 +31,10 @@ TEST_CASE("combat risk scoring") {
 TEST_CASE("combat distinguishes legal threats from proximity behind walls") {
     auto fixture = sudo_win::test::EngineFixture{};
     auto combat = sudo_win::Combat{};
-    fixture.controller.get_tile({7, 5})->dragon_part = unswbc::DragonPart{
+    fixture.tile({7, 5}).dragon_part = unswbc::DragonPart{
         {7, 5}, 4, unswbc::Team::B, unswbc::Direction::WEST, true};
     CHECK(combat.threat_level(fixture.controller, {6, 5}) == sudo_win::ThreatLevel::direct);
-    fixture.controller.get_tile({7, 5})->get_edge(unswbc::Direction::WEST)
+    fixture.tile({7, 5}).get_edge(unswbc::Direction::WEST)
         = unswbc::Edge{false, unswbc::EdgeType::KELP};
     CHECK(combat.threat_level(fixture.controller, {6, 5}) == sudo_win::ThreatLevel::none);
     CHECK(combat.destination_risk(fixture.controller, {6, 5}, sudo_win::Role::collector) == 0);
@@ -44,9 +44,9 @@ TEST_CASE("combat distinguishes legal threats from proximity behind walls") {
 
 TEST_CASE("an enemy cannot cross its own body to threaten a destination") {
     auto fixture = sudo_win::test::EngineFixture{};
-    fixture.controller.get_tile({7, 5})->dragon_part = unswbc::DragonPart{
+    fixture.tile({7, 5}).dragon_part = unswbc::DragonPart{
         {7, 5}, 4, unswbc::Team::B, unswbc::Direction::EAST, true};
-    fixture.controller.get_tile({6, 5})->dragon_part = unswbc::DragonPart{
+    fixture.tile({6, 5}).dragon_part = unswbc::DragonPart{
         {6, 5}, 4, unswbc::Team::B, unswbc::Direction::EAST, false};
     CHECK(sudo_win::Combat{}.threat_level(fixture.controller, {5, 5}) == sudo_win::ThreatLevel::none);
 }

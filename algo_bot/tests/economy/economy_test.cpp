@@ -11,8 +11,8 @@
 TEST_CASE("economy destination scoring") {
     auto fixture = sudo_win::test::EngineFixture{};
     auto const destination = unswbc::Position{6, 5};
-    fixture.controller.get_tile(destination)->pearl = true;
-    fixture.controller.get_tile(destination)->pearl_time = 3;
+    fixture.tile(destination).pearl = true;
+    fixture.tile(destination).pearl_time = 3;
 
     auto world = sudo_win::WorldModel{fixture.game};
     world.update(fixture.controller, fixture.game);

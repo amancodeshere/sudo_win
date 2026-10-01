@@ -9,7 +9,7 @@
 
 TEST_CASE("baseline planner") {
     auto fixture = sudo_win::test::EngineFixture{};
-    fixture.controller.get_tile({6, 5})->pearl = true;
+    fixture.tile({6, 5}).pearl = true;
 
     auto world = sudo_win::WorldModel{fixture.game};
     world.update(fixture.controller, fixture.game);
@@ -43,14 +43,14 @@ TEST_CASE("a long dragon avoids a closed pocket beyond the search horizon") {
                 || (p == unswbc::Position{6, 5} && neighbour == fixture.controller.get_position())) {
                 continue;
             }
-            fixture.controller.get_tile(p)->get_edge(direction)
+            fixture.tile(p).get_edge(direction)
                 = unswbc::Edge{false, unswbc::EdgeType::KELP};
             if (auto* tile = fixture.controller.get_tile(neighbour)) {
                 tile->get_edge(direction.get_opposite()) = unswbc::Edge{false, unswbc::EdgeType::KELP};
             }
         }
     }
-    fixture.controller.get_tile({6, 5})->pearl = true;
+    fixture.tile({6, 5}).pearl = true;
     auto world = sudo_win::WorldModel{fixture.game};
     world.update(fixture.controller, fixture.game);
     auto const action = sudo_win::Planner{}.choose_action(fixture.controller, fixture.game,
@@ -65,7 +65,7 @@ TEST_CASE("planner validates and prices every step of short pearl sprints") {
         tile.pearl_time = -1;
     }
     for (auto x = 6; x <= 8; ++x) {
-        fixture.controller.get_tile({x, 5})->pearl = true;
+        fixture.tile({x, 5}).pearl = true;
     }
     SECTION("an open pearl chain is collected with a profitable sprint") {
         auto world = sudo_win::WorldModel{fixture.game};
@@ -85,7 +85,7 @@ TEST_CASE("planner validates and prices every step of short pearl sprints") {
         CHECK(state.body.size() == 4);
     }
     SECTION("blocked intermediate edges prevent oversprinting through a pearl") {
-        fixture.controller.get_tile({6, 5})->get_edge(unswbc::Direction::EAST)
+        fixture.tile({6, 5}).get_edge(unswbc::Direction::EAST)
             = unswbc::Edge{false, unswbc::EdgeType::KELP};
         auto world = sudo_win::WorldModel{fixture.game};
         world.update(fixture.controller, fixture.game);
@@ -109,8 +109,8 @@ TEST_CASE("planner validates and prices every step of short pearl sprints") {
 
 TEST_CASE("an uncontested escape outranks a pearl threatened by a later enemy") {
     auto fixture = sudo_win::test::EngineFixture{};
-    fixture.controller.get_tile({6, 5})->pearl = true;
-    fixture.controller.get_tile({7, 5})->dragon_part = unswbc::DragonPart{
+    fixture.tile({6, 5}).pearl = true;
+    fixture.tile({7, 5}).dragon_part = unswbc::DragonPart{
         {7, 5}, 4, unswbc::Team::B, unswbc::Direction::WEST, true};
     auto world = sudo_win::WorldModel{fixture.game};
     world.update(fixture.controller, fixture.game);
@@ -122,10 +122,10 @@ TEST_CASE("an uncontested escape outranks a pearl threatened by a later enemy") 
 
 TEST_CASE("planner prefers an escape over a pearl in a closed pocket") {
     auto fixture = sudo_win::test::EngineFixture{};
-    fixture.controller.get_tile({6, 5})->pearl = true;
+    fixture.tile({6, 5}).pearl = true;
     for (auto const direction : {unswbc::Direction::NORTH, unswbc::Direction::EAST,
                                  unswbc::Direction::SOUTH}) {
-        fixture.controller.get_tile({6, 5})->get_edge(direction)
+        fixture.tile({6, 5}).get_edge(direction)
             = unswbc::Edge{false, unswbc::EdgeType::KELP};
     }
     auto world = sudo_win::WorldModel{fixture.game};

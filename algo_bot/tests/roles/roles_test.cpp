@@ -20,7 +20,7 @@ TEST_CASE("role assignment and scoring") {
         fixture.controller.unit_count = 2;
         for (auto const position : {unswbc::Position{6, 5}, unswbc::Position{6, 6},
                                     unswbc::Position{6, 7}, unswbc::Position{7, 7}}) {
-            fixture.controller.get_tile(position)->dragon_part = unswbc::DragonPart{
+            fixture.tile(position).dragon_part = unswbc::DragonPart{
                 position, 0, unswbc::Team::A, unswbc::Direction::NORTH, position == unswbc::Position{6, 5}};
         }
         CHECK(roles.choose_role(fixture.controller, fixture.game) == sudo_win::Role::scout);
@@ -38,7 +38,7 @@ TEST_CASE("champion estimates expire and do not oscillate on small length change
     fixture.controller.unit_count = 2;
     for (auto const position : {unswbc::Position{6, 5}, unswbc::Position{6, 6},
                                 unswbc::Position{6, 7}, unswbc::Position{7, 7}, unswbc::Position{7, 6}}) {
-        fixture.controller.get_tile(position)->dragon_part = unswbc::DragonPart{
+        fixture.tile(position).dragon_part = unswbc::DragonPart{
             position, 2, unswbc::Team::A, unswbc::Direction::NORTH, position == unswbc::Position{6, 5}};
     }
     auto roles = sudo_win::RoleManager{};

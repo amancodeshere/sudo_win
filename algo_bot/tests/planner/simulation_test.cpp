@@ -6,7 +6,7 @@
 TEST_CASE("body simulation follows collision growth and sprint ordering") {
     auto fixture = sudo_win::test::EngineFixture{};
     for (auto const position : {unswbc::Position{5, 6}, unswbc::Position{5, 7}}) {
-        fixture.controller.get_tile(position)->dragon_part = unswbc::DragonPart{
+        fixture.tile(position).dragon_part = unswbc::DragonPart{
             position, 0, unswbc::Team::A, unswbc::Direction::NORTH, false};
     }
     auto simulation = sudo_win::Simulation{};
@@ -30,12 +30,12 @@ TEST_CASE("body simulation follows collision growth and sprint ordering") {
         CHECK(west->body.front() == unswbc::Position{5, 6});
     }
     SECTION("collection holds the tail and costs are charged after collection") {
-        fixture.controller.get_tile({6, 5})->pearl = true;
+        fixture.tile({6, 5}).pearl = true;
         auto east = simulation.advance(fixture.controller, initial, unswbc::Direction::EAST);
         REQUIRE(east);
         CHECK(east->body.size() == 4);
         CHECK(east->body.back() == initial.body.back());
-        fixture.controller.get_tile({7, 5})->pearl = true;
+        fixture.tile({7, 5}).pearl = true;
         auto sprint = simulation.advance(fixture.controller, *east, unswbc::Direction::EAST, true);
         REQUIRE(sprint);
         CHECK(sprint->body.size() == 4);
@@ -50,7 +50,7 @@ TEST_CASE("body simulation follows collision growth and sprint ordering") {
         CHECK_FALSE(simulation.advance(fixture.controller, *second, unswbc::Direction::SOUTH, true));
     }
     SECTION("unranked visible body cannot be assumed to have vacated") {
-        fixture.controller.get_tile({5, 6})->dragon_part.reset();
+        fixture.tile({5, 6}).dragon_part.reset();
         auto partial = simulation.initial_state(fixture.controller);
         CHECK(partial.unranked_body.size() == 1);
         partial.body.front() = {6, 7};
@@ -66,7 +66,7 @@ TEST_CASE("remembered mobility distinguishes closed terrain from unseen frontier
     auto const state = simulation.initial_state(fixture.controller, &world);
     CHECK(simulation.remembered_mobility(fixture.controller, state, world).open_frontier);
     for (auto const direction : unswbc::Direction::get_direction_list()) {
-        fixture.controller.get_tile({5, 5})->get_edge(direction)
+        fixture.tile({5, 5}).get_edge(direction)
             = unswbc::Edge{false, unswbc::EdgeType::KELP};
     }
     world.update(fixture.controller, fixture.game);
@@ -78,7 +78,7 @@ TEST_CASE("remembered mobility distinguishes closed terrain from unseen frontier
 TEST_CASE("simulation consumes a pearl only once on a looping route") {
     auto fixture = sudo_win::test::EngineFixture{};
     fixture.controller.length = 2;
-    fixture.controller.get_tile({6, 5})->pearl = true;
+    fixture.tile({6, 5}).pearl = true;
     auto simulation = sudo_win::Simulation{};
     auto state = simulation.initial_state(fixture.controller);
     for (auto const direction : {unswbc::Direction::EAST, unswbc::Direction::SOUTH,

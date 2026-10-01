@@ -12,10 +12,10 @@ TEST_CASE("world model observations") {
     auto fixture = sudo_win::test::EngineFixture{};
     fixture.game.round_num = 12;
 
-    auto* east = fixture.controller.get_tile({6, 5});
-    east->pearl = true;
-    east->pearl_time = 4;
-    east->get_edge(unswbc::Direction::EAST) = unswbc::Edge{false, unswbc::EdgeType::PORTAL, 9};
+    auto& east = fixture.tile({6, 5});
+    east.pearl = true;
+    east.pearl_time = 4;
+    east.get_edge(unswbc::Direction::EAST) = unswbc::Edge{false, unswbc::EdgeType::PORTAL, 9};
 
     auto world = sudo_win::WorldModel{fixture.game};
     world.update(fixture.controller, fixture.game);
@@ -42,9 +42,9 @@ TEST_CASE("world model observations") {
 TEST_CASE("paired portal boundaries preserve heading and deduplicate both sides") {
     auto fixture = sudo_win::test::EngineFixture{};
     for (auto const position : {unswbc::Position{5, 5}, unswbc::Position{7, 7}}) {
-        fixture.controller.get_tile(position)->get_edge(unswbc::Direction::EAST)
+        fixture.tile(position).get_edge(unswbc::Direction::EAST)
             = unswbc::Edge{false, unswbc::EdgeType::PORTAL, 9};
-        fixture.controller.get_tile(position.add_dir(unswbc::Direction::EAST))->get_edge(unswbc::Direction::WEST)
+        fixture.tile(position.add_dir(unswbc::Direction::EAST)).get_edge(unswbc::Direction::WEST)
             = unswbc::Edge{false, unswbc::EdgeType::PORTAL, 9};
     }
     auto world = sudo_win::WorldModel{fixture.game};
@@ -60,7 +60,7 @@ TEST_CASE("paired portal boundaries preserve heading and deduplicate both sides"
 
     SECTION("a visible empty exit can be crossed and scored as the actual destination") {
         CHECK(safety.is_safe_standard_move(fixture.controller, unswbc::Direction::EAST, &world));
-        fixture.controller.get_tile({8, 7})->pearl = true;
+        fixture.tile({8, 7}).pearl = true;
         auto const next = simulation.advance(fixture.controller, simulation.initial_state(fixture.controller, &world),
                                               unswbc::Direction::EAST, false, &world);
         REQUIRE(next);
@@ -69,7 +69,7 @@ TEST_CASE("paired portal boundaries preserve heading and deduplicate both sides"
         CHECK(sudo_win::Pathfinding{}.visible_pearl_distance(fixture.controller, {5, 5}, &world) == 1);
     }
     SECTION("occupied exits remain fatal") {
-        fixture.controller.get_tile({8, 7})->dragon_part = unswbc::DragonPart{
+        fixture.tile({8, 7}).dragon_part = unswbc::DragonPart{
             {8, 7}, 2, unswbc::Team::B, unswbc::Direction::WEST, false};
         CHECK(safety.standard_move_reason(fixture.controller, unswbc::Direction::EAST, &world)
               == sudo_win::SafetyReason::occupied);
@@ -85,9 +85,9 @@ TEST_CASE("paired portal boundaries preserve heading and deduplicate both sides"
     }
     SECTION("body reconstruction follows portal links rather than adjacent coordinates") {
         fixture.controller.head.position = {8, 7};
-        fixture.controller.get_tile({5, 5})->dragon_part = unswbc::DragonPart{
+        fixture.tile({5, 5}).dragon_part = unswbc::DragonPart{
             {5, 5}, 0, unswbc::Team::A, unswbc::Direction::EAST, false};
-        fixture.controller.get_tile({5, 6})->dragon_part = unswbc::DragonPart{
+        fixture.tile({5, 6}).dragon_part = unswbc::DragonPart{
             {5, 6}, 0, unswbc::Team::A, unswbc::Direction::NORTH, false};
         auto const state = simulation.initial_state(fixture.controller, &world);
         CHECK(state.body[1] == unswbc::Position{5, 5});
@@ -99,9 +99,9 @@ TEST_CASE("paired portal boundaries preserve heading and deduplicate both sides"
 TEST_CASE("horizontal portal crossings choose the heading side of the partner") {
     auto fixture = sudo_win::test::EngineFixture{};
     for (auto const position : {unswbc::Position{5, 5}, unswbc::Position{7, 7}}) {
-        fixture.controller.get_tile(position)->get_edge(unswbc::Direction::NORTH)
+        fixture.tile(position).get_edge(unswbc::Direction::NORTH)
             = unswbc::Edge{true, unswbc::EdgeType::PORTAL, 9};
-        fixture.controller.get_tile(position.add_dir(unswbc::Direction::NORTH))->get_edge(unswbc::Direction::SOUTH)
+        fixture.tile(position.add_dir(unswbc::Direction::NORTH)).get_edge(unswbc::Direction::SOUTH)
             = unswbc::Edge{true, unswbc::EdgeType::PORTAL, 9};
     }
     auto world = sudo_win::WorldModel{fixture.game};

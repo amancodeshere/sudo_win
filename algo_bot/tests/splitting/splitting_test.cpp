@@ -33,7 +33,7 @@ TEST_CASE("experimental splits require safe parent child and separate pearl inco
                 }
             }
         }
-        fixture.controller.get_tile(body[i])->dragon_part = unswbc::DragonPart{
+        fixture.tile(body[i]).dragon_part = unswbc::DragonPart{
             body[i], 0, unswbc::Team::A, heading, i == 0};
     }
     for (auto& tile : fixture.controller.vision.tiles) {
@@ -42,7 +42,7 @@ TEST_CASE("experimental splits require safe parent child and separate pearl inco
     }
     // Investing is most useful when the parent has no immediate collection.
     for (auto const direction : unswbc::Direction::get_direction_list()) {
-        fixture.controller.get_tile(fixture.controller.get_position().add_dir(direction))->pearl = false;
+        fixture.tile(fixture.controller.get_position().add_dir(direction)).pearl = false;
     }
     auto world = sudo_win::WorldModel{fixture.game};
     world.update(fixture.controller, fixture.game);
@@ -74,12 +74,12 @@ TEST_CASE("experimental splits require safe parent child and separate pearl inco
         CHECK_FALSE(candidate());
     }
     SECTION("incomplete body knowledge cannot certify the child") {
-        fixture.controller.get_tile({5, 6})->dragon_part.reset();
+        fixture.tile({5, 6}).dragon_part.reset();
         CHECK_FALSE(candidate());
     }
     SECTION("a trapped tail cannot become a child") {
         for (auto const direction : unswbc::Direction::get_direction_list()) {
-            fixture.controller.get_tile(body.back())->get_edge(direction)
+            fixture.tile(body.back()).get_edge(direction)
                 = unswbc::Edge{false, unswbc::EdgeType::KELP};
         }
         CHECK_FALSE(candidate());
