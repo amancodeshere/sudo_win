@@ -42,7 +42,7 @@ Install the official toolkit and refresh its generated helper when the protocol
 changes:
 
 ```bash
-uv tool install unswbc
+uv tool install unswbc==1.2.2
 unswbc update algo_bot
 unswbc maps
 ```
@@ -72,23 +72,31 @@ fail the workflow when they detect a runtime error.
 
 Pushes to `main` and manual workflow runs also build and test the Release
 configuration, then upload a 14-day artifact containing the Linux executable
-and the submission sources. The delivery job runs only after both compiler test
-jobs pass. It does not submit the bot to the competition server.
+and the submission source ZIP with a checksum manifest. Delivery requires both
+compiler jobs and the packaging/deterministic judge-sandbox job. It does not
+submit the bot to the competition server.
 
 Before merging, require the following checks in the repository's branch
 protection settings:
 
 - `Algorithm Bot CI / GCC Debug + sanitizers`;
 - `Algorithm Bot CI / Clang Debug + sanitizers`.
+- `Algorithm Bot CI / Submission tools + judge sandbox`.
 
 ## Run a Match
 
 ```bash
-unswbc run --sandbox -v maps/arena.map algo_bot algo_bot
+python3 algo_bot/util/prepare_submission.py algo_bot --output /tmp/sudo-win-submission
+unswbc run --sandbox -v --seed 1 maps/arena.map /tmp/sudo-win-submission /tmp/sudo-win-submission
 ```
 
 Always use `--sandbox` for performance checks. Ordinary local runs do not apply
 the judge's CPU-point budget.
+
+The current toolkit's sandbox compiler scans every C++ file under the directory
+passed to it. Use a clean submission directory so it does not compile Catch2 and
+the test entry point alongside the bot. The benchmark tool stages selected files
+automatically.
 
 ## Reproducible Benchmarks
 
@@ -115,19 +123,48 @@ output directory must be fresh. JSONL records include source/map fingerprints,
 colour, seed, winner, final team total lengths, deaths, errors, CPU p50/p95/max,
 peak observed lengths, and replay hashes. Repeated replays must match exactly.
 The command fails on runtime errors, no-valid-action deaths, nondeterminism, or
-turns exceeding the default 90-million-point margin. Other collision deaths are
-recorded for comparison, rather than assumed avoidable.
+turns exceeding the default 90-million-point margin. It also independently checks
+death snapshots for visible body/wall collisions or unaffordable sprints when a
+safe ordinary alternative existed. Deaths with no known safe alternative and
+future enemy attacks remain recorded, rather than assumed avoidable. Action
+counts distinguish ordinary moves, sprints, and splits.
 
 `--native` is a faster diagnostic mode and cannot verify CPU budgets. Peak
 observed length is sampled before actions; it is not final longest-dragon length.
 The engine still determines wins using its actual scoring rules.
 
-## Baseline
+## Prepare an Upload
 
-The current implementation provides persistent visible map memory, conservative
-collision avoidance, flood-fill mobility, pearl scoring, elementary roles,
-combat-risk penalties, authenticated sonar encoding, and a mandatory fallback.
-Unknown portal exits, sprints, splits, and sonar transmission remain disabled by
-default in `include/sudo_win/config/config.h`.
+```bash
+python3 algo_bot/util/prepare_submission.py algo_bot \
+  --profile stable --output build/submission-stable
+```
 
-See `IMPLEMENTATION_GUIDE.md` for the complete baseline-to-endgame roadmap.
+This produces a clean bot directory, `build/submission-stable.zip`, and a JSON
+checksum/flag manifest. Choose a fresh output name for later builds. Profiles
+are applied to the copy, leaving source configuration unchanged:
+
+- `stable`: configured sprint policy, splitting/sonar/indicators disabled;
+- `no-sprint`: stable strategy with sprint generation disabled for ablations;
+- `experimental`: enables the resource-backed split policy.
+
+Test the resulting directory through `benchmark.py` before uploading. If the
+toolkit is already authenticated, `unswbc submit build/submission-stable` submits
+the sources. Packaging and CI do not submit automatically.
+
+## Current Strategy
+
+The stable bot uses persistent map memory, remembered pearl/frontier routing,
+target hysteresis, six-step body-aware survival search, remembered escape-space
+penalties, legal enemy move prediction, local champion estimates, gradual endgame
+caution, and validated two-/three-step sprints. Known portal exits must be visible
+and empty before execution. Search has fixed node budgets; sandbox evaluation
+checks the judge's actual CPU points.
+
+Resource-backed splitting is implemented but remains experimental and disabled
+by default. Sonar reports are decoded but still not applied or transmitted.
+The competition build has a planning exception fallback; Debug/RelWithDebInfo
+builds expose exceptions to catch development errors.
+
+See `VALIDATION.md` for measured results and `IMPLEMENTATION_GUIDE.md` for the
+remaining coordination, tactical search, and endgame roadmap.

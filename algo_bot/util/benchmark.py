@@ -154,7 +154,7 @@ def visible_action_check(stdin: str, stdout: str) -> dict:
     return result
 
 
-def match(engine, map_path, bots, seed, sandbox, replay_path):
+def match(engine, map_path, bots, seed, sandbox, replay_path, candidate_team="A"):
     from unswbc.bot import Bot, Pool
     from unswbc.engine import DEBUG_ALL, DEBUG_LIMITS
     from unswbc.sandbox import SandboxBot, WasmPool
@@ -213,7 +213,8 @@ def match(engine, map_path, bots, seed, sandbox, replay_path):
 
         result = engine.run(map_path.read_bytes(), reply, death, spawn, notices.append,
                             DEBUG_ALL | (DEBUG_LIMITS if sandbox else 0), seed)
-        replay = engine.replay("candidate", "opponent")
+        replay = engine.replay("candidate" if candidate_team == "A" else "opponent",
+                               "opponent" if candidate_team == "A" else "candidate")
         replay_path.write_bytes(replay)
         return {
             **asdict(result), "seed": seed, "map": str(map_path),
@@ -275,8 +276,9 @@ def main() -> int:
                     for repeat in range(args.repeat):
                         replay = args.output / f"{index}-{map_path.stem}-{seed}-{reverse}-{repeat}.replay"
                         record = match(engine, map_path, built[::-1] if reverse else built,
-                                       seed, not args.native, replay)
+                                       seed, not args.native, replay, candidate_team)
                         record.update(toolkit=version, candidate_team=candidate_team,
+                                      benchmark_sha256=hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest(),
                                       candidate_sha256=staged[0][1], opponent_sha256=staged[1][1])
                         hashes.append(record["replay_sha256"])
                         records.append(record)

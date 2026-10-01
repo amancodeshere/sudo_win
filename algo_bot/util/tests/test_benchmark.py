@@ -15,7 +15,8 @@ class BenchmarkTests(unittest.TestCase):
         lines = ["ID 0", "TEAM A", "MAP 10 10", "UNIT_LIMIT 64", "ROUND 1", "DIR N",
                  f"LENGTH {length}", "UNIT_COUNT 1", "NUM_MSGS 0", "ECHOES 0 0 0 0 0"]
         lines += [f"{x} {y} 0 -1" for y in range(2, 9) for x in range(2, 9)]
-        lines += ["DRAGON_BODIES 3", "A 0 5 5 N 1", "A 0 5 6 N 0", "A 0 5 7 N 0"]
+        parts = ["A 0 5 5 N 1", "A 0 5 6 N 0", "A 0 5 7 N 0"][:length]
+        lines += [f"DRAGON_BODIES {len(parts)}", *parts]
         lines += [". . . . . . ."] * 8 + [". . . . . . . ."] * 7
         return "\n".join(lines) + "\n"
 

@@ -69,9 +69,45 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
+  benchmark-tools:
+    name: Submission tools + judge sandbox
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      UNSWBC_NO_VSCODE: "1"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned judge toolkit
+        run: python -m pip install -r algo_bot/util/requirements.txt
+      - name: Test benchmark and packaging tools
+        run: python -m unittest discover -s algo_bot/util/tests
+      - name: Prepare clean submission sources and official arena
+        run: |
+          python algo_bot/util/prepare_submission.py algo_bot --output "$RUNNER_TEMP/sudo-win-submission"
+          python -c 'import pathlib, shutil, unswbc; shutil.copyfile(pathlib.Path(unswbc.__file__).parent / "templates/maps/arena.map", "arena.map")'
+      - name: Verify deterministic sandbox matches
+        run: >-
+          python algo_bot/util/benchmark.py
+          "$RUNNER_TEMP/sudo-win-submission" "$RUNNER_TEMP/sudo-win-submission"
+          --maps arena.map --seeds 1 --both-colours --repeat 2
+          --output "$RUNNER_TEMP/sudo-win-results"
+      - name: Upload sandbox metrics and replays
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: judge-sandbox-results
+          path: ${{ runner.temp }}/sudo-win-results/
+          if-no-files-found: ignore
+          retention-days: 14
+
   delivery:
     name: Build submission artifact
-    needs: test
+    needs: [test, benchmark-tools]
     if: >-
       github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'push' && github.ref == 'refs/heads/main')
@@ -102,18 +138,15 @@ jobs:
           --no-tests=error
 
       - name: Package submission sources
-        run: |
-          mkdir -p dist/sudo-win-algo-bot
-          cp algo_bot/bot.toml algo_bot/helper.hpp dist/sudo-win-algo-bot/
-          cp -R algo_bot/include algo_bot/src dist/sudo-win-algo-bot/
-          tar -C dist -czf dist/sudo-win-algo-bot.tar.gz sudo-win-algo-bot
+        run: python3 algo_bot/util/prepare_submission.py algo_bot --output dist/sudo-win-algo-bot
 
       - name: Upload tested bot
         uses: actions/upload-artifact@v4
         with:
           name: sudo-win-algo-bot-${{ github.sha }}
           path: |
-            dist/sudo-win-algo-bot.tar.gz
+            dist/sudo-win-algo-bot.zip
+            dist/sudo-win-algo-bot.json
             ${{ env.BUILD_DIRECTORY }}/sudo_win
           if-no-files-found: error
           retention-days: 14

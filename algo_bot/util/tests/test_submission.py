@@ -1,0 +1,36 @@
+import importlib.util
+import pathlib
+import tempfile
+import unittest
+import zipfile
+
+SCRIPT = pathlib.Path(__file__).parents[1] / "prepare_submission.py"
+spec = importlib.util.spec_from_file_location("prepare_submission", SCRIPT)
+submission = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(submission)
+BOT = pathlib.Path(__file__).parents[2]
+
+
+class SubmissionTests(unittest.TestCase):
+    def test_profiles_are_isolated_and_archive_contains_only_submission_sources(self):
+        original = (BOT / "include/sudo_win/config/config.h").read_bytes()
+        with tempfile.TemporaryDirectory() as work:
+            root = pathlib.Path(work)
+            stable = submission.prepare(BOT, root / "stable", "stable")
+            experimental = submission.prepare(BOT, root / "experimental", "experimental")
+            self.assertEqual(stable["effective_flags"]["enable_splitting"], "false")
+            self.assertEqual(experimental["effective_flags"]["enable_splitting"], "true")
+            with zipfile.ZipFile(stable["archive"]) as archive:
+                self.assertIn("src/main.cpp", archive.namelist())
+                self.assertIn("src/planner/simulation.cpp", archive.namelist())
+                self.assertFalse(any(name.startswith(("tests/", "lib/", "util/")) for name in archive.namelist()))
+                self.assertEqual(archive.testzip(), None)
+            repeated = submission.prepare(BOT, root / "stable-again", "stable")
+            self.assertEqual(stable["archive_sha256"], repeated["archive_sha256"])
+            with self.assertRaises(ValueError):
+                submission.prepare(BOT, root / "stable", "stable")
+        self.assertEqual((BOT / "include/sudo_win/config/config.h").read_bytes(), original)
+
+
+if __name__ == "__main__":
+    unittest.main()

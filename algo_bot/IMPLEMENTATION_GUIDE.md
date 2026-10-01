@@ -20,55 +20,48 @@ strong policy that occasionally outputs an illegal action.
 
 ## Current Implementation Status
 
-> **Current milestone: runnable baseline, not a complete competition bot.**
-> The project builds, its Catch2 unit tests pass, and the bot can play a round.
-> The advanced pathfinding, coordinated team strategy, tactical search, and
-> endgame concentration described later in this guide are not implemented yet.
+> **Current milestone: validated single-dragon strategy with experimental splitting.**
+> See `VALIDATION.md` for measured results and `README.md` for reproducible commands.
+> These results compare against the original repository bot, not the competition field.
 
-Status labels used throughout this guide:
-
-- **IMPLEMENTED:** present, tested, and used by the running bot;
-- **PARTIAL:** some supporting code exists, but the complete behaviour or its
-  integration is missing;
-- **DISABLED:** code exists but its feature flag is off;
-- **NOT IMPLEMENTED:** roadmap only; no working implementation exists yet.
-
-| Area | Status | Implemented now | Still needed |
-| --- | --- | --- | --- |
-| Build and tests | **IMPLEMENTED** | Strict C++20 CMake build, sanitizers, vendored Catch2, CTest, feature-level tests, and GCC/Clang GitHub Actions CI | Automated multi-seed match runner and performance reporting |
-| Engine loop | **IMPLEMENTED** | State update, planning, one action per turn, and a deterministic emergency fallback | Narrow exception boundary and verified crash-safe final emission |
-| Geometry | **IMPLEMENTED** for baseline | Direction indexing, wrapping, toroidal distances, and symmetry transforms | Portal transition helpers and broader topology edge cases |
-| World model | **PARTIAL** | Remembers visible tiles, edges, pearls, occupants, and observed portal endpoints | Staleness/confidence policy, symmetry inference, enemy tracks, and team reports |
-| Safety | **PARTIAL** | Filters visible standard moves and supplies a deterministic least-bad fallback | Structured reasons, sprint-step validation, split validation, portals, uncertainty, and fuller collision modelling |
-| Pathfinding | **PARTIAL** | Visible flood fill and visible BFS to pearls | Remembered-map BFS, frontier routing, A*, portals, time expansion, and route invalidation |
-| Pearl economy | **PARTIAL** | Scores immediate pearls and nearby visible/future pearl information | Arrival timing, competition, spawn blocking, death drops, denial, and reservations |
-| Roles | **PARTIAL** | Deterministic local role selection; dragon ID `0` is treated as champion | Real champion estimation, reports, reassignment, and hysteresis |
-| Sonar | **DISABLED / PARTIAL** | Authenticated encode/decode and expiry validation | Processing accepted messages, team knowledge, message scheduling, congestion control, and sending |
-| Splitting | **DISABLED / PARTIAL** | Conservative eligibility check and child-size selection | Competitive action score, parent/child geometry, resource forecast, coordination, and child bootstrap |
-| Combat | **PARTIAL** | Adjacent visible enemy-head risk with a turn-order heuristic | Legal enemy moves, collision outcomes, trade valuation, and tactical maximin/minimax |
-| Planner | **PARTIAL** | Scores safe one-step moves using mobility, economy, exploration, combat, roles, and the endgame modifier | Sprint candidates, useful split comparison, multi-turn search, transposition table, and budget cutoff |
-| Endgame | **PARTIAL** | At round `425`, adds mobility/combat weighting and doubles that modifier for the ID-based champion role | Every coordinated survival, denial, rendezvous, controlled-death, and pearl-sweep behaviour |
-| Diagnostics and experiment harness | **NOT IMPLEMENTED** | Unit tests provide local correctness checks | Match metrics, deterministic batch commands, ablations, replay records, and promotion gates |
+| Area | Implemented and exercised | Remaining work |
+| --- | --- | --- |
+| Build and delivery | Strict C++20, Clang/GCC tests, sanitizers, Release, clean source ZIPs, pinned toolkit, CI sandbox gate | Run updated remote CI after pushing |
+| Engine loop | One action per turn; competition planning exception fallback; development exceptions remain visible | Fuzz malformed protocol input separately |
+| World model | Persistent terrain/pearls, visit ages, canonical portal boundaries | Symmetry inference, enemy tracks, team reports |
+| Safety | Structured reasons, wrapped/body collisions, ranked fallback, sprint intermediate states | Better decisions when every visible action is fatal |
+| Routing | Remembered-map BFS to pearls/frontiers, target hysteresis/expiry, current occupancy checks | A*, arrival-time competition, global target reservations |
+| Survival search | Bounded six-step body simulation, growth/tail release, closed-pocket penalties from remembered terrain | Larger tactical search, transposition tables, fuller moving-opponent simulation |
+| Combat | Legal enemy ordinary moves, possible two-step sprints, turn-order weighting; direct threats outrank pearl rewards | Enemy length certainty, ally congestion prediction, richer trade valuation |
+| Sprints | Up to three steps, payment before each extra step, net-growth and tempo scoring, endpoint survival checks | Larger opponent pool and broader held-out promotion gate |
+| Roles | Local length estimates, expiry and hysteresis; either colour can select a champion | Authenticated champion heartbeats and global agreement |
+| Sonar | Existing authenticated codec and expiry tests; decoded messages are still discarded | Team knowledge, event scheduling, message validation against game bounds |
+| Splitting | Experimental scored policy checks complete body, parent/child escapes, distinct reachable pearl income, size/cap/phase | Demonstrate win-rate improvement; remains disabled in stable profile |
+| Endgame | Caution ramps from round 400; full extra survival weighting at 425 | Corridor clearing, denial, rendezvous, controlled feeding |
+| Evaluation | Sandbox batches, source/map hashes, colours/seeds, deaths, CPU p50/p95/max, action counts, independent collision audit, identical replay checks | Stronger opponents, 100 seeds per map, exploration/collection statistics |
 
 ### Behaviour of the Bot Today
 
-On each turn, the current executable:
+1. Record the current observation and head visit in persistent memory.
+2. Authenticate received sonar payloads, but do not apply or transmit reports.
+3. Estimate a local champion from own length and fresh friendly observations.
+4. Select a remembered pearl or exploration target with route hysteresis.
+5. Simulate ordinary moves and affordable two-/three-step sprints.
+6. Prefer unthreatened actions with a surviving continuation, then score growth,
+   reachable space, remembered closed pockets, exploration, roles, and endgame.
+7. Compare a resource-backed split only in the experimental profile.
+8. Emit one action; choose a ranked fallback if no validated candidate exists.
 
-1. records the visible observation in `WorldModel`;
-2. authenticates and decodes received sonar payloads, but discards valid decoded
-   messages instead of applying them;
-3. assigns a deterministic role from local controller state;
-4. enumerates safe ordinary one-step moves only;
-5. scores those moves and chooses the highest-scoring candidate;
-6. uses a deterministic ordinary-move fallback if no safe candidate exists;
-7. does not send sonar, sprint, or split with the current configuration.
+Stable defaults enable sprints and disable splitting, sonar transmission, and
+indicators. Portal transitions preserve heading and deduplicate observations of
+both sides of one physical boundary. Execution requires the actual exit to be
+visible and empty; remembered terrain alone cannot certify current occupancy.
+Unseen original body segments are not assumed to have vacated.
 
-The following flags are currently `false` in
-`include/sudo_win/config/config.h`: `enable_sprinting`, `enable_splitting`,
-`enable_sonar`, and `enable_indicators`. Turning a flag on does not imply that
-the corresponding roadmap feature is complete. In particular, the planner does
-not generate sprint candidates, sonar messages are not integrated, and split
-candidates currently have a score of zero.
+Competition builds catch planning exceptions before any action has been emitted.
+Debug and RelWithDebInfo builds define `SUDO_WIN_DEVELOPMENT` and expose those
+exceptions. Fixed node budgets bound search; sandbox batches enforce a
+90-million-point promotion margin against the 100-million judge limit.
 
 ## 2. Target File Structure
 
@@ -327,9 +320,11 @@ short expiry.
 
 ### `include/sudo_win/splitting/splitting.h` and `src/splitting/splitting.cpp`
 
-**Current status: DISABLED / PARTIAL.** The policy performs basic length, unit
-cap, role, round, open-area, and `can_split` checks. Its feature flag is off and
-its candidate score is zero, so it is not a functioning strategic split system.
+**Current status: EXPERIMENTAL, disabled in stable.** The policy compares child
+sizes, validates the complete observed body, checks both dragons' escape routes
+and reachable income, and supplies a nonzero investment score. A sandbox fixture
+exercises a real split and child turns. Ordinary-map comparisons have not shown
+an improvement, so stable delivery keeps it off.
 
 Splitting is an economic investment, not a default growth action. Require:
 
@@ -361,10 +356,10 @@ long enemy can be correct; risking the champion for the same exchange is not.
 
 ### `include/sudo_win/endgame/endgame.h` and `src/endgame/endgame.cpp`
 
-**Current status: PARTIAL scoring stub only.** At round `425`, this module adds
-reachable-area and combat terms to move scores and doubles them for
-`Role::champion`. It does not identify the actual longest dragon or coordinate
-any concentration behaviour. None of the behaviours below are implemented.
+**Current status: PARTIAL.** Survival/combat weighting ramps from round 400 to
+425, with extra weight for the locally estimated champion. This does not establish
+the globally longest dragon or coordinate concentration. The concentration and
+support behaviours below remain roadmap work.
 
 Activate endgame behaviour gradually rather than at one hard round:
 
@@ -384,9 +379,11 @@ this until ordinary endgame survival is reliable.
 
 ### `include/sudo_win/planner/planner.h` and `src/planner/planner.cpp`
 
-**Current status: PARTIAL.** The planner evaluates safe ordinary one-step moves
-and compares an optional split candidate. It does not generate sprints or run
-multi-turn search. With the current flags, only ordinary movement is active.
+**Current status: PARTIAL.** The planner compares ordinary moves and bounded
+sprints using six-step body-aware survival search, remembered route targets,
+closed-region penalties, and legal enemy threat estimates. Experimental splitting
+is scored but disabled by default. General beam/maximin search and transposition
+caching remain roadmap work.
 
 The planner is the integration point, not the owner of domain rules.
 
@@ -415,161 +412,70 @@ Reserve enough budget to emit a valid action even if search is stopped early.
 
 ### Stage 0: Harness and Invariants
 
-**Status: PARTIAL.** The generated helper, CMake build, Catch2 suite, sanitizer
-configuration, submission manifest, and GCC/Clang GitHub Actions workflow
-exist. CI tests every relevant push and pull request. Tested release artifacts
-are produced for `main` and manual workflow runs.
+**Implemented:** pinned toolkit/runtime, manifest-only staging, stable/experimental
+packages, seeded sandbox batches, both colours, replay hashes, death snapshots,
+CPU metrics, and action validation. CI requires compiler tests plus sandbox checks
+before delivering an artifact.
 
-**Still required:**
-
-- install and pin the current `unswbc` toolkit;
-- document a reproducible command for regenerating `helper.hpp` and official
-  maps;
-- add stable and experimental configuration profiles;
-- run every test with `--sandbox -v`;
-- record seed, map, colour, result, death cause, round, and points used;
-- establish deterministic replay commands.
-
-**Gate:** the same seed and bot pair produces identical results, and a batch can
-be reproduced from one command.
+**Remaining:** a stronger saved opponent pool and richer replay-derived metrics.
+A repeated identical matchup must produce the same replay hash.
 
 ### Stage 1: Safe Baseline
 
-**Status: PARTIAL, but runnable.** The bot already emits ordinary moves, filters
-basic visible hazards, chooses a deterministic fallback, and has unit coverage.
-This is the only stage mature enough to run today, but its completion gate has
-not been demonstrated.
+**Implemented:** visible move reasons; wrap/body/tail tests; deterministic ranked
+fallback; competition exception boundary; dynamic sprint legality; and independent
+checks for avoidable visible collisions in death snapshots.
 
-**Implemented now:**
-
-- reject visible impassable edges, portals, and occupied destination tiles for
-  ordinary moves;
-- enumerate safe ordinary moves;
-- choose the first passable direction, or north as a final deterministic
-  fallback;
-- emit exactly one ordinary action in the current configuration.
-
-**Still required:**
-
-- explicit safety-result reasons;
-- tests for wrap edges and own-tail collision;
-- define and test the least-bad policy for states where every move is fatal;
-- crash-safe action emission;
-- point-budget counters with logging disabled by default.
-
-**Gate:** zero malformed actions, illegal splits, oversprints, and avoidable
-visible collisions across all official maps and at least 100 seeds.
+**Remaining gate:** at least 100 held-out seeds per official map. The recorded
+150-game run uses five distinct seeds across 15 maps and both colours, so it does
+not satisfy that larger gate. A fatal fallback with no known safe alternative is
+recorded separately from an avoidable collision.
 
 ### Stage 2: World Model and Pathfinding
 
-**Status: PARTIAL.** Persistent observations, visible flood fill, and visible
-pearl BFS exist. The bot does not yet plan over its complete remembered map.
+**Implemented:** persistent terrain, pearl expiry, visited-cell penalties,
+remembered-map BFS, target persistence, current observation invalidation, canonical
+portal pairing, and visible-exit traversal.
 
-**Implemented now:**
-
-- persistent storage for observed edges, pearls, occupants, and portal
-  endpoints;
-- visible reachable-area flood fill;
-- visible shortest-path search toward pearls.
-
-**Still required:**
-
-- symmetry-candidate elimination and inference;
-- complete portal pairing and transition lookup;
-- BFS over remembered tiles to pearls and exploration frontiers;
-- A* over the remembered toroidal graph;
-- route invalidation when new observations contradict memory.
-
-**Gate:** the bot explores every reachable region on empty-opponent tests,
-crosses known-safe portals, and reaches known pearls without local oscillation.
+**Remaining:** symmetry inference, A*, long-lived route objects, uncertain portal
+policies, and complete empty-opponent exploration coverage.
 
 ### Stage 3: Pearl Economy
 
-**Status: PARTIAL.** Immediate destination pearls and nearby visible/future
-pearls contribute to one-step scores. There is no persistent target-selection
-system.
+**Implemented:** immediate/future/nearby pearl scoring, remembered targets, and
+short sprints priced by net growth after segment costs. A 32-game ablation favoured
+sprints, but larger held-out/opponent-pool validation remains useful.
 
-**Still required:**
-
-- arrival-time-aware pearl target selection;
-- competition estimates from visible heads and sightings;
-- profitable sprint generation;
-- spawn-tile occupancy management;
-- death-drop collection and denial;
-- anti-oscillation target reservations.
-
-**Gate:** higher median maximum length and total length than Stage 2 across every
-official map, with no material increase in deaths.
+**Remaining:** exact arrival timing, enemy/ally reservations, spawn blocking,
+death-drop opportunities, and explicit denial scoring.
 
 ### Stage 4: Roles, Sonar, and Splitting
 
-**Status: PARTIAL, with sonar and splitting disabled.** Deterministic initial
-roles, the sonar codec, and conservative split eligibility checks exist. No
-working inter-process coordination exists.
+**Implemented:** colour-independent local champion estimates with expiry and
+hysteresis; the existing sonar codec; and experimental split scoring with parent
+and child geometry, distinct reachable income, population/phase limits, and child
+bootstrap through the ordinary fresh-process engine loop.
 
-**Implemented now:**
-
-- deterministic local role selection;
-- authenticated sonar encode/decode with expiry checks;
-- basic split legality and population-cap checks.
-
-**Still required:**
-
-- event-driven sharing of portals, enemies, and targets;
-- processing and storing accepted messages;
-- stable role reassignment and hysteresis;
-- team target reservations;
-- useful split scoring and parent/child safety evaluation;
-- child bootstrap behaviour using ID, position, and any received message.
-
-**Gate:** splitting improves team total length and map coverage against the
-non-splitting bot while preserving or improving longest-dragon length.
+**Remaining:** processing/transmitting team reports, global champion agreement,
+resource reservations, and measured split promotion. Splitting stays disabled in
+stable; its small ordinary-map comparison was inconclusive.
 
 ### Stage 5: Tactical Combat and Search
 
-**Status: PARTIAL risk heuristic only.** The current bot penalises moves near
-visible enemy heads and applies a stronger penalty when turn order makes the
-threat worse. It does not simulate enemy actions or future turns.
+**Implemented:** legal enemy ordinary-move enumeration, possible short-sprint
+threats, turn-order weighting, and bounded future self-body simulation. Known direct
+threats outrank economic rewards.
 
-**Still required:**
-
-- enemy legal-move enumeration;
-- turn-order-aware collision prediction;
-- local maximin search around contested pearls;
-- beam search for movement and bounded sprints;
-- transposition tables and early budget cutoff;
-- champion-specific risk scaling.
-
-**Gate:** improved win rate against rush, greedy, blocker, and mirror opponents,
-not merely against the previous bot.
+**Remaining:** fuller enemy search, multi-agent collision modelling, minimax/beam
+search, transposition tables, and more sophisticated budget allocation.
 
 ### Stage 6: Endgame Concentration
 
-**Status: NOT IMPLEMENTED as a concentration system.** The existing
-`Endgame` class is only a round-gated scoring modifier. It activates at round
-`425`, rewards reachable area and combat score, and doubles that modifier for
-the deterministic ID-based champion role. This is not champion discovery,
-coordination, feeding, or concentration.
+**Implemented:** gradual endgame survival weighting and local champion protection.
 
-**Implemented now:**
-
-- hard activation threshold at round `425`;
-- extra late-game weight for reachable area and combat score;
-- an additional copy of that score for `Role::champion`.
-
-**Still required, in order:**
-
-1. Soft endgame risk increase around rounds 400–430.
-2. Champion identification and heartbeats.
-3. Support-dragon corridor clearing.
-4. Enemy champion denial.
-5. Total-length preservation when longest length is uncertain.
-6. Feeder rendezvous planning.
-7. Controlled death geometry and champion pearl sweep.
-
-**Gate:** concentration must increase actual game wins, not just champion
-length, over a large held-out seed set. Disable it on maps or states where pearl
-recovery probability is poor.
+**Not implemented:** coordinated corridor clearing, champion denial, feeder
+rendezvous, deliberate death geometry, or concentration. Do not enable feeding
+without held-out evidence of improved actual wins.
 
 ## 6. Candidate Evaluation Model
 
@@ -624,23 +530,19 @@ testing only against the latest build.
 
 ## 8. Immediate Next Tasks
 
-Completed foundation work:
-
-- [x] Create the conventional `include`, `src`, `tests`, `lib`, and `util`
-  layout.
-- [x] Add strict C++20 CMake, sanitizers, CTest, and vendored Catch2 tests.
-- [x] Add GCC/Clang pull-request CI and gated release artifacts.
-- [x] Generate and integrate `helper.hpp`.
-- [x] Build a runnable ordinary-movement baseline.
-- [x] Complete at least one sandboxed self-match with the production bot.
-
-Next implementation work, in priority order:
-
-- [ ] Finish Stage 1 safety reasons, failure boundaries, point counters, and
-  the 100-seed safety gate.
-- [ ] Build the reproducible batch-match and metrics harness from Stage 0.
-- [ ] Implement symmetry inference and known-portal traversal.
-- [ ] Replace visible-only pearl selection with remembered-map BFS targets.
-- [ ] Add and validate profitable two- and three-step sprint candidates.
-- [ ] Integrate sonar only after single-dragon decisions are stable.
-- [ ] Implement ordinary endgame survival before any feeder concentration.
+- [x] Pin the toolkit and build a reproducible sandbox harness.
+- [x] Add structured move reasons, wrapped/body/tail tests, and planning fallback.
+- [x] Implement bounded body-aware survival search and remembered closed-pocket penalties.
+- [x] Route to remembered pearls/frontiers with persistent targets.
+- [x] Predict legal enemy moves around contested destinations.
+- [x] Pair portal boundaries and traverse currently verified exits.
+- [x] Generate and validate affordable two-/three-step sprints.
+- [x] Replace the global-ID champion rule with local estimates and hysteresis.
+- [x] Add and exercise an experimental resource-backed split policy.
+- [x] Package isolated profiles and validate the exact stable submission sources.
+- [ ] Push and inspect the updated remote GCC/Clang/sandbox CI checks.
+- [ ] Expand held-out coverage to 100 seeds per map and stronger opponents.
+- [ ] Improve the weaker Trauma matchup without map-specific overfitting.
+- [ ] Integrate sonar knowledge and target/champion coordination.
+- [ ] Promote splitting only after a larger measured benefit.
+- [ ] Implement coordinated endgame support before feeder concentration.
