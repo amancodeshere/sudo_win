@@ -49,14 +49,23 @@ auto Safety::safe_standard_moves(unswbc::Controller const& controller, WorldMode
 
 auto Safety::least_bad_fallback(unswbc::Controller const& controller) const -> unswbc::Direction {
     auto best = controller.get_dir();
-    auto best_rank = 5;
+    auto best_rank = 7;
     // Prefer an uncertain escape over a certainly fatal wall/body collision.
     for (auto const direction : unswbc::Direction::get_direction_list()) {
         auto const reason = standard_move_reason(controller, direction);
-        auto const rank = reason == SafetyReason::safe ? 0
+        auto rank = reason == SafetyReason::safe ? 0
                         : reason == SafetyReason::unknown_tile ? 1
                         : reason == SafetyReason::unknown_portal ? 2
-                        : reason == SafetyReason::occupied ? 3 : 4;
+                        : reason == SafetyReason::occupied ? 4 : 5;
+        if (reason == SafetyReason::occupied) {
+            auto const* tile = controller.get_tile(controller.get_position().add_dir(direction));
+            auto const* part = tile != nullptr ? tile->get_dragon() : nullptr;
+            if (part != nullptr && part->is_head() && part->get_id() != controller.get_id()) {
+                // When every escape fails, never kill an ally as well. An
+                // enemy head can at least turn the forced loss into a trade.
+                rank = part->get_team() == controller.get_team() ? 6 : 3;
+            }
+        }
         if (rank < best_rank || (rank == best_rank && direction == controller.get_dir())) {
             best = direction;
             best_rank = rank;

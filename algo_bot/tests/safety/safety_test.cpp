@@ -60,3 +60,16 @@ TEST_CASE("safety resolves wrapped destinations including own body") {
         {9, 5}, 0, unswbc::Team::A, unswbc::Direction::EAST, false};
     CHECK_FALSE(safety.is_safe_standard_move(fixture.controller, unswbc::Direction::WEST));
 }
+
+TEST_CASE("fatal fallback protects allied heads and prefers enemy trades") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dir = unswbc::Direction::EAST;
+    fixture.tile({6,5}).dragon_part = unswbc::DragonPart{{6,5},2,unswbc::Team::A,unswbc::Direction::WEST,true};
+    for (auto const direction : {unswbc::Direction::NORTH, unswbc::Direction::SOUTH, unswbc::Direction::WEST}) {
+        fixture.tile({5,5}).get_edge(direction) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    }
+    CHECK(sudo_win::Safety{}.least_bad_fallback(fixture.controller) != unswbc::Direction::EAST);
+    fixture.tile({5,5}).get_edge(unswbc::Direction::NORTH) = unswbc::Edge{false,unswbc::EdgeType::EMPTY};
+    fixture.tile({5,4}).dragon_part = unswbc::DragonPart{{5,4},3,unswbc::Team::B,unswbc::Direction::SOUTH,true};
+    CHECK(sudo_win::Safety{}.least_bad_fallback(fixture.controller) == unswbc::Direction::NORTH);
+}
