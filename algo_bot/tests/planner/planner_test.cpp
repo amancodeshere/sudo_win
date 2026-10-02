@@ -319,3 +319,35 @@ TEST_CASE("a partially observed split child uses free movement to clear queen ex
     }
     CHECK(state.body.size() == initial.body.size());
 }
+
+TEST_CASE("a small helper can fund safe movement that releases the queen's sole exit") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.game = unswbc::Game{32,16,64};
+    fixture.controller.head.dragon_id = 4;
+    auto input = std::ifstream{std::string{SUDO_WIN_TEST_SOURCE_DIR} + "/replays/portal_helper_release.txt"};
+    REQUIRE(input.good());
+    auto* previous = std::cin.rdbuf(input.rdbuf());
+    bool updated = false;
+    try {
+        updated = unswbc::update(fixture.controller,fixture.game);
+    } catch (...) {
+        std::cin.rdbuf(previous);
+        throw;
+    }
+    std::cin.rdbuf(previous);
+    REQUIRE(updated);
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    REQUIRE(world.queen_reservations(fixture.controller,38)[46] == 120000);
+    auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::collector);
+    REQUIRE(action.steps.size() >= 2);
+    auto state = sudo_win::Simulation{}.initial_state(fixture.controller,&world);
+    for (std::size_t i = 0; i < action.steps.size(); ++i) {
+        auto const next = sudo_win::Simulation{}.advance(fixture.controller,state,action.steps[i],i > 0,&world);
+        REQUIRE(next);
+        state = *next;
+    }
+    CHECK(std::find(state.body.begin(),state.body.end(),unswbc::Position{14,1}) == state.body.end());
+    auto budget = 512;
+    CHECK(sudo_win::Simulation{}.survival_depth(fixture.controller,state,6,budget,&world) == 6);
+}

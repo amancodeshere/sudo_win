@@ -142,13 +142,22 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         auto const safety_class = survival == 0 ? 0 : (threatened || sealed_pocket) ? 1 : 2;
         auto const improves_safety = safety_class > best_safety_class
             || (safety_class == best_safety_class && survival > best_survival && best_sealed_entry);
-        if (sprint && length_gain < 0 && !improves_safety) {
+        auto const releases_queen = config::enable_queen_release && controller.get_id() > 1
+            && controller.get_length() <= 4 && controller.get_unit_count() > 1 && safety_class == 2
+            && survival == config::survival_search_depth
+            && std::any_of(initial.body.begin(), initial.body.end(), [&](auto const p) {
+                return p.x >= 0 && p.y >= 0
+                    && reservations[static_cast<std::size_t>(p.y * world.width() + p.x)] >= 120000
+                    && std::find(next.body.begin(), next.body.end(), p) == next.body.end()
+                    && std::find(next.unranked_body.begin(), next.unranked_body.end(), p) == next.unranked_body.end();
+            });
+        if (sprint && length_gain < 0 && !improves_safety && !releases_queen) {
             return;
         }
         auto const paid_steps = static_cast<int>(steps.size()) - Simulation::free_steps(controller.get_length());
         if (sprint && paid_steps > 0 && length_gain <= 0
             && (config::enable_movement_economics || role == Role::champion || role == Role::queen || endgame_.active(game))
-            && !improves_safety) {
+            && !improves_safety && !releases_queen) {
             return;
         }
         candidate.role_score += roles_.score_move(role,
