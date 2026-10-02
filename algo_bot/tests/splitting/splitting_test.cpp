@@ -129,6 +129,13 @@ TEST_CASE("trapped snakes reverse their tails rather than collide") {
         fixture.controller.length = 3;
         CHECK_FALSE(sudo_win::SplittingPolicy{}.rescue(fixture.controller,world,true));
     }
+    SECTION("a child escape cannot certify rescue of a stationary trapped queen") {
+        CHECK_FALSE(sudo_win::SplittingPolicy{}.rescue(fixture.controller,world,false,true));
+        auto const fatal_fallback = sudo_win::SplittingPolicy{}.rescue(fixture.controller,world,true,true);
+        REQUIRE(fatal_fallback);
+        CHECK(fatal_fallback->score == 0);
+        CHECK(fatal_fallback->split_size == 2);
+    }
 }
 
 TEST_CASE("early expansion protects the champion and requires separate resources") {
@@ -169,6 +176,9 @@ TEST_CASE("early expansion protects the champion and requires separate resources
     SECTION("existing champions keep their length") {
         fixture.controller.unit_count = 2;
         CHECK_FALSE(candidate(sudo_win::Role::champion));
+    }
+    SECTION("fixed queens never split for population investment") {
+        CHECK_FALSE(candidate(sudo_win::Role::queen));
     }
     SECTION("a solitary early champion can start a second collector") {
         CHECK(candidate(sudo_win::Role::champion));

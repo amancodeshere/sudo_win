@@ -18,7 +18,8 @@ public:
         -> std::optional<PlannedAction>;
     [[nodiscard]] auto rescue(unswbc::Controller const& controller,
                               WorldModel const& world,
-                              bool certainly_trapped) const -> std::optional<PlannedAction>;
+                              bool certainly_trapped,
+                              bool preserve_parent = false) const -> std::optional<PlannedAction>;
     [[nodiscard]] auto consider(unswbc::Controller const& controller,
                                 unswbc::Game const& game,
                                 Role role,

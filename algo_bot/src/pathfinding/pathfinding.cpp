@@ -51,7 +51,7 @@ auto Pathfinding::remembered_target(unswbc::Controller const& controller,
     for (auto const& tile : controller.get_tiles()) {
         auto const* ally = tile.get_dragon();
         if (ally == nullptr || !ally->is_head() || ally->get_team() != controller.get_team()
-            || ally->get_id() == controller.get_id()) {
+            || ally->get_id() == controller.get_id() || controller.get_id() <= 1) {
             continue;
         }
         auto observed_length = 0;
@@ -61,7 +61,7 @@ auto Pathfinding::remembered_target(unswbc::Controller const& controller,
         }
         // Small helpers avoid races. A growing champion keeps its collection
         // priority unless an ally is visibly longer, even in a partial view.
-        if (controller.get_length() > 3 && observed_length <= controller.get_length()) {
+        if (ally->get_id() > 1 && controller.get_length() > 3 && observed_length <= controller.get_length()) {
             continue;
         }
         auto claimed = std::vector<int>(area, -1);

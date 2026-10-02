@@ -16,6 +16,7 @@ enum class ActionKind {
 };
 
 enum class Role {
+    queen,
     champion,
     collector,
     scout,

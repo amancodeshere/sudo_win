@@ -5,6 +5,10 @@
 namespace sudo_win {
 
 auto RoleManager::choose_role(unswbc::Controller const& controller, unswbc::Game const& game) const -> Role {
+    // The starting IDs 0 and 1 are the fixed queens, regardless of colour.
+    if (controller.get_id() <= 1) {
+        return Role::queen;
+    }
     auto visible_lengths = std::unordered_map<int, int>{};
     for (auto const& tile : controller.get_tiles()) {
         auto const* part = tile.get_dragon();
@@ -57,6 +61,7 @@ auto RoleManager::score_move(Role role,
                              int frontier_count,
                              int combat_score) const -> int {
     switch (role) {
+    case Role::queen: return reachable_area * 180 + combat_score;
     case Role::champion: return reachable_area * 120 + combat_score;
     case Role::collector: return reachable_area * 40;
     case Role::scout: return frontier_count * 250;

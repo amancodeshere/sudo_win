@@ -19,7 +19,7 @@ auto Endgame::score_destination(unswbc::Controller const&,
     }
 
     auto score = reachable_area * 250 + combat_score;
-    if (role == Role::champion) {
+    if (role == Role::champion || role == Role::queen) {
         score += reachable_area * 250 + combat_score;
     }
     auto const ramp = config::endgame_start_round - config::endgame_ramp_round;

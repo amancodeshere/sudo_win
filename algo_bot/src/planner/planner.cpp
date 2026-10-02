@@ -10,7 +10,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
                             unswbc::Game const& game,
                             WorldModel const& world,
                             Role role) const -> PlannedAction {
-    if (favourable_trades_) {
+    if (favourable_trades_ && role != Role::queen) {
         if (auto const trade = combat_.favourable_trade(controller, world)) {
             return *trade;
         }
@@ -79,7 +79,8 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         }
         candidate.exploration_score += world.unseen_neighbour_count(destination) * config::score_frontier;
         auto const& threat = threats[static_cast<std::size_t>(destination.y * world.width() + destination.x)];
-        candidate.combat_score = threat.score * (role == Role::champion ? config::score_champion_risk_multiplier : 1);
+        candidate.combat_score = threat.score * (role == Role::queen ? 3
+            : role == Role::champion ? config::score_champion_risk_multiplier : 1);
         auto const threatened = threat.level == ThreatLevel::direct
             || (funded_sprint_priority_ && threat.affordable_steps > 0 && threat.affordable_steps <= 2);
         auto const entry_trap = steps.size() == 1 && survival < config::survival_search_depth
@@ -93,7 +94,9 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         if (sprint && length_gain < 0 && !improves_safety) {
             return;
         }
-        if (sprint && length_gain <= 0 && (role == Role::champion || endgame_.active(game))
+        auto const paid_steps = static_cast<int>(steps.size()) - Simulation::free_steps(controller.get_length());
+        if (sprint && paid_steps > 0 && length_gain <= 0
+            && (role == Role::champion || role == Role::queen || endgame_.active(game))
             && !improves_safety) {
             return;
         }
@@ -162,7 +165,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
 
     auto rescue = std::optional<PlannedAction>{};
     if (best_survival <= 1) {
-        rescue = splitting_.rescue(controller, world, best.steps.empty());
+        rescue = splitting_.rescue(controller, world, best.steps.empty(), role == Role::queen);
         if (rescue && rescue->score > 0) {
             return *rescue;
         }

@@ -175,7 +175,7 @@ auto Combat::destination_risk(unswbc::Controller const& controller,
                               Role role, WorldModel const* world) const -> int {
     auto const map = threats(controller, world);
     auto score = map[static_cast<std::size_t>(destination.y * unswbc::game->width + destination.x)].score;
-    if (role == Role::champion) {
+    if (role == Role::champion || role == Role::queen) {
         score *= config::score_champion_risk_multiplier;
     }
     return score;

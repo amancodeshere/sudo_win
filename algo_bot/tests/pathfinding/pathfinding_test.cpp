@@ -81,6 +81,7 @@ TEST_CASE("remembered routes retain targets and reject stale or blocked pearls")
 
 TEST_CASE("resource routes yield to closer visible allies only on legal paths") {
     auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 4;
     for (auto& tile : fixture.controller.vision.tiles) {
         tile.pearl_time = -1;
     }
@@ -104,6 +105,19 @@ TEST_CASE("resource routes yield to closer visible allies only on legal paths") 
         auto const chosen = route();
         REQUIRE(chosen);
         CHECK(chosen->target == unswbc::Position{7, 5});
+    }
+    SECTION("a queen keeps food priority regardless of helper length") {
+        fixture.controller.head.dragon_id = 1;
+        auto const chosen = route();
+        REQUIRE(chosen);
+        CHECK(chosen->target == unswbc::Position{7,5});
+    }
+    SECTION("a long helper yields to the fixed queen even when she is shorter") {
+        fixture.controller.length = 10;
+        fixture.tile({7,4}).dragon_part->dragon_id = 0;
+        auto const chosen = route();
+        REQUIRE(chosen);
+        CHECK(chosen->target == unswbc::Position{5,7});
     }
     SECTION("walls prevent an apparent geometric claim") {
         fixture.tile({7, 4}).get_edge(unswbc::Direction::SOUTH)

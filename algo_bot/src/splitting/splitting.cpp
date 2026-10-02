@@ -15,7 +15,7 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
                                        Role role, WorldModel const& world) const
     -> std::optional<PlannedAction> {
     constexpr auto child_size = unswbc::Constants::MIN_SIZE;
-    if (game.get_round_num() >= 280 || controller.get_unit_count() >= 24
+    if (role == Role::queen || game.get_round_num() >= 280 || controller.get_unit_count() >= 24
         || controller.get_length() < 4 || controller.get_length() > 12
         || !controller.can_split(child_size)
         || (role == Role::champion && (controller.get_unit_count() > 1 || game.get_round_num() >= 80))) {
@@ -97,7 +97,7 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
 
 auto SplittingPolicy::rescue(unswbc::Controller const& controller,
                              WorldModel const& world,
-                             bool certainly_trapped) const -> std::optional<PlannedAction> {
+                             bool certainly_trapped, bool preserve_parent) const -> std::optional<PlannedAction> {
     if (!controller.can_split(unswbc::Constants::MIN_SIZE)) {
         return std::nullopt;
     }
@@ -108,6 +108,7 @@ auto SplittingPolicy::rescue(unswbc::Controller const& controller,
     auto best = std::optional<PlannedAction>{};
     auto best_depth = 0;
     auto tail_safe = false;
+    auto parent_safe = true;
     if (complete) {
         // Every split size starts the child at the same old tail. Check its
         // visibility and threats once, before copying potentially long bodies.
@@ -116,12 +117,23 @@ auto SplittingPolicy::rescue(unswbc::Controller const& controller,
             child_head->dragon_part.reset();
             tail_safe = Combat{}.threat_level(view, initial.body.back(), &world) != ThreatLevel::direct;
         }
+        if (preserve_parent) {
+            if (auto* parent_head = view.get_tile(initial.body.front())) {
+                parent_head->dragon_part.reset();
+            }
+            parent_safe = Combat{}.threat_level(view, initial.body.front(), &world) != ThreatLevel::direct;
+        }
     }
     if (tail_safe) {
         // The parent is already in trouble. Preserve as much length as possible
         // in the escaping tail rather than always rescuing a two-segment child.
-        for (auto child_size = controller.get_length() - unswbc::Constants::MIN_SIZE;
-             child_size >= unswbc::Constants::MIN_SIZE; --child_size) {
+        auto const first_size = preserve_parent ? unswbc::Constants::MIN_SIZE
+            : controller.get_length() - unswbc::Constants::MIN_SIZE;
+        auto const last_size = preserve_parent ? controller.get_length() - unswbc::Constants::MIN_SIZE
+            : unswbc::Constants::MIN_SIZE;
+        auto const increment = preserve_parent ? 1 : -1;
+        for (auto child_size = first_size; preserve_parent ? child_size <= last_size : child_size >= last_size;
+             child_size += increment) {
             auto child = SimulationState{};
             child.body.assign(initial.body.rbegin(), initial.body.rbegin() + child_size);
             child.unranked_body.assign(initial.body.begin(), initial.body.end() - child_size);
@@ -129,6 +141,20 @@ auto SplittingPolicy::rescue(unswbc::Controller const& controller,
             auto const depth = simulation.survival_depth(controller, child, 4, budget, &world);
             if (depth < 2 || depth <= best_depth) {
                 continue;
+            }
+            if (preserve_parent) {
+                auto parent = initial;
+                parent.body.resize(parent.body.size() - static_cast<std::size_t>(child_size));
+                parent.unranked_body = child.body;
+                auto parent_budget = 128;
+                // Saving a large child cannot replace the fixed queen. Do not
+                // credit a parent route that depends on an unobserved child move.
+                if (simulation.survival_depth(controller, parent, 4, parent_budget, &world) < 2) {
+                    continue;
+                }
+                if (!parent_safe) {
+                    continue;
+                }
             }
             best_depth = depth;
             best = PlannedAction{};
@@ -159,7 +185,7 @@ auto SplittingPolicy::consider(unswbc::Controller const& controller,
                                Role role,
                                int reachable_area, WorldModel const* world,
                                bool enabled) const -> std::optional<PlannedAction> {
-    if (!enabled || world == nullptr || game.get_round_num() >= config::split_stop_round
+    if (!enabled || role == Role::queen || world == nullptr || game.get_round_num() >= config::split_stop_round
         || (role == Role::champion && (controller.get_unit_count() > 1 || game.get_round_num() >= 200))) {
         return std::nullopt;
     }

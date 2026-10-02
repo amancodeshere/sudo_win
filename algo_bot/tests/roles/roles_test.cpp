@@ -8,15 +8,21 @@ TEST_CASE("role assignment and scoring") {
     auto fixture = sudo_win::test::EngineFixture{};
     auto roles = sudo_win::RoleManager{};
 
-    SECTION("the only living friendly dragon is champion regardless of colour or ID") {
-        CHECK(roles.choose_role(fixture.controller, fixture.game) == sudo_win::Role::champion);
+    SECTION("fixed queen IDs keep their role regardless of colour or length") {
+        CHECK(roles.choose_role(fixture.controller, fixture.game) == sudo_win::Role::queen);
+        fixture.controller.head.dragon_id = 1;
+        fixture.controller.head.team = unswbc::Team::B;
+        fixture.controller.unit_count = 4;
+        CHECK(roles.choose_role(fixture.controller, fixture.game) == sudo_win::Role::queen);
+    }
+    SECTION("a sole non-queen survivor retains the secondary champion role") {
         fixture.controller.head.dragon_id = 7;
         fixture.controller.head.team = unswbc::Team::B;
         CHECK(roles.choose_role(fixture.controller, fixture.game) == sudo_win::Role::champion);
     }
 
     SECTION("non-champion IDs receive deterministic roles") {
-        fixture.controller.head.dragon_id = 1;
+        fixture.controller.head.dragon_id = 5;
         fixture.controller.unit_count = 2;
         for (auto const position : {unswbc::Position{6, 5}, unswbc::Position{6, 6},
                                     unswbc::Position{6, 7}, unswbc::Position{7, 7}}) {
