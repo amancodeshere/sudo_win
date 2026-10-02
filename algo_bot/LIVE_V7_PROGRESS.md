@@ -65,3 +65,15 @@ The first response implementation incorrectly excluded enemies with lower IDs be
 Corrected the regression's ownership IDs and expectation, and extended the official-engine rule verifier to assert the cyclic `0,1,2,3,0,1,2,3` turn order over two rounds. Existing visible financial lower bounds, unknown-length envelopes, body obstacles and fixed node budgets are unchanged. The earlier same-round-only results remain in the progress record as superseded evidence.
 
 Corrected snapshot `build/live-v7-response-cycle`, source SHA-256 `32f0c87bded85193e57567bc437dc1a3e7b155eb0142362c652c666b75b6ee7a`. C++ remains **79 cases / 555 assertions**, all compiler and sanitizer checks passing; 16 Python tests pass, including official-engine turn-order conformance. An exact-source 17-map comparison, a fresh-seed stage comparison and metered tests are running. Earlier `final` and `finalb` artifacts must not be uploaded as the final corrected version.
+
+## Final validation — implemented and packaged; competitive promotion withheld
+
+All five priorities and the integration/correctness refinements are complete. Added the paid joint-corridor-release regression: the validated two-step move collects one pearl, retains length three, and clears the queen's known exits. Final checks pass **79 C++ cases / 555 assertions** on three release compilers and ASan/UBSan, plus **16 Python tests**.
+
+Exact corrected-source comparisons: all 17 maps seed 812 both colours **17–16–1**; metered Autarky / Slithery Fight / Schooltime / Around UNSW seed 820 **2–6**, candidate peak **53,610,292 / 100,000,000**; four-map comparison with the queen-exit predecessor seed 821 **4–4**. All have zero recorded errors. Four deterministic repeat pairs have identical replay hashes; the four unique fixtures score **2–2**.
+
+A frozen v4 variant changing only `enable_favourable_trades=true` tests broader head attacks. On the same four maps and seed 822, finalc scores **1–7**, versus original v4 **3–5**. Both pass action checks with zero errors. This regression and the adverse metered results mean the combined version is **not established as a competitive replacement for v4**. No private leader executable was used and no upload was performed. More income and population are demonstrated; retaining that income as surviving scoring length remains unresolved.
+
+Final artifact `build/submission-live-v7-finalc.zip`, source SHA-256 `32f0c87bded85193e57567bc437dc1a3e7b155eb0142362c652c666b75b6ee7a`, ZIP SHA-256 `a7b8a93367d32e1b048a6a0ddd88728a7c34745e8d2c4634de237615fdc45141`. Independently regenerated ZIP hashes match; all 32 selected source files match current source bytes and exact archive membership. Older `final` and `finalb` packages are superseded. The final source is saved for evaluation, not automatically uploaded.
+
+`LIVE_V7_VALIDATION.md` provides outcomes and limitations; `analysis/live_v7_validation_2026-10-02.json` preserves source identities, map and replay hashes, rule probes, compact match outcomes and measured strategy metrics. Earlier adverse experiments and superseded timing assumptions remain recorded rather than being presented as final-source validation.

@@ -83,6 +83,17 @@ protection settings:
 - `Algorithm Bot CI / Clang Debug + sanitizers`.
 - `Algorithm Bot CI / Submission tools + judge sandbox`.
 
+## Current replay upgrade
+
+The current v7 sources add enemy-response checks through our next action, independent food targets
+for growth splits, resource-funded population budgets, productive portal approaches,
+scoring-dragon food coordination, paid-step pricing and joint queen-exit viability. Portal scouting remains
+available to expendable helpers; queens and champions keep viable farm routes.
+`LIVE_V7_PROGRESS.md` records each implementation stage, including adverse results.
+`LIVE_V7_VALIDATION.md` records the final package and comparison evidence. Correctness checks
+pass, but competitive results are mixed, including adverse metered and aggressive-opponent
+comparisons; v7 is not established as a winning replacement for uploaded v4.
+
 ## Run a Match
 
 ```bash
@@ -111,6 +122,7 @@ uv pip install --python /tmp/sudo-win-bench-env/bin/python -r algo_bot/util/requ
 Preserve the old submission sources as a separate bot directory, then compare:
 
 ```bash
+ulimit -n 4096
 XDG_CACHE_HOME=/tmp/sudo-win-cache /tmp/sudo-win-bench-env/bin/python \
   algo_bot/util/benchmark.py algo_bot /tmp/sudo-win-baseline \
   --seeds 1 2 3 --both-colours --repeat 2 --allow-favourable-trades \
@@ -160,7 +172,16 @@ are applied to the copy, leaving source configuration unchanged:
   `no-economics`, `no-interception`, `no-tail-clearance`, `no-queen-release`:
   single-feature ablations for the leader-driven upgrades;
 - `no-champion-retention`: retain the eight-segment helper threshold throughout
-  the match rather than protecting four-segment scorers after round 80;
+  the match rather than protecting four-segment scorers in small teams after round 80;
+- `no-response-defense`, `no-productive-expansion`, `no-portal-income`,
+  `no-scoring-coordination`, `no-resource-population`, `no-paid-pricing`,
+  `no-queen-exit-viability`:
+  isolated ablations for the v7 policies;
+- `diagnostic`: stable decisions with indicators enabled. Use
+  `util/decision_metrics.py RESULTS_DIRECTORY` for action/payment purposes and
+  split rejection reasons, and `util/strategy_metrics.py RESULTS_DIRECTORY` for
+  actual food, paid steps, early population, queen survival and retained length.
+  Native diagnostic runs help explain decisions; production indicators stay off;
 - `growth`: retained alias for the stable strategy;
 - `combat`: adds small-helper trades against visibly larger nonqueen heads;
 - `experimental`: enables investment/expansion splits, longer sprint forecasts,

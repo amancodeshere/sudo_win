@@ -351,3 +351,35 @@ TEST_CASE("a helper must not cover all queen exits with its resulting body") {
     fixture.tile({6,5}).dragon_part = unswbc::DragonPart{{6,5},8,unswbc::Team::A,unswbc::Direction::NORTH,false};
     CHECK_FALSE(sudo_win::Safety{}.blocks_queen_escape(fixture.controller,*east,world));
 }
+
+TEST_CASE("validated paid movement can release jointly blocked queen exits") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 4;
+    fixture.controller.head.position = {5,4};
+    fixture.controller.length = 3;
+    fixture.controller.unit_count = 2;
+    for (auto& tile : fixture.controller.vision.tiles) { tile.pearl_time = -1; }
+    fixture.tile({5,4}).dragon_part = unswbc::DragonPart{{5,4},4,unswbc::Team::A,unswbc::Direction::NORTH,true};
+    fixture.tile({5,5}).dragon_part = unswbc::DragonPart{{5,5},4,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    fixture.tile({6,5}).dragon_part = unswbc::DragonPart{{6,5},4,unswbc::Team::A,unswbc::Direction::WEST,false};
+    fixture.tile({6,4}).dragon_part = unswbc::DragonPart{{6,4},0,unswbc::Team::A,unswbc::Direction::NORTH,true};
+    for (auto const d : {unswbc::Direction::NORTH,unswbc::Direction::EAST}) {
+        fixture.tile({6,4}).get_edge(d) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    }
+    fixture.tile({5,3}).pearl = true;
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto state = sudo_win::Simulation{}.initial_state(fixture.controller,&world);
+    REQUIRE(sudo_win::Safety{}.blocks_queen_escape(fixture.controller,state,world));
+    auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::collector);
+    REQUIRE(action.steps.size() == 2);
+    CHECK(action.reason == "paid queen corridor release");
+    for (std::size_t i = 0; i < action.steps.size(); ++i) {
+        auto const next = sudo_win::Simulation{}.advance(fixture.controller,state,action.steps[i],i > 0,&world);
+        REQUIRE(next);
+        state = *next;
+    }
+    CHECK(state.pearls == 1);
+    CHECK(state.body.size() == 3);
+    CHECK_FALSE(sudo_win::Safety{}.blocks_queen_escape(fixture.controller,state,world));
+}
