@@ -49,6 +49,7 @@ class SubmissionTests(unittest.TestCase):
                                   ("no-resource-population", "enable_resource_population"),
                                   ("no-paid-pricing", "enable_paid_step_pricing"),
                                   ("no-queen-exit-viability", "enable_queen_exit_viability"),
+                                  ("no-queen-continuation-corridors", "enable_queen_continuation_corridors"),
                                   ("phase-expansion", "enable_phase_expansion"),
                                   ("no-sonar-network", "enable_sonar_network"),
                                   ("no-continuation-defense", "enable_continuation_defense"),

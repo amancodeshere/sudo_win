@@ -97,3 +97,7 @@ Compact immutable comparison evidence, source fingerprints, per-match replay has
 ## First v5 upload verified
 
 Submission **15048**, server version **7**, **bot bot v5**, description **please actually win**, builds successfully on its first attempt and is verified as the team's sole active submission. Exact package hashes are recorded in `analysis/live_v5_upload_2026-10-03.json`. The user has since requested further improvements to queen/helper coordination, queen escape, retained scorers, productive portal use and worker/sonar decisions; continue with separately tested candidates and preserve this upload as a frozen baseline.
+
+## Follow-up 1 — queen continuations before allied entrapment
+
+A new regression fails on uploaded v5: a helper leaves the queen's sole next landing empty while occupying its only onward tile. Extended the visible corridor check to two steps, comparing available continuations with and without this helper's resulting body. It does not attribute pre-existing wall/other-body traps to this helper, assume unseen clearance or predict queen tail release. Safety remains ahead of traffic priority. All 89 C++ cases / 622 assertions and 17 Python tests pass; profile isolation and reproducible packaging include the new flag. Frozen `build/submission-v5-followup-traffic`, source SHA `89fcb77c7088e299e1024155052884adccadcf25ba561521a03ef8fd76bb4655`. Both-colour seed-861 comparison against uploaded 15048 is running on Default, Devil and Portals; competitive benefit remains under evaluation.

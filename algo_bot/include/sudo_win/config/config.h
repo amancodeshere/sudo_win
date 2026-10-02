@@ -22,6 +22,7 @@ inline constexpr auto enable_scoring_coordination = true;
 inline constexpr auto enable_resource_population = true;
 inline constexpr auto enable_paid_step_pricing = true;
 inline constexpr auto enable_queen_exit_viability = true;
+inline constexpr auto enable_queen_continuation_corridors = true;
 inline constexpr auto enable_phase_expansion = false;
 inline constexpr auto enable_sonar_network = true;
 inline constexpr auto enable_continuation_defense = true;

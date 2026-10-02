@@ -242,6 +242,32 @@ auto Safety::blocks_queen_escape(unswbc::Controller const& controller,
         }
         // Do not blame this unit for a queen trapped exclusively by others.
         if (releasable > 0 && remaining == 0) { return true; }
+        if (!config::enable_queen_continuation_corridors) { continue; }
+        auto const available = [&](unswbc::Position p, bool include_helper) {
+            auto const* visible = controller.get_tile(p);
+            if (!visible) { return false; }
+            auto const* part = visible->get_dragon();
+            if (part && part->get_id() != controller.get_id()) { return false; }
+            return !include_helper || (std::find(after.body.begin(),after.body.end(),p) == after.body.end()
+                && std::find(after.unranked_body.begin(),after.unranked_body.end(),p) == after.unranked_body.end());
+        };
+        auto potential_continuation = false;
+        auto remaining_continuation = false;
+        for (auto const first : unswbc::Direction::get_direction_list()) {
+            auto const landing = world.transition(tile.get_position(),first);
+            if (!landing || !available(*landing,false)) { continue; }
+            for (auto const second : unswbc::Direction::get_direction_list()) {
+                auto const onward = world.transition(*landing,second);
+                if (!onward || *onward == tile.get_position() || *onward == *landing
+                    || !available(*onward,false)) { continue; }
+                potential_continuation = true;
+                remaining_continuation = remaining_continuation
+                    || (available(*landing,true) && available(*onward,true));
+            }
+        }
+        // Static visible corridors only: no unseen clearance, future ally move,
+        // or queen tail release is assumed. Act before the last exit is closed.
+        if (potential_continuation && !remaining_continuation) { return true; }
     }
     return false;
 }

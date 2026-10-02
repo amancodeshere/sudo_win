@@ -403,3 +403,31 @@ TEST_CASE("protected continuations distinguish legal exits from funded enemy pre
     CHECK(sudo_win::Safety{}.unpressured_exits(fixture.controller,after,world,
         combat.threats(fixture.controller,&world)) == 1);
 }
+
+TEST_CASE("helpers preserve a continuation beyond the queen's sole immediate exit") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 4;
+    fixture.controller.length = 2;
+    fixture.controller.unit_count = 2;
+    fixture.tile({6,3}).dragon_part = unswbc::DragonPart{
+        {6,3},0,unswbc::Team::A,unswbc::Direction::SOUTH,true};
+    for (auto const d : {unswbc::Direction::NORTH,unswbc::Direction::EAST,unswbc::Direction::WEST}) {
+        fixture.tile({6,3}).get_edge(d) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    }
+    for (auto const d : {unswbc::Direction::EAST,unswbc::Direction::WEST}) {
+        fixture.tile({6,4}).get_edge(d) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    }
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto after = sudo_win::SimulationState{};
+    after.body = {{6,5},{5,5}};
+    CHECK(sudo_win::Safety{}.blocks_queen_escape(fixture.controller,after,world));
+    after.body = {{4,5},{5,5}};
+    CHECK_FALSE(sudo_win::Safety{}.blocks_queen_escape(fixture.controller,after,world));
+    // Do not attribute a pre-existing wall trap to this helper.
+    fixture.tile({6,4}).get_edge(unswbc::Direction::SOUTH)
+        = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    world.update(fixture.controller,fixture.game);
+    after.body = {{6,5},{5,5}};
+    CHECK_FALSE(sudo_win::Safety{}.blocks_queen_escape(fixture.controller,after,world));
+}
