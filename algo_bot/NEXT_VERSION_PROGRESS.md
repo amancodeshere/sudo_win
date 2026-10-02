@@ -20,15 +20,16 @@ No upload or live challenges are part of this task.
 | 4 | Earlier remembered portal escapes and helper exploration | Complete | 49 C++ cases / 326 assertions; native 5–3 against step 3b, zero errors |
 | 5 | Useful sonar reports and helper attacks against enemy queen | Complete | Native 3–5; sandbox 1–1, no errors, peak 43,533,506 CPU points |
 | 6 | Resource-supported helper expansion and endgame coordination | Complete | 54 C++ cases / 356 assertions; native 4–4, no errors; four compiler/config checks pass |
-| 7 | Combined held-out sandbox checks, repeatability and final package | In progress | Twenty sandbox games across all ten competition maps are running |
+| 7 | Combined held-out sandbox checks, repeatability and final package | Complete | Exact package: 20 sandbox games, 10–10, zero errors; 8 repeated self-play runs deterministic; peak 56,416,128 |
 
 ## Rules that validation must enforce
 
 - At the round limit: fixed queen length, then longest living snake, then total
   living length. A dead queen scores zero. Queen IDs are 0 and 1, but either team
   can own either ID. https://game.battlecode.au/docs/structure
-- The first `ceil(action_start_length / 4)` moves are free; later moves cost one
-  segment before moving. Pearl growth does not change the action's free allowance.
+- The first `ceil(action_start_length / 4)` moves are free; later steps require
+  length above two before moving and remove an additional tail segment after
+  collision/growth checks. Pearl growth does not change the free allowance.
   https://game.battlecode.au/docs/movement
 - Collision checks occur before movement, including when entering one's own tail.
 - Split children get a new program instance and act later in the same round.
@@ -80,4 +81,10 @@ Stable packaging preserves these promoted feature settings. Each ablation profil
 
 Sonar does not supply sender-team metadata. Integration review found that a mirrored opponent could emit our format, so the wire tag now includes an explicit team bit and a team-dependent checksum. Opposite-team copies cannot accidentally accept each other's reports; this still does not make the format cryptographic authentication. Bot encode/decode uses the current controller's team, independent of queen ID. Regression tests cover both colors and cross-team rejection. Release and ASan/UBSan pass 55 cases / 362 assertions.
 
-The first self-repeat trial (`combined-self-repeat8`, seed 403) was intentionally interrupted after one completed game when this refinement superseded its source; it is excluded from completed validation evidence. Earlier combined seed 401 sandbox / seed 402 native trials remain strategy diagnostics. The exact final package is `build/submission-competition-v5.zip`, with all 32 selected files identical to working sources. Final seed 404 all-map sandbox and seed 405 repeated self-play trials are running against that exact source.
+The first self-repeat trial (`combined-self-repeat8`, seed 403) was intentionally interrupted after one completed game when this refinement superseded its source; it is excluded from completed validation evidence. Earlier combined seed 401 sandbox / seed 402 native trials remain strategy diagnostics. The exact final package is `build/submission-competition-v5.zip`, with all 32 selected files identical to working sources.
+
+### Step 7 — completed combined validation
+
+All four compiler/configuration suites pass 55 C++ cases / 362 assertions; 16 Python tests and independent official-engine live-rule probes pass. Exact package seed 404 across all ten competition maps / both colors: 10–10, zero candidate or opponent errors, peak 56,416,128 / 100,000,000 CPU points. Seed 405 self-play on Portals and Schooltime / both colors / two repetitions: eight runs with matching replay hashes, zero errors, peak 44,653,650. Earlier seed 401 sandbox strategy comparison was 12–8; seed 402 native diagnostic was 8–12 (zero candidate errors, one opponent error). These small samples establish correctness and runtime integration, not a reliable competition win-rate advantage.
+
+Exact final replay metrics: 5,896 pearls / 104,568 turns versus 6,325 / 125,073 (about 11.5% better food per turn), 40 versus 26 portal crossings, six versus five queens alive, total final queen lengths 84 versus 52. Map/seed variance and forced traps remain limitations. Full evidence, per-map results, package hashes and reproduction command: `LIVE_V5_VALIDATION.md`. No upload or live activation was performed. Every requested implementation step is saved independently.

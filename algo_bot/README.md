@@ -113,17 +113,19 @@ Preserve the old submission sources as a separate bot directory, then compare:
 ```bash
 XDG_CACHE_HOME=/tmp/sudo-win-cache /tmp/sudo-win-bench-env/bin/python \
   algo_bot/util/benchmark.py algo_bot /tmp/sudo-win-baseline \
-  --seeds 1 2 3 --both-colours --repeat 2 --output /tmp/sudo-win-results
+  --seeds 1 2 3 --both-colours --repeat 2 --allow-favourable-trades \
+  --output /tmp/sudo-win-results
 ```
 
 With no `--maps`, every map bundled with toolkit 1.2.5 is used. Narrow iteration
 with `--maps maps/arena.map`. Runs use the judge sandbox by default and compile
 only manifest-selected files, excluding Catch2 and test entry points. Each
 output directory must be fresh. JSONL records include source/map fingerprints,
-colour, seed, winner, final team total lengths, deaths, errors, CPU p50/p95/max,
+colour, seed, winner, fixed queen and secondary scores, deaths, errors, CPU p50/p95/max,
 peak observed lengths, and replay hashes. Repeated replays must match exactly.
-The command fails on runtime errors, no-valid-action deaths, nondeterminism, or
-turns exceeding the default 90-million-point margin. It also independently checks
+The command gates candidate runtime errors, no-valid-action deaths, nondeterminism,
+and turns exceeding the default 90-million-point margin. Opponent errors remain
+recorded separately. It also independently checks
 death snapshots for visible body/wall collisions or unaffordable sprints when a
 safe ordinary alternative existed. Deaths with no known safe alternative and
 future enemy attacks remain recorded, rather than assumed avoidable. Action
@@ -144,15 +146,23 @@ This produces a clean bot directory, `build/submission-stable.zip`, and a JSON
 checksum/flag manifest. Choose a fresh output name for later builds. Profiles
 are applied to the copy, leaving source configuration unchanged:
 
-- `stable`: configured sprints, rescue splits, confirmed body memory and
-  last-resort remembered portal escapes; experimental priorities/attacks disabled;
+- `stable`: live free sprints, fixed queen protection, funded turn-order defense,
+  bounded helper expansion, helper portal exploration, team sonar reports and
+  small-helper attacks against a currently visible enemy queen;
 - `no-sprint`: stable strategy with sprint generation disabled for ablations;
-- `growth`: enables selective collector expansion only;
-- `combat`: enables small-helper trades against visibly larger enemy heads;
-  use `benchmark.py --allow-favourable-trades` for this explicit trial;
+- `no-growth`, `no-sonar`, `no-helper-portals`, `no-hunting`: disable exactly
+  the named feature; all other stable settings remain identical;
+- `growth`: retained alias for the stable strategy;
+- `combat`: adds small-helper trades against visibly larger nonqueen heads;
 - `experimental`: enables investment/expansion splits, longer sprint forecasts,
   sealed-pocket priority, funded-sprint priority and favourable trades.
-  These trials are not the promoted upload strategy.
+  These additional priorities are not the promoted upload strategy.
+
+Use `benchmark.py --allow-favourable-trades` with stable or combat. The checker
+independently verifies funded, visible enemy-head trades by a small nonqueen
+helper with a teammate; other avoidable collision gates stay active. Sonar tags
+separate teams and reject malformed/expired reports, but are not cryptographic
+authentication. Reports and delayed echoes cannot certify empty portal exits.
 
 Test the resulting directory through `benchmark.py` before uploading. If the
 toolkit is already authenticated, `unswbc submit build/submission-stable` submits

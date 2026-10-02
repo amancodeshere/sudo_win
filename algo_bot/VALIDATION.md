@@ -2,6 +2,9 @@
 
 ## Current live-rule implementation
 
+The completed candidate and exact package validation are recorded in
+[LIVE_V5_VALIDATION.md](LIVE_V5_VALIDATION.md).
+
 Follow `NEXT_VERSION_PROGRESS.md` for the new candidate. Toolkit 1.2.5 is pinned,
 and `util/verify_rules.py` independently exercises queen scoring and frozen free
 sprint allowance against its bundled official engine before benchmarks run.
@@ -9,7 +12,7 @@ Earlier sections below are historical results from toolkit 1.2.2; they do not
 establish performance under current queen and sprint rules.
 
 
-## Version 4 conservative candidate — latest 2 October 2026 review
+## Historical version 4 conservative candidate — before its later upload
 
 The new package is **`build/submission-replay-v4-conservative.zip`**. It has not
 been uploaded during this replay-improvement task. The active baseline is
