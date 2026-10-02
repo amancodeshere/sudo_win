@@ -23,6 +23,7 @@ PROFILES["no-sonar"] = {**PROFILES["stable"], "enable_sonar": False}
 PROFILES["no-growth"] = {**PROFILES["stable"], "enable_growth_splitting": False}
 PROFILES["no-helper-portals"] = {**PROFILES["stable"], "enable_helper_portals": False}
 PROFILES["no-hunting"] = {**PROFILES["stable"], "enable_queen_hunting": False}
+PROFILES["no-corridors"] = {**PROFILES["stable"], "enable_queen_corridors": False}
 PROFILES["growth"] = {**PROFILES["stable"]}  # retained CLI alias
 PROFILES["combat"] = {**PROFILES["stable"], "enable_favourable_trades": True}
 PROFILES["experimental"] = {**PROFILES["stable"], "enable_splitting": True,

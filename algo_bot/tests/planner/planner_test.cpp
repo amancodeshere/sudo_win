@@ -233,3 +233,24 @@ TEST_CASE("queens and last survivors avoid funded later attacks without an exper
     CHECK(threats[56].later_affordable_steps == 0);
     CHECK(threats[56].earlier_affordable_steps == 2);
 }
+
+TEST_CASE("a helper yields the queen's only escape despite an adjacent pearl") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 7;
+    fixture.controller.length = 2;
+    fixture.controller.unit_count = 2;
+    for (auto& tile : fixture.controller.vision.tiles) { tile.pearl_time = -1; }
+    fixture.tile({6,5}).pearl = true;
+    fixture.tile({6,4}).dragon_part = unswbc::DragonPart{
+        {6,4},0,unswbc::Team::A,unswbc::Direction::SOUTH,true};
+    fixture.tile({6,3}).dragon_part = unswbc::DragonPart{
+        {6,3},0,unswbc::Team::A,unswbc::Direction::SOUTH,false};
+    for (auto const direction : {unswbc::Direction::WEST,unswbc::Direction::EAST}) {
+        fixture.tile({6,4}).get_edge(direction) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    }
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto const action = sudo_win::Planner{false}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::collector);
+    REQUIRE(action.steps.size() == 1);
+    CHECK(action.steps.front() != unswbc::Direction::EAST);
+}

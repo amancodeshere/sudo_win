@@ -67,7 +67,8 @@ auto WorldModel::receive_report(TeamMessage const& message, int round) -> void {
         || round < message.round || round - message.round > config::sonar_max_age
         || message.sender_id < 0 || message.sender_id >= 8192 || message.value < 0 || message.value >= 2048
         || static_cast<unsigned>(message.type) > 7
-        || (message.type == MessageType::champion && message.sender_id > 1)) {
+        || ((message.type == MessageType::champion || message.type == MessageType::danger)
+            && message.sender_id > 1)) {
         return;
     }
     auto const found = std::find_if(reports_.begin(), reports_.end(), [&](auto const& existing) {
@@ -102,6 +103,72 @@ auto WorldModel::receive_report(TeamMessage const& message, int round) -> void {
 }
 
 auto WorldModel::reports() const -> std::vector<TeamMessage> const& { return reports_; }
+
+auto WorldModel::queen_reservations(unswbc::Controller const& controller, int round) const
+    -> std::vector<int> {
+    auto reserved = std::vector<int>(cells_.size(), 0);
+    if (!config::enable_queen_corridors || controller.get_id() <= 1) { return reserved; }
+    for (auto const& report : reports_) {
+        if (report.type == MessageType::danger && report.sender_id <= 1 && round - report.round <= 1) {
+            reserved[index({report.x, report.y})] = 12000;
+        }
+    }
+    for (auto const& tile : controller.get_tiles()) {
+        auto const* queen = tile.get_dragon();
+        if (queen == nullptr || !queen->is_head() || queen->get_id() > 1
+            || queen->get_team() != controller.get_team()) { continue; }
+        auto exits = std::vector<std::pair<unswbc::Position, unswbc::Direction>>{};
+        for (auto const direction : unswbc::Direction::get_direction_list()) {
+            auto const p = transition(tile.get_position(), direction);
+            auto const* next = p ? controller.get_tile(*p) : nullptr;
+            if (next != nullptr && (next->get_dragon() == nullptr
+                || next->get_dragon()->get_id() == controller.get_id())) {
+                exits.emplace_back(*p, direction);
+            }
+        }
+        for (auto const& [p, direction] : exits) {
+            auto& weight = reserved[index(p)];
+            weight = std::max(weight, exits.size() == 1U ? 120000 : 16000);
+            // Reserve a continuation, not a whole area around the queen.
+            auto const onward = transition(p, direction);
+            auto const* next = onward ? controller.get_tile(*onward) : nullptr;
+            if (next != nullptr && next->get_dragon() == nullptr) {
+                reserved[index(*onward)] = std::max(reserved[index(*onward)], 8000);
+            }
+        }
+    }
+    return reserved;
+}
+
+auto WorldModel::queen_intent(unswbc::Controller const& controller, int round,
+                              PlannedAction const& action) const -> std::optional<TeamMessage> {
+    if (!config::enable_queen_corridors || controller.get_id() > 1) { return std::nullopt; }
+    auto const simulation = Simulation{};
+    auto state = simulation.initial_state(controller, this);
+    if (action.kind == ActionKind::split) {
+        if (!controller.can_split(action.split_size)) { return std::nullopt; }
+        state.unranked_body.assign(state.body.end() - action.split_size, state.body.end());
+        state.body.resize(state.body.size() - static_cast<std::size_t>(action.split_size));
+    } else {
+        for (std::size_t i = 0; i < action.steps.size(); ++i) {
+            auto const next = simulation.advance(controller, state, action.steps[i], i > 0, this);
+            if (!next) { return std::nullopt; }
+            state = *next;
+        }
+    }
+    auto best = std::optional<unswbc::Position>{};
+    auto best_score = -1;
+    for (auto const direction : unswbc::Direction::get_direction_list()) {
+        auto const next = simulation.advance(controller, state, direction, false, this);
+        if (!next) { continue; }
+        auto budget = 64;
+        auto const score = simulation.survival_depth(controller, *next, 4, budget, this) * 100
+            + next->pearls * 10 + (direction == controller.get_dir() ? 1 : 0);
+        if (score > best_score) { best = next->body.front(); best_score = score; }
+    }
+    if (!best) { return std::nullopt; }
+    return TeamMessage{MessageType::danger, round & 511, controller.get_id(), best->x, best->y, 0};
+}
 
 auto WorldModel::own_body(unswbc::Controller const& controller) const
     -> std::vector<unswbc::Position> const* {

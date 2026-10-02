@@ -36,7 +36,9 @@ auto Bot::execute_turn(unswbc::Controller& controller, unswbc::Game const& game)
         auto report = std::optional<TeamMessage>{};
         auto const phase = game.get_round_num() % 4;
         auto const own = controller.get_position();
-        if (phase == 0 && controller.get_id() <= 1) {
+        if (controller.get_id() <= 1 && phase % 2 == 1) {
+            report = world_.queen_intent(controller, game.get_round_num(), action);
+        } else if (phase == 0 && controller.get_id() <= 1) {
             report = TeamMessage{MessageType::champion, game.get_round_num() & 511,
                 controller.get_id(), own.x, own.y, std::min(controller.get_length(), 2047)};
         } else if (phase == 1) {

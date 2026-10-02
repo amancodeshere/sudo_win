@@ -280,3 +280,30 @@ TEST_CASE("reported portal pairs provide static topology without certifying remo
     world.receive_report({sudo_win::MessageType::portal,1,4097,2,2,21},1);
     CHECK(world.portal_endpoints(10) == nullptr); // contradicts a directly seen empty edge
 }
+
+TEST_CASE("queen corridors preserve fixed identities and expire remote intentions") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 7;
+    fixture.controller.unit_count = 2;
+    fixture.tile({6,5}).dragon_part = unswbc::DragonPart{
+        {6,5},1,unswbc::Team::A,unswbc::Direction::NORTH,true};
+    for (auto const direction : {unswbc::Direction::NORTH, unswbc::Direction::EAST}) {
+        fixture.tile({6,5}).get_edge(direction) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    }
+    fixture.tile({6,4}).dragon_part = unswbc::DragonPart{
+        {6,4},1,unswbc::Team::A,unswbc::Direction::SOUTH,false};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto const at = [&](std::vector<int> const& weights, unswbc::Position p) {
+        return weights[static_cast<std::size_t>(p.y * fixture.game.width + p.x)];
+    };
+    CHECK(at(world.queen_reservations(fixture.controller,0),{6,6}) > 0);
+    fixture.tile({6,5}).dragon_part->team = unswbc::Team::B;
+    world.update(fixture.controller,fixture.game);
+    CHECK(at(world.queen_reservations(fixture.controller,0),{6,6}) == 0);
+    world.receive_report({sudo_win::MessageType::danger,0,1,3,3,0},0);
+    CHECK(at(world.queen_reservations(fixture.controller,1),{3,3}) > 0);
+    CHECK(at(world.queen_reservations(fixture.controller,2),{3,3}) == 0);
+    world.receive_report({sudo_win::MessageType::danger,0,7,4,4,0},0);
+    CHECK(at(world.queen_reservations(fixture.controller,0),{4,4}) == 0);
+}

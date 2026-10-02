@@ -28,6 +28,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     auto const simulation = Simulation{};
     auto const threats = combat_.threats(controller, &world);
     auto const initial = simulation.initial_state(controller, &world);
+    auto const reservations = world.queen_reservations(controller, game.get_round_num());
     auto best_survival = -1;
     auto best_safety_class = -1;
     auto best_sealed_entry = false;
@@ -85,6 +86,12 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             candidate.exploration_score += config::score_recent_visit;
         }
         candidate.exploration_score += world.unseen_neighbour_count(destination) * config::score_frontier;
+        // Every retained segment can obstruct the queen, not only our head.
+        for (auto const p : next.body) {
+            if (p.x >= 0 && p.y >= 0) {
+                candidate.role_score -= reservations[static_cast<std::size_t>(p.y * world.width() + p.x)];
+            }
+        }
         for (auto const& report : world.reports()) {
             if (report.type != MessageType::enemy_head || report.value != 1024
                 || game.get_round_num() - report.round > 2) {
@@ -123,7 +130,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             && !improves_safety) {
             return;
         }
-        candidate.role_score = roles_.score_move(role,
+        candidate.role_score += roles_.score_move(role,
                                                  reachable_area,
                                                  world.unseen_neighbour_count(destination),
                                                  candidate.combat_score);
