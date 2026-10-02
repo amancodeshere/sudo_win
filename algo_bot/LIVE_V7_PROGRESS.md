@@ -81,3 +81,15 @@ Final artifact `build/submission-live-v7-finalc.zip`, source SHA-256 `32f0c87bde
 ## User-requested live evaluation upload
 
 After reviewing the mixed local evidence, the user explicitly requested uploading the exact tested finalc package as **bot bot 4**, description **i shall win**. Upload accepted on 2 October 2026 at 12:24:00 UTC: **submission 14928, server version 6**. The API subsequently reports **active**, with one build attempt and no build error. The upload record and exact local archive manifest are saved in `analysis/live_v7_upload_2026-10-02.json`. No live challenges were created; the user will arrange leader matches. The earlier statements that no upload was performed describe the implementation/validation phase.
+
+## Post-upload replay assessment — submission 14928
+
+Downloaded 56 recent own-team replays, verified 51 headers belonging to the new upload and excluded five AlgoMaster games from old submission 14744. New-bot outcomes: **3–48** across three 17-map unranked series (tungtung67 0–17, EternalWisdom 3–14, Adrak vali chai 0–17). Downloaded and assessed 15 current top-three-versus-horse games on predefined maps as a separate strategic/sonar comparison. All 66 included reconstructions match engine final states and winners; own maximum instruction count is **61,997,211**, zero reported timeouts.
+
+The report `LIVE_BOT4_REPLAY_REVIEW.md` and tracked evidence `analysis/live_bot4_replay_review_2026-10-02.json` cover each map, enemy attacks, queen rescues, early territory, scorer retention, sonar delivery and pearl provenance. Own round-100 medians remain four units / 16 segments versus opponents' 21 / 50. Queens survive 5/51; 30 die in head attacks and 33 of the 46 dead queens are length two. Other-ally sonar deliveries are approximately 245 versus 995 per 1,000 turns. Source inspection confirms the current strategy ignores protocol-3 echo data and reports only enemy queen heads.
+
+A diagnostic-only larger response budget detects the visible funded four-step attack missed by the normal reconstructed model at Around UNSW 880180, round 138; search completeness needs explicit treatment rather than treating exhausted search as clearance. Native queen reconstruction has historical action differences and is not an exact server-state counterfactual. No larger-budget variant was uploaded.
+
+Food provenance reveals substantial allied-death feeding of top teams' queens: Cutlery 183/200 pearls, SSS 118/130, horse 355/395, compared with our 38/359. Collection and timing are directly measured; deliberate donor coordination remains an inference. The report proposes controlled resource transfer experiments alongside safer early expansion and communication improvements.
+
+All raw own replays are in `replays/`; API captures, leader replays, full audits, exact reconstructed queen histories, diagnostics and investigation script copies are in `build/validation/live-bot4-submission14928-study/`. Upload source/ZIP hashes remain unchanged. This assessment makes no strategy change, new upload or challenge.
