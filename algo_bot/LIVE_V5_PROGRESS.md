@@ -63,3 +63,9 @@ The combined phase-ablation test (seed 841, Schooltime/Slithery Fight/Around UNS
 The pre-funding-refinement integrated metered comparison (seed 839, Portals/Slithery Fight) finishes **1–3**, zero errors, peak **49,591,995**. It is preserved as adverse evidence, not overwritten by final results.
 
 Exact release candidate: `build/submission-v5-release-candidate.zip`, source SHA **f5f4128d70d0f99323520f76cd10792f35aef5a5b5d1286d2ea762221642a823**, ZIP SHA **047e26470c38f9615228f2d55c178ae89296f554926b7431ac39cd7c4ecb7610**. A separately regenerated ZIP matches both hashes; archive membership and all 32 source file bytes match the repository, with credentials/tests/utilities excluded. Final 17-map seed-842 comparison, metered seed-843 comparison and aggressive-reference seed-844 stress test are running against this exact artifact.
+
+## Release-gate regression and refinement
+
+The first candidate passes judge correctness (8 metered games **4–4**, peak **67,456,789**, zero errors), all compiler/sanitizer checks (86 cases / 609 assertions), 17 Python tests, and four replay repeat pairs. However, the broad comparison is losing too many games, and the aggressive comparison is only **3–5**; this candidate is not accepted for upload yet.
+
+Two new tests fail on that source: a queen takes tempting food at an endpoint with a modeled four-step possible attack even though an unthreatened west move exists; and a helper takes food in a fresh remote queen-intent tile. Fixed by keeping every modeled response within the five-step envelope below the clear safety class, including stationary queen split/rescue checks, and by raising authenticated fresh queen intent to corridor-release priority. The original attack funding remains certified independently; a possible route is not relabeled as certainly funded. Expired intent still releases the helper's food. These changes require new exact-source comparisons; the old release candidate is superseded.

@@ -431,3 +431,47 @@ TEST_CASE("a small helper can fund safe movement that releases the queen's sole 
     auto budget = 512;
     CHECK(sudo_win::Simulation{}.survival_depth(fixture.controller,state,6,budget,&world) == 6);
 }
+
+TEST_CASE("a protected queen avoids a plausible four step response despite tempting food") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.length = 2;
+    fixture.controller.unit_count = 4;
+    fixture.tile({5,5}).dragon_part = fixture.controller.head;
+    fixture.tile({5,6}).dragon_part = unswbc::DragonPart{{5,6},0,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    fixture.tile({6,5}).pearl = true;
+    for (auto const p : std::vector<unswbc::Position>{{8,3},{8,4},{8,5},{8,6}}) {
+        fixture.tile(p).dragon_part = unswbc::DragonPart{p,7,unswbc::Team::B,unswbc::Direction::NORTH,p.y == 3};
+    }
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto const east = sudo_win::Simulation{}.advance(fixture.controller,
+        sudo_win::Simulation{}.initial_state(fixture.controller,&world),unswbc::Direction::EAST,false,&world);
+    REQUIRE(east);
+    auto const response = sudo_win::Combat{}.response_threat(fixture.controller,*east,world);
+    CHECK(response.funded_steps == 0);
+    CHECK(response.possible_steps == 4);
+    auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::queen);
+    REQUIRE(action.steps.size() == 1);
+    CHECK(action.steps.front() == unswbc::Direction::WEST);
+}
+
+TEST_CASE("fresh remote queen intent outranks a helper's competing food then expires") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 6;
+    fixture.controller.length = 2;
+    fixture.controller.unit_count = 4;
+    fixture.tile({5,5}).dragon_part = fixture.controller.head;
+    fixture.tile({5,6}).dragon_part = unswbc::DragonPart{{5,6},6,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    fixture.tile({5,4}).pearl = true;
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    world.receive_report({sudo_win::MessageType::danger,0,0,5,4,0},0);
+    auto const fresh = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::collector);
+    REQUIRE(fresh.steps.size() == 1);
+    CHECK(fresh.steps.front() != unswbc::Direction::NORTH);
+    fixture.game.round_num = 2;
+    world.update(fixture.controller,fixture.game);
+    auto const expired = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::collector);
+    REQUIRE(expired.steps.size() == 1);
+    CHECK(expired.steps.front() == unswbc::Direction::NORTH);
+}

@@ -196,7 +196,7 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
     if (config::enable_response_defense && queen_investment) {
         auto const response = Combat{}.response_threat(controller,parent,world);
         if (response.funded_steps > 0 || response.unresolved_steps > 0
-            || (response.possible_steps > 0 && response.possible_steps <= 3)) {
+            || response.possible_steps > 0) {
             return reject("queen response threat");
         }
     }
@@ -291,7 +291,7 @@ auto SplittingPolicy::rescue(unswbc::Controller const& controller,
                 if (config::enable_response_defense) {
                     auto const response = Combat{}.response_threat(controller, parent, world);
                     if (response.funded_steps > 0 || response.unresolved_steps > 0
-            || (response.possible_steps > 0 && response.possible_steps <= 3)) {
+            || response.possible_steps > 0) {
                         continue;
                     }
                 }

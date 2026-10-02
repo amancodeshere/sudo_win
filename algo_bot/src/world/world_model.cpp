@@ -110,7 +110,7 @@ auto WorldModel::queen_reservations(unswbc::Controller const& controller, int ro
     if (!config::enable_queen_corridors || controller.get_id() <= 1) { return reserved; }
     for (auto const& report : reports_) {
         if (report.type == MessageType::danger && report.sender_id <= 1 && round - report.round <= 1) {
-            reserved[index({report.x, report.y})] = 12000;
+            reserved[index({report.x, report.y})] = config::enable_sonar_network ? 120000 : 12000;
         }
     }
     for (auto const& tile : controller.get_tiles()) {
