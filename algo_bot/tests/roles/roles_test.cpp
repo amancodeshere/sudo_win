@@ -82,3 +82,33 @@ TEST_CASE("a separate helper champion persists beside a queen and learns fresh r
     world.update(fixture.controller,fixture.game);
     CHECK(roles.choose_role(fixture.controller,fixture.game,&world) == sudo_win::Role::champion);
 }
+
+TEST_CASE("a four segment secondary scorer is protected after early expansion") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 4;
+    fixture.controller.unit_count = 3;
+    auto roles = sudo_win::RoleManager{};
+    fixture.controller.length = 3;
+    CHECK(roles.choose_role(fixture.controller,fixture.game) == sudo_win::Role::collector);
+    fixture.controller.length = 4;
+    fixture.game.round_num = 79;
+    CHECK(roles.choose_role(fixture.controller,fixture.game) == sudo_win::Role::collector);
+    fixture.game.round_num = 80;
+    CHECK(roles.choose_role(fixture.controller,fixture.game) == sudo_win::Role::champion);
+    fixture.controller.length = 6;
+    CHECK(roles.choose_role(fixture.controller,fixture.game) == sudo_win::Role::champion);
+}
+
+TEST_CASE("election hysteresis cannot borrow a teammate's length for champion eligibility") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 4;
+    fixture.controller.length = 3;
+    fixture.controller.unit_count = 3;
+    fixture.game.round_num = 100;
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto roles = sudo_win::RoleManager{};
+    CHECK(roles.choose_role(fixture.controller,fixture.game,&world) == sudo_win::Role::collector);
+    world.receive_report({sudo_win::MessageType::heartbeat,100,8,0,0,4},100);
+    CHECK(roles.choose_role(fixture.controller,fixture.game,&world) == sudo_win::Role::collector);
+}

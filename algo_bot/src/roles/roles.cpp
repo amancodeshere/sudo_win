@@ -66,7 +66,7 @@ auto RoleManager::choose_role(unswbc::Controller const& controller, unswbc::Game
     }
     champion_id_ = candidate;
     if (controller.get_id() == champion_id_ && (!config::enable_champion_farms
-        || controller.get_unit_count() == 1 || candidate_length >= 8)) {
+        || controller.get_unit_count() == 1 || controller.get_length() >= (config::enable_champion_retention && game.get_round_num() >= 80 ? 4 : 8))) {
         return Role::champion;
     }
     switch (controller.get_id() % 4) {
