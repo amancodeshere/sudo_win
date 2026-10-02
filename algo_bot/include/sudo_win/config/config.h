@@ -10,6 +10,7 @@ inline constexpr auto enable_long_sprint_threats = false;
 inline constexpr auto enable_pocket_priority = false;
 inline constexpr auto enable_funded_sprint_priority = false;
 inline constexpr auto enable_portal_escape = true;
+inline constexpr auto enable_favourable_trades = false;
 inline constexpr auto portal_exit_max_age = 16;
 inline constexpr auto enable_sonar = false;
 inline constexpr auto enable_indicators = false;

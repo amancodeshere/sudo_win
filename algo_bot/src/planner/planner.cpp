@@ -10,6 +10,11 @@ auto Planner::choose_action(unswbc::Controller const& controller,
                             unswbc::Game const& game,
                             WorldModel const& world,
                             Role role) const -> PlannedAction {
+    if (favourable_trades_) {
+        if (auto const trade = combat_.favourable_trade(controller, world)) {
+            return *trade;
+        }
+    }
     auto const safe_moves = safety_.safe_standard_moves(controller, &world);
     auto best = PlannedAction{};
     auto largest_reachable_area = 0;

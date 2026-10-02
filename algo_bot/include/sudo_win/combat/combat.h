@@ -4,6 +4,7 @@
 #include "../engine/helper.h"
 #include "../types/types.h"
 #include "../config/config.h"
+#include <optional>
 
 namespace sudo_win {
 class WorldModel;
@@ -30,6 +31,8 @@ public:
                                         unswbc::Position destination,
                                         Role role,
                                         WorldModel const* world = nullptr) const -> int;
+    [[nodiscard]] auto favourable_trade(unswbc::Controller const& controller,
+                                         WorldModel const& world) const -> std::optional<PlannedAction>;
 };
 
 } // namespace sudo_win

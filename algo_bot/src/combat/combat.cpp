@@ -2,9 +2,71 @@
 
 #include "../../include/sudo_win/config/config.h"
 #include "../../include/sudo_win/planner/simulation.h"
+#include "../../include/sudo_win/world/world_model.h"
 #include <algorithm>
 
 namespace sudo_win {
+
+auto Combat::favourable_trade(unswbc::Controller const& controller,
+                              WorldModel const& world) const -> std::optional<PlannedAction> {
+    if (controller.get_length() > 3 || controller.get_unit_count() <= 1) {
+        return std::nullopt;
+    }
+    auto const simulation = Simulation{};
+    struct Node { SimulationState state; std::vector<unswbc::Direction> steps; };
+    auto queue = std::vector<Node>{{simulation.initial_state(controller, &world), {}}};
+    auto budget = config::sprint_node_budget;
+    auto best = std::optional<PlannedAction>{};
+    for (std::size_t cursor = 0; cursor < queue.size() && budget > 0; ++cursor) {
+        auto const node = queue[cursor];
+        if (node.steps.size() >= config::max_sprint_steps) {
+            continue;
+        }
+        for (auto const direction : unswbc::Direction::get_direction_list()) {
+            if (budget-- <= 0) {
+                break;
+            }
+            auto const target = world.transition(node.state.body.front(), direction);
+            auto const* tile = target ? controller.get_tile(*target) : nullptr;
+            auto const* enemy = tile != nullptr ? tile->get_dragon() : nullptr;
+            auto steps = node.steps;
+            steps.push_back(direction);
+            if (enemy != nullptr && enemy->is_head() && enemy->get_team() != controller.get_team()) {
+                auto observed_length = 0;
+                for (auto const& part_tile : controller.get_tiles()) {
+                    auto const* part = part_tile.get_dragon();
+                    observed_length += part != nullptr && part->get_id() == enemy->get_id();
+                }
+                if (observed_length < controller.get_length() + 2) {
+                    continue;
+                }
+                auto view = controller;
+                auto* attack_tile = view.get_tile(*target);
+                if (attack_tile == nullptr) {
+                    continue;
+                }
+                attack_tile->dragon_part.reset();
+                if (!simulation.advance(view, node.state, direction, !node.steps.empty(), &world)) {
+                    continue;
+                }
+                auto const score = observed_length * config::score_immediate_pearl
+                    - controller.get_length() * config::score_immediate_pearl
+                    - static_cast<int>(steps.size()) * config::score_sprint_tempo;
+                if (!best || score > best->score) {
+                    best = PlannedAction{};
+                    best->kind = steps.size() > 1 ? ActionKind::sprint : ActionKind::move;
+                    best->steps = steps;
+                    best->score = score;
+                    best->reason = "small helper trades for visibly larger enemy head";
+                }
+            } else if (auto const next = simulation.advance(controller, node.state, direction,
+                                                              !node.steps.empty(), &world)) {
+                queue.push_back({*next, std::move(steps)});
+            }
+        }
+    }
+    return best;
+}
 
 auto Combat::threats(unswbc::Controller const& controller, WorldModel const* world, bool long_sprints) const
     -> std::vector<ThreatAssessment> {

@@ -113,3 +113,29 @@ seed 201, both colours (`build/validation/funded-evasion-native20`). This was
 unmetered diagnostic play with no engine/protocol failures. Broad priority is
 therefore disabled by default (`enable_funded_sprint_priority = false`) and
 available only as an experimental policy. It is not a promoted improvement.
+
+## Escape and attack trials
+
+- Shortening escape sprints may spend segments only when they improve the
+  movement safety class or extend bounded survival at the same class. The
+  four-cell loop regression test proves why ordinary movement can fail while
+  a paid three-step escape survives. The ten-map seed-202 comparison was 9–11,
+  so this correctness fix does not establish an overall win-rate advantage.
+- The first portal variant also replaced directly threatened ordinary moves.
+  It lost 3–5 on four maps, seed 203, including both Portals games. It is
+  narrowed to cases where **no ordinary action survives beyond one predicted
+  step**, before rescue splitting. Exit age is at most 16 rounds, the pair must
+  be known, body order complete, remembered exit empty, nearby recent enemy
+  heads absent, at least two distinct onward destinations and adequate known
+  space. Stale emptiness never becomes a certified safe move.
+- A small-helper attack trial guarantees a present enemy head can be reached
+  in at most three currently visible, affordable steps. Only snakes of length
+  2–3 with another surviving ally may trade, and the enemy's visible length
+  lower bound must exceed ours by at least two. Longer growing snakes and the
+  last unit are protected. Eight native games on four maps, seed 204, tied
+  4–4. The strict collision gate initially failed on 11 intentional trades;
+  all 11 independently met the funding, enemy-head and length-advantage
+  criteria. There were no runtime or invalid-action errors. The benchmark
+  now requires explicit `--allow-favourable-trades` to accept such collisions;
+  it still rejects ordinary wall/body/unfunded mistakes. The strategy remains
+  **disabled in stable**, available in the isolated `combat` profile.

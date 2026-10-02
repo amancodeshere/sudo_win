@@ -64,6 +64,8 @@ def visible_action_check(stdin: str, stdout: str) -> dict:
     identity = int(next(line.split()[1] for line in lines if line.startswith("ID ")))
     width, height = map(int, next(line.split()[1:] for line in lines if line.startswith("MAP ")))
     length = int(next(line.split()[1] for line in lines if line.startswith("LENGTH ")))
+    team = next(line.split()[1] for line in lines if line.startswith("TEAM "))
+    unit_count = int(next(line.split()[1] for line in lines if line.startswith("UNIT_COUNT ")))
     start = next(i for i, line in enumerate(lines) if re.fullmatch(r"-?\d+ -?\d+ [01] -?\d+", line))
     tiles = [tuple(map(int, line.split())) for line in lines[start:start + 49]]
     pearl_tiles = {(x, y) for x, y, pearl, _ in tiles if pearl}
@@ -141,6 +143,13 @@ def visible_action_check(stdin: str, stdout: str) -> dict:
         if target in ranked or (target in unranked and step == 0) or (
                 target in occupants and occupants[target] != identity):
             result.update(fatal_step=step + 1, fatal_reason="occupied", avoidable_collision=bool(safe))
+            victim = next((p for p in parts if (int(p[2]), int(p[3])) == target), None)
+            if victim is not None and victim[0] != team and victim[5] == '1' and length <= 3 and unit_count > 1:
+                observed_length = sum(p[1] == victim[1] for p in parts)
+                if observed_length >= length + 2:
+                    result['favourable_head_trade'] = {'enemy_id': int(victim[1]),
+                                                     'enemy_visible_length': observed_length,
+                                                     'our_start_length': length}
             break
         if target in unranked or target not in visible_positions:
             break
@@ -154,7 +163,7 @@ def visible_action_check(stdin: str, stdout: str) -> dict:
     return result
 
 
-def match(engine, map_path, bots, seed, sandbox, replay_path, candidate_team="A"):
+def match(engine, map_path, bots, seed, sandbox, replay_path, candidate_team="A", allow_favourable_trades=False):
     from unswbc.bot import Bot, Pool
     from unswbc.engine import DEBUG_ALL, DEBUG_LIMITS
     from unswbc.sandbox import SandboxBot, WasmPool
@@ -201,12 +210,15 @@ def match(engine, map_path, bots, seed, sandbox, replay_path, candidate_team="A"
             trace = last_turn.get(dragon_id, {})
             if trace:
                 trace["visible_check"] = visible_action_check(trace["stdin"], trace["stdout"])
-                if trace["visible_check"]["avoidable_collision"]:
+                expected_trade = allow_favourable_trades and reason == 'H' and bool(
+                    trace['visible_check'].get('favourable_head_trade'))
+                if trace["visible_check"]["avoidable_collision"] and not expected_trade:
                     errors.append({"id": dragon_id, "team": teams[dragon_id],
                                    "error": "avoidable visible collision", "diagnostic": str(diagnostic)})
             diagnostic.write_text(json.dumps(trace, indent=2) + "\n")
             deaths.append({"id": dragon_id, "team": teams[dragon_id], "round": round_num, "reason": reason,
-                           "diagnostic": str(diagnostic)})
+                           "diagnostic": str(diagnostic), "verified_head_trade": bool(
+                               trace.get('visible_check', {}).get('favourable_head_trade')) and reason == 'H'})
             worker = live.pop(dragon_id, None)
             if worker:
                 worker.stop()
@@ -243,6 +255,8 @@ def main() -> int:
     parser.add_argument("--both-colours", action="store_true")
     parser.add_argument("--repeat", type=int, default=1, help="repeat each matchup and require identical replays")
     parser.add_argument("--native", action="store_true", help="diagnostics only; no judge CPU verification")
+    parser.add_argument("--allow-favourable-trades", action="store_true",
+                        help="Allow independently verified small-helper head trades; other collision gates remain active")
     parser.add_argument("--max-points", type=int, default=90_000_000)
     parser.add_argument("--output", required=True, type=pathlib.Path)
     args = parser.parse_args()
@@ -276,7 +290,7 @@ def main() -> int:
                     for repeat in range(args.repeat):
                         replay = args.output / f"{index}-{map_path.stem}-{seed}-{reverse}-{repeat}.replay"
                         record = match(engine, map_path, built[::-1] if reverse else built,
-                                       seed, not args.native, replay, candidate_team)
+                                       seed, not args.native, replay, candidate_team, args.allow_favourable_trades)
                         record.update(toolkit=version, candidate_team=candidate_team,
                                       benchmark_sha256=hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest(),
                                       candidate_sha256=staged[0][1], opponent_sha256=staged[1][1])
@@ -302,6 +316,7 @@ def main() -> int:
     for record in records:
         candidate_actions.update(record["actions"][record["candidate_team"]])
     summary["candidate_actions"] = dict(candidate_actions)
+    summary['verified_head_trades'] = sum(d['verified_head_trade'] for r in records for d in r['deaths'])
     (args.output / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
     print(json.dumps(summary, indent=2))
     return int(failed)

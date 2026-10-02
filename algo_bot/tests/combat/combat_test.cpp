@@ -1,6 +1,7 @@
 #include "sudo_win/combat/combat.h"
 
 #include "sudo_win/config/config.h"
+#include "sudo_win/world/world_model.h"
 
 #include "../engine_fixture.h"
 
@@ -118,5 +119,53 @@ TEST_CASE("sprint capability separates observed funding from partial enemy uncer
         fixture.tile({8,6}).dragon_part = unswbc::DragonPart{
             {8,6},4,unswbc::Team::B,unswbc::Direction::NORTH,false};
         CHECK(threat().affordable_steps == 2);
+    }
+}
+
+TEST_CASE("small helpers trade only for provably larger visible enemy heads") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.length = 2;
+    fixture.controller.unit_count = 2;
+    fixture.tile({5,6}).dragon_part = unswbc::DragonPart{{5,6},0,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    for (auto const p : std::vector<unswbc::Position>{{7,5},{7,6},{7,7},{7,8}}) {
+        fixture.tile(p).dragon_part = unswbc::DragonPart{p,4,unswbc::Team::B,unswbc::Direction::NORTH,p.y == 5};
+    }
+    auto const trade = [&] {
+        auto world = sudo_win::WorldModel{fixture.game};
+        world.update(fixture.controller,fixture.game);
+        return sudo_win::Combat{}.favourable_trade(fixture.controller,world);
+    };
+    SECTION("minimum length cannot pay a second step without pearl income") {
+        CHECK_FALSE(trade());
+    }
+    SECTION("an intermediate pearl funds the terminal head collision") {
+        fixture.tile({6,5}).pearl = true;
+        auto const attack = trade();
+        REQUIRE(attack);
+        CHECK(attack->kind == sudo_win::ActionKind::sprint);
+        CHECK(attack->steps == std::vector<unswbc::Direction>{unswbc::Direction::EAST,unswbc::Direction::EAST});
+    }
+    SECTION("our last surviving unit is never sacrificed") {
+        fixture.tile({6,5}).pearl = true;
+        fixture.controller.unit_count = 1;
+        CHECK_FALSE(trade());
+    }
+    SECTION("longer growing snakes are preserved") {
+        fixture.tile({6,5}).pearl = true;
+        fixture.controller.length = 4;
+        CHECK_FALSE(trade());
+    }
+    SECTION("partial enemy sightings cannot justify the length trade") {
+        fixture.tile({6,5}).pearl = true;
+        fixture.tile({7,8}).dragon_part.reset();
+        CHECK_FALSE(trade());
+    }
+    SECTION("walls and intermediate bodies rule out the attack") {
+        fixture.tile({6,5}).pearl = true;
+        fixture.tile({5,5}).get_edge(unswbc::Direction::EAST) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+        CHECK_FALSE(trade());
+        fixture.tile({5,5}).get_edge(unswbc::Direction::EAST) = unswbc::Edge{};
+        fixture.tile({6,5}).dragon_part = unswbc::DragonPart{{6,5},9,unswbc::Team::A,unswbc::Direction::EAST,false};
+        CHECK_FALSE(trade());
     }
 }

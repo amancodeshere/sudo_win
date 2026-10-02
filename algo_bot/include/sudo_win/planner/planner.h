@@ -19,9 +19,10 @@ public:
     explicit Planner(bool sprinting = config::enable_sprinting,
                      bool splitting = config::enable_splitting,
                      bool growth_splitting = config::enable_growth_splitting,
-                     bool funded_sprint_priority = config::enable_funded_sprint_priority)
+                     bool funded_sprint_priority = config::enable_funded_sprint_priority,
+                     bool favourable_trades = config::enable_favourable_trades)
     : sprinting_{sprinting}, splitting_enabled_{splitting}, growth_splitting_{growth_splitting},
-      funded_sprint_priority_{funded_sprint_priority} {}
+      funded_sprint_priority_{funded_sprint_priority}, favourable_trades_{favourable_trades} {}
     [[nodiscard]] auto choose_action(unswbc::Controller const& controller,
                                      unswbc::Game const& game,
                                      WorldModel const& world,
@@ -32,6 +33,7 @@ private:
     bool splitting_enabled_;
     bool growth_splitting_;
     bool funded_sprint_priority_;
+    bool favourable_trades_;
     mutable std::optional<unswbc::Position> target_;
     mutable int target_round_ = -1;
     Safety safety_;

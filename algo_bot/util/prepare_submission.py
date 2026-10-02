@@ -12,13 +12,14 @@ import tomllib
 import zipfile
 
 PROFILES = {
-    "stable": {"enable_splitting": False, "enable_growth_splitting": False, "enable_long_sprint_threats": False, "enable_pocket_priority": False, "enable_funded_sprint_priority": False, "enable_sonar": False, "enable_indicators": False},
-    "no-sprint": {"enable_sprinting": False, "enable_splitting": False, "enable_growth_splitting": False, "enable_long_sprint_threats": False, "enable_pocket_priority": False, "enable_funded_sprint_priority": False,
+    "stable": {"enable_splitting": False, "enable_growth_splitting": False, "enable_long_sprint_threats": False, "enable_pocket_priority": False, "enable_funded_sprint_priority": False, "enable_favourable_trades": False, "enable_sonar": False, "enable_indicators": False},
+    "no-sprint": {"enable_sprinting": False, "enable_splitting": False, "enable_growth_splitting": False, "enable_long_sprint_threats": False, "enable_pocket_priority": False, "enable_funded_sprint_priority": False, "enable_favourable_trades": False,
                   "enable_sonar": False, "enable_indicators": False},
-    "experimental": {"enable_splitting": True, "enable_growth_splitting": True, "enable_long_sprint_threats": True, "enable_pocket_priority": True, "enable_funded_sprint_priority": True, "enable_sonar": False, "enable_indicators": False},
-    "growth": {"enable_splitting": False, "enable_growth_splitting": True, "enable_long_sprint_threats": False, "enable_pocket_priority": False, "enable_funded_sprint_priority": False,
+    "experimental": {"enable_splitting": True, "enable_growth_splitting": True, "enable_long_sprint_threats": True, "enable_pocket_priority": True, "enable_funded_sprint_priority": True, "enable_favourable_trades": True, "enable_sonar": False, "enable_indicators": False},
+    "growth": {"enable_splitting": False, "enable_growth_splitting": True, "enable_long_sprint_threats": False, "enable_pocket_priority": False, "enable_funded_sprint_priority": False, "enable_favourable_trades": False,
                "enable_sonar": False, "enable_indicators": False},
 }
+PROFILES["combat"] = {**PROFILES["stable"], "enable_favourable_trades": True}
 
 
 def prepare(bot: pathlib.Path, output: pathlib.Path, profile: str) -> dict:
