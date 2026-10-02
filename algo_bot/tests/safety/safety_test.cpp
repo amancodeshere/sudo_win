@@ -1,4 +1,6 @@
 #include "sudo_win/safety/safety.h"
+#include "sudo_win/world/world_model.h"
+#include "sudo_win/planner/planner.h"
 
 #include "../engine_fixture.h"
 
@@ -72,4 +74,88 @@ TEST_CASE("fatal fallback protects allied heads and prefers enemy trades") {
     fixture.tile({5,5}).get_edge(unswbc::Direction::NORTH) = unswbc::Edge{false,unswbc::EdgeType::EMPTY};
     fixture.tile({5,4}).dragon_part = unswbc::DragonPart{{5,4},3,unswbc::Team::B,unswbc::Direction::SOUTH,true};
     CHECK(sudo_win::Safety{}.least_bad_fallback(fixture.controller) == unswbc::Direction::NORTH);
+}
+
+TEST_CASE("remembered portal escapes keep stale observations separate from safe movement") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.game.round_num = 10;
+    for (auto const p : std::vector<unswbc::Position>{{5,6},{5,7}}) {
+        fixture.tile(p).dragon_part = unswbc::DragonPart{p,0,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    }
+    for (auto y = 0; y <= 2; ++y) {
+        for (auto x = 0; x <= 2; ++x) {
+            if (fixture.controller.get_tile({x,y}) == nullptr) {
+                fixture.controller.vision.tiles.emplace_back(unswbc::Position{x,y});
+            }
+        }
+    }
+    fixture.controller.vision = unswbc::Vision{fixture.controller.vision.tiles};
+    fixture.tile({5,5}).get_edge(unswbc::Direction::EAST) = unswbc::Edge{false,unswbc::EdgeType::PORTAL,9};
+    fixture.tile({0,0}).get_edge(unswbc::Direction::WEST) = unswbc::Edge{false,unswbc::EdgeType::PORTAL,9};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto const hide_exit = [&] {
+        auto tiles = fixture.controller.vision.tiles;
+        tiles.erase(std::remove_if(tiles.begin(),tiles.end(),[](auto const& tile) {
+            auto p = tile.get_position();
+            return p.x < 2 || p.y < 2;
+        }),tiles.end());
+        fixture.controller.vision = unswbc::Vision{std::move(tiles)};
+        fixture.game.round_num = 12;
+        world.update(fixture.controller,fixture.game);
+    };
+    auto const escape = [&] {
+        return sudo_win::Safety{}.remembered_portal_escape(fixture.controller,world,fixture.game.get_round_num());
+    };
+    SECTION("a known empty remote exit offers an uncertain single step escape") {
+        hide_exit();
+        CHECK(escape() == unswbc::Direction::EAST);
+        CHECK(sudo_win::Safety{}.standard_move_reason(fixture.controller,unswbc::Direction::EAST,&world)
+              == sudo_win::SafetyReason::unknown_tile);
+    }
+    SECTION("expired empty observations cannot authorize a crossing") {
+        hide_exit();
+        fixture.game.round_num = 27;
+        CHECK_FALSE(escape());
+    }
+    SECTION("remembered bodies block the exit") {
+        fixture.tile({0,0}).dragon_part = unswbc::DragonPart{{0,0},4,unswbc::Team::B,unswbc::Direction::NORTH,false};
+        world.update(fixture.controller,fixture.game);
+        hide_exit();
+        CHECK_FALSE(escape());
+    }
+    SECTION("a recent enemy head near the exit rules out the escape") {
+        fixture.tile({1,1}).dragon_part = unswbc::DragonPart{{1,1},4,unswbc::Team::B,unswbc::Direction::NORTH,true};
+        world.update(fixture.controller,fixture.game);
+        hide_exit();
+        CHECK_FALSE(escape());
+    }
+    SECTION("an exit with only one onward route is rejected") {
+        fixture.tile({0,0}).get_edge(unswbc::Direction::SOUTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+        world.update(fixture.controller,fixture.game);
+        hide_exit();
+        CHECK_FALSE(escape());
+    }
+    SECTION("incomplete body knowledge cannot rule out teleporting into ourselves") {
+        hide_exit();
+        fixture.tile({5,6}).dragon_part.reset();
+        CHECK_FALSE(escape());
+    }
+    SECTION("the planner tries the portal when ordinary movement is trapped") {
+        hide_exit();
+        for (auto const d : {unswbc::Direction::NORTH,unswbc::Direction::WEST}) {
+            fixture.tile({5,5}).get_edge(d) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+        }
+        world.update(fixture.controller,fixture.game);
+        auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::champion);
+        CHECK(action.kind == sudo_win::ActionKind::move);
+        REQUIRE(action.steps.size() == 1);
+        CHECK(action.steps.front() == unswbc::Direction::EAST);
+    }
+    SECTION("a good visible escape takes precedence over an unseen portal exit") {
+        hide_exit();
+        auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::champion);
+        REQUIRE(!action.steps.empty());
+        CHECK(action.steps.front() != unswbc::Direction::EAST);
+    }
 }

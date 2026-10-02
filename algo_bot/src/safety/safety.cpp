@@ -1,5 +1,10 @@
 #include "../../include/sudo_win/safety/safety.h"
 #include "../../include/sudo_win/world/world_model.h"
+#include "../../include/sudo_win/planner/simulation.h"
+#include "../../include/sudo_win/config/config.h"
+#include "../../include/sudo_win/geometry/geometry.h"
+
+#include <algorithm>
 
 namespace sudo_win {
 
@@ -45,6 +50,87 @@ auto Safety::safe_standard_moves(unswbc::Controller const& controller, WorldMode
         }
     }
     return moves;
+}
+
+auto Safety::remembered_portal_escape(unswbc::Controller const& controller,
+                                       WorldModel const& world, int round) const
+    -> std::optional<unswbc::Direction> {
+    auto const* origin = controller.get_tile(controller.get_position());
+    if (origin == nullptr) {
+        return std::nullopt;
+    }
+    auto const state = Simulation{}.initial_state(controller, &world);
+    if (!state.unranked_body.empty() || std::any_of(state.body.begin(), state.body.end(), [](auto p) {
+        return p.x < 0 || p.y < 0;
+    })) {
+        return std::nullopt;
+    }
+    auto const blocked = [&](unswbc::Position p) {
+        return std::find(state.body.begin(), state.body.end(), p) != state.body.end()
+            || world.cell(p).occupant.has_value();
+    };
+    auto best = std::optional<unswbc::Direction>{};
+    auto best_score = -1;
+    for (auto const direction : unswbc::Direction::get_direction_list()) {
+        if (!origin->get_edge(direction).is_portal()) {
+            continue;
+        }
+        auto const exit = world.transition(controller.get_position(), direction);
+        if (!exit || controller.get_tile(*exit) != nullptr || !world.has_seen(*exit) || blocked(*exit)) {
+            continue;
+        }
+        auto const age = round - world.cell(*exit).last_seen_round;
+        if (age < 0 || age > config::portal_exit_max_age) {
+            continue;
+        }
+        auto recent_enemy = false;
+        for (auto y = 0; y < world.height() && !recent_enemy; ++y) {
+            for (auto x = 0; x < world.width(); ++x) {
+                auto const p = unswbc::Position{x, y};
+                auto const& cell = world.cell(p);
+                if (cell.occupant && cell.occupant->is_head
+                    && cell.occupant->team != controller.get_team().value
+                    && round - cell.last_seen_round <= 2
+                    && geometry::toroidal_manhattan(p, *exit, world.width(), world.height()) <= 4) {
+                    recent_enemy = true;
+                    break;
+                }
+            }
+        }
+        if (recent_enemy) {
+            continue;
+        }
+        auto onward = std::vector<unswbc::Position>{};
+        for (auto const d : unswbc::Direction::get_direction_list()) {
+            auto const next = world.transition(*exit, d);
+            if (next && world.has_seen(*next) && !blocked(*next)
+                && std::find(onward.begin(), onward.end(), *next) == onward.end()) {
+                onward.push_back(*next);
+            }
+        }
+        if (onward.size() < 2) {
+            continue;
+        }
+        auto queue = std::vector<unswbc::Position>{*exit};
+        for (std::size_t cursor = 0; cursor < queue.size() && cursor < 64U; ++cursor) {
+            for (auto const d : unswbc::Direction::get_direction_list()) {
+                auto const next = world.transition(queue[cursor], d);
+                if (next && world.has_seen(*next) && !blocked(*next)
+                    && std::find(queue.begin(), queue.end(), *next) == queue.end()) {
+                    queue.push_back(*next);
+                }
+            }
+        }
+        if (queue.size() < state.body.size() + 3) {
+            continue;
+        }
+        auto const score = static_cast<int>(onward.size()) * 1000 + static_cast<int>(std::min<std::size_t>(queue.size(), 64U)) * 10 - age * 20;
+        if (score > best_score) {
+            best = direction;
+            best_score = score;
+        }
+    }
+    return best;
 }
 
 auto Safety::least_bad_fallback(unswbc::Controller const& controller) const -> unswbc::Direction {

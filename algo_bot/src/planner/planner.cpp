@@ -151,6 +151,15 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         }
     }
 
+    if (config::enable_portal_escape && best_survival <= 1) {
+        if (auto const portal = safety_.remembered_portal_escape(controller, world, game.get_round_num())) {
+            best.kind = ActionKind::move;
+            best.steps = {*portal};
+            best.reason = "uncertain portal escape through remembered empty exit";
+            return best;
+        }
+    }
+
     if (best_survival <= 1) {
         if (auto const rescue = splitting_.rescue(controller, world, best.steps.empty())) {
             return *rescue;

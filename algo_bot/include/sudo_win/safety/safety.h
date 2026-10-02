@@ -4,6 +4,7 @@
 #include "../engine/helper.h"
 
 #include <vector>
+#include <optional>
 
 namespace sudo_win {
 
@@ -22,6 +23,10 @@ public:
                                            WorldModel const* world = nullptr) const
         -> std::vector<unswbc::Direction>;
     [[nodiscard]] auto least_bad_fallback(unswbc::Controller const& controller) const -> unswbc::Direction;
+    // An uncertain escape, never certified as an ordinary safe move.
+    [[nodiscard]] auto remembered_portal_escape(unswbc::Controller const& controller,
+                                                WorldModel const& world, int round) const
+        -> std::optional<unswbc::Direction>;
 };
 
 } // namespace sudo_win
