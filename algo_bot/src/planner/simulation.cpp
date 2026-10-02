@@ -17,7 +17,18 @@ auto Simulation::initial_state(unswbc::Controller const& controller, WorldModel 
     auto state = SimulationState{};
     state.body.resize(static_cast<std::size_t>(controller.get_length()), {-1, -1});
     state.body.front() = controller.get_position();
+    if (world != nullptr) {
+        if (auto const* remembered = world->own_body(controller)) {
+            state.body = *remembered;
+        }
+    }
     for (std::size_t index = 1; index < state.body.size(); ++index) {
+        if (state.body[index].x >= 0 && state.body[index].y >= 0) {
+            continue;
+        }
+        if (state.body[index-1].x < 0 || state.body[index-1].y < 0) {
+            break;
+        }
         auto found = false;
         for (auto const& tile : controller.get_tiles()) {
             auto const* part = tile.get_dragon();

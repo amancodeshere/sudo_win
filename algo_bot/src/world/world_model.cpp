@@ -1,6 +1,7 @@
 #include "../../include/sudo_win/world/world_model.h"
 
 #include "../../include/sudo_win/geometry/geometry.h"
+#include "../../include/sudo_win/planner/simulation.h"
 
 #include <algorithm>
 #include <cstddef>
@@ -53,6 +54,104 @@ auto WorldModel::update(unswbc::Controller const& controller, unswbc::Game const
                 remember_portal(edge.get_portal_id(), PortalEndpoint{tile.get_position(), direction});
             }
         }
+    }
+    reconcile_body(controller, game);
+}
+
+auto WorldModel::own_body(unswbc::Controller const& controller) const
+    -> std::vector<unswbc::Position> const* {
+    if (own_id_ != controller.get_id() || own_body_.size() != static_cast<std::size_t>(controller.get_length())
+        || own_body_.empty() || own_body_.front() != controller.get_position()) {
+        return nullptr;
+    }
+    for (std::size_t i = 1; i < own_body_.size(); ++i) {
+        auto const p = own_body_[i];
+        if (p.x < 0 || p.y < 0) {
+            continue;
+        }
+        if (auto const* tile = controller.get_tile(p)) {
+            auto const* part = tile->get_dragon();
+            if (part == nullptr || part->get_id() != controller.get_id() || part->is_head()) {
+                return nullptr;
+            }
+        }
+    }
+    return &own_body_;
+}
+
+auto WorldModel::reconcile_body(unswbc::Controller const& controller, unswbc::Game const& game) -> void {
+    auto candidate = std::vector<unswbc::Position>{};
+    if (own_id_ == controller.get_id() && pending_round_ + 1 == game.get_round_num() && !pending_body_.empty()) {
+        if (pending_single_move_ && (controller.get_length() == static_cast<int>(pending_body_.size())
+            || controller.get_length() == static_cast<int>(pending_body_.size()) + 1)) {
+            // The next observation confirms the actual landing tile and growth,
+            // including a single uncertain portal crossing.
+            candidate.push_back(controller.get_position());
+            candidate.insert(candidate.end(), pending_body_.begin(), pending_body_.end());
+            candidate.resize(static_cast<std::size_t>(controller.get_length()));
+        } else if (!pending_single_move_ && pending_body_.size() == static_cast<std::size_t>(controller.get_length())
+            && pending_body_.front() == controller.get_position()) {
+            candidate = pending_body_;
+        }
+    }
+    pending_body_.clear();
+    pending_single_move_ = false;
+    auto valid = !candidate.empty();
+    for (std::size_t i = 1; valid && i < candidate.size(); ++i) {
+        auto const p = candidate[i];
+        if (p.x < 0 || p.y < 0) {
+            continue;
+        }
+        auto const* tile = controller.get_tile(p);
+        auto const* part = tile != nullptr ? tile->get_dragon() : nullptr;
+        if ((tile != nullptr && (part == nullptr || part->get_id() != controller.get_id() || part->is_head()))
+            || std::find(candidate.begin(), candidate.begin() + static_cast<std::ptrdiff_t>(i), p)
+                != candidate.begin() + static_cast<std::ptrdiff_t>(i)) {
+            valid = false;
+        }
+        if (part != nullptr && candidate[i-1].x >= 0) {
+            auto const ahead = transition(p, part->get_dir());
+            valid = valid && (!ahead || *ahead == candidate[i-1]);
+        }
+    }
+    if (valid && std::none_of(candidate.begin(), candidate.end(), [](auto p) { return p.x < 0 || p.y < 0; })) {
+        for (auto const& tile : controller.get_tiles()) {
+            auto const* part = tile.get_dragon();
+            if (part != nullptr && part->get_id() == controller.get_id()
+                && std::find(candidate.begin(), candidate.end(), tile.get_position()) == candidate.end()) {
+                valid = false;
+            }
+        }
+    }
+    own_body_ = valid ? std::move(candidate) : std::vector<unswbc::Position>{};
+    own_id_ = controller.get_id();
+    own_body_ = Simulation{}.initial_state(controller, this).body;
+}
+
+auto WorldModel::remember_action(unswbc::Controller const& controller, unswbc::Game const& game,
+                                 PlannedAction const& action) -> void {
+    pending_body_.clear();
+    pending_single_move_ = false;
+    pending_round_ = game.get_round_num();
+    auto const simulation = Simulation{};
+    auto state = simulation.initial_state(controller, this);
+    if (action.kind == ActionKind::split) {
+        if (controller.can_split(action.split_size)) {
+            state.body.resize(state.body.size() - static_cast<std::size_t>(action.split_size));
+            pending_body_ = std::move(state.body);
+        }
+    } else if (action.steps.size() == 1) {
+        pending_single_move_ = true;
+        pending_body_ = std::move(state.body);
+    } else {
+        for (std::size_t i = 0; i < action.steps.size(); ++i) {
+            auto next = simulation.advance(controller, state, action.steps[i], i > 0, this);
+            if (!next) {
+                return;
+            }
+            state = std::move(*next);
+        }
+        pending_body_ = std::move(state.body);
     }
 }
 

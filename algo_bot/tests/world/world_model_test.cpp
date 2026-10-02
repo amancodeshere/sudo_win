@@ -109,3 +109,134 @@ TEST_CASE("horizontal portal crossings choose the heading side of the partner") 
     CHECK(world.transition({5, 5}, unswbc::Direction::NORTH) == unswbc::Position{7, 6});
     CHECK(world.transition({5, 4}, unswbc::Direction::SOUTH) == unswbc::Position{7, 7});
 }
+
+TEST_CASE("confirmed own movement preserves body order outside current vision") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.game.round_num = 0;
+    for (auto const p : std::vector<unswbc::Position>{{5,6},{5,7}}) {
+        fixture.tile(p).dragon_part = unswbc::DragonPart{p,0,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    }
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto action = sudo_win::PlannedAction{};
+    action.steps = {unswbc::Direction::EAST};
+    world.remember_action(fixture.controller,fixture.game,action);
+    fixture.controller.head.position = {6,5};
+    fixture.game.round_num = 1;
+    fixture.tile({5,5}).dragon_part = unswbc::DragonPart{{5,5},0,unswbc::Team::A,unswbc::Direction::EAST,false};
+    fixture.tile({5,7}).dragon_part.reset();
+    auto tiles = fixture.controller.vision.tiles;
+    tiles.erase(std::remove_if(tiles.begin(),tiles.end(),[](auto const& tile) {
+        return tile.get_position() == unswbc::Position{5,6};
+    }),tiles.end());
+    fixture.controller.vision = unswbc::Vision{std::move(tiles)};
+    SECTION("a hidden tail keeps its known rank") {
+        world.update(fixture.controller,fixture.game);
+        auto state = sudo_win::Simulation{}.initial_state(fixture.controller,&world);
+        CHECK(state.body == std::vector<unswbc::Position>{{6,5},{5,5},{5,6}});
+        CHECK(state.unranked_body.empty());
+    }
+    SECTION("conflicting visible occupancy invalidates the prediction") {
+        fixture.tile({5,5}).dragon_part.reset();
+        world.update(fixture.controller,fixture.game);
+        auto state = sudo_win::Simulation{}.initial_state(fixture.controller,&world);
+        CHECK(state.body[1] == unswbc::Position{-1,-1});
+    }
+    SECTION("a skipped observation cannot confirm a previous action") {
+        fixture.game.round_num = 2;
+        world.update(fixture.controller,fixture.game);
+        auto state = sudo_win::Simulation{}.initial_state(fixture.controller,&world);
+        CHECK(state.body[2] == unswbc::Position{-1,-1});
+    }
+}
+
+TEST_CASE("a portal landing confirms an unseen body link without guessing the partner") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.game.round_num = 0;
+    for (auto const p : std::vector<unswbc::Position>{{5,6},{5,7}}) {
+        fixture.tile(p).dragon_part = unswbc::DragonPart{p,0,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    }
+    fixture.tile({5,5}).get_edge(unswbc::Direction::EAST) = unswbc::Edge{false,unswbc::EdgeType::PORTAL,9};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto action = sudo_win::PlannedAction{};
+    action.steps = {unswbc::Direction::EAST};
+    world.remember_action(fixture.controller,fixture.game,action);
+    fixture.controller.head.position = {0,0};
+    fixture.controller.vision = unswbc::Vision{std::vector<unswbc::Tile>{unswbc::Tile{{0,0}}}};
+    fixture.game.round_num = 1;
+    world.update(fixture.controller,fixture.game);
+    auto state = sudo_win::Simulation{}.initial_state(fixture.controller,&world);
+    CHECK(state.body == std::vector<unswbc::Position>{{0,0},{5,5},{5,6}});
+    REQUIRE(world.portal_endpoints(9));
+    CHECK(world.portal_endpoints(9)->size() == 1);
+    CHECK_FALSE(world.transition({5,5},unswbc::Direction::EAST));
+}
+
+TEST_CASE("sprint and split body predictions are checked against the next observation") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.game.round_num = 0;
+    fixture.controller.length = 4;
+    for (auto const p : std::vector<unswbc::Position>{{5,6},{5,7},{5,8}}) {
+        fixture.tile(p).dragon_part = unswbc::DragonPart{p,0,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    }
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    SECTION("growth is confirmed using actual length after a single step") {
+        auto action = sudo_win::PlannedAction{};
+        action.steps = {unswbc::Direction::EAST};
+        world.remember_action(fixture.controller,fixture.game,action);
+        fixture.controller.head.position = {6,5};
+        fixture.controller.length = 5;
+        fixture.controller.vision = unswbc::Vision{std::vector<unswbc::Tile>{unswbc::Tile{{6,5}}}};
+        fixture.game.round_num = 1;
+        world.update(fixture.controller,fixture.game);
+        CHECK(sudo_win::Simulation{}.initial_state(fixture.controller,&world).body
+              == std::vector<unswbc::Position>{{6,5},{5,5},{5,6},{5,7},{5,8}});
+    }
+    SECTION("paid steps release the correct number of tail segments") {
+        auto action = sudo_win::PlannedAction{};
+        action.kind = sudo_win::ActionKind::sprint;
+        action.steps = {unswbc::Direction::EAST,unswbc::Direction::EAST};
+        world.remember_action(fixture.controller,fixture.game,action);
+        fixture.controller.head.position = {7,5};
+        fixture.controller.length = 3;
+        fixture.controller.vision = unswbc::Vision{std::vector<unswbc::Tile>{unswbc::Tile{{7,5}}}};
+        fixture.game.round_num = 1;
+        world.update(fixture.controller,fixture.game);
+        CHECK(sudo_win::Simulation{}.initial_state(fixture.controller,&world).body
+              == std::vector<unswbc::Position>{{7,5},{6,5},{5,5}});
+    }
+    SECTION("a split retains the parent's prefix, not the reversed child") {
+        auto action = sudo_win::PlannedAction{};
+        action.kind = sudo_win::ActionKind::split;
+        action.split_size = 2;
+        world.remember_action(fixture.controller,fixture.game,action);
+        fixture.controller.length = 2;
+        fixture.controller.vision = unswbc::Vision{std::vector<unswbc::Tile>{unswbc::Tile{{5,5}}}};
+        fixture.game.round_num = 1;
+        world.update(fixture.controller,fixture.game);
+        CHECK(sudo_win::Simulation{}.initial_state(fixture.controller,&world).body
+              == std::vector<unswbc::Position>{{5,5},{5,6}});
+    }
+}
+
+TEST_CASE("unknown initial body ranks are learned through confirmed movement") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.game.round_num = 0;
+    fixture.controller.vision = unswbc::Vision{std::vector<unswbc::Tile>{unswbc::Tile{{5,5}}}};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    CHECK(sudo_win::Simulation{}.initial_state(fixture.controller,&world).body.back() == unswbc::Position{-1,-1});
+    for (auto round = 1; round <= 3; ++round) {
+        auto action = sudo_win::PlannedAction{};
+        action.steps = {unswbc::Direction::EAST};
+        world.remember_action(fixture.controller,fixture.game,action);
+        fixture.controller.head.position = {5+round,5};
+        fixture.controller.vision = unswbc::Vision{std::vector<unswbc::Tile>{unswbc::Tile{{5+round,5}}}};
+        fixture.game.round_num = round;
+        world.update(fixture.controller,fixture.game);
+    }
+    CHECK(sudo_win::Simulation{}.initial_state(fixture.controller,&world).body
+          == std::vector<unswbc::Position>{{8,5},{7,5},{6,5}});
+}

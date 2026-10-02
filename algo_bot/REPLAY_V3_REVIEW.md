@@ -139,3 +139,20 @@ available only as an experimental policy. It is not a promoted improvement.
   now requires explicit `--allow-favourable-trades` to accept such collisions;
   it still rejects ordinary wall/body/unfunded mistakes. The strategy remains
   **disabled in stable**, available in the isolated `combat` profile.
+
+## Confirmed own-body memory
+
+Body order now survives loss of vision. Single-step movement uses the next
+observed head and exact length; visible sprint steps account for pearl income
+and paid tail removal; splits retain the parent's prefix. Missing starting
+ranks wash out as confirmed head positions enter the body. This also preserves
+body links across a confirmed portal landing even when its partner edge has
+not been discovered. Predictions are dropped on mismatched length/head,
+skipped rounds, duplicate positions or conflicting visible body observations.
+Enemy body estimates remain observation-based; own memory is never assigned
+to an opponent or newly spawned child.
+
+On all ten competition maps, seed 205, both colours, this isolated change beat
+the forced-portal/shortening-escape candidate **16–4**, with no detected runtime,
+invalid-action or avoidable visible-collision failures. This native result is
+encouraging but unmetered and limited to one seed per map.

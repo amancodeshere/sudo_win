@@ -2,6 +2,7 @@
 #define SUDO_WIN_WORLD_WORLD_MODEL_H
 
 #include "../engine/helper.h"
+#include "../types/types.h"
 
 #include <array>
 #include <cstddef>
@@ -44,6 +45,10 @@ public:
     explicit WorldModel(unswbc::Game const& game);
 
     auto update(unswbc::Controller const& controller, unswbc::Game const& game) -> void;
+    auto remember_action(unswbc::Controller const& controller, unswbc::Game const& game,
+                         PlannedAction const& action) -> void;
+    [[nodiscard]] auto own_body(unswbc::Controller const& controller) const
+        -> std::vector<unswbc::Position> const*;
 
     [[nodiscard]] auto cell(unswbc::Position position) const -> CellKnowledge const&;
     [[nodiscard]] auto has_seen(unswbc::Position position) const -> bool;
@@ -57,11 +62,17 @@ public:
 private:
     [[nodiscard]] auto index(unswbc::Position position) const -> std::size_t;
     auto remember_portal(int portal_id, PortalEndpoint endpoint) -> void;
+    auto reconcile_body(unswbc::Controller const& controller, unswbc::Game const& game) -> void;
 
     int width_;
     int height_;
     std::vector<CellKnowledge> cells_;
     std::unordered_map<int, std::vector<PortalEndpoint>> portals_;
+    int own_id_ = -1;
+    std::vector<unswbc::Position> own_body_;
+    int pending_round_ = -2;
+    bool pending_single_move_ = false;
+    std::vector<unswbc::Position> pending_body_;
 };
 
 } // namespace sudo_win

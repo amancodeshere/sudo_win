@@ -26,6 +26,7 @@ auto Bot::execute_turn(unswbc::Controller& controller, unswbc::Game const& game)
 
     auto const role = roles_.choose_role(controller, game);
     action = planner_.choose_action(controller, game, world_, role);
+    world_.remember_action(controller, game, action);
 #ifndef SUDO_WIN_DEVELOPMENT
     } catch (std::exception const&) {
         // No action has been emitted yet. Keep the competition reply valid.
