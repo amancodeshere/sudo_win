@@ -11,3 +11,9 @@ Use a reverse distance lower bound on directed visible topology to prioritize an
 Validation/results are recorded below as each stage completes. Experimental policies must earn inclusion through both-colour benchmarks and judge CPU checks. No claim of guaranteed wins against private leaders.
 
 Stage 1 release checks: 80 C++ cases / 560 assertions pass, including the recorded funded attack and deliberately exhausted-search uncertainty. Frozen verified source `build/submission-v5-defense-verified`, SHA `960886d5243f3ab192363ebed5997ea6560a03612ca2f8efc1eb0a59da9e811d`. Paired native and metered comparisons underway; no budget increase.
+
+## Stage 2 — phase-aware productive expansion
+
+A rich region is measured against nearby workers, not only global population. Through round 139, uncrowded income can fund a two-segment worker from a length 6–19 early champion even when the team already has four units. Parent/child body reconstruction, escape horizon, separate reachable resources, queen corridor and stationary threat gates remain required. Length-20+ champions and the consolidation phase keep their reserve. Fresh competing helper claims also remove shared funding opportunities; own claims do not disqualify investment. The `no-phase-expansion` profile isolates this policy.
+
+Release C++ checks pass (including rich multi-unit champion investment, crowding rejection and phase cutoff); Python utilities pass. Snapshot `build/submission-v5-expansion`; paired three-map stage comparison seed 833 is running.

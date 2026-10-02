@@ -235,7 +235,7 @@ TEST_CASE("early expansion protects the champion and requires separate resources
         fixture.controller.unit_limit = 21;
         CHECK_FALSE(candidate());
         fixture.controller.unit_limit = 64;
-        fixture.game.round_num = 100;
+        fixture.game.round_num = 140;
         CHECK_FALSE(candidate());
     }
     SECTION("a legal two-segment child has income and two escape routes") {
@@ -260,6 +260,20 @@ TEST_CASE("early expansion protects the champion and requires separate resources
     }
     SECTION("existing champions keep their length") {
         fixture.controller.unit_count = 2;
+        CHECK_FALSE(candidate(sudo_win::Role::champion));
+    }
+    SECTION("a rich uncrowded region can invest its early champion after the initial population") {
+        fixture.controller.unit_count = 4;
+        fixture.game.round_num = 100;
+        fixture.tile({7,4}).pearl = true;
+        CHECK(candidate(sudo_win::Role::champion));
+        fixture.game.round_num = 140;
+        CHECK_FALSE(candidate(sudo_win::Role::champion));
+    }
+    SECTION("regional competitors stop investment despite a large global population budget") {
+        fixture.controller.unit_count = 4;
+        fixture.tile({7,4}).pearl = true;
+        fixture.tile({7,7}).dragon_part = unswbc::DragonPart{{7,7},8,unswbc::Team::A,unswbc::Direction::NORTH,true};
         CHECK_FALSE(candidate(sudo_win::Role::champion));
     }
     SECTION("fixed queens never split for population investment") {

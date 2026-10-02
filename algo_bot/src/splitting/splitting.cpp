@@ -21,13 +21,21 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
     auto const local_income = std::count_if(controller.get_tiles().begin(), controller.get_tiles().end(), [](auto const& tile) {
         return tile.get_dragon() == nullptr && (tile.has_pearl() || (tile.get_pearl_time() > 0 && tile.get_pearl_time() <= 12));
     });
+    auto const regional_workers = std::count_if(controller.get_tiles().begin(), controller.get_tiles().end(), [&](auto const& tile) {
+        auto const* part = tile.get_dragon();
+        return part != nullptr && part->is_head() && part->get_team() == controller.get_team()
+            && part->get_id() > 1 && part->get_id() != controller.get_id();
+    });
+    auto const productive_region = local_income >= 2 * (regional_workers + 2);
     if (config::enable_resource_population && config::enable_territorial_growth
-        && game.get_round_num() < 100 && local_income >= 4) {
+        && game.get_round_num() < (config::enable_phase_expansion ? 140 : 100) && productive_region) {
         cap = std::min(controller.unit_limit, std::clamp(world.width() * world.height() / 32, 8, 48));
     }
-    auto const early_investment = config::enable_territorial_growth && game.get_round_num() < 80
+    auto const early_investment = config::enable_territorial_growth && ((game.get_round_num() < 80
         && controller.get_length() >= (config::enable_scoring_coordination ? 10 : 8)
-        && (!config::enable_scoring_coordination || controller.get_unit_count() < 4);
+        && (!config::enable_scoring_coordination || controller.get_unit_count() < 4))
+        || (config::enable_phase_expansion && game.get_round_num() < 140 && productive_region
+            && controller.get_length() >= 6 && controller.get_length() < 20));
     auto const reject = [&](std::string_view reason) -> std::optional<PlannedAction> {
         growth_rejection_ = reason;
         return std::nullopt;
@@ -145,8 +153,11 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
         auto const qd = queen_distance[index(p)];
         auto claimed = qd >= 0 && ((pd >= 0 && qd <= pd) || (cd >= 0 && qd <= cd));
         for (auto const& report : world.reports()) {
-            claimed = claimed || (report.type == MessageType::feeder && report.sender_id <= 1
-                && game.get_round_num() - report.round <= 4 && report.x == p.x && report.y == p.y);
+            auto const age = game.get_round_num() - report.round;
+            claimed = claimed || (report.type == MessageType::feeder && report.sender_id != controller.get_id()
+                && age >= 0 && age <= 4 && report.x == p.x && report.y == p.y
+                && (report.sender_id <= 1 || (config::enable_phase_expansion
+                    && report.value <= std::max(pd, cd))));
         }
         if (claimed) { continue; }
         if (pd > 0 && (cd < 0 || pd < cd)) {

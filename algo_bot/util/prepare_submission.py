@@ -39,6 +39,7 @@ PROFILES["no-scoring-coordination"] = {**PROFILES["stable"], "enable_scoring_coo
 PROFILES["no-resource-population"] = {**PROFILES["stable"], "enable_resource_population": False}
 PROFILES["no-paid-pricing"] = {**PROFILES["stable"], "enable_paid_step_pricing": False}
 PROFILES["no-queen-exit-viability"] = {**PROFILES["stable"], "enable_queen_exit_viability": False}
+PROFILES["no-phase-expansion"] = {**PROFILES["stable"], "enable_phase_expansion": False}
 PROFILES["diagnostic"] = {**PROFILES["stable"], "enable_indicators": True}
 PROFILES["growth"] = {**PROFILES["stable"]}  # retained CLI alias
 PROFILES["combat"] = {**PROFILES["stable"], "enable_favourable_trades": True}
