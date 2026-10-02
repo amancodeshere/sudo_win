@@ -17,7 +17,9 @@ auto RoleManager::choose_role(unswbc::Controller const& controller, unswbc::Game
     auto visible_lengths = std::unordered_map<int, int>{};
     if (world != nullptr) {
         for (auto const& report : world->reports()) {
-            if (report.type == MessageType::champion && report.sender_id <= 1
+            if (((report.type == MessageType::champion && report.sender_id <= 1)
+                || (config::enable_champion_farms && report.type == MessageType::heartbeat
+                    && report.sender_id > 1 && report.value >= unswbc::Constants::MIN_SIZE))
                 && game.get_round_num() - report.round <= config::ally_estimate_max_age) {
                 auto const existing = allies_.find(report.sender_id);
                 if (existing == allies_.end() || existing->second.round <= report.round) {
@@ -46,6 +48,7 @@ auto RoleManager::choose_role(unswbc::Controller const& controller, unswbc::Game
     auto candidate_length = controller.get_length();
     if (controller.get_unit_count() > 1) {
         for (auto const& [id, estimate] : allies_) {
+            if (config::enable_champion_farms && id <= 1) { continue; }
             if (game.get_round_num() - estimate.round > config::ally_estimate_max_age) {
                 continue;
             }
@@ -55,13 +58,15 @@ auto RoleManager::choose_role(unswbc::Controller const& controller, unswbc::Game
             }
         }
         auto const old = allies_.find(champion_id_);
-        if (old != allies_.end() && game.get_round_num() - old->second.round <= config::ally_estimate_max_age
+        if (old != allies_.end() && (!config::enable_champion_farms || champion_id_ > 1)
+            && game.get_round_num() - old->second.round <= config::ally_estimate_max_age
             && old->second.length + config::champion_hysteresis > candidate_length) {
             candidate = champion_id_;
         }
     }
     champion_id_ = candidate;
-    if (controller.get_id() == champion_id_) {
+    if (controller.get_id() == champion_id_ && (!config::enable_champion_farms
+        || controller.get_unit_count() == 1 || candidate_length >= 8)) {
         return Role::champion;
     }
     switch (controller.get_id() % 4) {

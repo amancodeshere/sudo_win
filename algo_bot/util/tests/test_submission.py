@@ -33,6 +33,9 @@ class SubmissionTests(unittest.TestCase):
                                   ("no-sonar", "enable_sonar"),
                                   ("no-helper-portals", "enable_helper_portals"),
                                   ("no-hunting", "enable_queen_hunting"),
+                                  ("no-corridors", "enable_queen_corridors"),
+                                  ("no-territory", "enable_territorial_growth"),
+                                  ("no-farms", "enable_champion_farms"),
                                   ("no-sprint", "enable_sprinting")):
                 ablation = submission.prepare(BOT, root / profile, profile)
                 differences = [key for key in stable["effective_flags"]

@@ -35,7 +35,8 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     if (game.get_round_num() - target_round_ > config::target_max_age) {
         target_.reset();
     }
-    auto const route = pathfinding_.remembered_target(controller, world, game.get_round_num(), target_);
+    auto const route = pathfinding_.remembered_target(controller, world, game.get_round_num(), target_,
+        role == Role::queen || role == Role::champion);
     if (route) {
         if (!target_ || *target_ != route->target) {
             target_round_ = game.get_round_num();

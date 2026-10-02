@@ -25,6 +25,7 @@ PROFILES["no-helper-portals"] = {**PROFILES["stable"], "enable_helper_portals": 
 PROFILES["no-hunting"] = {**PROFILES["stable"], "enable_queen_hunting": False}
 PROFILES["no-corridors"] = {**PROFILES["stable"], "enable_queen_corridors": False}
 PROFILES["no-territory"] = {**PROFILES["stable"], "enable_territorial_growth": False}
+PROFILES["no-farms"] = {**PROFILES["stable"], "enable_champion_farms": False}
 PROFILES["growth"] = {**PROFILES["stable"]}  # retained CLI alias
 PROFILES["combat"] = {**PROFILES["stable"], "enable_favourable_trades": True}
 PROFILES["experimental"] = {**PROFILES["stable"], "enable_splitting": True,

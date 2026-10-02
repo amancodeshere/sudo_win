@@ -35,7 +35,8 @@ namespace {
 auto Pathfinding::remembered_target(unswbc::Controller const& controller,
                                     WorldModel const& world,
                                     int round,
-                                    std::optional<unswbc::Position> preferred) const
+                                    std::optional<unswbc::Position> preferred,
+                                    bool protected_unit) const
     -> std::optional<TargetRoute> {
     auto const area = static_cast<std::size_t>(world.width() * world.height());
     auto distance = std::vector<int>(area, -1);
@@ -117,8 +118,11 @@ auto Pathfinding::remembered_target(unswbc::Controller const& controller,
         auto const age = round - cell.last_seen_round;
         auto const claim = claims[current_index];
         auto const pearl = (cell.has_pearl && age <= config::pearl_memory_max_age) || remote_pearls[current_index];
-        auto const spawning = !cell.has_pearl && cell.pearl_time >= 0 && age <= 2
-                           && cell.pearl_time - age <= steps + 1;
+        auto const farming = config::enable_champion_farms && (protected_unit || controller.get_id() <= 1);
+        auto const remaining = cell.pearl_time - age;
+        auto const spawning = !cell.has_pearl && cell.pearl_time >= 0
+            && age <= (farming ? 64 : 2) && (!farming || remaining >= -2)
+            && remaining <= steps + (farming ? 8 : 1);
         auto frontier = 0;
         for (auto const direction : unswbc::Direction::get_direction_list()) {
             auto const& edge = cell.edges[geometry::direction_index(direction)];
@@ -128,8 +132,10 @@ auto Pathfinding::remembered_target(unswbc::Controller const& controller,
             }
         }
         if (steps > 0 && (pearl || spawning || frontier > 0)) {
-            auto value = (pearl ? 24000 : spawning ? 8000 : frontier * 2400) / (steps + 1);
-            if (cell.last_visited_round >= 0 && round - cell.last_visited_round < 8) {
+            auto const wait = farming && spawning ? std::max(0, remaining - steps) : 0;
+            auto value = (pearl ? 24000 : spawning ? (farming ? 12000 : 8000) : frontier * 2400) / (steps + wait + 1);
+            if (cell.last_visited_round >= 0 && round - cell.last_visited_round < 8
+                && !(farming && (pearl || spawning))) {
                 value /= 4;
             }
             if ((pearl || spawning) && steps > 1 && ally_distance[current_index] >= 0

@@ -7,7 +7,7 @@ Evidence: `LEADER_GAMEPLAY_REVIEW.md`. Current 17 map hashes are in the associat
 | --- | --- | --- | --- |
 | 1 | Queen corridors and split-child yielding | Complete | 57 C++ cases / 369 assertions, release + ASan/UBSan; 16 Python tests; native 11–5 against v5 over 16 games, no errors |
 | 2 | Earlier territorial expansion | Complete | Release + ASan/UBSan pass 57 cases / 373 assertions; native 5–3 over eight current-map games, no errors |
-| 3 | Queen farming and persistent secondary champion | Pending | Measure scoring bodies, not total food |
+| 3 | Queen farming and persistent secondary champion | Complete | 59 cases / 382 assertions, release + sanitizers; 16 Python tests; refined native 6–2, zero errors |
 | 4 | Purposeful portal routes | Pending | Test continuation safety and destination benefit |
 | 5 | Paid-step economics and queen interception | Pending | Keep free movement; meter combined runtime |
 
@@ -24,3 +24,9 @@ Frozen snapshot: `build/leader-stage1-corridors`. Native seeds 601/602, both col
 Investment capacity now scales with map area (eight to 32, bounded by the engine limit), so maps starting above eight units can invest. Complete long helpers may spawn a minimum-size child; early champions of at least eight segments can spare two, while smaller established champions remain protected. Independent body-validated income routes extend to four moves and can include directly observed spawners due within twelve rounds. Parent and child still need multiple six-turn escape routes, room and safe heads. Investment is refused when it freezes a visible queen corridor. `no-territory` restores the earlier growth rules for ablations.
 
 Snapshot: `build/leader-stage2-territory`. Native seed 603, current Autarky / Islands / Around UNSW / Slithery Fight, both colours, versus stage 1: 5–3, zero errors (`build/validation/leader-stage2-native8`). Functional coverage and the focused future-income/cap tests pass; more population is not assumed to mean better play. The combined validation will measure early population and scoring bodies on broader seeds.
+
+## Stage 3 — protected food routes and secondary champion
+
+Protected units route toward remembered countdowns with travel and waiting costs; overdue predictions expire rather than becoming imaginary pearls. Fresh future food is exempt from the generic recent-visit penalty. Queens emit food-route claims alongside corridor/status reporting. Helper champions broadcast bounded self-length estimates using the existing heartbeat wire type; projected split/movement changes are included where simulation is possible. Reports remain advisory and do not change remote occupancy. The queen is excluded from the helper champion election, but a non-solitary helper must reach eight segments before receiving champion protection. Smaller units continue their ordinary collection/scouting roles.
+
+A draft without the minimum champion size scored 4–4 on seed 604 and risked over-protecting every isolated small helper. It was refined before commit. Final snapshot `build/leader-stage3b-farms`: seed 605, current Portals / Maze / Tower Defense / Default, both colours, versus stage 2: 6–2, zero errors (`build/validation/leader-stage3b-native8`). Release and ASan/UBSan pass; the fresh/expired report and farm-countdown regressions pass. The new ablation profiles are checked to alter exactly one configuration flag. `no-farms` disables this stage.

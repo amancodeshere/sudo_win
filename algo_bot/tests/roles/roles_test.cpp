@@ -1,4 +1,5 @@
 #include "sudo_win/roles/roles.h"
+#include "sudo_win/world/world_model.h"
 
 #include "../engine_fixture.h"
 
@@ -27,7 +28,7 @@ TEST_CASE("role assignment and scoring") {
         for (auto const position : {unswbc::Position{6, 5}, unswbc::Position{6, 6},
                                     unswbc::Position{6, 7}, unswbc::Position{7, 7}}) {
             fixture.tile(position).dragon_part = unswbc::DragonPart{
-                position, 0, unswbc::Team::A, unswbc::Direction::NORTH, position == unswbc::Position{6, 5}};
+                position, 2, unswbc::Team::A, unswbc::Direction::NORTH, position == unswbc::Position{6, 5}};
         }
         CHECK(roles.choose_role(fixture.controller, fixture.game) == sudo_win::Role::scout);
     }
@@ -58,5 +59,26 @@ TEST_CASE("champion estimates expire and do not oscillate on small length change
     for (auto& tile : fixture.controller.vision.tiles) {
         tile.dragon_part.reset();
     }
-    CHECK(roles.choose_role(fixture.controller, fixture.game) == sudo_win::Role::champion);
+    CHECK(roles.choose_role(fixture.controller, fixture.game) != sudo_win::Role::champion);
+}
+
+TEST_CASE("a separate helper champion persists beside a queen and learns fresh remote lengths") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 7;
+    fixture.controller.length = 8;
+    fixture.controller.unit_count = 3;
+    fixture.tile({6,5}).dragon_part = unswbc::DragonPart{{6,5},0,unswbc::Team::A,unswbc::Direction::NORTH,true};
+    fixture.tile({6,6}).dragon_part = unswbc::DragonPart{{6,6},0,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    fixture.tile({6,7}).dragon_part = unswbc::DragonPart{{6,7},0,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    fixture.tile({7,7}).dragon_part = unswbc::DragonPart{{7,7},0,unswbc::Team::A,unswbc::Direction::WEST,false};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto roles = sudo_win::RoleManager{};
+    CHECK(roles.choose_role(fixture.controller,fixture.game,&world) == sudo_win::Role::champion);
+    world.receive_report({sudo_win::MessageType::heartbeat,0,4,0,0,12},0);
+    CHECK(roles.choose_role(fixture.controller,fixture.game,&world) != sudo_win::Role::champion);
+    CHECK_FALSE(world.has_seen({0,0}));
+    fixture.game.round_num = 9;
+    world.update(fixture.controller,fixture.game);
+    CHECK(roles.choose_role(fixture.controller,fixture.game,&world) == sudo_win::Role::champion);
 }

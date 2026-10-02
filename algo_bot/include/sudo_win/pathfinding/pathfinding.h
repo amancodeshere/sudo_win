@@ -21,7 +21,8 @@ public:
     [[nodiscard]] auto remembered_target(unswbc::Controller const& controller,
                                          WorldModel const& world,
                                          int round,
-                                         std::optional<unswbc::Position> preferred = std::nullopt) const
+                                         std::optional<unswbc::Position> preferred = std::nullopt,
+                                         bool protected_unit = false) const
         -> std::optional<TargetRoute>;
     [[nodiscard]] auto visible_reachable_area(unswbc::Controller const& controller,
                                               unswbc::Position start,

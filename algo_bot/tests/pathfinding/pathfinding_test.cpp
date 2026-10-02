@@ -162,3 +162,22 @@ TEST_CASE("fresh queen sonar claims coordinate helper food and expire") {
     REQUIRE(expired);
     CHECK(expired->target == unswbc::Position{7,5});
 }
+
+TEST_CASE("protected farms use observed countdowns and discard overdue predictions") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    for (auto& tile : fixture.controller.vision.tiles) { tile.pearl_time = -1; }
+    fixture.tile({8,5}).pearl_time = 12;
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto tiles = fixture.controller.vision.tiles;
+    tiles.erase(std::remove_if(tiles.begin(),tiles.end(),
+        [](auto const& tile) { return tile.get_position() == unswbc::Position{8,5}; }),tiles.end());
+    fixture.controller.vision = unswbc::Vision{std::move(tiles)};
+    auto const route = sudo_win::Pathfinding{}.remembered_target(fixture.controller,world,4);
+    REQUIRE(route);
+    CHECK(route->target == unswbc::Position{8,5});
+    CHECK(route->pearl);
+    auto const stale = sudo_win::Pathfinding{}.remembered_target(fixture.controller,world,20);
+    REQUIRE(stale);
+    CHECK_FALSE(stale->pearl);
+}

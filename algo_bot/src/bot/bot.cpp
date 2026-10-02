@@ -1,6 +1,7 @@
 #include "../../include/sudo_win/bot/bot.h"
 
 #include "../../include/sudo_win/config/config.h"
+#include "../../include/sudo_win/planner/simulation.h"
 
 #include <string>
 #include <exception>
@@ -38,11 +39,27 @@ auto Bot::execute_turn(unswbc::Controller& controller, unswbc::Game const& game)
         auto const own = controller.get_position();
         if (controller.get_id() <= 1 && phase % 2 == 1) {
             report = world_.queen_intent(controller, game.get_round_num(), action);
-        } else if (phase == 0 && controller.get_id() <= 1) {
-            report = TeamMessage{MessageType::champion, game.get_round_num() & 511,
-                controller.get_id(), own.x, own.y, std::min(controller.get_length(), 2047)};
-        } else if (phase == 1) {
-            if (auto const route = Pathfinding{}.remembered_target(controller, world_, game.get_round_num());
+        } else if (phase == 0 && (controller.get_id() <= 1
+            || (config::enable_champion_farms && role == Role::champion))) {
+            auto length = controller.get_length();
+            auto position = own;
+            if (config::enable_champion_farms && action.kind == ActionKind::split) {
+                length -= action.split_size;
+            } else if (config::enable_champion_farms) {
+                auto state = Simulation{}.initial_state(controller, &world_);
+                for (std::size_t i = 0; i < action.steps.size(); ++i) {
+                    auto const next = Simulation{}.advance(controller, state, action.steps[i], i > 0, &world_);
+                    if (!next) { break; }
+                    state = *next;
+                    length = static_cast<int>(state.body.size());
+                    position = state.body.front();
+                }
+            }
+            report = TeamMessage{controller.get_id() <= 1 ? MessageType::champion : MessageType::heartbeat, game.get_round_num() & 511,
+                controller.get_id(), position.x, position.y, std::min(length, 2047)};
+        } else if (phase == 1 || (config::enable_champion_farms && phase == 2 && controller.get_id() <= 1)) {
+            if (auto const route = Pathfinding{}.remembered_target(controller, world_, game.get_round_num(), std::nullopt,
+                    role == Role::queen || role == Role::champion);
                 route && route->pearl) {
                 report = TeamMessage{MessageType::feeder, game.get_round_num() & 511,
                     controller.get_id(), route->target.x, route->target.y, std::min(route->distance, 2047)};
