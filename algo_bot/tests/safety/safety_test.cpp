@@ -152,6 +152,19 @@ TEST_CASE("remembered portal escapes keep stale observations separate from safe 
         REQUIRE(action.steps.size() == 1);
         CHECK(action.steps.front() == unswbc::Direction::EAST);
     }
+    SECTION("a certified reversed tail rescue takes precedence over an uncertain portal") {
+        fixture.controller.length = 4;
+        fixture.tile({5,8}).dragon_part = unswbc::DragonPart{{5,8},0,unswbc::Team::A,unswbc::Direction::NORTH,false};
+        world.update(fixture.controller,fixture.game);
+        hide_exit();
+        for (auto const d : {unswbc::Direction::NORTH,unswbc::Direction::WEST}) {
+            fixture.tile({5,5}).get_edge(d) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+        }
+        world.update(fixture.controller,fixture.game);
+        auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::champion);
+        CHECK(action.kind == sudo_win::ActionKind::split);
+        CHECK(action.split_size == 2);
+    }
     SECTION("a good visible escape takes precedence over an unseen portal exit") {
         hide_exit();
         auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::champion);

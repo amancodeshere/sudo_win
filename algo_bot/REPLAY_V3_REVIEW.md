@@ -156,3 +156,22 @@ On all ten competition maps, seed 205, both colours, this isolated change beat
 the forced-portal/shortening-escape candidate **16–4**, with no detected runtime,
 invalid-action or avoidable visible-collision failures. This native result is
 encouraging but unmetered and limited to one seed per map.
+
+## Final conservative escape rules
+
+Full sandbox comparisons against uploaded 14465 exposed regressions in the
+broader combined escape rules: seed 206 ended 7–12 with one draw, and the
+GCC-compatible equivalent at seed 207 ended 11–9. Both ran all ten maps in both
+colours, with no runtime/invalid-action/avoidable-visible-collision failures;
+maximum candidate CPU was 36,653,257 and 36,552,855 respectively. Neither
+archive is promoted.
+
+The final rules spend segments for same-class survival improvement only when
+the best ordinary route enters a **certified sealed entrance chamber**, not
+merely when the search stops at the vision boundary. Higher immediate safety
+class still permits the existing emergency sprint. A portal is attempted only
+when there is **no legal ordinary move** and no reversed-tail rescue certified
+to escape; certified rescue wins before uncertain teleportation. Fresh empty
+exit memory, complete body, distinct onward routes and space checks remain.
+These decisions address the observed regressions without making unseen
+occupancy or truncated lookahead into a safety guarantee.

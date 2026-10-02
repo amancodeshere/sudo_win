@@ -23,6 +23,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     auto const initial = simulation.initial_state(controller, &world);
     auto best_survival = -1;
     auto best_safety_class = -1;
+    auto best_sealed_entry = false;
     if (game.get_round_num() - target_round_ > config::target_max_age) {
         target_.reset();
     }
@@ -81,12 +82,14 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         candidate.combat_score = threat.score * (role == Role::champion ? config::score_champion_risk_multiplier : 1);
         auto const threatened = threat.level == ThreatLevel::direct
             || (funded_sprint_priority_ && threat.affordable_steps > 0 && threat.affordable_steps <= 2);
+        auto const entry_trap = steps.size() == 1 && survival < config::survival_search_depth
+            && simulation.sealed_entry_pocket(next, world);
         auto const sealed_pocket = config::enable_pocket_priority && !mobility.open_frontier
             && mobility.area < static_cast<int>(next.body.size())
             && simulation.sealed_entry_pocket(next, world);
         auto const safety_class = survival == 0 ? 0 : (threatened || sealed_pocket) ? 1 : 2;
         auto const improves_safety = safety_class > best_safety_class
-            || (safety_class == best_safety_class && survival > best_survival);
+            || (safety_class == best_safety_class && survival > best_survival && best_sealed_entry);
         if (sprint && length_gain < 0 && !improves_safety) {
             return;
         }
@@ -116,6 +119,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
                 || (survival == best_survival && candidate.total_score() > best.score)))) {
             best_safety_class = safety_class;
             best_survival = survival;
+            best_sealed_entry = entry_trap;
             best.kind = sprint ? ActionKind::sprint : ActionKind::move;
             best.steps = steps;
             best.score = candidate.total_score();
@@ -156,7 +160,15 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         }
     }
 
-    if (config::enable_portal_escape && best_survival <= 1) {
+    auto rescue = std::optional<PlannedAction>{};
+    if (best_survival <= 1) {
+        rescue = splitting_.rescue(controller, world, best.steps.empty());
+        if (rescue && rescue->score > 0) {
+            return *rescue;
+        }
+    }
+
+    if (config::enable_portal_escape && best.steps.empty()) {
         if (auto const portal = safety_.remembered_portal_escape(controller, world, game.get_round_num())) {
             best.kind = ActionKind::move;
             best.steps = {*portal};
@@ -165,10 +177,8 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         }
     }
 
-    if (best_survival <= 1) {
-        if (auto const rescue = splitting_.rescue(controller, world, best.steps.empty())) {
-            return *rescue;
-        }
+    if (rescue) {
+        return *rescue;
     }
 
     if (growth_splitting_) {
