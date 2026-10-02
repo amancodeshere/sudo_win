@@ -68,6 +68,12 @@ auto RoleManager::choose_role(unswbc::Controller const& controller, unswbc::Game
         }
     }
     champion_id_ = candidate;
+    if (config::enable_mature_scorers && (controller.get_length() >= 20
+        || (game.get_round_num() >= 200 && controller.get_length() >= 12))) {
+        // Election chooses the preferred scorer; it must not remove defense,
+        // farming or segment reserves from another already mature body.
+        return Role::champion;
+    }
     if (controller.get_id() == champion_id_ && (!config::enable_champion_farms
         || controller.get_unit_count() == 1 || controller.get_length() >= (config::enable_champion_retention && game.get_round_num() >= 80
             && (!config::enable_scoring_coordination || controller.get_unit_count() < 4) ? 4 : 8))) {

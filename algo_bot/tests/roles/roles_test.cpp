@@ -133,3 +133,23 @@ TEST_CASE("champion coordination protects durable scorers without freezing rich 
     fixture.controller.unit_count = 1;
     CHECK(roles.choose_role(fixture.controller,fixture.game,&world) == sudo_win::Role::champion);
 }
+
+TEST_CASE("mature scorers retain protection beside a longer elected champion") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 7;
+    fixture.controller.unit_count = 10;
+    fixture.game.round_num = 100;
+    fixture.controller.length = 20;
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    world.receive_report({sudo_win::MessageType::heartbeat,100,4,0,0,24},100);
+    auto roles = sudo_win::RoleManager{};
+    CHECK(roles.choose_role(fixture.controller,fixture.game,&world) == sudo_win::Role::champion);
+    fixture.controller.length = 12;
+    CHECK(roles.choose_role(fixture.controller,fixture.game,&world) != sudo_win::Role::champion);
+    fixture.game.round_num = 200;
+    world.receive_report({sudo_win::MessageType::heartbeat,200,4,0,0,24},200);
+    CHECK(roles.choose_role(fixture.controller,fixture.game,&world) == sudo_win::Role::champion);
+    fixture.controller.length = 8;
+    CHECK(roles.choose_role(fixture.controller,fixture.game,&world) != sudo_win::Role::champion);
+}

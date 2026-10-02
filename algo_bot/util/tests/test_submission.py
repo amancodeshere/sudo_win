@@ -42,6 +42,7 @@ class SubmissionTests(unittest.TestCase):
                                   ("no-tail-clearance", "enable_tail_clearance"),
                                   ("no-queen-release", "enable_queen_release"),
                                   ("no-champion-retention", "enable_champion_retention"),
+                                  ("no-mature-scorers", "enable_mature_scorers"),
                                   ("no-response-defense", "enable_response_defense"),
                                   ("no-productive-expansion", "enable_productive_expansion"),
                                   ("no-portal-income", "enable_portal_income"),

@@ -32,6 +32,7 @@ PROFILES["no-interception"] = {**PROFILES["stable"], "enable_interception": Fals
 PROFILES["no-tail-clearance"] = {**PROFILES["stable"], "enable_tail_clearance": False}
 PROFILES["no-queen-release"] = {**PROFILES["stable"], "enable_queen_release": False}
 PROFILES["no-champion-retention"] = {**PROFILES["stable"], "enable_champion_retention": False}
+PROFILES["no-mature-scorers"] = {**PROFILES["stable"], "enable_mature_scorers": False}
 PROFILES["no-response-defense"] = {**PROFILES["stable"], "enable_response_defense": False}
 PROFILES["no-productive-expansion"] = {**PROFILES["stable"], "enable_productive_expansion": False}
 PROFILES["no-portal-income"] = {**PROFILES["stable"], "enable_portal_income": False}

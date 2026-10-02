@@ -15,6 +15,7 @@ inline constexpr auto enable_interception = true;
 inline constexpr auto enable_tail_clearance = true;
 inline constexpr auto enable_queen_release = true;
 inline constexpr auto enable_champion_retention = true;
+inline constexpr auto enable_mature_scorers = true;
 inline constexpr auto enable_response_defense = true;
 inline constexpr auto enable_productive_expansion = true;
 inline constexpr auto enable_portal_income = true;

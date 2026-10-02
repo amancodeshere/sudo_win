@@ -48,8 +48,10 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     auto best = PlannedAction{};
     auto largest_reachable_area = 0;
     auto const simulation = Simulation{};
+    auto const protected_unit = role == Role::queen || role == Role::champion || controller.get_unit_count() == 1;
     auto const threats = combat_.threats(controller, &world);
-    auto const reported_head_steps = world.reported_head_steps(controller,game.get_round_num());
+    auto const reported_head_steps = protected_unit ? world.reported_head_steps(controller,game.get_round_num())
+        : std::vector<int>{};
     auto const initial = simulation.initial_state(controller, &world);
     auto const initial_queen_trap = config::enable_queen_exit_viability
         && safety_.blocks_queen_escape(controller,initial,world);
@@ -182,7 +184,6 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         auto const& threat = threats[static_cast<std::size_t>(destination.y * world.width() + destination.x)];
         candidate.combat_score = threat.score * (role == Role::queen ? 3
             : role == Role::champion ? config::score_champion_risk_multiplier : 1);
-        auto const protected_unit = role == Role::queen || role == Role::champion || controller.get_unit_count() == 1;
         auto const response = config::enable_response_defense && protected_unit
             ? combat_.response_threat(controller, next, world) : ResponseThreat{};
         auto const threatened = threat.level == ThreatLevel::direct
