@@ -73,3 +73,13 @@ Two new tests fail on that source: a queen takes tempting food at an endpoint wi
 ## Resource-cap ablation correction
 
 Further source review found that disabling phase expansion still retained its local crowding condition in the resource population cap. This unintentionally restricted the old rich-region capacity even in the conservative release and makes the preceding no-phase selection an incomplete rollback. Corrected the off branch to use the original `local_income >= 4` cap gate; experimental crowding remains confined to `phase-expansion`. A regression exercises a rich region above the geometric population budget with a nearby helper. Earlier candidate comparisons remain preserved, but new acceptance artifacts must contain this correction. Minimal defense/network configuration comparisons are being used to assess which added policies help.
+
+## Corrected-cap configuration selection
+
+On fresh seed 850, the complete corrected-cap policy beats the reduced defense/network policy **4–2** (Default, Schooltime, Around UNSW, both colours). Retain the complete policy, with experimental expansion and voluntary feeding disabled. The reduced policy's broader and metered results are still recorded; no claim of superiority is drawn from a partial series.
+
+Pre-cap candidates finish **12–22** and **14–20** in their respective 17-map native comparisons. The first candidate scores 3–5 against the aggressive reference, while the uploaded baseline scores 5–3 on exactly that same seed/maps/colours; the complete pre-cap policy is rejected. It did demonstrate sonar delivery improvement: 144,594 other-ally hits / 115,986 personal turns (~1,247 per 1,000) versus baseline 42,721 / 124,590 (~343 per 1,000) in its metered comparison. Better delivery is not equated with better final scoring.
+
+The selected artifact `build/submission-v5-cap-corrected` contains the resource-cap fix and all passing queen response/intent regressions. Final exact-source 17-map seed 853, metered seed 854, and same-seed aggressive stress comparisons are running. The final upload script will be repinned to this artifact, not an older candidate.
+
+Final immutable upload package: `build/submission-v5-final.zip`, source SHA **d797f5adb34dda4af29da68f1102a6d4e1933dbc59cde2fc163fd9126cd68ace**, ZIP SHA **4e7a2e88bba4b7f2ca50f814b710f33738d6f6b57dd2b645d999abecb84195b9**. These match the tested corrected-cap snapshot and a fresh independent regeneration. All 32 selected files match current repository bytes and exact archive membership. Upload name/description are pinned in a credential-safe script, which checks the ZIP hash before POST. API access and active baseline 14928 are verified. Upload awaits completion of exact-source judge/comparison gates.
