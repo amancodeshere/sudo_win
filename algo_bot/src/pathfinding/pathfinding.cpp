@@ -133,7 +133,7 @@ auto Pathfinding::remembered_target(unswbc::Controller const& controller,
         for (auto const direction : unswbc::Direction::get_direction_list()) {
             auto const& edge = cell.edges[geometry::direction_index(direction)];
             auto const* ends = edge.type == unswbc::EdgeType::PORTAL ? world.portal_endpoints(edge.portal_id) : nullptr;
-            portal_frontier = portal_frontier || (config::enable_portal_routing && portal_scout && !config::enable_portal_income && edge.seen
+            portal_frontier = portal_frontier || (config::enable_portal_routing && portal_scout && edge.seen
                 && edge.type == unswbc::EdgeType::PORTAL && (ends == nullptr || ends->size() < 2U));
             if (edge.seen && edge.type == unswbc::EdgeType::EMPTY
                 && !world.has_seen(current.add_dir(direction))) {
@@ -253,7 +253,7 @@ auto Pathfinding::portal_income_route(unswbc::Controller const& controller,
                     }
                     if (onward < 2 || region.size() < static_cast<std::size_t>(controller.get_length() + 3)) { continue; }
                 }
-                if (protected_unit && !surveyed && income == 0) { continue; }
+                if (!surveyed && income == 0) { continue; }
                 // A mapped exhausted pocket is never treated as unexplored.
                 if (exit && world.has_seen(*exit) && income == 0 && !surveyed) { continue; }
                 auto const value = ((surveyed || income > 0) ? 40000 + std::min(income, 4) * 4000 : 18000)

@@ -192,13 +192,12 @@ TEST_CASE("starved portal approaches price destination income and reject exhaust
         = unswbc::Edge{false,unswbc::EdgeType::PORTAL,19};
     auto world = sudo_win::WorldModel{fixture.game};
     world.update(fixture.controller,fixture.game);
-    SECTION("small helper approaches a remote unexplored entrance") {
-        auto const route = sudo_win::Pathfinding{}.portal_income_route(fixture.controller,world,30,false);
+    SECTION("unmapped scouting remains available without inventing productive income") {
+        auto const route = sudo_win::Pathfinding{}.remembered_target(fixture.controller,world,30,std::nullopt,false,true);
         REQUIRE(route);
         CHECK(route->target == unswbc::Position{7,5});
         CHECK(route->first_direction == unswbc::Direction::EAST);
-        CHECK(route->distance == 3);
-        CHECK(route->portal);
+        CHECK_FALSE(sudo_win::Pathfinding{}.portal_income_route(fixture.controller,world,30,false));
         CHECK_FALSE(sudo_win::Pathfinding{}.portal_income_route(fixture.controller,world,30,true));
     }
     SECTION("protected approach needs a productive mapped destination") {

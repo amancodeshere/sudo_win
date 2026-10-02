@@ -74,7 +74,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     if (config::enable_portal_income && game.get_round_num() < 400
         && game.get_round_num() - last_portal_round_ >= 12
         && game.get_round_num() - resource_progress_round_ >= 8
-        && (!route || !route->pearl || route->value < 8000)) {
+        && (!route || !route->pearl || (role != Role::queen && role != Role::champion && route->value < 8000))) {
         auto const relocation = pathfinding_.portal_income_route(controller, world, game.get_round_num(),
             role == Role::queen || (role == Role::champion && controller.get_length() > 4));
         if (relocation && (!route || relocation->value > route->value)) { route = relocation; }
@@ -308,7 +308,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
 
     if (config::enable_portal_routing && (role == Role::queen || role == Role::champion)
         && game.get_round_num() < 400 && game.get_round_num() - last_portal_round_ >= 12
-        && game.get_round_num() - resource_progress_round_ >= 12 && (!route || !route->pearl || (config::enable_portal_income && route->value < 8000))) {
+        && game.get_round_num() - resource_progress_round_ >= 12 && (!route || !route->pearl)) {
         if (auto const portal = safety_.surveyed_portal_route(controller, world, game.get_round_num())) {
             last_portal_round_ = game.get_round_num();
             best.kind = ActionKind::move;

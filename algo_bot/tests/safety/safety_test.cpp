@@ -258,3 +258,26 @@ TEST_CASE("portal destination surveys are advisory fresh and tied to a mapped pa
     REQUIRE(relocation.steps.size() == 1);
     CHECK(relocation.steps.front() == unswbc::Direction::EAST);
 }
+
+TEST_CASE("a fresh productive portal survey cannot displace a viable queen farm") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.length = 3;
+    fixture.controller.unit_count = 2;
+    for (auto& tile : fixture.controller.vision.tiles) { tile.pearl_time = -1; }
+    fixture.tile({5,6}).dragon_part = unswbc::DragonPart{{5,6},0,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    fixture.tile({5,7}).dragon_part = unswbc::DragonPart{{5,7},0,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    fixture.tile({5,5}).get_edge(unswbc::Direction::EAST) = unswbc::Edge{false,unswbc::EdgeType::PORTAL,9};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    world.receive_report({sudo_win::MessageType::portal,0,4,0,0,19},0);
+    auto planner = sudo_win::Planner{false};
+    static_cast<void>(planner.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::queen));
+    fixture.game.round_num = 13;
+    fixture.tile({5,2}).pearl = true;
+    world.update(fixture.controller,fixture.game);
+    world.receive_report({sudo_win::MessageType::empty,13,4,0,0,1033},13);
+    REQUIRE(sudo_win::Safety{}.surveyed_portal_route(fixture.controller,world,13));
+    auto const action = planner.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::queen);
+    REQUIRE(action.steps.size() == 1);
+    CHECK(action.steps.front() == unswbc::Direction::NORTH);
+}
