@@ -37,7 +37,10 @@ auto Bot::execute_turn(unswbc::Controller& controller, unswbc::Game const& game)
         auto report = std::optional<TeamMessage>{};
         auto const phase = game.get_round_num() % 4;
         auto const own = controller.get_position();
-        if (controller.get_id() <= 1 && phase % 2 == 1) {
+        if (action.kind == ActionKind::split && action.resource_target) {
+            report = TeamMessage{MessageType::feeder,game.get_round_num() & 511,controller.get_id(),
+                action.resource_target->x,action.resource_target->y,std::min(2047,action.resource_distance + 1)};
+        } else if (controller.get_id() <= 1 && phase % 2 == 1) {
             report = world_.queen_intent(controller, game.get_round_num(), action);
         } else if (phase == 0 && (controller.get_id() <= 1
             || (config::enable_champion_farms && role == Role::champion))) {
@@ -116,7 +119,7 @@ auto Bot::execute_turn(unswbc::Controller& controller, unswbc::Game const& game)
 #endif
 
     if (config::enable_indicators) {
-        controller.set_indicator_string(std::string{action.reason});
+        controller.set_indicator_string(std::string{action.reason} + "; growth: " + std::string{planner_.growth_rejection()});
     }
     apply_action(controller, action);
     if (report_payload) {

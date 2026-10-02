@@ -8,6 +8,50 @@
 
 #include <catch2/catch.hpp>
 
+TEST_CASE("well fed queens can invest while retaining a safe scoring parent") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    auto body = std::vector<unswbc::Position>{{5,5},{5,6},{4,6},{3,6},{2,6},{2,5},{2,4},{3,4}};
+    fixture.controller.length = static_cast<int>(body.size());
+    for (std::size_t i = 0; i < body.size(); ++i) {
+        auto dir = unswbc::Direction{unswbc::Direction::NORTH};
+        if (i > 0) {
+            for (auto const d : unswbc::Direction::get_direction_list()) {
+                if (body[i].add_dir(d) == body[i-1]) { dir = d; break; }
+            }
+        }
+        fixture.tile(body[i]).dragon_part = unswbc::DragonPart{body[i],0,unswbc::Team::A,dir,i == 0};
+    }
+    fixture.tile({6,4}).pearl = true;
+    fixture.tile({3,3}).pearl = true;
+    auto const split = [&] {
+        auto world = sudo_win::WorldModel{fixture.game};
+        world.update(fixture.controller,fixture.game);
+        return sudo_win::SplittingPolicy{}.grow_population(fixture.controller,fixture.game,sudo_win::Role::queen,world);
+    };
+    SECTION("early investment retains six queen segments and separate food") {
+        auto const action = split();
+        REQUIRE(action);
+        CHECK(action->split_size == 2);
+        REQUIRE(action->resource_target);
+        CHECK(action->resource_target == unswbc::Position{6,4});
+    }
+    SECTION("a thin queen cannot fund investment") {
+        fixture.controller.length = 7;
+        CHECK_FALSE(split());
+    }
+    SECTION("established populations and late queens retain their scoring length") {
+        fixture.controller.unit_count = 4;
+        CHECK_FALSE(split());
+        fixture.controller.unit_count = 1;
+        fixture.game.round_num = 80;
+        CHECK_FALSE(split());
+    }
+    SECTION("an enemy response prevents investment by a stationary queen") {
+        fixture.tile({6,5}).dragon_part = unswbc::DragonPart{{6,5},7,unswbc::Team::B,unswbc::Direction::WEST,true};
+        CHECK_FALSE(split());
+    }
+}
+
 TEST_CASE("stable splitting policy") {
     auto fixture = sudo_win::test::EngineFixture{};
     fixture.controller.length = 20;
@@ -192,6 +236,15 @@ TEST_CASE("early expansion protects the champion and requires separate resources
         auto const action = sudo_win::Planner{false, false, true}.choose_action(
             fixture.controller, fixture.game, world, sudo_win::Role::collector);
         CHECK(action.kind == sudo_win::ActionKind::split);
+    }
+    SECTION("productive narrow exits do not require two immediate branches") {
+        fixture.tile({5,5}).get_edge(unswbc::Direction::EAST) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+        fixture.tile({5,5}).get_edge(unswbc::Direction::WEST) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+        fixture.tile({2,5}).get_edge(unswbc::Direction::EAST) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+        auto const split = candidate();
+        REQUIRE(split);
+        REQUIRE(split->resource_target);
+        CHECK(split->resource_distance > 0);
     }
     SECTION("existing champions keep their length") {
         fixture.controller.unit_count = 2;

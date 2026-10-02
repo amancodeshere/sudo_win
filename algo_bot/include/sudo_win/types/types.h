@@ -4,6 +4,7 @@
 #include "../engine/helper.h"
 
 #include <limits>
+#include <optional>
 #include <string_view>
 #include <vector>
 
@@ -28,6 +29,8 @@ struct PlannedAction {
     ActionKind kind = ActionKind::move;
     std::vector<unswbc::Direction> steps;
     int split_size = 0;
+    std::optional<unswbc::Position> resource_target;
+    int resource_distance = 0;
     int score = std::numeric_limits<int>::min();
     std::string_view reason = "fallback";
 };

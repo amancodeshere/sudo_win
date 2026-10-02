@@ -16,6 +16,7 @@ inline constexpr auto enable_tail_clearance = true;
 inline constexpr auto enable_queen_release = true;
 inline constexpr auto enable_champion_retention = true;
 inline constexpr auto enable_response_defense = true;
+inline constexpr auto enable_productive_expansion = true;
 inline constexpr auto response_node_budget = 160;
 inline constexpr auto response_step_limit = 5;
 inline constexpr auto population_unit_cap = 8;

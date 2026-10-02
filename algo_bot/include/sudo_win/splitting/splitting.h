@@ -12,6 +12,7 @@ class WorldModel;
 
 class SplittingPolicy {
 public:
+    [[nodiscard]] auto growth_rejection() const -> std::string_view { return growth_rejection_; }
     [[nodiscard]] auto grow_population(unswbc::Controller const& controller,
                                        unswbc::Game const& game,
                                        Role role, WorldModel const& world) const
@@ -26,6 +27,8 @@ public:
                                 int reachable_area,
                                 WorldModel const* world = nullptr,
                                 bool enabled = config::enable_splitting) const -> std::optional<PlannedAction>;
+private:
+    mutable std::string_view growth_rejection_ = "not evaluated";
 };
 
 } // namespace sudo_win

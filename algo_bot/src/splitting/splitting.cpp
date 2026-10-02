@@ -20,26 +20,31 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
         : config::population_unit_cap;
     auto const early_investment = config::enable_territorial_growth && game.get_round_num() < 80
         && controller.get_length() >= 8;
-    if (controller.get_id() <= 1 || role == Role::queen || game.get_round_num() >= 280
-        || controller.get_unit_count() >= cap
-        || controller.get_length() < 4 || (!config::enable_territorial_growth && controller.get_length() > 12)
-        || !controller.can_split(child_size)
-        || (role == Role::champion && !early_investment
-            && (controller.get_unit_count() > 1 || game.get_round_num() >= 80))) {
+    auto const reject = [&](std::string_view reason) -> std::optional<PlannedAction> {
+        growth_rejection_ = reason;
         return std::nullopt;
-    }
+    };
+    auto const queen_investment = config::enable_productive_expansion && controller.get_id() <= 1
+        && game.get_round_num() < 80 && controller.get_length() >= 8 && controller.get_unit_count() < 4;
+    if ((controller.get_id() <= 1 || role == Role::queen) && !queen_investment) { return reject("queen reserve"); }
+    if (game.get_round_num() >= 280) { return reject("late phase"); }
+    if (controller.get_unit_count() >= cap) { return reject("population budget"); }
+    if (controller.get_length() < 4 || (!config::enable_territorial_growth && controller.get_length() > 12)
+        || !controller.can_split(child_size)) { return reject("segment budget"); }
+    if (role == Role::champion && !early_investment
+        && (controller.get_unit_count() > 1 || game.get_round_num() >= 80)) { return reject("champion reserve"); }
     auto const simulation = Simulation{};
     auto parent = simulation.initial_state(controller, &world);
     if (!parent.unranked_body.empty()
         || std::any_of(parent.body.begin(), parent.body.end(), [](auto p) { return p.x < 0 || p.y < 0; })) {
-        return std::nullopt;
+        return reject("incomplete body");
     }
     auto const reservations = world.queen_reservations(controller, game.get_round_num());
     if (std::any_of(parent.body.begin(), parent.body.end(), [&](auto p) {
         return reservations[static_cast<std::size_t>(p.y * world.width() + p.x)] >= 16000;
     })) {
         // Splitting freezes the parent's body instead of clearing an escape.
-        return std::nullopt;
+        return reject("queen corridor");
     }
     auto child = SimulationState{};
     child.body.assign(parent.body.rbegin(), parent.body.rbegin() + child_size);
@@ -56,18 +61,22 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
                 }
             }
         }
-        return escapes >= 2;
+        return escapes >= (config::enable_productive_expansion ? 1 : 2);
     };
     if (!viable(parent) || !viable(child)) {
-        return std::nullopt;
+        return reject("escape horizon");
     }
     auto const parent_tiles = simulation.reachable_positions(controller, parent, &world);
     auto const child_tiles = simulation.reachable_positions(controller, child, &world);
-    if (parent_tiles.size() < parent.body.size() + 8 || child_tiles.size() < child.body.size() + 8) {
-        return std::nullopt;
+    auto const reserve = config::enable_productive_expansion ? 5U : 8U;
+    if (parent_tiles.size() < parent.body.size() + reserve || child_tiles.size() < child.body.size() + reserve) {
+        return reject("growth space");
     }
     auto parent_resources = 0;
     auto child_resources = 0;
+    auto parent_target = std::optional<unswbc::Position>{};
+    auto parent_target_distance = 100;
+    auto shared_income = std::vector<unswbc::Position>{};
     auto const area = static_cast<std::size_t>(world.width() * world.height());
     auto const index = [&](unswbc::Position p) {
         return static_cast<std::size_t>(p.y * world.width() + p.x);
@@ -80,7 +89,7 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
         auto budget = config::enable_territorial_growth ? 256 : 128;
         for (std::size_t cursor = 0; cursor < queue.size() && budget > 0; ++cursor) {
             auto const node = queue[cursor];
-            if (node.distance >= (config::enable_territorial_growth ? 4 : 3)) { continue; }
+            if (node.distance >= (config::enable_productive_expansion ? 5 : config::enable_territorial_growth ? 4 : 3)) { continue; }
             for (auto const direction : unswbc::Direction::get_direction_list()) {
                 if (budget-- <= 0) { break; }
                 if (auto const next = simulation.advance(controller,node.state,direction,false,&world)) {
@@ -98,7 +107,7 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
     auto queen_queue = std::vector<unswbc::Position>{};
     for (auto const& tile : controller.get_tiles()) {
         auto const* part = tile.get_dragon();
-        if (part != nullptr && part->is_head() && part->get_id() <= 1
+        if (part != nullptr && part->is_head() && part->get_id() <= 1 && part->get_id() != controller.get_id()
             && part->get_team() == controller.get_team()) {
             queen_distance[index(tile.get_position())] = 0;
             queen_queue.push_back(tile.get_position());
@@ -132,17 +141,28 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
                 && game.get_round_num() - report.round <= 4 && report.x == p.x && report.y == p.y);
         }
         if (claimed) { continue; }
-        parent_resources += pd > 0 && (cd < 0 || pd < cd);
+        if (pd > 0 && (cd < 0 || pd < cd)) {
+            ++parent_resources;
+            if (pd < parent_target_distance) { parent_target = p; parent_target_distance = pd; }
+        }
         child_resources += cd > 0 && (pd < 0 || cd < pd);
+        if (config::enable_productive_expansion && pd > 0 && pd == cd) { shared_income.push_back(p); }
+    }
+    for (auto const p : shared_income) {
+        if (parent_resources <= child_resources) {
+            ++parent_resources;
+            auto const distance = parent_distance[index(p)];
+            if (distance < parent_target_distance) { parent_target = p; parent_target_distance = distance; }
+        } else { ++child_resources; }
     }
     if (parent_resources < 1 || child_resources < 1) {
-        return std::nullopt;
+        return reject("independent income");
     }
     auto view = controller;
     auto* parent_head = view.get_tile(parent.body.front());
     auto* child_head = view.get_tile(child.body.front());
     if (parent_head == nullptr || child_head == nullptr) {
-        return std::nullopt;
+        return reject("unseen split heads");
     }
     parent_head->dragon_part.reset();
     child_head->dragon_part.reset();
@@ -152,7 +172,13 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
     };
     if (threat_at(parent.body.front()).level != ThreatLevel::none
         || threat_at(child.body.front()).level != ThreatLevel::none) {
-        return std::nullopt;
+        return reject("stationary head threat");
+    }
+    if (config::enable_response_defense && queen_investment) {
+        auto const response = Combat{}.response_threat(controller,parent,world);
+        if (response.funded_steps > 0 || (response.possible_steps > 0 && response.possible_steps <= 3)) {
+            return reject("queen response threat");
+        }
     }
     auto action = PlannedAction{};
     action.kind = ActionKind::split;
@@ -160,7 +186,16 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
     action.score = static_cast<int>(parent_tiles.size()) * config::score_reachable_tile
         + (std::min(child_resources, 3) + 1) * 40000
         - child_size * config::score_split_segment_cost;
+    if (config::enable_productive_expansion) {
+        // Price the child's future income, rather than comparing its investment
+        // only with a single movement's visible reachable area.
+        action.score += std::min(child_resources,3) * 45000
+            + std::min(8,cap - controller.get_unit_count()) * 4000;
+        action.resource_target = parent_target;
+        action.resource_distance = parent_target_distance;
+    }
     action.reason = "early expansion with independent pearl opportunities";
+    growth_rejection_ = "viable investment";
     return action;
 }
 

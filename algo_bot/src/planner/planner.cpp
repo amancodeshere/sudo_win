@@ -13,6 +13,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
                             unswbc::Game const& game,
                             WorldModel const& world,
                             Role role) const -> PlannedAction {
+    growth_rejection_ = "movement or rescue priority";
     if (resource_progress_round_ < 0 || controller.get_length() > previous_length_) {
         resource_progress_round_ = game.get_round_num();
     }
@@ -301,9 +302,14 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     }
 
     if (growth_splitting_) {
-        if (auto const expansion = splitting_.grow_population(controller, game, role, world);
-            expansion && expansion->score > best.score) {
-            return *expansion;
+        auto const expansion = splitting_.grow_population(controller, game, role, world);
+        growth_rejection_ = splitting_.growth_rejection();
+        if (expansion) {
+            if (expansion->score > best.score) {
+                if (expansion->resource_target) { target_ = expansion->resource_target; target_round_ = game.get_round_num(); }
+                return *expansion;
+            }
+            growth_rejection_ = "move exceeds investment";
         }
     }
 
