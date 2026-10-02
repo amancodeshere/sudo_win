@@ -71,6 +71,8 @@ __pycache__/
 *.pyc
 .unswbc-build/
 replays/
+!algo_bot/tests/replays/
+!algo_bot/tests/replays/*.txt
 
 # ide files
 .idea/

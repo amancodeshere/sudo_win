@@ -8,6 +8,87 @@
 
 namespace sudo_win {
 
+auto Combat::response_threat(unswbc::Controller const& controller,
+                             SimulationState const& after, WorldModel const& world) const -> ResponseThreat {
+    auto result = ResponseThreat{};
+    if (after.body.empty()) { return result; }
+    auto view = controller;
+    // The enemy responds to our resulting occupancy, not the departing tail.
+    // Leave the target head empty only for the terminal head-to-head test.
+    for (auto& tile : view.vision.tiles) {
+        if (tile.dragon_part && tile.dragon_part->get_id() == controller.get_id()) {
+            tile.dragon_part.reset();
+        }
+        if (std::find(after.eaten.begin(), after.eaten.end(), tile.get_position()) != after.eaten.end()) {
+            tile.pearl = false;
+        }
+    }
+    auto const block = [&](unswbc::Position p) {
+        if (auto* tile = view.get_tile(p)) {
+            tile->dragon_part = unswbc::DragonPart{p, controller.get_id(), controller.get_team(),
+                                                  controller.get_dir(), false};
+        }
+    };
+    for (std::size_t i = 1; i < after.body.size(); ++i) { block(after.body[i]); }
+    for (auto const p : after.unranked_body) { block(p); }
+    auto const target = after.body.front();
+    auto enemies = std::vector<unswbc::DragonPart>{};
+    auto has_portal = false;
+    for (auto const& tile : view.get_tiles()) {
+        auto const* part = tile.get_dragon();
+        if (part != nullptr && part->is_head() && part->get_team() != controller.get_team()
+            && part->get_id() > controller.get_id()) { enemies.push_back(*part); }
+        for (auto const d : unswbc::Direction::get_direction_list()) {
+            has_portal = has_portal || tile.get_edge(d).is_portal();
+        }
+    }
+    std::stable_sort(enemies.begin(), enemies.end(), [&](auto const& a, auto const& b) {
+        return geometry::toroidal_manhattan(a.get_position(), target, world.width(), world.height())
+             < geometry::toroidal_manhattan(b.get_position(), target, world.width(), world.height());
+    });
+    auto budget = config::response_node_budget;
+    auto const simulation = Simulation{};
+    for (auto const& enemy : enemies) {
+        if (!has_portal && geometry::toroidal_manhattan(enemy.get_position(), target,
+                world.width(), world.height()) > config::response_step_limit) { continue; }
+        auto observed = 0;
+        for (auto const& tile : view.get_tiles()) {
+            observed += tile.dragon_part && tile.dragon_part->get_id() == enemy.get_id();
+        }
+        auto opponent = view;
+        opponent.head = enemy;
+        // Missing segments can fund a short attack. Keep this envelope separate
+        // from funding established by observed length and intermediate food.
+        opponent.length = std::max(5, observed + 2);
+        auto const invented = opponent.length - std::max(unswbc::Constants::MIN_SIZE, observed);
+        struct Node { SimulationState state; int steps; bool funded; };
+        auto queue = std::vector<Node>{{simulation.initial_state(opponent, &world), 0, true}};
+        auto enemy_budget = 64;
+        for (std::size_t cursor = 0; cursor < queue.size(); ++cursor) {
+            auto const node = queue[cursor];
+            if (node.steps >= config::response_step_limit) { continue; }
+            for (auto const d : unswbc::Direction::get_direction_list()) {
+                // Always check every visible enemy's immediate attack, even
+                // after another search consumed the shared continuation budget.
+                if (node.steps > 0 && (budget-- <= 0 || enemy_budget-- <= 0)) { break; }
+                auto next = simulation.advance(opponent, node.state, d, node.steps > 0, &world);
+                if (!next) { continue; }
+                auto const steps = node.steps + 1;
+                auto const funded = node.funded && (node.steps < Simulation::free_steps(
+                    std::max(unswbc::Constants::MIN_SIZE, observed))
+                    || static_cast<int>(node.state.body.size()) - invented > unswbc::Constants::MIN_SIZE);
+                if (next->body.front() == target) {
+                    if (result.possible_steps == 0 || steps < result.possible_steps) { result.possible_steps = steps; }
+                    if (funded && (result.funded_steps == 0 || steps < result.funded_steps)) { result.funded_steps = steps; }
+                    continue;
+                }
+                if (budget > 0 && enemy_budget > 0) { queue.push_back({std::move(*next), steps, funded}); }
+            }
+        }
+    }
+    return result;
+}
+
 auto Combat::interception_distances(unswbc::Controller const& controller,
                                      WorldModel const& world, int round, Role role) const -> std::vector<int> {
     auto distances = std::vector<int>(static_cast<std::size_t>(world.width() * world.height()), -1);

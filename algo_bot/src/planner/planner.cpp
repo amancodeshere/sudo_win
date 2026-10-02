@@ -130,20 +130,28 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         auto const& threat = threats[static_cast<std::size_t>(destination.y * world.width() + destination.x)];
         candidate.combat_score = threat.score * (role == Role::queen ? 3
             : role == Role::champion ? config::score_champion_risk_multiplier : 1);
+        auto const protected_unit = role == Role::queen || role == Role::champion || controller.get_unit_count() == 1;
+        auto const response = config::enable_response_defense && protected_unit
+            ? combat_.response_threat(controller, next, world) : ResponseThreat{};
         auto const threatened = threat.level == ThreatLevel::direct
             || ((role == Role::queen || controller.get_unit_count() == 1)
                 && threat.later_affordable_steps > 0 && threat.later_affordable_steps <= 3)
-            || (funded_sprint_priority_ && threat.affordable_steps > 0 && threat.affordable_steps <= 2);
+            || (funded_sprint_priority_ && threat.affordable_steps > 0 && threat.affordable_steps <= 2)
+            || response.funded_steps > 0;
+        auto const uncertain_attack = response.possible_steps > 0 && response.possible_steps <= 3;
+        if (response.possible_steps > 0) {
+            candidate.combat_score -= (6 - response.possible_steps) * 10000;
+        }
         auto const entry_trap = steps.size() == 1 && survival < config::survival_search_depth
             && simulation.sealed_entry_pocket(next, world);
         auto const sealed_pocket = config::enable_pocket_priority && !mobility.open_frontier
             && mobility.area < static_cast<int>(next.body.size())
             && simulation.sealed_entry_pocket(next, world);
-        auto const safety_class = survival == 0 ? 0 : (threatened || sealed_pocket) ? 1 : 2;
+        auto const safety_class = survival == 0 ? 0 : (threatened || sealed_pocket) ? 1 : uncertain_attack ? 2 : 3;
         auto const improves_safety = safety_class > best_safety_class
             || (safety_class == best_safety_class && survival > best_survival && best_sealed_entry);
         auto const releases_queen = config::enable_queen_release && controller.get_id() > 1
-            && controller.get_length() <= 4 && controller.get_unit_count() > 1 && safety_class == 2
+            && controller.get_length() <= 4 && controller.get_unit_count() > 1 && safety_class == 3
             && survival == config::survival_search_depth
             && std::any_of(initial.body.begin(), initial.body.end(), [&](auto const p) {
                 return p.x >= 0 && p.y >= 0

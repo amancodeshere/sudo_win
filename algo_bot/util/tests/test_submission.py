@@ -42,6 +42,7 @@ class SubmissionTests(unittest.TestCase):
                                   ("no-tail-clearance", "enable_tail_clearance"),
                                   ("no-queen-release", "enable_queen_release"),
                                   ("no-champion-retention", "enable_champion_retention"),
+                                  ("no-response-defense", "enable_response_defense"),
                                   ("no-sprint", "enable_sprinting")):
                 ablation = submission.prepare(BOT, root / profile, profile)
                 differences = [key for key in stable["effective_flags"]

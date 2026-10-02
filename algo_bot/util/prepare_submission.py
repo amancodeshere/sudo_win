@@ -32,6 +32,7 @@ PROFILES["no-interception"] = {**PROFILES["stable"], "enable_interception": Fals
 PROFILES["no-tail-clearance"] = {**PROFILES["stable"], "enable_tail_clearance": False}
 PROFILES["no-queen-release"] = {**PROFILES["stable"], "enable_queen_release": False}
 PROFILES["no-champion-retention"] = {**PROFILES["stable"], "enable_champion_retention": False}
+PROFILES["no-response-defense"] = {**PROFILES["stable"], "enable_response_defense": False}
 PROFILES["growth"] = {**PROFILES["stable"]}  # retained CLI alias
 PROFILES["combat"] = {**PROFILES["stable"], "enable_favourable_trades": True}
 PROFILES["experimental"] = {**PROFILES["stable"], "enable_splitting": True,

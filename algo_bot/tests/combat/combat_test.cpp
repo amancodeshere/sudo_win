@@ -2,10 +2,53 @@
 
 #include "sudo_win/config/config.h"
 #include "sudo_win/world/world_model.h"
+#include "sudo_win/planner/simulation.h"
 
 #include "../engine_fixture.h"
 
 #include <catch2/catch.hpp>
+
+TEST_CASE("enemy responses use the proposed queen occupancy and partial length envelope") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.length = 3;
+    fixture.tile({5,5}).dragon_part = fixture.controller.head;
+    fixture.tile({5,6}).dragon_part = unswbc::DragonPart{{5,6},0,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    fixture.tile({4,6}).dragon_part = unswbc::DragonPart{{4,6},0,unswbc::Team::A,unswbc::Direction::EAST,false};
+    auto after = sudo_win::SimulationState{};
+    after.body = {{4,6},{4,5}};
+    fixture.tile({3,6}).dragon_part = unswbc::DragonPart{{3,6},7,unswbc::Team::B,unswbc::Direction::EAST,true};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto combat = sudo_win::Combat{};
+    SECTION("a head landing on its departing tail is not shielded by old occupancy") {
+        CHECK(combat.threats(fixture.controller,&world)[64].level == sudo_win::ThreatLevel::none);
+        auto const response = combat.response_threat(fixture.controller,after,world);
+        CHECK(response.funded_steps == 1);
+        CHECK(response.possible_steps == 1);
+    }
+    SECTION("retained neck segments still obstruct enemy responses") {
+        after.body = {{5,6},{4,6}};
+        auto const response = combat.response_threat(fixture.controller,after,world);
+        CHECK(response.funded_steps == 0);
+        CHECK(response.possible_steps != 2);
+    }
+    SECTION("an earlier enemy is not given a second turn after our action") {
+        fixture.controller.head.dragon_id = 9;
+        CHECK(combat.response_threat(fixture.controller,after,world).possible_steps == 0);
+    }
+    SECTION("a partial enemy can threaten three steps without certified funding") {
+        after.body = {{6,6},{6,5}};
+        auto const response = combat.response_threat(fixture.controller,after,world);
+        CHECK(response.possible_steps == 3);
+        CHECK(response.funded_steps == 0);
+    }
+    SECTION("stationary split parents remain attackable") {
+        after.body = {{5,5},{5,6}};
+        after.unranked_body = {{4,6}};
+        fixture.tile({4,5}).dragon_part = unswbc::DragonPart{{4,5},8,unswbc::Team::B,unswbc::Direction::EAST,true};
+        CHECK(combat.response_threat(fixture.controller,after,world).funded_steps == 1);
+    }
+}
 
 TEST_CASE("combat risk scoring") {
     auto fixture = sudo_win::test::EngineFixture{};

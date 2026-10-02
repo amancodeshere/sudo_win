@@ -232,6 +232,12 @@ auto SplittingPolicy::rescue(unswbc::Controller const& controller,
                 if (!parent_safe) {
                     continue;
                 }
+                if (config::enable_response_defense) {
+                    auto const response = Combat{}.response_threat(controller, parent, world);
+                    if (response.funded_steps > 0 || (response.possible_steps > 0 && response.possible_steps <= 3)) {
+                        continue;
+                    }
+                }
             }
             best_depth = depth;
             best = PlannedAction{};

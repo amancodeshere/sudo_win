@@ -1,0 +1,11 @@
+# Live replay upgrades — implementation progress
+
+Baseline: `c17d014`, uploaded submission 14744 (`bot bot v4`), frozen sources in `build/submission-competition-v6-final`. The 81-game assessment is `LIVE_V4_LEADER_REVIEW.md`.
+
+The authorized work is five separately validated priorities: candidate-specific enemy-response defense; productive early expansion; portal income and exploration; durable secondary champions; movement economics. Each stage will have a source snapshot, functional regressions, a comparison with its predecessor, and a separate `aman/feat: ...` commit. Final integration will compare with the exact uploaded baseline on current maps and verify metered CPU, rule conformance and deterministic packaging. Source changes do not imply a new upload.
+
+## 1. Enemy responses — complete
+
+Added a bounded response search for later-moving visible enemies on the proposed body's resulting occupancy. Retained neck and split-child cells still block; departing cells no longer falsely shield the destination. Visible funding and a bounded partial-length uncertainty envelope remain distinct. Protected units rank short uncertain attacks below clear endpoints, and funded attacks below both. Queen rescue checks stationary parents with the same response model. Search is limited to five steps and a shared 160-node continuation budget per candidate, with immediate attacks checked for every visible enemy. The `no-response-defense` profile isolates this change.
+
+Release and ASan/UBSan pass **70 cases / 465 assertions**, including three observed live attacks (Stripes 864982, Slithery Fight 865145, Tower Defense 864983). Sixteen Python tests pass, including the isolated ablation. Frozen snapshot `build/live-v7-stage1-defense`: native seed 801, Portals / Autarky / Slithery Fight / Default, both colours, **4–4**, zero candidate errors (`live-v7-stage1-native8-complete`). The frozen opponent had one recorded error. Metered Slithery Fight seed 802, both colours, **2–0**, zero errors and peak **46,524,504 / 100,000,000** (`live-v7-stage1-sandbox2`). Both queens still die on that opening map; these wins do not establish improved queen survival against leaders. The first native attempt stopped after four games because the host's file-descriptor limit was too small; its partial results are excluded. Subsequent benchmark commands use `ulimit -n 4096`.

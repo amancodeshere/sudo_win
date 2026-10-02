@@ -9,6 +9,57 @@
 #include <fstream>
 #include <sstream>
 
+TEST_CASE("live leader queen attacks are recognized after the recorded action") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    auto file = std::string{};
+    auto steps = std::vector<unswbc::Direction>{};
+    auto split = 0;
+    auto funded = true;
+    SECTION("Stripes game 864982 exposes the vacated tail to a one-step attack") {
+        fixture.game.width = 24; fixture.game.height = 12;
+        file = "stripes_queen_response";
+        steps = {unswbc::Direction::NORTH,unswbc::Direction::WEST};
+    }
+    SECTION("Slithery game 865145 includes a three-step partial-body attack") {
+        fixture.game.width = 63; fixture.game.height = 27;
+        fixture.controller.head.dragon_id = 1;
+        file = "slithery_queen_response";
+        steps = {unswbc::Direction::NORTH};
+        funded = false;
+    }
+    SECTION("Tower game 864983 exposes a stationary split parent") {
+        fixture.game.width = 32; fixture.game.height = 16;
+        fixture.controller.head.dragon_id = 1;
+        file = "tower_queen_split_response";
+        split = 7;
+    }
+    auto input = std::ifstream{std::string{SUDO_WIN_TEST_SOURCE_DIR} + "/replays/" + file + ".txt"};
+    REQUIRE(input.good());
+    auto* previous = std::cin.rdbuf(input.rdbuf());
+    bool updated = false;
+    try { updated = unswbc::update(fixture.controller,fixture.game); }
+    catch (...) { std::cin.rdbuf(previous); throw; }
+    std::cin.rdbuf(previous);
+    REQUIRE(updated);
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto state = sudo_win::Simulation{}.initial_state(fixture.controller,&world);
+    if (split > 0) {
+        state.unranked_body.assign(state.body.rbegin(),state.body.rbegin() + split);
+        state.body.resize(state.body.size() - static_cast<std::size_t>(split));
+    } else {
+        for (std::size_t i = 0; i < steps.size(); ++i) {
+            auto const next = sudo_win::Simulation{}.advance(fixture.controller,state,steps[i],i > 0,&world);
+            REQUIRE(next);
+            state = *next;
+        }
+    }
+    auto const response = sudo_win::Combat{}.response_threat(fixture.controller,state,world);
+    REQUIRE(response.possible_steps > 0);
+    CHECK(response.possible_steps <= 3);
+    CHECK((response.funded_steps > 0) == funded);
+}
+
 TEST_CASE("baseline planner") {
     auto fixture = sudo_win::test::EngineFixture{};
     fixture.tile({6, 5}).pearl = true;
