@@ -75,7 +75,10 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         auto const& threat = threats[static_cast<std::size_t>(destination.y * world.width() + destination.x)];
         candidate.combat_score = threat.score * (role == Role::champion ? config::score_champion_risk_multiplier : 1);
         auto const threatened = threat.level == ThreatLevel::direct;
-        auto const safety_class = survival == 0 ? 0 : threatened ? 1 : 2;
+        auto const sealed_pocket = !mobility.open_frontier
+            && mobility.area < static_cast<int>(next.body.size())
+            && simulation.sealed_entry_pocket(next, world);
+        auto const safety_class = survival == 0 ? 0 : (threatened || sealed_pocket) ? 1 : 2;
         if (sprint && length_gain < 0 && safety_class <= best_safety_class) {
             return;
         }

@@ -1,6 +1,7 @@
 #include "../../include/sudo_win/planner/simulation.h"
 #include "../../include/sudo_win/world/world_model.h"
 #include "../../include/sudo_win/config/config.h"
+#include "../../include/sudo_win/geometry/geometry.h"
 
 #include <algorithm>
 
@@ -195,6 +196,45 @@ auto Simulation::remembered_mobility(unswbc::Controller const& controller,
     // A bounded flood fill is a lower bound, never proof of a closed pocket.
     frontier = frontier || queue.size() > config::mobility_node_budget;
     return {static_cast<int>(std::min(queue.size(), static_cast<std::size_t>(config::mobility_node_budget))), frontier};
+}
+
+auto Simulation::sealed_entry_pocket(SimulationState const& state,
+                                      WorldModel const& world) const -> bool {
+    if (state.body.size() < 3 || !state.unranked_body.empty()
+        || std::any_of(state.body.begin(), state.body.end(), [](auto p) { return p.x < 0 || p.y < 0; })) {
+        return false;
+    }
+    // The neck seals the entrance until the tail reaches it. Ignore other
+    // dragons: their movement must never be mistaken for a permanent wall.
+    auto queue = std::vector<unswbc::Position>{state.body.front()};
+    for (std::size_t cursor = 0; cursor < queue.size(); ++cursor) {
+        for (auto const direction : unswbc::Direction::get_direction_list()) {
+            auto const& edge = world.cell(queue[cursor]).edges[geometry::direction_index(direction)];
+            if (!edge.seen) {
+                return false;
+            }
+            if (edge.type == unswbc::EdgeType::KELP) {
+                continue;
+            }
+            auto const next = world.transition(queue[cursor], direction);
+            if (!next || !world.has_seen(*next)) {
+                return false;
+            }
+            if (*next == state.body[1] || contains(queue, *next)) {
+                continue;
+            }
+            // Existing tail segments inside the chamber can vacate during
+            // movement; the entrance-capacity estimate does not apply.
+            if (contains(state.body, *next)) {
+                return false;
+            }
+            queue.push_back(*next);
+            if (queue.size() >= state.body.size()) {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 } // namespace sudo_win

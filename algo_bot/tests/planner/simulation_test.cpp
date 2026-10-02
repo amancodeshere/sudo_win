@@ -3,6 +3,51 @@
 #include "../engine_fixture.h"
 #include <catch2/catch.hpp>
 
+TEST_CASE("entrance pockets distinguish permanent walls from moving tail space") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    auto state = sudo_win::SimulationState{};
+    state.body = {{6,5},{5,5},{5,6},{4,6},{4,5}};
+    for (auto const direction : {unswbc::Direction::NORTH, unswbc::Direction::EAST,
+                                 unswbc::Direction::SOUTH}) {
+        fixture.tile({6,5}).get_edge(direction) = unswbc::Edge{false, unswbc::EdgeType::KELP};
+    }
+    auto const trapped = [&] {
+        auto world = sudo_win::WorldModel{fixture.game};
+        world.update(fixture.controller, fixture.game);
+        return sudo_win::Simulation{}.sealed_entry_pocket(state, world);
+    };
+    SECTION("the neck seals a chamber too small for the snake") {
+        CHECK(trapped());
+    }
+    SECTION("an open exit prevents a sealed chamber estimate") {
+        fixture.tile({6,5}).get_edge(unswbc::Direction::EAST) = unswbc::Edge{};
+        CHECK_FALSE(trapped());
+    }
+    SECTION("a tail inside the chamber can vacate") {
+        fixture.tile({6,5}).get_edge(unswbc::Direction::NORTH) = unswbc::Edge{};
+        state.body.back() = {6,4};
+        CHECK_FALSE(trapped());
+    }
+    SECTION("incomplete body order cannot certify a pocket") {
+        state.body.back() = {-1,-1};
+        CHECK_FALSE(trapped());
+    }
+    SECTION("a missing portal partner remains uncertain") {
+        fixture.tile({6,5}).get_edge(unswbc::Direction::EAST)
+            = unswbc::Edge{false, unswbc::EdgeType::PORTAL, 3};
+        CHECK_FALSE(trapped());
+    }
+    SECTION("an exit into unseen terrain is not a sealed chamber") {
+        fixture.tile({6,5}).get_edge(unswbc::Direction::NORTH) = unswbc::Edge{};
+        auto tiles = fixture.controller.vision.tiles;
+        tiles.erase(std::remove_if(tiles.begin(), tiles.end(), [](auto const& tile) {
+            return tile.get_position() == unswbc::Position{6,4};
+        }), tiles.end());
+        fixture.controller.vision = unswbc::Vision{std::move(tiles)};
+        CHECK_FALSE(trapped());
+    }
+}
+
 TEST_CASE("body simulation follows collision growth and sprint ordering") {
     auto fixture = sudo_win::test::EngineFixture{};
     for (auto const position : {unswbc::Position{5, 6}, unswbc::Position{5, 7}}) {

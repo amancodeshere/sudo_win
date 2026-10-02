@@ -45,6 +45,8 @@ public:
     [[nodiscard]] auto remembered_mobility(unswbc::Controller const& controller,
                                            SimulationState const& state,
                                            WorldModel const& world) const -> MobilityEstimate;
+    [[nodiscard]] auto sealed_entry_pocket(SimulationState const& state,
+                                          WorldModel const& world) const -> bool;
 };
 
 } // namespace sudo_win
