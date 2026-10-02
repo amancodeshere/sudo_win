@@ -23,7 +23,7 @@ auto Bot::execute_turn(unswbc::Controller& controller, unswbc::Game const& game)
         if (!config::enable_sonar) {
             break;
         }
-        auto const message = sonar_.decode(payload, game.get_round_num());
+        auto const message = sonar_.decode(payload, game.get_round_num(), static_cast<char>(controller.get_team().value));
         if (!message.has_value()) {
             continue;
         }
@@ -78,7 +78,7 @@ auto Bot::execute_turn(unswbc::Controller& controller, unswbc::Game const& game)
             }
         }
         if (report && sonar_.can_encode(*report)) {
-            report_payload = sonar_.encode(*report);
+            report_payload = sonar_.encode(*report, static_cast<char>(controller.get_team().value));
         }
     }
     world_.remember_action(controller, game, action);

@@ -17,8 +17,8 @@ auto SonarCodec::can_encode(TeamMessage const& message) const -> bool {
         && static_cast<unsigned>(message.type) <= 7;
 }
 
-auto SonarCodec::encode(TeamMessage const& message) const -> std::uint64_t {
-    if (!can_encode(message)) {
+auto SonarCodec::encode(TeamMessage const& message, char team) const -> std::uint64_t {
+    if (!can_encode(message) || (team != 'A' && team != 'B')) {
         throw std::invalid_argument{"sonar fields exceed wire bounds"};
     }
     auto body = std::uint64_t{0};
@@ -28,13 +28,13 @@ auto SonarCodec::encode(TeamMessage const& message) const -> std::uint64_t {
     body |= static_cast<std::uint64_t>(message.type) << 21U;
     body |= static_cast<std::uint64_t>(message.sender_id) << 24U;
     body |= static_cast<std::uint64_t>(message.value) << 37U;
-    return body | (static_cast<std::uint64_t>(tag(body)) << 48U);
+    return body | (static_cast<std::uint64_t>(tag(body, team)) << 48U);
 }
 
-auto SonarCodec::decode(std::uint64_t payload, int current_round) const -> std::optional<TeamMessage> {
+auto SonarCodec::decode(std::uint64_t payload, int current_round, char team) const -> std::optional<TeamMessage> {
     auto const body = payload & body_mask;
     auto const supplied_tag = static_cast<std::uint16_t>(payload >> 48U);
-    if (supplied_tag != tag(body)) {
+    if ((team != 'A' && team != 'B') || supplied_tag != tag(body, team)) {
         return std::nullopt;
     }
 
@@ -55,14 +55,14 @@ auto SonarCodec::decode(std::uint64_t payload, int current_round) const -> std::
     return message;
 }
 
-auto SonarCodec::tag(std::uint64_t body) const -> std::uint16_t {
-    auto mixed = body ^ config::sonar_secret;
+auto SonarCodec::tag(std::uint64_t body, char team) const -> std::uint16_t {
+    auto mixed = body ^ config::sonar_secret ^ (team == 'B' ? 0x9E3779B97F4A7C15ULL : 0ULL);
     mixed ^= mixed >> 30U;
     mixed *= 0xBF58476D1CE4E5B9ULL;
     mixed ^= mixed >> 27U;
     mixed *= 0x94D049BB133111EBULL;
     mixed ^= mixed >> 31U;
-    return static_cast<std::uint16_t>(mixed);
+    return static_cast<std::uint16_t>((mixed & 0x7FFFULL) | (team == 'B' ? 0x8000ULL : 0ULL));
 }
 
 } // namespace sudo_win

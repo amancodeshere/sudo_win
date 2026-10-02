@@ -31,11 +31,11 @@ struct TeamMessage {
 class SonarCodec {
 public:
     [[nodiscard]] auto can_encode(TeamMessage const& message) const -> bool;
-    [[nodiscard]] auto encode(TeamMessage const& message) const -> std::uint64_t;
-    [[nodiscard]] auto decode(std::uint64_t payload, int current_round) const -> std::optional<TeamMessage>;
+    [[nodiscard]] auto encode(TeamMessage const& message, char team = 'A') const -> std::uint64_t;
+    [[nodiscard]] auto decode(std::uint64_t payload, int current_round, char team = 'A') const -> std::optional<TeamMessage>;
 
 private:
-    [[nodiscard]] auto tag(std::uint64_t body) const -> std::uint16_t;
+    [[nodiscard]] auto tag(std::uint64_t body, char team) const -> std::uint16_t;
 };
 
 } // namespace sudo_win

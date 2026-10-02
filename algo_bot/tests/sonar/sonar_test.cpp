@@ -22,6 +22,19 @@ TEST_CASE("sonar codec") {
     }
 }
 
+TEST_CASE("sonar reports distinguish teammates from a mirrored opponent bot") {
+    auto codec = sudo_win::SonarCodec{};
+    auto const report = sudo_win::TeamMessage{sudo_win::MessageType::champion, 10, 1, 5, 5, 20};
+    auto const a = codec.encode(report,'A');
+    auto const b = codec.encode(report,'B');
+    REQUIRE(a != b);
+    CHECK(codec.decode(a,11,'A'));
+    CHECK(codec.decode(b,11,'B'));
+    CHECK_FALSE(codec.decode(a,11,'B'));
+    CHECK_FALSE(codec.decode(b,11,'A'));
+    CHECK_FALSE(codec.decode(a,11,'C'));
+}
+
 TEST_CASE("sonar wire format preserves large identities and rejects field truncation") {
     auto codec = sudo_win::SonarCodec{};
     auto message = sudo_win::TeamMessage{sudo_win::MessageType::portal, 511, 4097, 63, 63, 2047};
