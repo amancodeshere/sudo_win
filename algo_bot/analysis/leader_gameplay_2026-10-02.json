@@ -1,0 +1,6667 @@
+{
+  "study": {
+    "captured_at": "2026-10-02T05:18:27.375163+00:00",
+    "leaders": [
+      {
+        "id": 213,
+        "name": "Sponge(Albert and Bob)",
+        "elo": 2052
+      },
+      {
+        "id": 91,
+        "name": "SSS",
+        "elo": 2014
+      },
+      {
+        "id": 264,
+        "name": "forgot to mention",
+        "elo": 1995
+      },
+      {
+        "id": 842,
+        "name": "horse",
+        "elo": 1994
+      },
+      {
+        "id": 306,
+        "name": "Cutlery",
+        "elo": 1992
+      }
+    ]
+  },
+  "method": "Event reconstruction of 79 public leader replays and 34 current-map native matches; final count, total length and longest length checked against engine result for every replay. Rates are descriptive, with different opponents and map mixes. v5 is not uploaded.",
+  "leader_summary": {
+    "Sponge(Albert and Bob)": {
+      "games": 25,
+      "wins": 16,
+      "queen_survived": 7,
+      "median_peak_population": 39,
+      "median_round100_population": 18.5,
+      "pearls_per_1000_turns": 66.58,
+      "portal_crossings_per_1000_turns": 9.05,
+      "declared_paid_steps_per_1000_turns": 2.08,
+      "totals": {
+        "turns": 263986,
+        "pearls": 17575,
+        "queen_pearls": 504,
+        "queen_turns": 5962,
+        "queen_declared_paid_steps": 1,
+        "declared_paid_steps": 548,
+        "sprints": 10343,
+        "split_actions": 5416,
+        "children_created": 5416,
+        "children_dead_within_5_turns": 935,
+        "queen_splits": 165,
+        "portal_crossings": 2388,
+        "queen_portal_crossings": 13,
+        "sonar_beams": 418447,
+        "sonar_ally_head_hits": 34899,
+        "suicides": 1084,
+        "timeouts": 0
+      }
+    },
+    "SSS": {
+      "games": 27,
+      "wins": 13,
+      "queen_survived": 7,
+      "median_peak_population": 49,
+      "median_round100_population": 24,
+      "pearls_per_1000_turns": 63.4,
+      "portal_crossings_per_1000_turns": 6.44,
+      "declared_paid_steps_per_1000_turns": 6.86,
+      "totals": {
+        "turns": 354709,
+        "pearls": 22487,
+        "queen_pearls": 377,
+        "queen_turns": 6403,
+        "queen_declared_paid_steps": 6,
+        "declared_paid_steps": 2433,
+        "sprints": 28558,
+        "split_actions": 6706,
+        "children_created": 6706,
+        "children_dead_within_5_turns": 892,
+        "queen_splits": 87,
+        "portal_crossings": 2284,
+        "queen_portal_crossings": 9,
+        "sonar_beams": 1156775,
+        "sonar_ally_head_hits": 147610,
+        "suicides": 415,
+        "timeouts": 0
+      }
+    },
+    "forgot to mention": {
+      "games": 10,
+      "wins": 7,
+      "queen_survived": 2,
+      "median_peak_population": 33.5,
+      "median_round100_population": 25,
+      "pearls_per_1000_turns": 91.77,
+      "portal_crossings_per_1000_turns": 5.39,
+      "declared_paid_steps_per_1000_turns": 3.89,
+      "totals": {
+        "turns": 92731,
+        "pearls": 8510,
+        "queen_pearls": 53,
+        "queen_turns": 1224,
+        "queen_declared_paid_steps": 3,
+        "declared_paid_steps": 361,
+        "sprints": 5505,
+        "split_actions": 2612,
+        "children_created": 2612,
+        "children_dead_within_5_turns": 516,
+        "queen_splits": 40,
+        "portal_crossings": 500,
+        "queen_portal_crossings": 4,
+        "sonar_beams": 163131,
+        "sonar_ally_head_hits": 14191,
+        "suicides": 1675,
+        "timeouts": 0
+      }
+    },
+    "horse": {
+      "games": 44,
+      "wins": 28,
+      "queen_survived": 11,
+      "median_peak_population": 50.5,
+      "median_round100_population": 24.0,
+      "pearls_per_1000_turns": 73.76,
+      "portal_crossings_per_1000_turns": 7.5,
+      "declared_paid_steps_per_1000_turns": 2.61,
+      "totals": {
+        "turns": 468625,
+        "pearls": 34564,
+        "queen_pearls": 365,
+        "queen_turns": 6140,
+        "queen_declared_paid_steps": 0,
+        "declared_paid_steps": 1223,
+        "sprints": 20176,
+        "split_actions": 10475,
+        "children_created": 10475,
+        "children_dead_within_5_turns": 1828,
+        "queen_splits": 154,
+        "portal_crossings": 3515,
+        "queen_portal_crossings": 36,
+        "sonar_beams": 1380407,
+        "sonar_ally_head_hits": 139236,
+        "suicides": 0,
+        "timeouts": 0
+      }
+    },
+    "Cutlery": {
+      "games": 27,
+      "wins": 11,
+      "queen_survived": 6,
+      "median_peak_population": 17,
+      "median_round100_population": 9,
+      "pearls_per_1000_turns": 86.69,
+      "portal_crossings_per_1000_turns": 11.73,
+      "declared_paid_steps_per_1000_turns": 4.35,
+      "totals": {
+        "turns": 251853,
+        "pearls": 21834,
+        "queen_pearls": 606,
+        "queen_turns": 6253,
+        "queen_declared_paid_steps": 31,
+        "declared_paid_steps": 1096,
+        "sprints": 19721,
+        "split_actions": 11702,
+        "children_created": 6786,
+        "children_dead_within_5_turns": 1484,
+        "queen_splits": 36,
+        "portal_crossings": 2954,
+        "queen_portal_crossings": 14,
+        "sonar_beams": 595518,
+        "sonar_ally_head_hits": 63681,
+        "suicides": 0,
+        "timeouts": 0
+      }
+    }
+  },
+  "candidate_summary": {
+    "games": 34,
+    "wins": 18,
+    "queen_survived": 7,
+    "median_peak_population": 27.5,
+    "median_round100_population": 4.0,
+    "pearls_per_1000_turns": 55.47,
+    "portal_crossings_per_1000_turns": 1.31,
+    "declared_paid_steps_per_1000_turns": 10.86,
+    "totals": {
+      "turns": 236508,
+      "pearls": 13118,
+      "queen_pearls": 495,
+      "queen_turns": 9132,
+      "queen_declared_paid_steps": 38,
+      "declared_paid_steps": 2569,
+      "sprints": 17662,
+      "split_actions": 3264,
+      "children_created": 3264,
+      "children_dead_within_5_turns": 516,
+      "queen_splits": 39,
+      "portal_crossings": 310,
+      "queen_portal_crossings": 40,
+      "sonar_beams": 227250,
+      "sonar_ally_head_hits": 21412,
+      "suicides": 0,
+      "timeouts": 0
+    }
+  },
+  "current_maps": [
+    {
+      "id": 9,
+      "name": "Schooltime",
+      "sizeLabel": "60\u00d740",
+      "active": true,
+      "private": false,
+      "sha256": "5b9481d0c65454b6d0a6747a581c582414cba37dd99273cc5a23dbca63b31724"
+    },
+    {
+      "id": 20,
+      "name": "Portals",
+      "sizeLabel": "32\u00d716",
+      "active": true,
+      "private": false,
+      "sha256": "56341e6577da7429efb6f33b64b79b0c4223c4fbd9df995713ad781bead5f423"
+    },
+    {
+      "id": 21,
+      "name": "Slithery Fight",
+      "sizeLabel": "63\u00d727",
+      "active": true,
+      "private": false,
+      "sha256": "001f3501dc5b76cb35b796f03fcaaed6c90be34741b5da03ab061ba0908347e7"
+    },
+    {
+      "id": 7,
+      "name": "Queen Of Spades",
+      "sizeLabel": "25\u00d735",
+      "active": true,
+      "private": false,
+      "sha256": "126d71b46443268596285918d910b7f8d875bf3028ca9c5ff6bad97b4e868938"
+    },
+    {
+      "id": 32,
+      "name": "Stripes",
+      "sizeLabel": "24\u00d712",
+      "active": true,
+      "private": false,
+      "sha256": "31b22a24c467edb146f8c6fc291beccce1493617d90ff5bb6eff538c3af24715"
+    },
+    {
+      "id": 4,
+      "name": "Default",
+      "sizeLabel": "32\u00d732",
+      "active": true,
+      "private": false,
+      "sha256": "42d4766ffede5f445692b119a26a6eee687fdc63b5b86776fefdf7fd755789b8"
+    },
+    {
+      "id": 33,
+      "name": "Tower Defense",
+      "sizeLabel": "32\u00d716",
+      "active": true,
+      "private": false,
+      "sha256": "1f097251f44508a5db71c691a361362052934817e99a8975a2521bcaf81c9725"
+    },
+    {
+      "id": 30,
+      "name": "Islands",
+      "sizeLabel": "56\u00d740",
+      "active": true,
+      "private": false,
+      "sha256": "8a403c0aa6c7affc53ee27283fed1568840bb82517c9d7eb59c69462f66d5fb6"
+    },
+    {
+      "id": 34,
+      "name": "Around UNSW",
+      "sizeLabel": "64\u00d764",
+      "active": true,
+      "private": false,
+      "sha256": "ea443f10a63c1a37521cfef814b2e9316acf5e56f29e74b9e2c20987ccd0b72a"
+    },
+    {
+      "id": 11,
+      "name": "Trophy",
+      "sizeLabel": "25\u00d725",
+      "active": true,
+      "private": false,
+      "sha256": "4f84e990688c1e96ee4c2a7ff0706e4b44f4ee63531dd5c5582cf9157b134fb1"
+    },
+    {
+      "id": 28,
+      "name": "weakhold",
+      "sizeLabel": "40\u00d715",
+      "active": true,
+      "private": false,
+      "sha256": "4cf0e4e57c12fd4dfbd2ad997e29994e736dd5d8eca1e0f3353e3020d94b08c1"
+    },
+    {
+      "id": 31,
+      "name": "Maze",
+      "sizeLabel": "48\u00d724",
+      "active": true,
+      "private": false,
+      "sha256": "f154114e3ed9d39efd8516529acf8462328866b1580662228ff35dedd3cd3bdf"
+    },
+    {
+      "id": 17,
+      "name": "Prisoners Dilemma",
+      "sizeLabel": "32\u00d716",
+      "active": true,
+      "private": false,
+      "sha256": "fd02547854cbcbe36274d4341900610ba1aa1caa35e553c38135def95e0db68d"
+    },
+    {
+      "id": 29,
+      "name": "Australia",
+      "sizeLabel": "64\u00d764",
+      "active": true,
+      "private": false,
+      "sha256": "7fccdee8a73a971bc3dc7a07b13aa56bb214f311249b942869bcc9708084d539"
+    },
+    {
+      "id": 19,
+      "name": "Autarky",
+      "sizeLabel": "54\u00d718",
+      "active": true,
+      "private": false,
+      "sha256": "c622b9afe8fea2d034999511f07fc561a4e5e7120615f0f9bf454b3f27fc0a16"
+    },
+    {
+      "id": 13,
+      "name": "Devil",
+      "sizeLabel": "32\u00d716",
+      "active": true,
+      "private": false,
+      "sha256": "a09e8f2d3bdd1e40fad31a0ecdf00166cd1090c232c56dcc2557729de737f6aa"
+    },
+    {
+      "id": 15,
+      "name": "Trauma",
+      "sizeLabel": "48\u00d724",
+      "active": true,
+      "private": false,
+      "sha256": "dcf39d713c060e5ded2d031a7ffe1a27ea60fe4b72ff8fb3fffbabc4f81e2066"
+    }
+  ],
+  "native_summary": {
+    "outcomes": {
+      "loss": 16,
+      "win": 18
+    },
+    "matches": 34,
+    "passed": true,
+    "mode": "native-unmetered",
+    "max_points": 0,
+    "candidate_max_points": 0,
+    "candidate_errors": 0,
+    "opponent_errors": 0,
+    "median_rounds": 500.0,
+    "candidate_actions": {
+      "split": 3264,
+      "split_segments": 10841,
+      "move": 215582,
+      "movement_steps": 257510,
+      "sprint": 17662
+    },
+    "verified_head_trades": 28
+  },
+  "large_map_sandbox_summary": {
+    "outcomes": {
+      "win": 2,
+      "loss": 2
+    },
+    "matches": 4,
+    "passed": true,
+    "mode": "sandbox",
+    "max_points": 65000985,
+    "candidate_max_points": 65000985,
+    "candidate_errors": 0,
+    "opponent_errors": 0,
+    "median_rounds": 500.0,
+    "candidate_actions": {
+      "move": 51297,
+      "movement_steps": 61075,
+      "split": 480,
+      "split_segments": 1611,
+      "sprint": 4095
+    },
+    "verified_head_trades": 2
+  },
+  "candidate_queen_blockers": [
+    {
+      "game": "2-21-501-0-0",
+      "map": "Slithery Fight",
+      "round": 1,
+      "reason": "O",
+      "blocker": "ally",
+      "blocker_id": "14",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "2-21-501-1-0",
+      "map": "Slithery Fight",
+      "round": 1,
+      "reason": "O",
+      "blocker": "ally",
+      "blocker_id": "15",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "3-7-501-0-0",
+      "map": "Queen Of Spades",
+      "round": 266,
+      "reason": "O",
+      "blocker": "ally",
+      "blocker_id": "4",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "3-7-501-1-0",
+      "map": "Queen Of Spades",
+      "round": 387,
+      "reason": "O",
+      "blocker": "enemy",
+      "blocker_id": "0",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "4-32-501-0-0",
+      "map": "Stripes",
+      "round": 79,
+      "reason": "O",
+      "blocker": "enemy",
+      "blocker_id": "1",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "4-32-501-1-0",
+      "map": "Stripes",
+      "round": 288,
+      "reason": "O",
+      "blocker": "ally",
+      "blocker_id": "12",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "5-4-501-0-0",
+      "map": "Default",
+      "round": 406,
+      "reason": "O",
+      "blocker": "ally",
+      "blocker_id": "50",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "5-4-501-1-0",
+      "map": "Default",
+      "round": 362,
+      "reason": "O",
+      "blocker": "enemy",
+      "blocker_id": "0",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "6-33-501-0-0",
+      "map": "Tower Defense",
+      "round": 335,
+      "reason": "O",
+      "blocker": "ally",
+      "blocker_id": "24",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "6-33-501-1-0",
+      "map": "Tower Defense",
+      "round": 434,
+      "reason": "O",
+      "blocker": "ally",
+      "blocker_id": "6",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "7-30-501-0-0",
+      "map": "Islands",
+      "round": 359,
+      "reason": "O",
+      "blocker": "enemy",
+      "blocker_id": "16",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "7-30-501-1-0",
+      "map": "Islands",
+      "round": 36,
+      "reason": "O",
+      "blocker": "ally",
+      "blocker_id": "3",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "8-34-501-0-0",
+      "map": "Around UNSW",
+      "round": 5,
+      "reason": "S",
+      "blocker": "self",
+      "blocker_id": "0",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "8-34-501-1-0",
+      "map": "Around UNSW",
+      "round": 216,
+      "reason": "O",
+      "blocker": "enemy",
+      "blocker_id": "32",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "9-11-501-0-0",
+      "map": "Trophy",
+      "round": 115,
+      "reason": "O",
+      "blocker": "ally",
+      "blocker_id": "8",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "9-11-501-1-0",
+      "map": "Trophy",
+      "round": 124,
+      "reason": "O",
+      "blocker": "enemy",
+      "blocker_id": "2",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "10-28-501-1-0",
+      "map": "weakhold",
+      "round": 25,
+      "reason": "S",
+      "blocker": "self",
+      "blocker_id": "1",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "11-31-501-0-0",
+      "map": "Maze",
+      "round": 157,
+      "reason": "O",
+      "blocker": "ally",
+      "blocker_id": "9",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "11-31-501-1-0",
+      "map": "Maze",
+      "round": 233,
+      "reason": "S",
+      "blocker": "self",
+      "blocker_id": "1",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "12-17-501-0-0",
+      "map": "Prisoners Dilemma",
+      "round": 451,
+      "reason": "O",
+      "blocker": "ally",
+      "blocker_id": "12",
+      "queen_length": 3,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "12-17-501-1-0",
+      "map": "Prisoners Dilemma",
+      "round": 244,
+      "reason": "S",
+      "blocker": "self",
+      "blocker_id": "1",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "13-29-501-0-0",
+      "map": "Australia",
+      "round": 173,
+      "reason": "O",
+      "blocker": "ally",
+      "blocker_id": "19",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "13-29-501-1-0",
+      "map": "Australia",
+      "round": 412,
+      "reason": "O",
+      "blocker": "ally",
+      "blocker_id": "101",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "14-19-501-0-0",
+      "map": "Autarky",
+      "round": 285,
+      "reason": "O",
+      "blocker": "ally",
+      "blocker_id": "40",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "14-19-501-1-0",
+      "map": "Autarky",
+      "round": 99,
+      "reason": "S",
+      "blocker": "self",
+      "blocker_id": "1",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "15-13-501-0-0",
+      "map": "Devil",
+      "round": 90,
+      "reason": "S",
+      "blocker": "self",
+      "blocker_id": "0",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    },
+    {
+      "game": "15-13-501-1-0",
+      "map": "Devil",
+      "round": 61,
+      "reason": "O",
+      "blocker": "ally",
+      "blocker_id": "3",
+      "queen_length": 2,
+      "no_safe_visible_first_step": true
+    }
+  ],
+  "leader_games": [
+    {
+      "game": 854634,
+      "metadata": {
+        "game": 854634,
+        "battle": 854634,
+        "teamAId": 842,
+        "teamBId": 91,
+        "teamAName": "horse",
+        "teamBName": "SSS",
+        "map": "Schooltime",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "Schooltime",
+      "replay_sha256": "e7658eb2fa456a37a8b688848d8a09d9295e816aa2515b0fe6f7ba7e84be1cb7",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 6,
+          "longestDragon": 18,
+          "totalLength": 45
+        },
+        "teamB": {
+          "dragonCount": 63,
+          "longestDragon": 97,
+          "totalLength": 518
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 9472,
+          "pearls": 939,
+          "portal_crossings": 59,
+          "declared_paid_steps": 76,
+          "children_created": 301,
+          "peak_population": 41,
+          "final_queen": 3,
+          "round100_population": 27
+        },
+        "B": {
+          "turns": 26352,
+          "pearls": 2156,
+          "portal_crossings": 212,
+          "declared_paid_steps": 176,
+          "children_created": 462,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 43
+        }
+      }
+    },
+    {
+      "game": 854635,
+      "metadata": {
+        "game": 854635,
+        "battle": 854634,
+        "teamAId": 842,
+        "teamBId": 91,
+        "teamAName": "horse",
+        "teamBName": "SSS",
+        "map": "Portals",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "Portals",
+      "replay_sha256": "d2b691845eb70d5e5980c1b9500b28a3e7dc4e127a9fb28bfaa28b0b8a047359",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 1,
+          "longestDragon": 67,
+          "totalLength": 67
+        },
+        "teamB": {
+          "dragonCount": 2,
+          "longestDragon": 59,
+          "totalLength": 62
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 11203,
+          "pearls": 1434,
+          "portal_crossings": 483,
+          "declared_paid_steps": 0,
+          "children_created": 537,
+          "peak_population": 42,
+          "final_queen": 0,
+          "round100_population": 34
+        },
+        "B": {
+          "turns": 8809,
+          "pearls": 651,
+          "portal_crossings": 220,
+          "declared_paid_steps": 67,
+          "children_created": 230,
+          "peak_population": 40,
+          "final_queen": 0,
+          "round100_population": 11
+        }
+      }
+    },
+    {
+      "game": 854636,
+      "metadata": {
+        "game": 854636,
+        "battle": 854634,
+        "teamAId": 842,
+        "teamBId": 91,
+        "teamAName": "horse",
+        "teamBName": "SSS",
+        "map": "Slithery Fight",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "Slithery Fight",
+      "replay_sha256": "b64c5f14b876448d34148ff0fb31d77499322318de4f9e3eec26c0d715a4344c",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 16,
+          "longestDragon": 65,
+          "totalLength": 255
+        },
+        "teamB": {
+          "dragonCount": 16,
+          "longestDragon": 39,
+          "totalLength": 108
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 25255,
+          "pearls": 2609,
+          "portal_crossings": 48,
+          "declared_paid_steps": 68,
+          "children_created": 762,
+          "peak_population": 64,
+          "final_queen": 50,
+          "round100_population": 62
+        },
+        "B": {
+          "turns": 25369,
+          "pearls": 1554,
+          "portal_crossings": 47,
+          "declared_paid_steps": 259,
+          "children_created": 454,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 58
+        }
+      }
+    },
+    {
+      "game": 854637,
+      "metadata": {
+        "game": 854637,
+        "battle": 854634,
+        "teamAId": 842,
+        "teamBId": 91,
+        "teamAName": "horse",
+        "teamBName": "SSS",
+        "map": "Queen Of Spades",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Queen Of Spades",
+      "replay_sha256": "5d46c1474b59643bcfc07947bf867c4a6b82f949f7a53a90eb42cb0e2949f99f",
+      "rounds": 100,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        },
+        "teamB": {
+          "dragonCount": 16,
+          "longestDragon": 3,
+          "totalLength": 40
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 164,
+          "pearls": 4,
+          "portal_crossings": 2,
+          "declared_paid_steps": 2,
+          "children_created": 1,
+          "peak_population": 3,
+          "final_queen": 0,
+          "round100_population": null
+        },
+        "B": {
+          "turns": 891,
+          "pearls": 81,
+          "portal_crossings": 18,
+          "declared_paid_steps": 1,
+          "children_created": 32,
+          "peak_population": 18,
+          "final_queen": 0,
+          "round100_population": null
+        }
+      }
+    },
+    {
+      "game": 854638,
+      "metadata": {
+        "game": 854638,
+        "battle": 854634,
+        "teamAId": 842,
+        "teamBId": 91,
+        "teamAName": "horse",
+        "teamBName": "SSS",
+        "map": "Stripes",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "Stripes",
+      "replay_sha256": "e4212fea75f9390528047987e9ea4274c75708d8c600e48d3ea193c363a064db",
+      "rounds": 111,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 23,
+          "longestDragon": 4,
+          "totalLength": 60
+        },
+        "teamB": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 1249,
+          "pearls": 130,
+          "portal_crossings": 79,
+          "declared_paid_steps": 2,
+          "children_created": 56,
+          "peak_population": 26,
+          "final_queen": 4,
+          "round100_population": 23
+        },
+        "B": {
+          "turns": 170,
+          "pearls": 0,
+          "portal_crossings": 2,
+          "declared_paid_steps": 0,
+          "children_created": 0,
+          "peak_population": 2,
+          "final_queen": 0,
+          "round100_population": 1
+        }
+      }
+    },
+    {
+      "game": 854639,
+      "metadata": {
+        "game": 854639,
+        "battle": 854634,
+        "teamAId": 842,
+        "teamBId": 91,
+        "teamAName": "horse",
+        "teamBName": "SSS",
+        "map": "Default",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "Default",
+      "replay_sha256": "aa026bfee3fac412a6c06fffe0deb2c3ba897e78ef2d8bc87e1aa0a684dba382",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 7,
+          "longestDragon": 29,
+          "totalLength": 135
+        },
+        "teamB": {
+          "dragonCount": 2,
+          "longestDragon": 16,
+          "totalLength": 19
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 10900,
+          "pearls": 520,
+          "portal_crossings": 153,
+          "declared_paid_steps": 23,
+          "children_created": 140,
+          "peak_population": 42,
+          "final_queen": 0,
+          "round100_population": 16
+        },
+        "B": {
+          "turns": 5127,
+          "pearls": 266,
+          "portal_crossings": 312,
+          "declared_paid_steps": 16,
+          "children_created": 95,
+          "peak_population": 22,
+          "final_queen": 0,
+          "round100_population": 20
+        }
+      }
+    },
+    {
+      "game": 854640,
+      "metadata": {
+        "game": 854640,
+        "battle": 854634,
+        "teamAId": 842,
+        "teamBId": 91,
+        "teamAName": "horse",
+        "teamBName": "SSS",
+        "map": "Tower Defense",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "Tower Defense",
+      "replay_sha256": "87244a6e1ec29497dc23c22bfb6f3e0235d725e6e323517205b683bd6399ef5f",
+      "rounds": 233,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 47,
+          "longestDragon": 4,
+          "totalLength": 119
+        },
+        "teamB": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 5386,
+          "pearls": 211,
+          "portal_crossings": 0,
+          "declared_paid_steps": 8,
+          "children_created": 86,
+          "peak_population": 50,
+          "final_queen": 3,
+          "round100_population": 18
+        },
+        "B": {
+          "turns": 702,
+          "pearls": 29,
+          "portal_crossings": 0,
+          "declared_paid_steps": 1,
+          "children_created": 11,
+          "peak_population": 6,
+          "final_queen": 0,
+          "round100_population": 4
+        }
+      }
+    },
+    {
+      "game": 854641,
+      "metadata": {
+        "game": 854641,
+        "battle": 854634,
+        "teamAId": 842,
+        "teamBId": 91,
+        "teamAName": "horse",
+        "teamBName": "SSS",
+        "map": "Islands",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Islands",
+      "replay_sha256": "8ce11e0957d1577ac68604b97fd38ce833d5449c8d086230af584f7d9e299112",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 2,
+          "longestDragon": 5,
+          "totalLength": 7
+        },
+        "teamB": {
+          "dragonCount": 29,
+          "longestDragon": 90,
+          "totalLength": 232
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 19303,
+          "pearls": 1304,
+          "portal_crossings": 189,
+          "declared_paid_steps": 77,
+          "children_created": 402,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 63
+        },
+        "B": {
+          "turns": 24915,
+          "pearls": 1607,
+          "portal_crossings": 117,
+          "declared_paid_steps": 158,
+          "children_created": 536,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 47
+        }
+      }
+    },
+    {
+      "game": 854642,
+      "metadata": {
+        "game": 854642,
+        "battle": 854634,
+        "teamAId": 842,
+        "teamBId": 91,
+        "teamAName": "horse",
+        "teamBName": "SSS",
+        "map": "Around UNSW",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "Around UNSW",
+      "replay_sha256": "6926f5e158cf7c17c05a6cdbb809b0f412da50de5a4ccdb421e999c0270d0dff",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 9,
+          "longestDragon": 76,
+          "totalLength": 238
+        },
+        "teamB": {
+          "dragonCount": 21,
+          "longestDragon": 70,
+          "totalLength": 256
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 23188,
+          "pearls": 2015,
+          "portal_crossings": 33,
+          "declared_paid_steps": 86,
+          "children_created": 406,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 64
+        },
+        "B": {
+          "turns": 24594,
+          "pearls": 1496,
+          "portal_crossings": 48,
+          "declared_paid_steps": 201,
+          "children_created": 406,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 49
+        }
+      }
+    },
+    {
+      "game": 854643,
+      "metadata": {
+        "game": 854643,
+        "battle": 854634,
+        "teamAId": 842,
+        "teamBId": 91,
+        "teamAName": "horse",
+        "teamBName": "SSS",
+        "map": "Trophy",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Trophy",
+      "replay_sha256": "70799a524053388d52b8fb29fc354cf6c9080b34f41f98d7bbcbabdffe5dde89",
+      "rounds": 142,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        },
+        "teamB": {
+          "dragonCount": 62,
+          "longestDragon": 5,
+          "totalLength": 166
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 632,
+          "pearls": 60,
+          "portal_crossings": 2,
+          "declared_paid_steps": 10,
+          "children_created": 20,
+          "peak_population": 8,
+          "final_queen": 0,
+          "round100_population": 5
+        },
+        "B": {
+          "turns": 4064,
+          "pearls": 246,
+          "portal_crossings": 3,
+          "declared_paid_steps": 15,
+          "children_created": 91,
+          "peak_population": 62,
+          "final_queen": 0,
+          "round100_population": 45
+        }
+      }
+    },
+    {
+      "game": 854644,
+      "metadata": {
+        "game": 854644,
+        "battle": 854634,
+        "teamAId": 842,
+        "teamBId": 91,
+        "teamAName": "horse",
+        "teamBName": "SSS",
+        "map": "weakhold",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "weakhold",
+      "replay_sha256": "fb6fcab173312904748ddf212192a465802b59b3fdc97c38cf25ffc0e41fa337",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 1,
+          "longestDragon": 7,
+          "totalLength": 7
+        },
+        "teamB": {
+          "dragonCount": 5,
+          "longestDragon": 46,
+          "totalLength": 57
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 4894,
+          "pearls": 387,
+          "portal_crossings": 0,
+          "declared_paid_steps": 21,
+          "children_created": 157,
+          "peak_population": 21,
+          "final_queen": 0,
+          "round100_population": 13
+        },
+        "B": {
+          "turns": 5878,
+          "pearls": 419,
+          "portal_crossings": 0,
+          "declared_paid_steps": 22,
+          "children_created": 148,
+          "peak_population": 20,
+          "final_queen": 0,
+          "round100_population": 12
+        }
+      }
+    },
+    {
+      "game": 854645,
+      "metadata": {
+        "game": 854645,
+        "battle": 854634,
+        "teamAId": 842,
+        "teamBId": 91,
+        "teamAName": "horse",
+        "teamBName": "SSS",
+        "map": "Maze",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Maze",
+      "replay_sha256": "da279f7e4cfe96521df4e07928371b5da1a569e8cc0af53427291c119ccb6dcc",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 3,
+          "longestDragon": 16,
+          "totalLength": 21
+        },
+        "teamB": {
+          "dragonCount": 13,
+          "longestDragon": 53,
+          "totalLength": 142
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 16106,
+          "pearls": 1121,
+          "portal_crossings": 202,
+          "declared_paid_steps": 3,
+          "children_created": 358,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 29
+        },
+        "B": {
+          "turns": 22665,
+          "pearls": 1186,
+          "portal_crossings": 242,
+          "declared_paid_steps": 102,
+          "children_created": 401,
+          "peak_population": 64,
+          "final_queen": 53,
+          "round100_population": 28
+        }
+      }
+    },
+    {
+      "game": 854646,
+      "metadata": {
+        "game": 854646,
+        "battle": 854634,
+        "teamAId": 842,
+        "teamBId": 91,
+        "teamAName": "horse",
+        "teamBName": "SSS",
+        "map": "Prisoners Dilemma",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "Prisoners Dilemma",
+      "replay_sha256": "8ffcc5ffbe25a100b64218e0b9950a51a06ff490b85dc7114910be01ec8b0818",
+      "rounds": 35,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 13,
+          "longestDragon": 3,
+          "totalLength": 30
+        },
+        "teamB": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 363,
+          "pearls": 54,
+          "portal_crossings": 0,
+          "declared_paid_steps": 5,
+          "children_created": 25,
+          "peak_population": 15,
+          "final_queen": 0,
+          "round100_population": null
+        },
+        "B": {
+          "turns": 155,
+          "pearls": 14,
+          "portal_crossings": 2,
+          "declared_paid_steps": 1,
+          "children_created": 8,
+          "peak_population": 10,
+          "final_queen": 0,
+          "round100_population": null
+        }
+      }
+    },
+    {
+      "game": 854647,
+      "metadata": {
+        "game": 854647,
+        "battle": 854634,
+        "teamAId": 842,
+        "teamBId": 91,
+        "teamAName": "horse",
+        "teamBName": "SSS",
+        "map": "Australia",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "Australia",
+      "replay_sha256": "127bacda5be896e8817eb2440e683ea2b8aa40489bd04639a319ac86d822cc44",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 17,
+          "longestDragon": 46,
+          "totalLength": 212
+        },
+        "teamB": {
+          "dragonCount": 46,
+          "longestDragon": 10,
+          "totalLength": 189
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 23714,
+          "pearls": 1201,
+          "portal_crossings": 55,
+          "declared_paid_steps": 95,
+          "children_created": 289,
+          "peak_population": 64,
+          "final_queen": 37,
+          "round100_population": 52
+        },
+        "B": {
+          "turns": 24938,
+          "pearls": 1365,
+          "portal_crossings": 102,
+          "declared_paid_steps": 140,
+          "children_created": 400,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 37
+        }
+      }
+    },
+    {
+      "game": 854648,
+      "metadata": {
+        "game": 854648,
+        "battle": 854634,
+        "teamAId": 842,
+        "teamBId": 91,
+        "teamAName": "horse",
+        "teamBName": "SSS",
+        "map": "Autarky",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "Autarky",
+      "replay_sha256": "9576dce0237b89f58c587df76501fe2f92fbe273c50490b0de1023f3b6e0549c",
+      "rounds": 277,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 62,
+          "longestDragon": 4,
+          "totalLength": 142
+        },
+        "teamB": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 8212,
+          "pearls": 465,
+          "portal_crossings": 37,
+          "declared_paid_steps": 30,
+          "children_created": 203,
+          "peak_population": 64,
+          "final_queen": 2,
+          "round100_population": 22
+        },
+        "B": {
+          "turns": 3766,
+          "pearls": 172,
+          "portal_crossings": 56,
+          "declared_paid_steps": 16,
+          "children_created": 72,
+          "peak_population": 22,
+          "final_queen": 0,
+          "round100_population": 20
+        }
+      }
+    },
+    {
+      "game": 854649,
+      "metadata": {
+        "game": 854649,
+        "battle": 854634,
+        "teamAId": 842,
+        "teamBId": 91,
+        "teamAName": "horse",
+        "teamBName": "SSS",
+        "map": "Devil",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Devil",
+      "replay_sha256": "17f84560adc79eb93912e07e9dace1869212cdc2e1e91de443c8c0c156d4d21f",
+      "rounds": 191,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        },
+        "teamB": {
+          "dragonCount": 62,
+          "longestDragon": 6,
+          "totalLength": 154
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 923,
+          "pearls": 82,
+          "portal_crossings": 0,
+          "declared_paid_steps": 5,
+          "children_created": 34,
+          "peak_population": 10,
+          "final_queen": 0,
+          "round100_population": 8
+        },
+        "B": {
+          "turns": 6277,
+          "pearls": 584,
+          "portal_crossings": 0,
+          "declared_paid_steps": 38,
+          "children_created": 231,
+          "peak_population": 63,
+          "final_queen": 2,
+          "round100_population": 37
+        }
+      }
+    },
+    {
+      "game": 854650,
+      "metadata": {
+        "game": 854650,
+        "battle": 854634,
+        "teamAId": 842,
+        "teamBId": 91,
+        "teamAName": "horse",
+        "teamBName": "SSS",
+        "map": "Trauma",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Trauma",
+      "replay_sha256": "de6c7de2aef1492f2f04d230b72841b465b2797bc953217911264633e2fa57c9",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 22,
+          "longestDragon": 33,
+          "totalLength": 138
+        },
+        "teamB": {
+          "dragonCount": 1,
+          "longestDragon": 43,
+          "totalLength": 43
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 13493,
+          "pearls": 923,
+          "portal_crossings": 143,
+          "declared_paid_steps": 13,
+          "children_created": 317,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 11
+        },
+        "B": {
+          "turns": 11599,
+          "pearls": 424,
+          "portal_crossings": 97,
+          "declared_paid_steps": 42,
+          "children_created": 157,
+          "peak_population": 42,
+          "final_queen": 43,
+          "round100_population": 22
+        }
+      }
+    },
+    {
+      "game": 854700,
+      "metadata": {
+        "game": 854700,
+        "battle": 854700,
+        "teamAId": 842,
+        "teamBId": 306,
+        "teamAName": "horse",
+        "teamBName": "Cutlery",
+        "map": "Schooltime",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Schooltime",
+      "replay_sha256": "a6642e57d530564afac88561a2630520e9b2eab85a18d0f9476cb634356d8fe8",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 1,
+          "longestDragon": 3,
+          "totalLength": 3
+        },
+        "teamB": {
+          "dragonCount": 37,
+          "longestDragon": 25,
+          "totalLength": 341
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 4404,
+          "pearls": 196,
+          "portal_crossings": 43,
+          "declared_paid_steps": 13,
+          "children_created": 74,
+          "peak_population": 23,
+          "final_queen": 3,
+          "round100_population": 9
+        },
+        "B": {
+          "turns": 18128,
+          "pearls": 917,
+          "portal_crossings": 425,
+          "declared_paid_steps": 54,
+          "children_created": 227,
+          "peak_population": 62,
+          "final_queen": 3,
+          "round100_population": 14
+        }
+      }
+    },
+    {
+      "game": 854701,
+      "metadata": {
+        "game": 854701,
+        "battle": 854700,
+        "teamAId": 842,
+        "teamBId": 306,
+        "teamAName": "horse",
+        "teamBName": "Cutlery",
+        "map": "Portals",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Portals",
+      "replay_sha256": "276c62b911d0da7f95e661f482b521391c09dac85b559679e9b7caec308107e7",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 2,
+          "longestDragon": 58,
+          "totalLength": 87
+        },
+        "teamB": {
+          "dragonCount": 1,
+          "longestDragon": 60,
+          "totalLength": 60
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 10391,
+          "pearls": 1331,
+          "portal_crossings": 469,
+          "declared_paid_steps": 0,
+          "children_created": 507,
+          "peak_population": 43,
+          "final_queen": 0,
+          "round100_population": 29
+        },
+        "B": {
+          "turns": 4823,
+          "pearls": 434,
+          "portal_crossings": 61,
+          "declared_paid_steps": 13,
+          "children_created": 139,
+          "peak_population": 31,
+          "final_queen": 60,
+          "round100_population": 16
+        }
+      }
+    },
+    {
+      "game": 854702,
+      "metadata": {
+        "game": 854702,
+        "battle": 854700,
+        "teamAId": 842,
+        "teamBId": 306,
+        "teamAName": "horse",
+        "teamBName": "Cutlery",
+        "map": "Slithery Fight",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "Slithery Fight",
+      "replay_sha256": "36c10c9d186b79367d63f9243c4f1d1499b7dc25cfaf71de1cedcccbe3f49f18",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 20,
+          "longestDragon": 69,
+          "totalLength": 294
+        },
+        "teamB": {
+          "dragonCount": 10,
+          "longestDragon": 29,
+          "totalLength": 103
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 24504,
+          "pearls": 2692,
+          "portal_crossings": 48,
+          "declared_paid_steps": 35,
+          "children_created": 785,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 64
+        },
+        "B": {
+          "turns": 21088,
+          "pearls": 2626,
+          "portal_crossings": 14,
+          "declared_paid_steps": 117,
+          "children_created": 992,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 41
+        }
+      }
+    },
+    {
+      "game": 854703,
+      "metadata": {
+        "game": 854703,
+        "battle": 854700,
+        "teamAId": 842,
+        "teamBId": 306,
+        "teamAName": "horse",
+        "teamBName": "Cutlery",
+        "map": "Queen Of Spades",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "Queen Of Spades",
+      "replay_sha256": "648e29c57215213a89c97d7712e7a81dfe0361c257f1e79d35fc5ae6e37b5e17",
+      "rounds": 135,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 26,
+          "longestDragon": 3,
+          "totalLength": 62
+        },
+        "teamB": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 1170,
+          "pearls": 112,
+          "portal_crossings": 30,
+          "declared_paid_steps": 0,
+          "children_created": 47,
+          "peak_population": 28,
+          "final_queen": 0,
+          "round100_population": 12
+        },
+        "B": {
+          "turns": 151,
+          "pearls": 1,
+          "portal_crossings": 0,
+          "declared_paid_steps": 3,
+          "children_created": 0,
+          "peak_population": 2,
+          "final_queen": 0,
+          "round100_population": 1
+        }
+      }
+    },
+    {
+      "game": 854704,
+      "metadata": {
+        "game": 854704,
+        "battle": 854700,
+        "teamAId": 842,
+        "teamBId": 306,
+        "teamAName": "horse",
+        "teamBName": "Cutlery",
+        "map": "Stripes",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "Stripes",
+      "replay_sha256": "c02f93a32f6e927f302c48d0f943ca566e2ed3896729a75fd5a05bbd4e4ed4e0",
+      "rounds": 114,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 18,
+          "longestDragon": 3,
+          "totalLength": 38
+        },
+        "teamB": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 1166,
+          "pearls": 112,
+          "portal_crossings": 69,
+          "declared_paid_steps": 2,
+          "children_created": 52,
+          "peak_population": 20,
+          "final_queen": 0,
+          "round100_population": 18
+        },
+        "B": {
+          "turns": 349,
+          "pearls": 43,
+          "portal_crossings": 14,
+          "declared_paid_steps": 3,
+          "children_created": 19,
+          "peak_population": 6,
+          "final_queen": 0,
+          "round100_population": 4
+        }
+      }
+    },
+    {
+      "game": 854705,
+      "metadata": {
+        "game": 854705,
+        "battle": 854700,
+        "teamAId": 842,
+        "teamBId": 306,
+        "teamAName": "horse",
+        "teamBName": "Cutlery",
+        "map": "Default",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Default",
+      "replay_sha256": "dea7973ffdd3fa26ed23afa7c6543d3a3478c04e99f11b7e08aa9feb2eaff5de",
+      "rounds": 186,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        },
+        "teamB": {
+          "dragonCount": 44,
+          "longestDragon": 10,
+          "totalLength": 107
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 908,
+          "pearls": 26,
+          "portal_crossings": 2,
+          "declared_paid_steps": 1,
+          "children_created": 13,
+          "peak_population": 8,
+          "final_queen": 0,
+          "round100_population": 5
+        },
+        "B": {
+          "turns": 3905,
+          "pearls": 202,
+          "portal_crossings": 201,
+          "declared_paid_steps": 10,
+          "children_created": 82,
+          "peak_population": 46,
+          "final_queen": 10,
+          "round100_population": 19
+        }
+      }
+    },
+    {
+      "game": 854706,
+      "metadata": {
+        "game": 854706,
+        "battle": 854700,
+        "teamAId": 842,
+        "teamBId": 306,
+        "teamAName": "horse",
+        "teamBName": "Cutlery",
+        "map": "Tower Defense",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "Tower Defense",
+      "replay_sha256": "f32b0d5975244803c246f70175ef477d47cc27c284a4f39d184ba993e1d7cc71",
+      "rounds": 197,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 51,
+          "longestDragon": 4,
+          "totalLength": 127
+        },
+        "teamB": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 4674,
+          "pearls": 194,
+          "portal_crossings": 0,
+          "declared_paid_steps": 2,
+          "children_created": 82,
+          "peak_population": 51,
+          "final_queen": 2,
+          "round100_population": 30
+        },
+        "B": {
+          "turns": 494,
+          "pearls": 18,
+          "portal_crossings": 0,
+          "declared_paid_steps": 5,
+          "children_created": 5,
+          "peak_population": 4,
+          "final_queen": 0,
+          "round100_population": 3
+        }
+      }
+    },
+    {
+      "game": 854707,
+      "metadata": {
+        "game": 854707,
+        "battle": 854700,
+        "teamAId": 842,
+        "teamBId": 306,
+        "teamAName": "horse",
+        "teamBName": "Cutlery",
+        "map": "Islands",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Islands",
+      "replay_sha256": "0b3719c5810784c662d262b8af22d24e6e42ec5629f60a36889d6e6ba8416dc4",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 5,
+          "longestDragon": 41,
+          "totalLength": 90
+        },
+        "teamB": {
+          "dragonCount": 14,
+          "longestDragon": 77,
+          "totalLength": 212
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 20376,
+          "pearls": 1345,
+          "portal_crossings": 198,
+          "declared_paid_steps": 61,
+          "children_created": 424,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 64
+        },
+        "B": {
+          "turns": 19464,
+          "pearls": 1612,
+          "portal_crossings": 264,
+          "declared_paid_steps": 126,
+          "children_created": 494,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 33
+        }
+      }
+    },
+    {
+      "game": 854708,
+      "metadata": {
+        "game": 854708,
+        "battle": 854700,
+        "teamAId": 842,
+        "teamBId": 306,
+        "teamAName": "horse",
+        "teamBName": "Cutlery",
+        "map": "Around UNSW",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "Around UNSW",
+      "replay_sha256": "e44b44c70513fd984ff817dfdb73532e77295b0ab4b1b12c8d0de5dbab30c525",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 18,
+          "longestDragon": 73,
+          "totalLength": 187
+        },
+        "teamB": {
+          "dragonCount": 33,
+          "longestDragon": 54,
+          "totalLength": 299
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 22916,
+          "pearls": 1872,
+          "portal_crossings": 20,
+          "declared_paid_steps": 82,
+          "children_created": 407,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 63
+        },
+        "B": {
+          "turns": 22085,
+          "pearls": 1608,
+          "portal_crossings": 109,
+          "declared_paid_steps": 87,
+          "children_created": 452,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 29
+        }
+      }
+    },
+    {
+      "game": 854709,
+      "metadata": {
+        "game": 854709,
+        "battle": 854700,
+        "teamAId": 842,
+        "teamBId": 306,
+        "teamAName": "horse",
+        "teamBName": "Cutlery",
+        "map": "Trophy",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "Trophy",
+      "replay_sha256": "83e120c1bb9e8ef79d18618904cfceba4d80352a343b4e1944de5afb8be48fb9",
+      "rounds": 127,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 62,
+          "longestDragon": 3,
+          "totalLength": 151
+        },
+        "teamB": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 3635,
+          "pearls": 176,
+          "portal_crossings": 7,
+          "declared_paid_steps": 4,
+          "children_created": 71,
+          "peak_population": 62,
+          "final_queen": 2,
+          "round100_population": 49
+        },
+        "B": {
+          "turns": 355,
+          "pearls": 15,
+          "portal_crossings": 3,
+          "declared_paid_steps": 6,
+          "children_created": 5,
+          "peak_population": 5,
+          "final_queen": 0,
+          "round100_population": 1
+        }
+      }
+    },
+    {
+      "game": 854710,
+      "metadata": {
+        "game": 854710,
+        "battle": 854700,
+        "teamAId": 842,
+        "teamBId": 306,
+        "teamAName": "horse",
+        "teamBName": "Cutlery",
+        "map": "weakhold",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "weakhold",
+      "replay_sha256": "37ec9976f8f0fbb8ac8c02307f840ef5ef0b0818eb9ca94355bf63792e82bf89",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 6,
+          "longestDragon": 33,
+          "totalLength": 80
+        },
+        "teamB": {
+          "dragonCount": 2,
+          "longestDragon": 20,
+          "totalLength": 29
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 9401,
+          "pearls": 634,
+          "portal_crossings": 0,
+          "declared_paid_steps": 1,
+          "children_created": 241,
+          "peak_population": 44,
+          "final_queen": 0,
+          "round100_population": 15
+        },
+        "B": {
+          "turns": 3990,
+          "pearls": 389,
+          "portal_crossings": 0,
+          "declared_paid_steps": 8,
+          "children_created": 167,
+          "peak_population": 15,
+          "final_queen": 0,
+          "round100_population": 8
+        }
+      }
+    },
+    {
+      "game": 854711,
+      "metadata": {
+        "game": 854711,
+        "battle": 854700,
+        "teamAId": 842,
+        "teamBId": 306,
+        "teamAName": "horse",
+        "teamBName": "Cutlery",
+        "map": "Maze",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Maze",
+      "replay_sha256": "415f6227ee69c35d515cdd7b720c0479e0a861738dc17ef9b3dca53836e4f0c3",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 2,
+          "longestDragon": 67,
+          "totalLength": 92
+        },
+        "teamB": {
+          "dragonCount": 11,
+          "longestDragon": 119,
+          "totalLength": 154
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 14589,
+          "pearls": 1009,
+          "portal_crossings": 146,
+          "declared_paid_steps": 11,
+          "children_created": 315,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 22
+        },
+        "B": {
+          "turns": 15561,
+          "pearls": 1413,
+          "portal_crossings": 316,
+          "declared_paid_steps": 43,
+          "children_created": 513,
+          "peak_population": 59,
+          "final_queen": 119,
+          "round100_population": 17
+        }
+      }
+    },
+    {
+      "game": 854712,
+      "metadata": {
+        "game": 854712,
+        "battle": 854700,
+        "teamAId": 842,
+        "teamBId": 306,
+        "teamAName": "horse",
+        "teamBName": "Cutlery",
+        "map": "Prisoners Dilemma",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "Prisoners Dilemma",
+      "replay_sha256": "0efbee304a6ee17b32b44d91d2c807999d020fd8d8fb86453c18ed8c0ba67136",
+      "rounds": 165,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 23,
+          "longestDragon": 3,
+          "totalLength": 52
+        },
+        "teamB": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 2411,
+          "pearls": 84,
+          "portal_crossings": 12,
+          "declared_paid_steps": 5,
+          "children_created": 41,
+          "peak_population": 25,
+          "final_queen": 0,
+          "round100_population": 15
+        },
+        "B": {
+          "turns": 614,
+          "pearls": 21,
+          "portal_crossings": 14,
+          "declared_paid_steps": 3,
+          "children_created": 14,
+          "peak_population": 9,
+          "final_queen": 0,
+          "round100_population": 3
+        }
+      }
+    },
+    {
+      "game": 854713,
+      "metadata": {
+        "game": 854713,
+        "battle": 854700,
+        "teamAId": 842,
+        "teamBId": 306,
+        "teamAName": "horse",
+        "teamBName": "Cutlery",
+        "map": "Australia",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Australia",
+      "replay_sha256": "e92fae34d49e391f54d92f8195f6bb982d0c7b98a290c5df83de0a5f54e0751c",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 12,
+          "longestDragon": 47,
+          "totalLength": 123
+        },
+        "teamB": {
+          "dragonCount": 23,
+          "longestDragon": 77,
+          "totalLength": 287
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 20260,
+          "pearls": 1001,
+          "portal_crossings": 45,
+          "declared_paid_steps": 67,
+          "children_created": 247,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 32
+        },
+        "B": {
+          "turns": 20653,
+          "pearls": 1538,
+          "portal_crossings": 172,
+          "declared_paid_steps": 115,
+          "children_created": 449,
+          "peak_population": 62,
+          "final_queen": 0,
+          "round100_population": 35
+        }
+      }
+    },
+    {
+      "game": 854714,
+      "metadata": {
+        "game": 854714,
+        "battle": 854700,
+        "teamAId": 842,
+        "teamBId": 306,
+        "teamAName": "horse",
+        "teamBName": "Cutlery",
+        "map": "Autarky",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "Autarky",
+      "replay_sha256": "18e12f8e4ede37816862f71ccb2a89fb6827468dd5510ca728d8708cb5692532",
+      "rounds": 230,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 59,
+          "longestDragon": 3,
+          "totalLength": 142
+        },
+        "teamB": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 7542,
+          "pearls": 358,
+          "portal_crossings": 18,
+          "declared_paid_steps": 7,
+          "children_created": 164,
+          "peak_population": 60,
+          "final_queen": 0,
+          "round100_population": 24
+        },
+        "B": {
+          "turns": 1850,
+          "pearls": 154,
+          "portal_crossings": 50,
+          "declared_paid_steps": 23,
+          "children_created": 68,
+          "peak_population": 17,
+          "final_queen": 0,
+          "round100_population": 9
+        }
+      }
+    },
+    {
+      "game": 854715,
+      "metadata": {
+        "game": 854715,
+        "battle": 854700,
+        "teamAId": 842,
+        "teamBId": 306,
+        "teamAName": "horse",
+        "teamBName": "Cutlery",
+        "map": "Devil",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "Devil",
+      "replay_sha256": "5d3255ed2c4930080460650b1b17dcc2e7baa8a31a8e26b5168c1721ecdbc099",
+      "rounds": 173,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 49,
+          "longestDragon": 4,
+          "totalLength": 125
+        },
+        "teamB": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 5371,
+          "pearls": 447,
+          "portal_crossings": 0,
+          "declared_paid_steps": 9,
+          "children_created": 187,
+          "peak_population": 55,
+          "final_queen": 3,
+          "round100_population": 38
+        },
+        "B": {
+          "turns": 833,
+          "pearls": 73,
+          "portal_crossings": 0,
+          "declared_paid_steps": 7,
+          "children_created": 29,
+          "peak_population": 8,
+          "final_queen": 0,
+          "round100_population": 3
+        }
+      }
+    },
+    {
+      "game": 854716,
+      "metadata": {
+        "game": 854716,
+        "battle": 854700,
+        "teamAId": 842,
+        "teamBId": 306,
+        "teamAName": "horse",
+        "teamBName": "Cutlery",
+        "map": "Trauma",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Trauma",
+      "replay_sha256": "924e5f0848ba06124b7bcae460108db2e1746f09f82d9b205a510c3a621d0bcc",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 16,
+          "longestDragon": 33,
+          "totalLength": 98
+        },
+        "teamB": {
+          "dragonCount": 11,
+          "longestDragon": 42,
+          "totalLength": 78
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 8797,
+          "pearls": 610,
+          "portal_crossings": 93,
+          "declared_paid_steps": 7,
+          "children_created": 217,
+          "peak_population": 42,
+          "final_queen": 0,
+          "round100_population": 12
+        },
+        "B": {
+          "turns": 12154,
+          "pearls": 824,
+          "portal_crossings": 176,
+          "declared_paid_steps": 36,
+          "children_created": 326,
+          "peak_population": 44,
+          "final_queen": 42,
+          "round100_population": 21
+        }
+      }
+    },
+    {
+      "game": 854853,
+      "metadata": {
+        "game": 854853,
+        "battle": 854853,
+        "teamAId": 213,
+        "teamBId": 91,
+        "teamAName": "Sponge(Albert and Bob)",
+        "teamBName": "SSS",
+        "map": "Portals",
+        "winner": "a",
+        "ranked": true
+      },
+      "map": "Portals",
+      "replay_sha256": "2c3a894276a19254600cdb1d6b6c9e88998d2281313e02f972a18e0b2d2dbd54",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 3,
+          "longestDragon": 28,
+          "totalLength": 53
+        },
+        "teamB": {
+          "dragonCount": 2,
+          "longestDragon": 40,
+          "totalLength": 42
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 10992,
+          "pearls": 1414,
+          "portal_crossings": 484,
+          "declared_paid_steps": 0,
+          "children_created": 525,
+          "peak_population": 41,
+          "final_queen": 28,
+          "round100_population": 22
+        },
+        "B": {
+          "turns": 8044,
+          "pearls": 667,
+          "portal_crossings": 231,
+          "declared_paid_steps": 89,
+          "children_created": 217,
+          "peak_population": 42,
+          "final_queen": 0,
+          "round100_population": 7
+        }
+      }
+    },
+    {
+      "game": 854854,
+      "metadata": {
+        "game": 854854,
+        "battle": 854853,
+        "teamAId": 213,
+        "teamBId": 91,
+        "teamAName": "Sponge(Albert and Bob)",
+        "teamBName": "SSS",
+        "map": "Schooltime",
+        "winner": "a",
+        "ranked": true
+      },
+      "map": "Schooltime",
+      "replay_sha256": "94593fa39e4746fed1276aec47d4cae3105848ea362eb32c8ab87bde5f72736a",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 4,
+          "longestDragon": 91,
+          "totalLength": 148
+        },
+        "teamB": {
+          "dragonCount": 62,
+          "longestDragon": 115,
+          "totalLength": 423
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 20043,
+          "pearls": 1538,
+          "portal_crossings": 241,
+          "declared_paid_steps": 92,
+          "children_created": 456,
+          "peak_population": 64,
+          "final_queen": 3,
+          "round100_population": 49
+        },
+        "B": {
+          "turns": 20745,
+          "pearls": 1668,
+          "portal_crossings": 94,
+          "declared_paid_steps": 188,
+          "children_created": 450,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 24
+        }
+      }
+    },
+    {
+      "game": 854855,
+      "metadata": {
+        "game": 854855,
+        "battle": 854853,
+        "teamAId": 213,
+        "teamBId": 91,
+        "teamAName": "Sponge(Albert and Bob)",
+        "teamBName": "SSS",
+        "map": "Australia",
+        "winner": "a",
+        "ranked": true
+      },
+      "map": "Australia",
+      "replay_sha256": "aef3e0aacbe5bf64ed8aba56649f80d6f10a3c569fc8a93132c59dab14e7817e",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 9,
+          "longestDragon": 59,
+          "totalLength": 201
+        },
+        "teamB": {
+          "dragonCount": 37,
+          "longestDragon": 66,
+          "totalLength": 185
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 23150,
+          "pearls": 1362,
+          "portal_crossings": 95,
+          "declared_paid_steps": 53,
+          "children_created": 369,
+          "peak_population": 64,
+          "final_queen": 52,
+          "round100_population": 56
+        },
+        "B": {
+          "turns": 21966,
+          "pearls": 1225,
+          "portal_crossings": 92,
+          "declared_paid_steps": 140,
+          "children_created": 391,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 26
+        }
+      }
+    },
+    {
+      "game": 854856,
+      "metadata": {
+        "game": 854856,
+        "battle": 854853,
+        "teamAId": 213,
+        "teamBId": 91,
+        "teamAName": "Sponge(Albert and Bob)",
+        "teamBName": "SSS",
+        "map": "Prisoners Dilemma",
+        "winner": "b",
+        "ranked": true
+      },
+      "map": "Prisoners Dilemma",
+      "replay_sha256": "604862cd02ee15778fc980884627382bcc826f8af116aadf4a083b9891f92eee",
+      "rounds": 140,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        },
+        "teamB": {
+          "dragonCount": 24,
+          "longestDragon": 3,
+          "totalLength": 49
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 333,
+          "pearls": 24,
+          "portal_crossings": 3,
+          "declared_paid_steps": 4,
+          "children_created": 12,
+          "peak_population": 10,
+          "final_queen": 0,
+          "round100_population": 1
+        },
+        "B": {
+          "turns": 1809,
+          "pearls": 102,
+          "portal_crossings": 11,
+          "declared_paid_steps": 10,
+          "children_created": 46,
+          "peak_population": 25,
+          "final_queen": 2,
+          "round100_population": 20
+        }
+      }
+    },
+    {
+      "game": 854857,
+      "metadata": {
+        "game": 854857,
+        "battle": 854853,
+        "teamAId": 213,
+        "teamBId": 91,
+        "teamAName": "Sponge(Albert and Bob)",
+        "teamBName": "SSS",
+        "map": "weakhold",
+        "winner": "b",
+        "ranked": true
+      },
+      "map": "weakhold",
+      "replay_sha256": "b7e52afde21fc3b8d7d1dfc0a929f300a94d357f625e584ecada10c7c22729ad",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 1,
+          "longestDragon": 3,
+          "totalLength": 3
+        },
+        "teamB": {
+          "dragonCount": 6,
+          "longestDragon": 36,
+          "totalLength": 74
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 2923,
+          "pearls": 213,
+          "portal_crossings": 0,
+          "declared_paid_steps": 2,
+          "children_created": 92,
+          "peak_population": 12,
+          "final_queen": 0,
+          "round100_population": 10
+        },
+        "B": {
+          "turns": 6453,
+          "pearls": 309,
+          "portal_crossings": 0,
+          "declared_paid_steps": 39,
+          "children_created": 98,
+          "peak_population": 23,
+          "final_queen": 6,
+          "round100_population": 13
+        }
+      }
+    },
+    {
+      "game": 854858,
+      "metadata": {
+        "game": 854858,
+        "battle": 854858,
+        "teamAId": 213,
+        "teamBId": 264,
+        "teamAName": "Sponge(Albert and Bob)",
+        "teamBName": "forgot to mention",
+        "map": "weakhold",
+        "winner": "b",
+        "ranked": true
+      },
+      "map": "weakhold",
+      "replay_sha256": "54b7edbd17689d1abe85034054aea59d1cb1d0df940459c9997913a4c7d9faac",
+      "rounds": 103,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        },
+        "teamB": {
+          "dragonCount": 19,
+          "longestDragon": 3,
+          "totalLength": 45
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 339,
+          "pearls": 26,
+          "portal_crossings": 0,
+          "declared_paid_steps": 2,
+          "children_created": 12,
+          "peak_population": 6,
+          "final_queen": 0,
+          "round100_population": 1
+        },
+        "B": {
+          "turns": 945,
+          "pearls": 69,
+          "portal_crossings": 0,
+          "declared_paid_steps": 1,
+          "children_created": 30,
+          "peak_population": 20,
+          "final_queen": 0,
+          "round100_population": 20
+        }
+      }
+    },
+    {
+      "game": 854859,
+      "metadata": {
+        "game": 854859,
+        "battle": 854858,
+        "teamAId": 213,
+        "teamBId": 264,
+        "teamAName": "Sponge(Albert and Bob)",
+        "teamBName": "forgot to mention",
+        "map": "Queen Of Spades",
+        "winner": "b",
+        "ranked": true
+      },
+      "map": "Queen Of Spades",
+      "replay_sha256": "4d8623e5438dedf1f696a5db883ee5264504a3ac2e84abc885b3cb39513a6e1a",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 1,
+          "longestDragon": 19,
+          "totalLength": 19
+        },
+        "teamB": {
+          "dragonCount": 4,
+          "longestDragon": 19,
+          "totalLength": 29
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 5301,
+          "pearls": 312,
+          "portal_crossings": 46,
+          "declared_paid_steps": 16,
+          "children_created": 108,
+          "peak_population": 23,
+          "final_queen": 0,
+          "round100_population": 14
+        },
+        "B": {
+          "turns": 3378,
+          "pearls": 293,
+          "portal_crossings": 46,
+          "declared_paid_steps": 15,
+          "children_created": 107,
+          "peak_population": 13,
+          "final_queen": 0,
+          "round100_population": 9
+        }
+      }
+    },
+    {
+      "game": 854860,
+      "metadata": {
+        "game": 854860,
+        "battle": 854858,
+        "teamAId": 213,
+        "teamBId": 264,
+        "teamAName": "Sponge(Albert and Bob)",
+        "teamBName": "forgot to mention",
+        "map": "Slithery Fight",
+        "winner": "a",
+        "ranked": true
+      },
+      "map": "Slithery Fight",
+      "replay_sha256": "3fec5c74d74fb0bbfb0c0d61788bdfc8cf96cbde9d5675b93deb7fe3d50311f8",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 4,
+          "longestDragon": 89,
+          "totalLength": 133
+        },
+        "teamB": {
+          "dragonCount": 14,
+          "longestDragon": 74,
+          "totalLength": 244
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 22439,
+          "pearls": 1678,
+          "portal_crossings": 73,
+          "declared_paid_steps": 34,
+          "children_created": 550,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 63
+        },
+        "B": {
+          "turns": 24582,
+          "pearls": 3361,
+          "portal_crossings": 66,
+          "declared_paid_steps": 88,
+          "children_created": 1009,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 62
+        }
+      }
+    },
+    {
+      "game": 854861,
+      "metadata": {
+        "game": 854861,
+        "battle": 854858,
+        "teamAId": 213,
+        "teamBId": 264,
+        "teamAName": "Sponge(Albert and Bob)",
+        "teamBName": "forgot to mention",
+        "map": "Devil",
+        "winner": "b",
+        "ranked": true
+      },
+      "map": "Devil",
+      "replay_sha256": "02e2dc09920beee2d5fb93bad51a28f69a0701af19252c7816ebc7e1331d565d",
+      "rounds": 75,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        },
+        "teamB": {
+          "dragonCount": 12,
+          "longestDragon": 4,
+          "totalLength": 31
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 299,
+          "pearls": 36,
+          "portal_crossings": 0,
+          "declared_paid_steps": 1,
+          "children_created": 14,
+          "peak_population": 6,
+          "final_queen": 0,
+          "round100_population": null
+        },
+        "B": {
+          "turns": 582,
+          "pearls": 85,
+          "portal_crossings": 0,
+          "declared_paid_steps": 5,
+          "children_created": 35,
+          "peak_population": 14,
+          "final_queen": 0,
+          "round100_population": null
+        }
+      }
+    },
+    {
+      "game": 854862,
+      "metadata": {
+        "game": 854862,
+        "battle": 854858,
+        "teamAId": 213,
+        "teamBId": 264,
+        "teamAName": "Sponge(Albert and Bob)",
+        "teamBName": "forgot to mention",
+        "map": "Schooltime",
+        "winner": "a",
+        "ranked": true
+      },
+      "map": "Schooltime",
+      "replay_sha256": "50b330f79f84044ad9319cc4522a6b8a90788fab3ce0b31a0ee70b88ce417a5b",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 23,
+          "longestDragon": 52,
+          "totalLength": 286
+        },
+        "teamB": {
+          "dragonCount": 1,
+          "longestDragon": 3,
+          "totalLength": 3
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 22125,
+          "pearls": 936,
+          "portal_crossings": 360,
+          "declared_paid_steps": 8,
+          "children_created": 233,
+          "peak_population": 64,
+          "final_queen": 3,
+          "round100_population": 17
+        },
+        "B": {
+          "turns": 3599,
+          "pearls": 146,
+          "portal_crossings": 32,
+          "declared_paid_steps": 18,
+          "children_created": 57,
+          "peak_population": 18,
+          "final_queen": 3,
+          "round100_population": 10
+        }
+      }
+    },
+    {
+      "game": 854863,
+      "metadata": {
+        "game": 854863,
+        "battle": 854863,
+        "teamAId": 213,
+        "teamBId": 306,
+        "teamAName": "Sponge(Albert and Bob)",
+        "teamBName": "Cutlery",
+        "map": "Trophy",
+        "winner": "a",
+        "ranked": true
+      },
+      "map": "Trophy",
+      "replay_sha256": "c1252daa558a8da09a8787884979dfa6648095c8b1e760c6a306aa5d681db003",
+      "rounds": 140,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 61,
+          "longestDragon": 5,
+          "totalLength": 159
+        },
+        "teamB": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 4037,
+          "pearls": 226,
+          "portal_crossings": 20,
+          "declared_paid_steps": 11,
+          "children_created": 87,
+          "peak_population": 62,
+          "final_queen": 0,
+          "round100_population": 48
+        },
+        "B": {
+          "turns": 500,
+          "pearls": 55,
+          "portal_crossings": 0,
+          "declared_paid_steps": 12,
+          "children_created": 20,
+          "peak_population": 6,
+          "final_queen": 0,
+          "round100_population": 3
+        }
+      }
+    },
+    {
+      "game": 854864,
+      "metadata": {
+        "game": 854864,
+        "battle": 854863,
+        "teamAId": 213,
+        "teamBId": 306,
+        "teamAName": "Sponge(Albert and Bob)",
+        "teamBName": "Cutlery",
+        "map": "weakhold",
+        "winner": "a",
+        "ranked": true
+      },
+      "map": "weakhold",
+      "replay_sha256": "6ce1cee18a1ef4fae62fc4a471522fb27286e1d09f887a831f6094656b53807e",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 4,
+          "longestDragon": 31,
+          "totalLength": 60
+        },
+        "teamB": {
+          "dragonCount": 5,
+          "longestDragon": 17,
+          "totalLength": 26
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 10169,
+          "pearls": 610,
+          "portal_crossings": 0,
+          "declared_paid_steps": 6,
+          "children_created": 226,
+          "peak_population": 40,
+          "final_queen": 0,
+          "round100_population": 15
+        },
+        "B": {
+          "turns": 3318,
+          "pearls": 439,
+          "portal_crossings": 0,
+          "declared_paid_steps": 7,
+          "children_created": 179,
+          "peak_population": 10,
+          "final_queen": 0,
+          "round100_population": 6
+        }
+      }
+    },
+    {
+      "game": 854865,
+      "metadata": {
+        "game": 854865,
+        "battle": 854863,
+        "teamAId": 213,
+        "teamBId": 306,
+        "teamAName": "Sponge(Albert and Bob)",
+        "teamBName": "Cutlery",
+        "map": "Stripes",
+        "winner": "a",
+        "ranked": true
+      },
+      "map": "Stripes",
+      "replay_sha256": "2e2daf69c8dea68a9f331eaadc323c3fb2f49cbfb76858c1c88788cbd9e6e226",
+      "rounds": 180,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 20,
+          "longestDragon": 4,
+          "totalLength": 51
+        },
+        "teamB": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 2112,
+          "pearls": 100,
+          "portal_crossings": 90,
+          "declared_paid_steps": 2,
+          "children_created": 42,
+          "peak_population": 22,
+          "final_queen": 0,
+          "round100_population": 15
+        },
+        "B": {
+          "turns": 535,
+          "pearls": 54,
+          "portal_crossings": 15,
+          "declared_paid_steps": 8,
+          "children_created": 23,
+          "peak_population": 5,
+          "final_queen": 0,
+          "round100_population": 4
+        }
+      }
+    },
+    {
+      "game": 854866,
+      "metadata": {
+        "game": 854866,
+        "battle": 854863,
+        "teamAId": 213,
+        "teamBId": 306,
+        "teamAName": "Sponge(Albert and Bob)",
+        "teamBName": "Cutlery",
+        "map": "Maze",
+        "winner": "a",
+        "ranked": true
+      },
+      "map": "Maze",
+      "replay_sha256": "407e56b12981b5969153b19d89dbe32e4ed6afc189cbcca4089b28829e3b3839",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 1,
+          "longestDragon": 86,
+          "totalLength": 86
+        },
+        "teamB": {
+          "dragonCount": 30,
+          "longestDragon": 55,
+          "totalLength": 234
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 8478,
+          "pearls": 766,
+          "portal_crossings": 96,
+          "declared_paid_steps": 13,
+          "children_created": 248,
+          "peak_population": 37,
+          "final_queen": 0,
+          "round100_population": 20
+        },
+        "B": {
+          "turns": 20628,
+          "pearls": 2081,
+          "portal_crossings": 426,
+          "declared_paid_steps": 59,
+          "children_created": 722,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 35
+        }
+      }
+    },
+    {
+      "game": 854867,
+      "metadata": {
+        "game": 854867,
+        "battle": 854863,
+        "teamAId": 213,
+        "teamBId": 306,
+        "teamAName": "Sponge(Albert and Bob)",
+        "teamBName": "Cutlery",
+        "map": "Prisoners Dilemma",
+        "winner": "b",
+        "ranked": true
+      },
+      "map": "Prisoners Dilemma",
+      "replay_sha256": "f01e26dc45b55b725b8f76387ddc23ddc1ea9c5b034f04bb014ad0745b434976",
+      "rounds": 132,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        },
+        "teamB": {
+          "dragonCount": 5,
+          "longestDragon": 4,
+          "totalLength": 15
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 613,
+          "pearls": 73,
+          "portal_crossings": 10,
+          "declared_paid_steps": 11,
+          "children_created": 28,
+          "peak_population": 10,
+          "final_queen": 0,
+          "round100_population": 4
+        },
+        "B": {
+          "turns": 937,
+          "pearls": 126,
+          "portal_crossings": 18,
+          "declared_paid_steps": 19,
+          "children_created": 52,
+          "peak_population": 11,
+          "final_queen": 3,
+          "round100_population": 4
+        }
+      }
+    },
+    {
+      "game": 854873,
+      "metadata": {
+        "game": 854873,
+        "battle": 854873,
+        "teamAId": 213,
+        "teamBId": 842,
+        "teamAName": "Sponge(Albert and Bob)",
+        "teamBName": "horse",
+        "map": "Australia",
+        "winner": "a",
+        "ranked": true
+      },
+      "map": "Australia",
+      "replay_sha256": "36ec48392fac92986661c0bd9bf2d25e77287794c3630026978f96c93c3f7f60",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 31,
+          "longestDragon": 57,
+          "totalLength": 237
+        },
+        "teamB": {
+          "dragonCount": 5,
+          "longestDragon": 49,
+          "totalLength": 85
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 24989,
+          "pearls": 1508,
+          "portal_crossings": 113,
+          "declared_paid_steps": 81,
+          "children_created": 428,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 41
+        },
+        "B": {
+          "turns": 15893,
+          "pearls": 1001,
+          "portal_crossings": 54,
+          "declared_paid_steps": 70,
+          "children_created": 287,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 29
+        }
+      }
+    },
+    {
+      "game": 854874,
+      "metadata": {
+        "game": 854874,
+        "battle": 854873,
+        "teamAId": 213,
+        "teamBId": 842,
+        "teamAName": "Sponge(Albert and Bob)",
+        "teamBName": "horse",
+        "map": "Trauma",
+        "winner": "a",
+        "ranked": true
+      },
+      "map": "Trauma",
+      "replay_sha256": "9a9f2ca1ffd39b3df51935019c7000588bb13b96b5b09f061c740262e1d5c245",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 4,
+          "longestDragon": 59,
+          "totalLength": 74
+        },
+        "teamB": {
+          "dragonCount": 13,
+          "longestDragon": 35,
+          "totalLength": 87
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 10282,
+          "pearls": 791,
+          "portal_crossings": 157,
+          "declared_paid_steps": 17,
+          "children_created": 317,
+          "peak_population": 39,
+          "final_queen": 59,
+          "round100_population": 23
+        },
+        "B": {
+          "turns": 12558,
+          "pearls": 858,
+          "portal_crossings": 136,
+          "declared_paid_steps": 19,
+          "children_created": 303,
+          "peak_population": 58,
+          "final_queen": 0,
+          "round100_population": 18
+        }
+      }
+    },
+    {
+      "game": 854875,
+      "metadata": {
+        "game": 854875,
+        "battle": 854873,
+        "teamAId": 213,
+        "teamBId": 842,
+        "teamAName": "Sponge(Albert and Bob)",
+        "teamBName": "horse",
+        "map": "weakhold",
+        "winner": "b",
+        "ranked": true
+      },
+      "map": "weakhold",
+      "replay_sha256": "0dcac5eec0a6b3b7c12d8ffd0ae91e858f00e9e221744e0b452fa1c9bdb9e3dc",
+      "rounds": 363,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        },
+        "teamB": {
+          "dragonCount": 12,
+          "longestDragon": 18,
+          "totalLength": 67
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 1229,
+          "pearls": 87,
+          "portal_crossings": 0,
+          "declared_paid_steps": 2,
+          "children_created": 36,
+          "peak_population": 8,
+          "final_queen": 0,
+          "round100_population": 4
+        },
+        "B": {
+          "turns": 6709,
+          "pearls": 342,
+          "portal_crossings": 0,
+          "declared_paid_steps": 4,
+          "children_created": 133,
+          "peak_population": 30,
+          "final_queen": 0,
+          "round100_population": 16
+        }
+      }
+    },
+    {
+      "game": 854876,
+      "metadata": {
+        "game": 854876,
+        "battle": 854873,
+        "teamAId": 213,
+        "teamBId": 842,
+        "teamAName": "Sponge(Albert and Bob)",
+        "teamBName": "horse",
+        "map": "Default",
+        "winner": "b",
+        "ranked": true
+      },
+      "map": "Default",
+      "replay_sha256": "03063f3af3f6a6bbea88e4bf783f3413bf3f937a92741e0a4286252b0fe69b46",
+      "rounds": 200,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        },
+        "teamB": {
+          "dragonCount": 44,
+          "longestDragon": 4,
+          "totalLength": 111
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 1227,
+          "pearls": 60,
+          "portal_crossings": 29,
+          "declared_paid_steps": 4,
+          "children_created": 26,
+          "peak_population": 11,
+          "final_queen": 0,
+          "round100_population": 5
+        },
+        "B": {
+          "turns": 3606,
+          "pearls": 237,
+          "portal_crossings": 142,
+          "declared_paid_steps": 16,
+          "children_created": 92,
+          "peak_population": 44,
+          "final_queen": 0,
+          "round100_population": 12
+        }
+      }
+    },
+    {
+      "game": 854877,
+      "metadata": {
+        "game": 854877,
+        "battle": 854873,
+        "teamAId": 213,
+        "teamBId": 842,
+        "teamAName": "Sponge(Albert and Bob)",
+        "teamBName": "horse",
+        "map": "Maze",
+        "winner": "b",
+        "ranked": true
+      },
+      "map": "Maze",
+      "replay_sha256": "1f65ca278b9403baf91ec882d726ce0e79b48bbaa7305954df39b5078527ba8c",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 10,
+          "longestDragon": 83,
+          "totalLength": 184
+        },
+        "teamB": {
+          "dragonCount": 3,
+          "longestDragon": 121,
+          "totalLength": 148
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 11889,
+          "pearls": 807,
+          "portal_crossings": 98,
+          "declared_paid_steps": 5,
+          "children_created": 250,
+          "peak_population": 46,
+          "final_queen": 0,
+          "round100_population": 20
+        },
+        "B": {
+          "turns": 14399,
+          "pearls": 995,
+          "portal_crossings": 209,
+          "declared_paid_steps": 3,
+          "children_created": 296,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 24
+        }
+      }
+    },
+    {
+      "game": 855256,
+      "metadata": {
+        "game": 855256,
+        "battle": 855256,
+        "teamAId": 15,
+        "teamBId": 213,
+        "teamAName": "Deer Park",
+        "teamBName": "Sponge(Albert and Bob)",
+        "map": "Around UNSW",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Around UNSW",
+      "replay_sha256": "45d23a49f81a4346e82073070cfa706f2b63e3824818ce14a37e98ab442c4557",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 12,
+          "longestDragon": 42,
+          "totalLength": 213
+        },
+        "teamB": {
+          "dragonCount": 6,
+          "longestDragon": 63,
+          "totalLength": 156
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 24146,
+          "pearls": 2049,
+          "portal_crossings": 33,
+          "declared_paid_steps": 58,
+          "children_created": 622,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 56
+        },
+        "B": {
+          "turns": 23441,
+          "pearls": 1426,
+          "portal_crossings": 89,
+          "declared_paid_steps": 109,
+          "children_created": 401,
+          "peak_population": 64,
+          "final_queen": 28,
+          "round100_population": 53
+        }
+      }
+    },
+    {
+      "game": 855257,
+      "metadata": {
+        "game": 855257,
+        "battle": 855256,
+        "teamAId": 15,
+        "teamBId": 213,
+        "teamAName": "Deer Park",
+        "teamBName": "Sponge(Albert and Bob)",
+        "map": "Australia",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Australia",
+      "replay_sha256": "2f4f384f9b4b8dab1b7ce3b313042fa897eb99d87c729f85cfba42d33c8a092a",
+      "rounds": 337,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        },
+        "teamB": {
+          "dragonCount": 62,
+          "longestDragon": 28,
+          "totalLength": 542
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 1908,
+          "pearls": 80,
+          "portal_crossings": 4,
+          "declared_paid_steps": 2,
+          "children_created": 33,
+          "peak_population": 13,
+          "final_queen": 0,
+          "round100_population": 12
+        },
+        "B": {
+          "turns": 18295,
+          "pearls": 1120,
+          "portal_crossings": 94,
+          "declared_paid_steps": 18,
+          "children_created": 225,
+          "peak_population": 64,
+          "final_queen": 10,
+          "round100_population": 63
+        }
+      }
+    },
+    {
+      "game": 855258,
+      "metadata": {
+        "game": 855258,
+        "battle": 855256,
+        "teamAId": 15,
+        "teamBId": 213,
+        "teamAName": "Deer Park",
+        "teamBName": "Sponge(Albert and Bob)",
+        "map": "Islands",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Islands",
+      "replay_sha256": "26c46a408ee6836644cc35f846db046f4e8acf0f5d2fa10c2c5bd1822c58c787",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 6,
+          "longestDragon": 10,
+          "totalLength": 36
+        },
+        "teamB": {
+          "dragonCount": 14,
+          "longestDragon": 51,
+          "totalLength": 246
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 8752,
+          "pearls": 1021,
+          "portal_crossings": 37,
+          "declared_paid_steps": 29,
+          "children_created": 414,
+          "peak_population": 37,
+          "final_queen": 0,
+          "round100_population": 13
+        },
+        "B": {
+          "turns": 24790,
+          "pearls": 1484,
+          "portal_crossings": 290,
+          "declared_paid_steps": 46,
+          "children_created": 394,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 62
+        }
+      }
+    },
+    {
+      "game": 855259,
+      "metadata": {
+        "game": 855259,
+        "battle": 855256,
+        "teamAId": 15,
+        "teamBId": 213,
+        "teamAName": "Deer Park",
+        "teamBName": "Sponge(Albert and Bob)",
+        "map": "Tower Defense",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Tower Defense",
+      "replay_sha256": "83845db2f53366fcacf0262643199b83853daf6da859fcfab87660317e3d232e",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 1,
+          "longestDragon": 11,
+          "totalLength": 11
+        },
+        "teamB": {
+          "dragonCount": 6,
+          "longestDragon": 47,
+          "totalLength": 114
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 1123,
+          "pearls": 78,
+          "portal_crossings": 0,
+          "declared_paid_steps": 2,
+          "children_created": 26,
+          "peak_population": 4,
+          "final_queen": 0,
+          "round100_population": 4
+        },
+        "B": {
+          "turns": 8524,
+          "pearls": 534,
+          "portal_crossings": 0,
+          "declared_paid_steps": 4,
+          "children_created": 177,
+          "peak_population": 34,
+          "final_queen": 0,
+          "round100_population": 16
+        }
+      }
+    },
+    {
+      "game": 855260,
+      "metadata": {
+        "game": 855260,
+        "battle": 855256,
+        "teamAId": 15,
+        "teamBId": 213,
+        "teamAName": "Deer Park",
+        "teamBName": "Sponge(Albert and Bob)",
+        "map": "weakhold",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "weakhold",
+      "replay_sha256": "ee58328243f72e6a1ac1e5327b7e1847dc492ad84c4bae4316aafa0b2c3b8916",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 1,
+          "longestDragon": 23,
+          "totalLength": 23
+        },
+        "teamB": {
+          "dragonCount": 2,
+          "longestDragon": 44,
+          "totalLength": 65
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 3380,
+          "pearls": 330,
+          "portal_crossings": 0,
+          "declared_paid_steps": 4,
+          "children_created": 136,
+          "peak_population": 13,
+          "final_queen": 0,
+          "round100_population": 10
+        },
+        "B": {
+          "turns": 5967,
+          "pearls": 444,
+          "portal_crossings": 0,
+          "declared_paid_steps": 7,
+          "children_created": 160,
+          "peak_population": 24,
+          "final_queen": 0,
+          "round100_population": 12
+        }
+      }
+    },
+    {
+      "game": 855261,
+      "metadata": {
+        "game": 855261,
+        "battle": 855261,
+        "teamAId": 15,
+        "teamBId": 91,
+        "teamAName": "Deer Park",
+        "teamBName": "SSS",
+        "map": "Around UNSW",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "Around UNSW",
+      "replay_sha256": "1ed1edf3e345a461f02cfd98eab0e30ddfaedc93a1e432735f9f5555aa45dd7c",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 13,
+          "longestDragon": 39,
+          "totalLength": 173
+        },
+        "teamB": {
+          "dragonCount": 59,
+          "longestDragon": 26,
+          "totalLength": 318
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 21845,
+          "pearls": 1568,
+          "portal_crossings": 58,
+          "declared_paid_steps": 80,
+          "children_created": 496,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 36
+        },
+        "B": {
+          "turns": 29655,
+          "pearls": 2180,
+          "portal_crossings": 47,
+          "declared_paid_steps": 218,
+          "children_created": 545,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 62
+        }
+      }
+    },
+    {
+      "game": 855262,
+      "metadata": {
+        "game": 855262,
+        "battle": 855261,
+        "teamAId": 15,
+        "teamBId": 91,
+        "teamAName": "Deer Park",
+        "teamBName": "SSS",
+        "map": "Australia",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Australia",
+      "replay_sha256": "1799bb130ec855918fb862f268e2216372a7e8f933272abb5180f5a9ff07836e",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 9,
+          "longestDragon": 30,
+          "totalLength": 131
+        },
+        "teamB": {
+          "dragonCount": 35,
+          "longestDragon": 38,
+          "totalLength": 279
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 19515,
+          "pearls": 1188,
+          "portal_crossings": 57,
+          "declared_paid_steps": 63,
+          "children_created": 359,
+          "peak_population": 63,
+          "final_queen": 0,
+          "round100_population": 27
+        },
+        "B": {
+          "turns": 25770,
+          "pearls": 1471,
+          "portal_crossings": 105,
+          "declared_paid_steps": 192,
+          "children_created": 383,
+          "peak_population": 64,
+          "final_queen": 38,
+          "round100_population": 45
+        }
+      }
+    },
+    {
+      "game": 855263,
+      "metadata": {
+        "game": 855263,
+        "battle": 855261,
+        "teamAId": 15,
+        "teamBId": 91,
+        "teamAName": "Deer Park",
+        "teamBName": "SSS",
+        "map": "Islands",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Islands",
+      "replay_sha256": "4f64861999240fb568fa9ad838eb55cc551d029ac6956a76dd5d3de3851c17f6",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 4,
+          "longestDragon": 21,
+          "totalLength": 56
+        },
+        "teamB": {
+          "dragonCount": 35,
+          "longestDragon": 97,
+          "totalLength": 221
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 15889,
+          "pearls": 1220,
+          "portal_crossings": 122,
+          "declared_paid_steps": 37,
+          "children_created": 451,
+          "peak_population": 58,
+          "final_queen": 0,
+          "round100_population": 35
+        },
+        "B": {
+          "turns": 25743,
+          "pearls": 1704,
+          "portal_crossings": 226,
+          "declared_paid_steps": 194,
+          "children_created": 554,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 62
+        }
+      }
+    },
+    {
+      "game": 855264,
+      "metadata": {
+        "game": 855264,
+        "battle": 855261,
+        "teamAId": 15,
+        "teamBId": 91,
+        "teamAName": "Deer Park",
+        "teamBName": "SSS",
+        "map": "Tower Defense",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Tower Defense",
+      "replay_sha256": "778c4a142c1a3c74a3bb9341e2c3702a35bc104ba139517bddd052dd2a6dce34",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 1,
+          "longestDragon": 11,
+          "totalLength": 11
+        },
+        "teamB": {
+          "dragonCount": 9,
+          "longestDragon": 62,
+          "totalLength": 102
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 1536,
+          "pearls": 65,
+          "portal_crossings": 0,
+          "declared_paid_steps": 5,
+          "children_created": 21,
+          "peak_population": 6,
+          "final_queen": 0,
+          "round100_population": 4
+        },
+        "B": {
+          "turns": 11191,
+          "pearls": 507,
+          "portal_crossings": 0,
+          "declared_paid_steps": 63,
+          "children_created": 165,
+          "peak_population": 49,
+          "final_queen": 11,
+          "round100_population": 15
+        }
+      }
+    },
+    {
+      "game": 855265,
+      "metadata": {
+        "game": 855265,
+        "battle": 855261,
+        "teamAId": 15,
+        "teamBId": 91,
+        "teamAName": "Deer Park",
+        "teamBName": "SSS",
+        "map": "weakhold",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "weakhold",
+      "replay_sha256": "c842d2e5328291f7ce50d212c0e292347918bfb7ee2d9d255eccbd0e659f7392",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 1,
+          "longestDragon": 17,
+          "totalLength": 17
+        },
+        "teamB": {
+          "dragonCount": 4,
+          "longestDragon": 47,
+          "totalLength": 65
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 4829,
+          "pearls": 401,
+          "portal_crossings": 0,
+          "declared_paid_steps": 4,
+          "children_created": 177,
+          "peak_population": 20,
+          "final_queen": 0,
+          "round100_population": 12
+        },
+        "B": {
+          "turns": 7062,
+          "pearls": 404,
+          "portal_crossings": 0,
+          "declared_paid_steps": 45,
+          "children_created": 123,
+          "peak_population": 35,
+          "final_queen": 0,
+          "round100_population": 9
+        }
+      }
+    },
+    {
+      "game": 855276,
+      "metadata": {
+        "game": 855276,
+        "battle": 855276,
+        "teamAId": 15,
+        "teamBId": 306,
+        "teamAName": "Deer Park",
+        "teamBName": "Cutlery",
+        "map": "Around UNSW",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Around UNSW",
+      "replay_sha256": "da42d3a05051599fe4815090d6e9023ecb4952c396c892bc41615b7401a589f1",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 3,
+          "longestDragon": 19,
+          "totalLength": 27
+        },
+        "teamB": {
+          "dragonCount": 45,
+          "longestDragon": 89,
+          "totalLength": 478
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 20384,
+          "pearls": 1248,
+          "portal_crossings": 35,
+          "declared_paid_steps": 39,
+          "children_created": 421,
+          "peak_population": 62,
+          "final_queen": 0,
+          "round100_population": 37
+        },
+        "B": {
+          "turns": 28212,
+          "pearls": 2743,
+          "portal_crossings": 135,
+          "declared_paid_steps": 147,
+          "children_created": 667,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 62
+        }
+      }
+    },
+    {
+      "game": 855277,
+      "metadata": {
+        "game": 855277,
+        "battle": 855276,
+        "teamAId": 15,
+        "teamBId": 306,
+        "teamAName": "Deer Park",
+        "teamBName": "Cutlery",
+        "map": "Australia",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Australia",
+      "replay_sha256": "637ae781cae137b2891a66947a4ae36fa75f14b08a883f6e4682ff801413f6fb",
+      "rounds": 467,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        },
+        "teamB": {
+          "dragonCount": 40,
+          "longestDragon": 81,
+          "totalLength": 549
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 4609,
+          "pearls": 168,
+          "portal_crossings": 6,
+          "declared_paid_steps": 3,
+          "children_created": 68,
+          "peak_population": 20,
+          "final_queen": 0,
+          "round100_population": 20
+        },
+        "B": {
+          "turns": 22358,
+          "pearls": 1924,
+          "portal_crossings": 167,
+          "declared_paid_steps": 60,
+          "children_created": 394,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 30
+        }
+      }
+    },
+    {
+      "game": 855278,
+      "metadata": {
+        "game": 855278,
+        "battle": 855276,
+        "teamAId": 15,
+        "teamBId": 306,
+        "teamAName": "Deer Park",
+        "teamBName": "Cutlery",
+        "map": "Islands",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Islands",
+      "replay_sha256": "480fee0ad7340f2bfefd89323a660bd67279063aff83f775131ee436e180e3d2",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 3,
+          "longestDragon": 24,
+          "totalLength": 31
+        },
+        "teamB": {
+          "dragonCount": 25,
+          "longestDragon": 112,
+          "totalLength": 270
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 11672,
+          "pearls": 1096,
+          "portal_crossings": 61,
+          "declared_paid_steps": 32,
+          "children_created": 445,
+          "peak_population": 39,
+          "final_queen": 0,
+          "round100_population": 20
+        },
+        "B": {
+          "turns": 24558,
+          "pearls": 2080,
+          "portal_crossings": 374,
+          "declared_paid_steps": 111,
+          "children_created": 558,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 59
+        }
+      }
+    },
+    {
+      "game": 855279,
+      "metadata": {
+        "game": 855279,
+        "battle": 855276,
+        "teamAId": 15,
+        "teamBId": 306,
+        "teamAName": "Deer Park",
+        "teamBName": "Cutlery",
+        "map": "Tower Defense",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "Tower Defense",
+      "replay_sha256": "110a84d83d4961306eeb97bda90e8908c5c6f7eb5b03c31353297b36f7bbeeea",
+      "rounds": 375,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 47,
+          "longestDragon": 4,
+          "totalLength": 117
+        },
+        "teamB": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 8313,
+          "pearls": 386,
+          "portal_crossings": 0,
+          "declared_paid_steps": 1,
+          "children_created": 161,
+          "peak_population": 50,
+          "final_queen": 0,
+          "round100_population": 4
+        },
+        "B": {
+          "turns": 1225,
+          "pearls": 47,
+          "portal_crossings": 0,
+          "declared_paid_steps": 10,
+          "children_created": 17,
+          "peak_population": 6,
+          "final_queen": 0,
+          "round100_population": 5
+        }
+      }
+    },
+    {
+      "game": 855280,
+      "metadata": {
+        "game": 855280,
+        "battle": 855276,
+        "teamAId": 15,
+        "teamBId": 306,
+        "teamAName": "Deer Park",
+        "teamBName": "Cutlery",
+        "map": "weakhold",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "weakhold",
+      "replay_sha256": "dd9d4af826a6c3d678aeeb750db2b7aaacfb3535905e444544ee963ba52d95b7",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 2,
+          "longestDragon": 23,
+          "totalLength": 43
+        },
+        "teamB": {
+          "dragonCount": 2,
+          "longestDragon": 10,
+          "totalLength": 13
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 9083,
+          "pearls": 617,
+          "portal_crossings": 0,
+          "declared_paid_steps": 1,
+          "children_created": 236,
+          "peak_population": 30,
+          "final_queen": 0,
+          "round100_population": 17
+        },
+        "B": {
+          "turns": 3085,
+          "pearls": 397,
+          "portal_crossings": 0,
+          "declared_paid_steps": 4,
+          "children_created": 173,
+          "peak_population": 11,
+          "final_queen": 0,
+          "round100_population": 5
+        }
+      }
+    },
+    {
+      "game": 855326,
+      "metadata": {
+        "game": 855326,
+        "battle": 855326,
+        "teamAId": 15,
+        "teamBId": 264,
+        "teamAName": "Deer Park",
+        "teamBName": "forgot to mention",
+        "map": "Around UNSW",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Around UNSW",
+      "replay_sha256": "4f54008ccf65d7352ba62f32c6395fb34684bb188b72ca57d4bc3b3327af974c",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 9,
+          "longestDragon": 39,
+          "totalLength": 222
+        },
+        "teamB": {
+          "dragonCount": 20,
+          "longestDragon": 51,
+          "totalLength": 219
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 23995,
+          "pearls": 2068,
+          "portal_crossings": 21,
+          "declared_paid_steps": 66,
+          "children_created": 666,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 56
+        },
+        "B": {
+          "turns": 22822,
+          "pearls": 1938,
+          "portal_crossings": 56,
+          "declared_paid_steps": 116,
+          "children_created": 600,
+          "peak_population": 63,
+          "final_queen": 0,
+          "round100_population": 49
+        }
+      }
+    },
+    {
+      "game": 855327,
+      "metadata": {
+        "game": 855327,
+        "battle": 855326,
+        "teamAId": 15,
+        "teamBId": 264,
+        "teamAName": "Deer Park",
+        "teamBName": "forgot to mention",
+        "map": "Australia",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Australia",
+      "replay_sha256": "45e61b2757453a10e623622f81300624da4c3702b8271aa3be8c3a60b041af44",
+      "rounds": 204,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        },
+        "teamB": {
+          "dragonCount": 62,
+          "longestDragon": 16,
+          "totalLength": 350
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 1852,
+          "pearls": 42,
+          "portal_crossings": 2,
+          "declared_paid_steps": 1,
+          "children_created": 18,
+          "peak_population": 15,
+          "final_queen": 0,
+          "round100_population": 11
+        },
+        "B": {
+          "turns": 8766,
+          "pearls": 487,
+          "portal_crossings": 46,
+          "declared_paid_steps": 14,
+          "children_created": 98,
+          "peak_population": 63,
+          "final_queen": 0,
+          "round100_population": 56
+        }
+      }
+    },
+    {
+      "game": 855328,
+      "metadata": {
+        "game": 855328,
+        "battle": 855326,
+        "teamAId": 15,
+        "teamBId": 264,
+        "teamAName": "Deer Park",
+        "teamBName": "forgot to mention",
+        "map": "Islands",
+        "winner": "a",
+        "ranked": false
+      },
+      "map": "Islands",
+      "replay_sha256": "94d70786da08cabb1c976b38ee927374fdefa320d842898a89693ec61f309c19",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 9,
+          "longestDragon": 37,
+          "totalLength": 86
+        },
+        "teamB": {
+          "dragonCount": 5,
+          "longestDragon": 35,
+          "totalLength": 82
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 14936,
+          "pearls": 1396,
+          "portal_crossings": 109,
+          "declared_paid_steps": 50,
+          "children_created": 527,
+          "peak_population": 51,
+          "final_queen": 0,
+          "round100_population": 38
+        },
+        "B": {
+          "turns": 20154,
+          "pearls": 1572,
+          "portal_crossings": 254,
+          "declared_paid_steps": 87,
+          "children_created": 451,
+          "peak_population": 63,
+          "final_queen": 0,
+          "round100_population": 43
+        }
+      }
+    },
+    {
+      "game": 855329,
+      "metadata": {
+        "game": 855329,
+        "battle": 855326,
+        "teamAId": 15,
+        "teamBId": 264,
+        "teamAName": "Deer Park",
+        "teamBName": "forgot to mention",
+        "map": "Tower Defense",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Tower Defense",
+      "replay_sha256": "d0e9db3d37c56ccabe1723d8964cdd5c9339b6e28ffe9309804d06ad6c58d04b",
+      "rounds": 148,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        },
+        "teamB": {
+          "dragonCount": 38,
+          "longestDragon": 3,
+          "totalLength": 89
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 360,
+          "pearls": 6,
+          "portal_crossings": 0,
+          "declared_paid_steps": 0,
+          "children_created": 3,
+          "peak_population": 4,
+          "final_queen": 0,
+          "round100_population": 2
+        },
+        "B": {
+          "turns": 2136,
+          "pearls": 154,
+          "portal_crossings": 0,
+          "declared_paid_steps": 3,
+          "children_created": 67,
+          "peak_population": 39,
+          "final_queen": 3,
+          "round100_population": 25
+        }
+      }
+    },
+    {
+      "game": 855330,
+      "metadata": {
+        "game": 855330,
+        "battle": 855326,
+        "teamAId": 15,
+        "teamBId": 264,
+        "teamAName": "Deer Park",
+        "teamBName": "forgot to mention",
+        "map": "weakhold",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "weakhold",
+      "replay_sha256": "ae9280517a632c0c9ff6f68d56d3ec16c63a074a10476f87a316b49e172d9e28",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 4,
+          "longestDragon": 19,
+          "totalLength": 35
+        },
+        "teamB": {
+          "dragonCount": 2,
+          "longestDragon": 31,
+          "totalLength": 33
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 4771,
+          "pearls": 462,
+          "portal_crossings": 0,
+          "declared_paid_steps": 4,
+          "children_created": 190,
+          "peak_population": 18,
+          "final_queen": 0,
+          "round100_population": 7
+        },
+        "B": {
+          "turns": 5767,
+          "pearls": 405,
+          "portal_crossings": 0,
+          "declared_paid_steps": 14,
+          "children_created": 158,
+          "peak_population": 28,
+          "final_queen": 0,
+          "round100_population": 10
+        }
+      }
+    },
+    {
+      "game": 855331,
+      "metadata": {
+        "game": 855331,
+        "battle": 855331,
+        "teamAId": 15,
+        "teamBId": 842,
+        "teamAName": "Deer Park",
+        "teamBName": "horse",
+        "map": "Around UNSW",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Around UNSW",
+      "replay_sha256": "adbb7ca53a83234a112736bc4acd845cb8df00c7a880b2d437cbd85914fdc26c",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 12,
+          "longestDragon": 35,
+          "totalLength": 166
+        },
+        "teamB": {
+          "dragonCount": 25,
+          "longestDragon": 88,
+          "totalLength": 264
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 21732,
+          "pearls": 1384,
+          "portal_crossings": 53,
+          "declared_paid_steps": 32,
+          "children_created": 414,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 38
+        },
+        "B": {
+          "turns": 24743,
+          "pearls": 2067,
+          "portal_crossings": 29,
+          "declared_paid_steps": 105,
+          "children_created": 421,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 64
+        }
+      }
+    },
+    {
+      "game": 855332,
+      "metadata": {
+        "game": 855332,
+        "battle": 855331,
+        "teamAId": 15,
+        "teamBId": 842,
+        "teamAName": "Deer Park",
+        "teamBName": "horse",
+        "map": "Australia",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Australia",
+      "replay_sha256": "cbd2d3865958df7ebbbc1f66fbf0854b22d90cd4652fa84ae0e7147c0d3a9eb1",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 9,
+          "longestDragon": 47,
+          "totalLength": 135
+        },
+        "teamB": {
+          "dragonCount": 20,
+          "longestDragon": 49,
+          "totalLength": 257
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 18809,
+          "pearls": 1138,
+          "portal_crossings": 59,
+          "declared_paid_steps": 41,
+          "children_created": 351,
+          "peak_population": 60,
+          "final_queen": 0,
+          "round100_population": 26
+        },
+        "B": {
+          "turns": 21397,
+          "pearls": 1214,
+          "portal_crossings": 70,
+          "declared_paid_steps": 90,
+          "children_created": 295,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 46
+        }
+      }
+    },
+    {
+      "game": 855333,
+      "metadata": {
+        "game": 855333,
+        "battle": 855331,
+        "teamAId": 15,
+        "teamBId": 842,
+        "teamAName": "Deer Park",
+        "teamBName": "horse",
+        "map": "Islands",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Islands",
+      "replay_sha256": "6f6767319f7529713aa31caba8062ce5cd7b2eb927b957cf00dd06068b1734c5",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 6,
+          "longestDragon": 39,
+          "totalLength": 117
+        },
+        "teamB": {
+          "dragonCount": 2,
+          "longestDragon": 60,
+          "totalLength": 86
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 18255,
+          "pearls": 1584,
+          "portal_crossings": 140,
+          "declared_paid_steps": 40,
+          "children_created": 578,
+          "peak_population": 59,
+          "final_queen": 0,
+          "round100_population": 42
+        },
+        "B": {
+          "turns": 19512,
+          "pearls": 1395,
+          "portal_crossings": 190,
+          "declared_paid_steps": 76,
+          "children_created": 383,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 49
+        }
+      }
+    },
+    {
+      "game": 855334,
+      "metadata": {
+        "game": 855334,
+        "battle": 855331,
+        "teamAId": 15,
+        "teamBId": 842,
+        "teamAName": "Deer Park",
+        "teamBName": "horse",
+        "map": "Tower Defense",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "Tower Defense",
+      "replay_sha256": "fa4bdd2e0890d931fa26503e5a7245c3fdf467408756274622429b942c4b7708",
+      "rounds": 170,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "teamEliminated",
+        "teamA": {
+          "dragonCount": 0,
+          "longestDragon": 0,
+          "totalLength": 0
+        },
+        "teamB": {
+          "dragonCount": 45,
+          "longestDragon": 4,
+          "totalLength": 113
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 379,
+          "pearls": 14,
+          "portal_crossings": 0,
+          "declared_paid_steps": 0,
+          "children_created": 6,
+          "peak_population": 4,
+          "final_queen": 0,
+          "round100_population": 4
+        },
+        "B": {
+          "turns": 3657,
+          "pearls": 191,
+          "portal_crossings": 0,
+          "declared_paid_steps": 4,
+          "children_created": 79,
+          "peak_population": 47,
+          "final_queen": 2,
+          "round100_population": 27
+        }
+      }
+    },
+    {
+      "game": 855335,
+      "metadata": {
+        "game": 855335,
+        "battle": 855331,
+        "teamAId": 15,
+        "teamBId": 842,
+        "teamAName": "Deer Park",
+        "teamBName": "horse",
+        "map": "weakhold",
+        "winner": "b",
+        "ranked": false
+      },
+      "map": "weakhold",
+      "replay_sha256": "0a517d530d82167dd46469a0a7ad688e93db84048b67fdf862e7dca25df6f22c",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 1,
+          "longestDragon": 10,
+          "totalLength": 10
+        },
+        "teamB": {
+          "dragonCount": 4,
+          "longestDragon": 48,
+          "totalLength": 75
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 3742,
+          "pearls": 372,
+          "portal_crossings": 0,
+          "declared_paid_steps": 3,
+          "children_created": 170,
+          "peak_population": 13,
+          "final_queen": 0,
+          "round100_population": 8
+        },
+        "B": {
+          "turns": 9179,
+          "pearls": 606,
+          "portal_crossings": 0,
+          "declared_paid_steps": 5,
+          "children_created": 218,
+          "peak_population": 43,
+          "final_queen": 0,
+          "round100_population": 16
+        }
+      }
+    }
+  ],
+  "candidate_games": [
+    {
+      "game": "0-9-501-0-0",
+      "metadata": {
+        "game": "0-9-501-0-0",
+        "candidate_team": "A",
+        "teamAId": 925,
+        "teamBId": 0,
+        "map": "/tmp/sudo-win-leader-study/current-maps/9.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Schooltime",
+      "replay_sha256": "74fc816e2e4ea2c6cd43f80764fa4023f43ca474d6acbaa07b5e85bffa958d44",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 34,
+          "longestDragon": 14,
+          "totalLength": 156
+        },
+        "teamB": {
+          "dragonCount": 64,
+          "longestDragon": 19,
+          "totalLength": 333
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 6298,
+          "pearls": 325,
+          "portal_crossings": 8,
+          "declared_paid_steps": 48,
+          "children_created": 89,
+          "peak_population": 34,
+          "final_queen": 3,
+          "round100_population": 3
+        },
+        "B": {
+          "turns": 14690,
+          "pearls": 797,
+          "portal_crossings": 1,
+          "declared_paid_steps": 127,
+          "children_created": 165,
+          "peak_population": 64,
+          "final_queen": 3,
+          "round100_population": 6
+        }
+      }
+    },
+    {
+      "game": "0-9-501-1-0",
+      "metadata": {
+        "game": "0-9-501-1-0",
+        "candidate_team": "B",
+        "teamAId": 0,
+        "teamBId": 925,
+        "map": "/tmp/sudo-win-leader-study/current-maps/9.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Schooltime",
+      "replay_sha256": "b8f0876f8359ed2e780e5fc2153660e3af71bb26b716e9e151574dc18ca439a1",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 28,
+          "longestDragon": 17,
+          "totalLength": 107
+        },
+        "teamB": {
+          "dragonCount": 56,
+          "longestDragon": 87,
+          "totalLength": 360
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 2268,
+          "pearls": 127,
+          "portal_crossings": 0,
+          "declared_paid_steps": 1,
+          "children_created": 38,
+          "peak_population": 34,
+          "final_queen": 3,
+          "round100_population": 3
+        },
+        "B": {
+          "turns": 9560,
+          "pearls": 652,
+          "portal_crossings": 10,
+          "declared_paid_steps": 70,
+          "children_created": 152,
+          "peak_population": 64,
+          "final_queen": 3,
+          "round100_population": 6
+        }
+      }
+    },
+    {
+      "game": "1-20-501-0-0",
+      "metadata": {
+        "game": "1-20-501-0-0",
+        "candidate_team": "A",
+        "teamAId": 925,
+        "teamBId": 0,
+        "map": "/tmp/sudo-win-leader-study/current-maps/20.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Portals",
+      "replay_sha256": "dbc175b16d894da7d391a454efec72d4a03c97df0426da168ae4463035b8f718",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 2,
+          "longestDragon": 8,
+          "totalLength": 11
+        },
+        "teamB": {
+          "dragonCount": 2,
+          "longestDragon": 5,
+          "totalLength": 8
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 1343,
+          "pearls": 17,
+          "portal_crossings": 3,
+          "declared_paid_steps": 1,
+          "children_created": 4,
+          "peak_population": 5,
+          "final_queen": 3,
+          "round100_population": 3
+        },
+        "B": {
+          "turns": 1131,
+          "pearls": 2,
+          "portal_crossings": 0,
+          "declared_paid_steps": 0,
+          "children_created": 0,
+          "peak_population": 3,
+          "final_queen": 5,
+          "round100_population": 3
+        }
+      }
+    },
+    {
+      "game": "1-20-501-1-0",
+      "metadata": {
+        "game": "1-20-501-1-0",
+        "candidate_team": "B",
+        "teamAId": 0,
+        "teamBId": 925,
+        "map": "/tmp/sudo-win-leader-study/current-maps/20.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Portals",
+      "replay_sha256": "91fda120d525ac76c64a3e012d54cf7755819f473f720c44dc0f4f0133d4c634",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 6,
+          "longestDragon": 6,
+          "totalLength": 18
+        },
+        "teamB": {
+          "dragonCount": 2,
+          "longestDragon": 5,
+          "totalLength": 8
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 2236,
+          "pearls": 24,
+          "portal_crossings": 1,
+          "declared_paid_steps": 0,
+          "children_created": 9,
+          "peak_population": 7,
+          "final_queen": 3,
+          "round100_population": 3
+        },
+        "B": {
+          "turns": 1449,
+          "pearls": 2,
+          "portal_crossings": 0,
+          "declared_paid_steps": 0,
+          "children_created": 0,
+          "peak_population": 3,
+          "final_queen": 5,
+          "round100_population": 3
+        }
+      }
+    },
+    {
+      "game": "2-21-501-0-0",
+      "metadata": {
+        "game": "2-21-501-0-0",
+        "candidate_team": "A",
+        "teamAId": 925,
+        "teamBId": 0,
+        "map": "/tmp/sudo-win-leader-study/current-maps/21.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Slithery Fight",
+      "replay_sha256": "28d53119e5d5977ac2c390865712c230bf731662e75104320e713df10983a35d",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 57,
+          "longestDragon": 15,
+          "totalLength": 230
+        },
+        "teamB": {
+          "dragonCount": 34,
+          "longestDragon": 18,
+          "totalLength": 141
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 20301,
+          "pearls": 1686,
+          "portal_crossings": 14,
+          "declared_paid_steps": 407,
+          "children_created": 505,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 20
+        },
+        "B": {
+          "turns": 14511,
+          "pearls": 815,
+          "portal_crossings": 6,
+          "declared_paid_steps": 205,
+          "children_created": 245,
+          "peak_population": 44,
+          "final_queen": 0,
+          "round100_population": 13
+        }
+      }
+    },
+    {
+      "game": "2-21-501-1-0",
+      "metadata": {
+        "game": "2-21-501-1-0",
+        "candidate_team": "B",
+        "teamAId": 0,
+        "teamBId": 925,
+        "map": "/tmp/sudo-win-leader-study/current-maps/21.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Slithery Fight",
+      "replay_sha256": "774b78e855bfd4c723a0c2b1422592c3dc1531e49f991a004fbdf2ad0d194f9e",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 45,
+          "longestDragon": 32,
+          "totalLength": 195
+        },
+        "teamB": {
+          "dragonCount": 63,
+          "longestDragon": 14,
+          "totalLength": 225
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 15927,
+          "pearls": 1186,
+          "portal_crossings": 0,
+          "declared_paid_steps": 331,
+          "children_created": 343,
+          "peak_population": 56,
+          "final_queen": 0,
+          "round100_population": 13
+        },
+        "B": {
+          "turns": 18622,
+          "pearls": 1232,
+          "portal_crossings": 21,
+          "declared_paid_steps": 303,
+          "children_created": 384,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 19
+        }
+      }
+    },
+    {
+      "game": "3-7-501-0-0",
+      "metadata": {
+        "game": "3-7-501-0-0",
+        "candidate_team": "A",
+        "teamAId": 925,
+        "teamBId": 0,
+        "map": "/tmp/sudo-win-leader-study/current-maps/7.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Queen Of Spades",
+      "replay_sha256": "0c38df319e85135c41143faa37b5613e1de9fcf979b61457a7eb7e3978305e8a",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 23,
+          "longestDragon": 11,
+          "totalLength": 107
+        },
+        "teamB": {
+          "dragonCount": 1,
+          "longestDragon": 12,
+          "totalLength": 12
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 3428,
+          "pearls": 160,
+          "portal_crossings": 5,
+          "declared_paid_steps": 12,
+          "children_created": 38,
+          "peak_population": 23,
+          "final_queen": 0,
+          "round100_population": 2
+        },
+        "B": {
+          "turns": 924,
+          "pearls": 25,
+          "portal_crossings": 0,
+          "declared_paid_steps": 0,
+          "children_created": 0,
+          "peak_population": 2,
+          "final_queen": 0,
+          "round100_population": 2
+        }
+      }
+    },
+    {
+      "game": "3-7-501-1-0",
+      "metadata": {
+        "game": "3-7-501-1-0",
+        "candidate_team": "B",
+        "teamAId": 0,
+        "teamBId": 925,
+        "map": "/tmp/sudo-win-leader-study/current-maps/7.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Queen Of Spades",
+      "replay_sha256": "12145d4dd841019af45795fa2603a803ea1d51247d9b9aacd2b5e6ac0101be17",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 5,
+          "longestDragon": 23,
+          "totalLength": 59
+        },
+        "teamB": {
+          "dragonCount": 3,
+          "longestDragon": 33,
+          "totalLength": 68
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 1242,
+          "pearls": 57,
+          "portal_crossings": 0,
+          "declared_paid_steps": 1,
+          "children_created": 4,
+          "peak_population": 6,
+          "final_queen": 23,
+          "round100_population": 2
+        },
+        "B": {
+          "turns": 1283,
+          "pearls": 65,
+          "portal_crossings": 0,
+          "declared_paid_steps": 1,
+          "children_created": 2,
+          "peak_population": 4,
+          "final_queen": 0,
+          "round100_population": 2
+        }
+      }
+    },
+    {
+      "game": "4-32-501-0-0",
+      "metadata": {
+        "game": "4-32-501-0-0",
+        "candidate_team": "A",
+        "teamAId": 925,
+        "teamBId": 0,
+        "map": "/tmp/sudo-win-leader-study/current-maps/32.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Stripes",
+      "replay_sha256": "be8adb9de146d4328b31f74e2853ab6e23b1c868cea9d9e3fabbf79259c44ee4",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 10,
+          "longestDragon": 7,
+          "totalLength": 38
+        },
+        "teamB": {
+          "dragonCount": 10,
+          "longestDragon": 6,
+          "totalLength": 33
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 2676,
+          "pearls": 160,
+          "portal_crossings": 89,
+          "declared_paid_steps": 47,
+          "children_created": 39,
+          "peak_population": 15,
+          "final_queen": 0,
+          "round100_population": 3
+        },
+        "B": {
+          "turns": 2887,
+          "pearls": 116,
+          "portal_crossings": 75,
+          "declared_paid_steps": 26,
+          "children_created": 34,
+          "peak_population": 13,
+          "final_queen": 0,
+          "round100_population": 7
+        }
+      }
+    },
+    {
+      "game": "4-32-501-1-0",
+      "metadata": {
+        "game": "4-32-501-1-0",
+        "candidate_team": "B",
+        "teamAId": 0,
+        "teamBId": 925,
+        "map": "/tmp/sudo-win-leader-study/current-maps/32.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Stripes",
+      "replay_sha256": "4b605c2b2a8269791fe632764d8bad5aab693c8cdae5ba6a36c6fdd596709819",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 3,
+          "longestDragon": 13,
+          "totalLength": 17
+        },
+        "teamB": {
+          "dragonCount": 19,
+          "longestDragon": 7,
+          "totalLength": 68
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 1685,
+          "pearls": 43,
+          "portal_crossings": 25,
+          "declared_paid_steps": 5,
+          "children_created": 11,
+          "peak_population": 9,
+          "final_queen": 0,
+          "round100_population": 2
+        },
+        "B": {
+          "turns": 2206,
+          "pearls": 162,
+          "portal_crossings": 85,
+          "declared_paid_steps": 16,
+          "children_created": 52,
+          "peak_population": 21,
+          "final_queen": 0,
+          "round100_population": 2
+        }
+      }
+    },
+    {
+      "game": "5-4-501-0-0",
+      "metadata": {
+        "game": "5-4-501-0-0",
+        "candidate_team": "A",
+        "teamAId": 925,
+        "teamBId": 0,
+        "map": "/tmp/sudo-win-leader-study/current-maps/4.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Default",
+      "replay_sha256": "7074ddaec26b467f7c0a4f49c30ffe93eb8a7c13ca29d30fd56f05cd0fee91b6",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 21,
+          "longestDragon": 12,
+          "totalLength": 140
+        },
+        "teamB": {
+          "dragonCount": 9,
+          "longestDragon": 14,
+          "totalLength": 55
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 6465,
+          "pearls": 229,
+          "portal_crossings": 12,
+          "declared_paid_steps": 50,
+          "children_created": 42,
+          "peak_population": 25,
+          "final_queen": 0,
+          "round100_population": 4
+        },
+        "B": {
+          "turns": 3220,
+          "pearls": 62,
+          "portal_crossings": 0,
+          "declared_paid_steps": 5,
+          "children_created": 8,
+          "peak_population": 9,
+          "final_queen": 0,
+          "round100_population": 4
+        }
+      }
+    },
+    {
+      "game": "5-4-501-1-0",
+      "metadata": {
+        "game": "5-4-501-1-0",
+        "candidate_team": "B",
+        "teamAId": 0,
+        "teamBId": 925,
+        "map": "/tmp/sudo-win-leader-study/current-maps/4.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Default",
+      "replay_sha256": "48ab895fe96a4c5a92561cd65bb3459c3563ac51e926e3815134f26823b84bbc",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 23,
+          "longestDragon": 14,
+          "totalLength": 94
+        },
+        "teamB": {
+          "dragonCount": 24,
+          "longestDragon": 24,
+          "totalLength": 123
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 4627,
+          "pearls": 120,
+          "portal_crossings": 4,
+          "declared_paid_steps": 15,
+          "children_created": 27,
+          "peak_population": 27,
+          "final_queen": 0,
+          "round100_population": 4
+        },
+        "B": {
+          "turns": 3950,
+          "pearls": 148,
+          "portal_crossings": 5,
+          "declared_paid_steps": 13,
+          "children_created": 33,
+          "peak_population": 26,
+          "final_queen": 0,
+          "round100_population": 4
+        }
+      }
+    },
+    {
+      "game": "6-33-501-0-0",
+      "metadata": {
+        "game": "6-33-501-0-0",
+        "candidate_team": "A",
+        "teamAId": 925,
+        "teamBId": 0,
+        "map": "/tmp/sudo-win-leader-study/current-maps/33.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Tower Defense",
+      "replay_sha256": "a289781e9ef9fbcd3cb5876636eb28980a8e8dc14f0b9cdf651c5d194a8ece3e",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 22,
+          "longestDragon": 6,
+          "totalLength": 70
+        },
+        "teamB": {
+          "dragonCount": 2,
+          "longestDragon": 20,
+          "totalLength": 28
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 4670,
+          "pearls": 277,
+          "portal_crossings": 0,
+          "declared_paid_steps": 93,
+          "children_created": 71,
+          "peak_population": 25,
+          "final_queen": 0,
+          "round100_population": 2
+        },
+        "B": {
+          "turns": 1014,
+          "pearls": 26,
+          "portal_crossings": 0,
+          "declared_paid_steps": 0,
+          "children_created": 1,
+          "peak_population": 3,
+          "final_queen": 0,
+          "round100_population": 2
+        }
+      }
+    },
+    {
+      "game": "6-33-501-1-0",
+      "metadata": {
+        "game": "6-33-501-1-0",
+        "candidate_team": "B",
+        "teamAId": 0,
+        "teamBId": 925,
+        "map": "/tmp/sudo-win-leader-study/current-maps/33.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Tower Defense",
+      "replay_sha256": "72e8300faed507bb07435687147cd8c1f19649d5124cb50b4766aa66e2d1b6f3",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 1,
+          "longestDragon": 10,
+          "totalLength": 10
+        },
+        "teamB": {
+          "dragonCount": 6,
+          "longestDragon": 8,
+          "totalLength": 28
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 839,
+          "pearls": 8,
+          "portal_crossings": 0,
+          "declared_paid_steps": 0,
+          "children_created": 0,
+          "peak_population": 2,
+          "final_queen": 0,
+          "round100_population": 2
+        },
+        "B": {
+          "turns": 1404,
+          "pearls": 34,
+          "portal_crossings": 0,
+          "declared_paid_steps": 1,
+          "children_created": 8,
+          "peak_population": 7,
+          "final_queen": 0,
+          "round100_population": 2
+        }
+      }
+    },
+    {
+      "game": "7-30-501-0-0",
+      "metadata": {
+        "game": "7-30-501-0-0",
+        "candidate_team": "A",
+        "teamAId": 925,
+        "teamBId": 0,
+        "map": "/tmp/sudo-win-leader-study/current-maps/30.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Islands",
+      "replay_sha256": "17b263149408c15e6a5b150099253436a2098c1ad08fd744f6fb53beb9af336f",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 29,
+          "longestDragon": 42,
+          "totalLength": 259
+        },
+        "teamB": {
+          "dragonCount": 18,
+          "longestDragon": 30,
+          "totalLength": 116
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 5273,
+          "pearls": 359,
+          "portal_crossings": 3,
+          "declared_paid_steps": 32,
+          "children_created": 59,
+          "peak_population": 32,
+          "final_queen": 0,
+          "round100_population": 5
+        },
+        "B": {
+          "turns": 3398,
+          "pearls": 145,
+          "portal_crossings": 0,
+          "declared_paid_steps": 21,
+          "children_created": 22,
+          "peak_population": 19,
+          "final_queen": 0,
+          "round100_population": 5
+        }
+      }
+    },
+    {
+      "game": "7-30-501-1-0",
+      "metadata": {
+        "game": "7-30-501-1-0",
+        "candidate_team": "B",
+        "teamAId": 0,
+        "teamBId": 925,
+        "map": "/tmp/sudo-win-leader-study/current-maps/30.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Islands",
+      "replay_sha256": "2a55daf22bc8db2dda8262fcc4aeafe3985752c8aff0c77e1cf3d0c0a35bf47b",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 8,
+          "longestDragon": 20,
+          "totalLength": 54
+        },
+        "teamB": {
+          "dragonCount": 45,
+          "longestDragon": 30,
+          "totalLength": 332
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 2481,
+          "pearls": 80,
+          "portal_crossings": 0,
+          "declared_paid_steps": 2,
+          "children_created": 7,
+          "peak_population": 10,
+          "final_queen": 0,
+          "round100_population": 4
+        },
+        "B": {
+          "turns": 7875,
+          "pearls": 454,
+          "portal_crossings": 5,
+          "declared_paid_steps": 53,
+          "children_created": 78,
+          "peak_population": 48,
+          "final_queen": 0,
+          "round100_population": 5
+        }
+      }
+    },
+    {
+      "game": "8-34-501-0-0",
+      "metadata": {
+        "game": "8-34-501-0-0",
+        "candidate_team": "A",
+        "teamAId": 925,
+        "teamBId": 0,
+        "map": "/tmp/sudo-win-leader-study/current-maps/34.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Around UNSW",
+      "replay_sha256": "ceda89c7a57f236913f40e1fdca252ac78bf0640a0c926e12b6f286f4df37f66",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 62,
+          "longestDragon": 21,
+          "totalLength": 391
+        },
+        "teamB": {
+          "dragonCount": 42,
+          "longestDragon": 26,
+          "totalLength": 256
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 22086,
+          "pearls": 1168,
+          "portal_crossings": 4,
+          "declared_paid_steps": 241,
+          "children_created": 222,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 18
+        },
+        "B": {
+          "turns": 10761,
+          "pearls": 432,
+          "portal_crossings": 1,
+          "declared_paid_steps": 103,
+          "children_created": 78,
+          "peak_population": 43,
+          "final_queen": 0,
+          "round100_population": 12
+        }
+      }
+    },
+    {
+      "game": "8-34-501-1-0",
+      "metadata": {
+        "game": "8-34-501-1-0",
+        "candidate_team": "B",
+        "teamAId": 0,
+        "teamBId": 925,
+        "map": "/tmp/sudo-win-leader-study/current-maps/34.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Around UNSW",
+      "replay_sha256": "79d199e0ae748a185340be478574e1b8853992c4d79c62ef72325f50ebb0dec5",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 47,
+          "longestDragon": 12,
+          "totalLength": 215
+        },
+        "teamB": {
+          "dragonCount": 62,
+          "longestDragon": 53,
+          "totalLength": 429
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 13147,
+          "pearls": 425,
+          "portal_crossings": 0,
+          "declared_paid_steps": 75,
+          "children_created": 110,
+          "peak_population": 51,
+          "final_queen": 0,
+          "round100_population": 13
+        },
+        "B": {
+          "turns": 17347,
+          "pearls": 947,
+          "portal_crossings": 3,
+          "declared_paid_steps": 184,
+          "children_created": 160,
+          "peak_population": 64,
+          "final_queen": 0,
+          "round100_population": 12
+        }
+      }
+    },
+    {
+      "game": "9-11-501-0-0",
+      "metadata": {
+        "game": "9-11-501-0-0",
+        "candidate_team": "A",
+        "teamAId": 925,
+        "teamBId": 0,
+        "map": "/tmp/sudo-win-leader-study/current-maps/11.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Trophy",
+      "replay_sha256": "8d796b8182ef2783cda432b7cca615c11894212b4bfbf3372e6c5a28f118b250",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 42,
+          "longestDragon": 9,
+          "totalLength": 152
+        },
+        "teamB": {
+          "dragonCount": 10,
+          "longestDragon": 11,
+          "totalLength": 51
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 9878,
+          "pearls": 535,
+          "portal_crossings": 2,
+          "declared_paid_steps": 117,
+          "children_created": 157,
+          "peak_population": 43,
+          "final_queen": 0,
+          "round100_population": 2
+        },
+        "B": {
+          "turns": 3669,
+          "pearls": 141,
+          "portal_crossings": 2,
+          "declared_paid_steps": 32,
+          "children_created": 27,
+          "peak_population": 14,
+          "final_queen": 0,
+          "round100_population": 3
+        }
+      }
+    },
+    {
+      "game": "9-11-501-1-0",
+      "metadata": {
+        "game": "9-11-501-1-0",
+        "candidate_team": "B",
+        "teamAId": 0,
+        "teamBId": 925,
+        "map": "/tmp/sudo-win-leader-study/current-maps/11.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Trophy",
+      "replay_sha256": "9397cafc153d54c2e731969fe6cc7b7831528689914c7e6c921481684a0b0c0a",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 11,
+          "longestDragon": 9,
+          "totalLength": 52
+        },
+        "teamB": {
+          "dragonCount": 35,
+          "longestDragon": 13,
+          "totalLength": 128
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 4659,
+          "pearls": 209,
+          "portal_crossings": 0,
+          "declared_paid_steps": 40,
+          "children_created": 49,
+          "peak_population": 22,
+          "final_queen": 0,
+          "round100_population": 2
+        },
+        "B": {
+          "turns": 8443,
+          "pearls": 506,
+          "portal_crossings": 6,
+          "declared_paid_steps": 135,
+          "children_created": 141,
+          "peak_population": 40,
+          "final_queen": 0,
+          "round100_population": 8
+        }
+      }
+    },
+    {
+      "game": "10-28-501-0-0",
+      "metadata": {
+        "game": "10-28-501-0-0",
+        "candidate_team": "A",
+        "teamAId": 925,
+        "teamBId": 0,
+        "map": "/tmp/sudo-win-leader-study/current-maps/28.map",
+        "mode": "native-unmetered"
+      },
+      "map": "weakhold",
+      "replay_sha256": "124703314cc1cd73cb0e21df24a0f92c3447e0c25143736902dbbb3755ba38ea",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 1,
+          "longestDragon": 4,
+          "totalLength": 4
+        },
+        "teamB": {
+          "dragonCount": 14,
+          "longestDragon": 11,
+          "totalLength": 64
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 746,
+          "pearls": 0,
+          "portal_crossings": 0,
+          "declared_paid_steps": 0,
+          "children_created": 1,
+          "peak_population": 3,
+          "final_queen": 4,
+          "round100_population": 2
+        },
+        "B": {
+          "turns": 2990,
+          "pearls": 145,
+          "portal_crossings": 0,
+          "declared_paid_steps": 25,
+          "children_created": 42,
+          "peak_population": 17,
+          "final_queen": 0,
+          "round100_population": 2
+        }
+      }
+    },
+    {
+      "game": "10-28-501-1-0",
+      "metadata": {
+        "game": "10-28-501-1-0",
+        "candidate_team": "B",
+        "teamAId": 0,
+        "teamBId": 925,
+        "map": "/tmp/sudo-win-leader-study/current-maps/28.map",
+        "mode": "native-unmetered"
+      },
+      "map": "weakhold",
+      "replay_sha256": "a0c181521c321bfe80f596be0f72d798d98f63837c197b9380eff0db81689849",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 2,
+          "longestDragon": 3,
+          "totalLength": 5
+        },
+        "teamB": {
+          "dragonCount": 19,
+          "longestDragon": 12,
+          "totalLength": 69
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 1062,
+          "pearls": 1,
+          "portal_crossings": 0,
+          "declared_paid_steps": 0,
+          "children_created": 2,
+          "peak_population": 4,
+          "final_queen": 3,
+          "round100_population": 2
+        },
+        "B": {
+          "turns": 4718,
+          "pearls": 180,
+          "portal_crossings": 0,
+          "declared_paid_steps": 32,
+          "children_created": 56,
+          "peak_population": 25,
+          "final_queen": 0,
+          "round100_population": 2
+        }
+      }
+    },
+    {
+      "game": "11-31-501-0-0",
+      "metadata": {
+        "game": "11-31-501-0-0",
+        "candidate_team": "A",
+        "teamAId": 925,
+        "teamBId": 0,
+        "map": "/tmp/sudo-win-leader-study/current-maps/31.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Maze",
+      "replay_sha256": "b1a3e27241991bed746d1c26ddbbfe59143d8892b7859d83da10a33df08204aa",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 27,
+          "longestDragon": 13,
+          "totalLength": 97
+        },
+        "teamB": {
+          "dragonCount": 54,
+          "longestDragon": 8,
+          "totalLength": 185
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 5951,
+          "pearls": 358,
+          "portal_crossings": 4,
+          "declared_paid_steps": 56,
+          "children_created": 116,
+          "peak_population": 45,
+          "final_queen": 0,
+          "round100_population": 2
+        },
+        "B": {
+          "turns": 9652,
+          "pearls": 586,
+          "portal_crossings": 84,
+          "declared_paid_steps": 90,
+          "children_created": 186,
+          "peak_population": 57,
+          "final_queen": 0,
+          "round100_population": 5
+        }
+      }
+    },
+    {
+      "game": "11-31-501-1-0",
+      "metadata": {
+        "game": "11-31-501-1-0",
+        "candidate_team": "B",
+        "teamAId": 0,
+        "teamBId": 925,
+        "map": "/tmp/sudo-win-leader-study/current-maps/31.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Maze",
+      "replay_sha256": "6aa4568834a9ad9bb702126547c6196c831b55c6b9c1fa3f7b8ff9bac6cc437b",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 44,
+          "longestDragon": 17,
+          "totalLength": 179
+        },
+        "teamB": {
+          "dragonCount": 27,
+          "longestDragon": 15,
+          "totalLength": 102
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 8121,
+          "pearls": 574,
+          "portal_crossings": 76,
+          "declared_paid_steps": 91,
+          "children_created": 173,
+          "peak_population": 46,
+          "final_queen": 0,
+          "round100_population": 2
+        },
+        "B": {
+          "turns": 5225,
+          "pearls": 302,
+          "portal_crossings": 0,
+          "declared_paid_steps": 37,
+          "children_created": 98,
+          "peak_population": 29,
+          "final_queen": 0,
+          "round100_population": 2
+        }
+      }
+    },
+    {
+      "game": "12-17-501-0-0",
+      "metadata": {
+        "game": "12-17-501-0-0",
+        "candidate_team": "A",
+        "teamAId": 925,
+        "teamBId": 0,
+        "map": "/tmp/sudo-win-leader-study/current-maps/17.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Prisoners Dilemma",
+      "replay_sha256": "3ef4774b1f4ea307177cc40186588b645b3bb54af099eabce137ec86022acabe",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 8,
+          "longestDragon": 10,
+          "totalLength": 39
+        },
+        "teamB": {
+          "dragonCount": 8,
+          "longestDragon": 8,
+          "totalLength": 35
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 3037,
+          "pearls": 50,
+          "portal_crossings": 0,
+          "declared_paid_steps": 10,
+          "children_created": 12,
+          "peak_population": 9,
+          "final_queen": 0,
+          "round100_population": 6
+        },
+        "B": {
+          "turns": 2884,
+          "pearls": 32,
+          "portal_crossings": 0,
+          "declared_paid_steps": 3,
+          "children_created": 10,
+          "peak_population": 9,
+          "final_queen": 0,
+          "round100_population": 6
+        }
+      }
+    },
+    {
+      "game": "12-17-501-1-0",
+      "metadata": {
+        "game": "12-17-501-1-0",
+        "candidate_team": "B",
+        "teamAId": 0,
+        "teamBId": 925,
+        "map": "/tmp/sudo-win-leader-study/current-maps/17.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Prisoners Dilemma",
+      "replay_sha256": "c11c3ac8707330669dc4595a2ad22e2c1b69441a68c38be9a27cc9c0cade6476",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 7,
+          "longestDragon": 11,
+          "totalLength": 48
+        },
+        "teamB": {
+          "dragonCount": 6,
+          "longestDragon": 9,
+          "totalLength": 24
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 3202,
+          "pearls": 61,
+          "portal_crossings": 0,
+          "declared_paid_steps": 14,
+          "children_created": 11,
+          "peak_population": 9,
+          "final_queen": 0,
+          "round100_population": 6
+        },
+        "B": {
+          "turns": 3456,
+          "pearls": 31,
+          "portal_crossings": 1,
+          "declared_paid_steps": 2,
+          "children_created": 12,
+          "peak_population": 10,
+          "final_queen": 0,
+          "round100_population": 7
+        }
+      }
+    },
+    {
+      "game": "13-29-501-0-0",
+      "metadata": {
+        "game": "13-29-501-0-0",
+        "candidate_team": "A",
+        "teamAId": 925,
+        "teamBId": 0,
+        "map": "/tmp/sudo-win-leader-study/current-maps/29.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Australia",
+      "replay_sha256": "21d6e05da6d127a009b11d1ca9847465cfb8943895df9a48032370c0fcd192b8",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 54,
+          "longestDragon": 60,
+          "totalLength": 419
+        },
+        "teamB": {
+          "dragonCount": 24,
+          "longestDragon": 23,
+          "totalLength": 154
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 12349,
+          "pearls": 557,
+          "portal_crossings": 6,
+          "declared_paid_steps": 58,
+          "children_created": 94,
+          "peak_population": 58,
+          "final_queen": 0,
+          "round100_population": 9
+        },
+        "B": {
+          "turns": 5926,
+          "pearls": 159,
+          "portal_crossings": 1,
+          "declared_paid_steps": 3,
+          "children_created": 27,
+          "peak_population": 25,
+          "final_queen": 0,
+          "round100_population": 10
+        }
+      }
+    },
+    {
+      "game": "13-29-501-1-0",
+      "metadata": {
+        "game": "13-29-501-1-0",
+        "candidate_team": "B",
+        "teamAId": 0,
+        "teamBId": 925,
+        "map": "/tmp/sudo-win-leader-study/current-maps/29.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Australia",
+      "replay_sha256": "ed5c99e01789a909d99227a0946f291ee3a1d7f042e546fb3b0c8c3415ba9e34",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 43,
+          "longestDragon": 17,
+          "totalLength": 237
+        },
+        "teamB": {
+          "dragonCount": 37,
+          "longestDragon": 43,
+          "totalLength": 287
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 9606,
+          "pearls": 388,
+          "portal_crossings": 0,
+          "declared_paid_steps": 35,
+          "children_created": 97,
+          "peak_population": 47,
+          "final_queen": 0,
+          "round100_population": 9
+        },
+        "B": {
+          "turns": 7867,
+          "pearls": 348,
+          "portal_crossings": 5,
+          "declared_paid_steps": 18,
+          "children_created": 47,
+          "peak_population": 39,
+          "final_queen": 0,
+          "round100_population": 8
+        }
+      }
+    },
+    {
+      "game": "14-19-501-0-0",
+      "metadata": {
+        "game": "14-19-501-0-0",
+        "candidate_team": "A",
+        "teamAId": 925,
+        "teamBId": 0,
+        "map": "/tmp/sudo-win-leader-study/current-maps/19.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Autarky",
+      "replay_sha256": "03a1e63f88671f739efdf77fa8b4a20a77b177114487562c7d7fd30f6ed9af9c",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 32,
+          "longestDragon": 32,
+          "totalLength": 166
+        },
+        "teamB": {
+          "dragonCount": 7,
+          "longestDragon": 16,
+          "totalLength": 44
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 7120,
+          "pearls": 210,
+          "portal_crossings": 6,
+          "declared_paid_steps": 9,
+          "children_created": 55,
+          "peak_population": 33,
+          "final_queen": 0,
+          "round100_population": 11
+        },
+        "B": {
+          "turns": 4695,
+          "pearls": 67,
+          "portal_crossings": 0,
+          "declared_paid_steps": 7,
+          "children_created": 19,
+          "peak_population": 13,
+          "final_queen": 0,
+          "round100_population": 10
+        }
+      }
+    },
+    {
+      "game": "14-19-501-1-0",
+      "metadata": {
+        "game": "14-19-501-1-0",
+        "candidate_team": "B",
+        "teamAId": 0,
+        "teamBId": 925,
+        "map": "/tmp/sudo-win-leader-study/current-maps/19.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Autarky",
+      "replay_sha256": "6b33448475834cf7db86838c18d70493ade75744c8eb48b4915007199b285e72",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 16,
+          "longestDragon": 21,
+          "totalLength": 144
+        },
+        "teamB": {
+          "dragonCount": 9,
+          "longestDragon": 12,
+          "totalLength": 53
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 6331,
+          "pearls": 159,
+          "portal_crossings": 0,
+          "declared_paid_steps": 15,
+          "children_created": 22,
+          "peak_population": 17,
+          "final_queen": 0,
+          "round100_population": 12
+        },
+        "B": {
+          "turns": 5606,
+          "pearls": 89,
+          "portal_crossings": 3,
+          "declared_paid_steps": 14,
+          "children_created": 26,
+          "peak_population": 16,
+          "final_queen": 0,
+          "round100_population": 13
+        }
+      }
+    },
+    {
+      "game": "15-13-501-0-0",
+      "metadata": {
+        "game": "15-13-501-0-0",
+        "candidate_team": "A",
+        "teamAId": 925,
+        "teamBId": 0,
+        "map": "/tmp/sudo-win-leader-study/current-maps/13.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Devil",
+      "replay_sha256": "42ae9dbf3a365fa463cdd484e5be01c6b99ae0e0d2a91b131bc512c85853159d",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 46,
+          "longestDragon": 10,
+          "totalLength": 166
+        },
+        "teamB": {
+          "dragonCount": 4,
+          "longestDragon": 2,
+          "totalLength": 8
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 12330,
+          "pearls": 915,
+          "portal_crossings": 0,
+          "declared_paid_steps": 236,
+          "children_created": 264,
+          "peak_population": 48,
+          "final_queen": 0,
+          "round100_population": 6
+        },
+        "B": {
+          "turns": 2941,
+          "pearls": 149,
+          "portal_crossings": 0,
+          "declared_paid_steps": 45,
+          "children_created": 49,
+          "peak_population": 11,
+          "final_queen": 0,
+          "round100_population": 3
+        }
+      }
+    },
+    {
+      "game": "15-13-501-1-0",
+      "metadata": {
+        "game": "15-13-501-1-0",
+        "candidate_team": "B",
+        "teamAId": 0,
+        "teamBId": 925,
+        "map": "/tmp/sudo-win-leader-study/current-maps/13.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Devil",
+      "replay_sha256": "c7366120f9df2ab5db71934f387e0a2e56b45ac56f3e1f6c47f34a4f40405aaa",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 7,
+          "longestDragon": 5,
+          "totalLength": 24
+        },
+        "teamB": {
+          "dragonCount": 43,
+          "longestDragon": 10,
+          "totalLength": 160
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 4382,
+          "pearls": 251,
+          "portal_crossings": 0,
+          "declared_paid_steps": 105,
+          "children_created": 55,
+          "peak_population": 16,
+          "final_queen": 0,
+          "round100_population": 3
+        },
+        "B": {
+          "turns": 10777,
+          "pearls": 854,
+          "portal_crossings": 0,
+          "declared_paid_steps": 265,
+          "children_created": 233,
+          "peak_population": 46,
+          "final_queen": 0,
+          "round100_population": 6
+        }
+      }
+    },
+    {
+      "game": "16-15-501-0-0",
+      "metadata": {
+        "game": "16-15-501-0-0",
+        "candidate_team": "A",
+        "teamAId": 925,
+        "teamBId": 0,
+        "map": "/tmp/sudo-win-leader-study/current-maps/15.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Trauma",
+      "replay_sha256": "a9828e50ab38906cdca804d1cf8192fdff6bf2ca4704a290bdb3259c28525d22",
+      "rounds": 500,
+      "result": {
+        "winner": "a",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 4,
+          "longestDragon": 32,
+          "totalLength": 43
+        },
+        "teamB": {
+          "dragonCount": 10,
+          "longestDragon": 7,
+          "totalLength": 32
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 1769,
+          "pearls": 72,
+          "portal_crossings": 10,
+          "declared_paid_steps": 7,
+          "children_created": 14,
+          "peak_population": 8,
+          "final_queen": 32,
+          "round100_population": 2
+        },
+        "B": {
+          "turns": 2093,
+          "pearls": 33,
+          "portal_crossings": 1,
+          "declared_paid_steps": 4,
+          "children_created": 10,
+          "peak_population": 10,
+          "final_queen": 2,
+          "round100_population": 2
+        }
+      }
+    },
+    {
+      "game": "16-15-501-1-0",
+      "metadata": {
+        "game": "16-15-501-1-0",
+        "candidate_team": "B",
+        "teamAId": 0,
+        "teamBId": 925,
+        "map": "/tmp/sudo-win-leader-study/current-maps/15.map",
+        "mode": "native-unmetered"
+      },
+      "map": "Trauma",
+      "replay_sha256": "be4d0ed46051fea953a1a966c35d9f2da48d167e1b4c0bf6bbf499f72f617db6",
+      "rounds": 500,
+      "result": {
+        "winner": "b",
+        "terminated": true,
+        "endReason": "roundLimit",
+        "teamA": {
+          "dragonCount": 7,
+          "longestDragon": 13,
+          "totalLength": 32
+        },
+        "teamB": {
+          "dragonCount": 2,
+          "longestDragon": 24,
+          "totalLength": 41
+        }
+      },
+      "teams": {
+        "A": {
+          "turns": 1810,
+          "pearls": 33,
+          "portal_crossings": 0,
+          "declared_paid_steps": 5,
+          "children_created": 7,
+          "peak_population": 8,
+          "final_queen": 0,
+          "round100_population": 2
+        },
+        "B": {
+          "turns": 1000,
+          "pearls": 34,
+          "portal_crossings": 0,
+          "declared_paid_steps": 1,
+          "children_created": 0,
+          "peak_population": 2,
+          "final_queen": 17,
+          "round100_population": 2
+        }
+      }
+    }
+  ]
+}
