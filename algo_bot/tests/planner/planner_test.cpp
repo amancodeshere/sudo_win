@@ -254,3 +254,34 @@ TEST_CASE("a helper yields the queen's only escape despite an adjacent pearl") {
     REQUIRE(action.steps.size() == 1);
     CHECK(action.steps.front() != unswbc::Direction::EAST);
 }
+
+TEST_CASE("helpers retain growth instead of paying it away for collection tempo") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 4;
+    fixture.controller.unit_count = 2;
+    for (auto& tile : fixture.controller.vision.tiles) { tile.pearl_time = -1; }
+    SECTION("a paid pearl step with zero net growth waits for an unpaid next turn") {
+        fixture.controller.length = 3;
+        fixture.tile({7,5}).pearl = true;
+        auto world = sudo_win::WorldModel{fixture.game};
+        world.update(fixture.controller,fixture.game);
+        auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::collector);
+        REQUIRE(action.steps.size() == 1);
+        CHECK(action.steps.front() == unswbc::Direction::EAST);
+    }
+    SECTION("free movement toward income stays available") {
+        fixture.controller.length = 5;
+        for (auto const& [p, direction] : std::vector<std::pair<unswbc::Position,unswbc::Direction>>{
+            {{5,6},unswbc::Direction::NORTH}, {{5,7},unswbc::Direction::NORTH},
+            {{4,7},unswbc::Direction::EAST}, {{4,6},unswbc::Direction::SOUTH}}) {
+            fixture.tile(p).dragon_part = unswbc::DragonPart{p,4,unswbc::Team::A,direction,false};
+        }
+        fixture.tile({8,5}).pearl = true;
+        auto world = sudo_win::WorldModel{fixture.game};
+        world.update(fixture.controller,fixture.game);
+        auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::collector);
+        REQUIRE(action.kind == sudo_win::ActionKind::sprint);
+        REQUIRE(action.steps.size() == 2);
+        CHECK(action.steps.front() == unswbc::Direction::EAST);
+    }
+}

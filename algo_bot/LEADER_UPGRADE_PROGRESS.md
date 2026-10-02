@@ -9,7 +9,7 @@ Evidence: `LEADER_GAMEPLAY_REVIEW.md`. Current 17 map hashes are in the associat
 | 2 | Earlier territorial expansion | Complete | Release + ASan/UBSan pass 57 cases / 373 assertions; native 5–3 over eight current-map games, no errors |
 | 3 | Queen farming and persistent secondary champion | Complete | 59 cases / 382 assertions, release + sanitizers; 16 Python tests; refined native 6–2, zero errors |
 | 4 | Purposeful portal routes | Complete | 61 cases / 395 assertions, release + sanitizers; native 5–3; sandbox 1–1, no errors, peak 56,860,251 |
-| 5 | Paid-step economics and queen interception | Pending | Keep free movement; meter combined runtime |
+| 5 | Paid-step economics and queen interception | Economics complete; interception next | 62 cases / 400 assertions, release + sanitizers; native 5–3, zero errors |
 
 Every stage needs focused regression coverage, release and sanitizer checks, paired native comparisons, and saved source snapshots. Combined promotion requires metered games, multiple seeds, both colours and deterministic repeat checks. Native matches do not certify CPU budgets. No upload is part of this task.
 
@@ -38,3 +38,9 @@ Designated small scouts seek unresolved portal boundaries and can probe after th
 Starved protected units can proactively use a matching mapped pair and a survey no more than one round old. Queens above eight segments, champions above twelve, sole survivors and late-game units do not take this exploratory relocation. This remains explicitly uncertain: other units may occupy a reported empty exit later. Reports do not set seen/occupancy flags, and ordinary safe-move validation continues to reject unseen landings. Focused tests cover expiration, mapping, body conflicts and a queen choosing the surveyed exit after twelve rounds without income. `no-portal-routes` is the ablation.
 
 Frozen snapshot: `build/leader-stage4-portals`, identical to all 32 selected working files. Native seed 606, current Portals / Maze / Stripes / Autarky, both colours, versus stage 3b: 5–3, zero errors (`leader-stage4-native8`). Summed final queen lengths 93 versus 32; four versus three queens survive. Sandbox seed 607, Around UNSW / both colours: 1–1, zero errors, candidate peak 56,860,251 / 100,000,000 (`leader-stage4-sandbox2`). These are small diagnostics; combined broader validation remains required.
+
+## Stage 5a — paid movement economics
+
+Helpers now preserve growth when a paid sprint merely collects enough pearls to replace its movement cost. Free extra steps, positive net growth, validated safety improvements and the separate funded enemy-queen trade remain available. `no-economics` disables this restriction for helpers.
+
+Snapshot `build/leader-stage5a-economics`; seed 608, current Schooltime / Slithery Fight / Default / Stripes, both colours versus stage 4: 5–3, zero errors (`leader-stage5a-native8`). Candidate paid steps were 570 across 79,867 turns, versus 1,166 across 56,418 opponent turns: 7.14 versus 20.67 per thousand turns. Queen survival was three versus four, so reduced spending alone is not evidence of better queen protection. Release and ASan/UBSan pass 62 cases / 400 assertions.

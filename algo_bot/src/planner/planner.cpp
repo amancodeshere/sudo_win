@@ -128,7 +128,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         }
         auto const paid_steps = static_cast<int>(steps.size()) - Simulation::free_steps(controller.get_length());
         if (sprint && paid_steps > 0 && length_gain <= 0
-            && (role == Role::champion || role == Role::queen || endgame_.active(game))
+            && (config::enable_movement_economics || role == Role::champion || role == Role::queen || endgame_.active(game))
             && !improves_safety) {
             return;
         }
