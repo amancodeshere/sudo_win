@@ -77,3 +77,7 @@ A frozen v4 variant changing only `enable_favourable_trades=true` tests broader 
 Final artifact `build/submission-live-v7-finalc.zip`, source SHA-256 `32f0c87bded85193e57567bc437dc1a3e7b155eb0142362c652c666b75b6ee7a`, ZIP SHA-256 `a7b8a93367d32e1b048a6a0ddd88728a7c34745e8d2c4634de237615fdc45141`. Independently regenerated ZIP hashes match; all 32 selected source files match current source bytes and exact archive membership. Older `final` and `finalb` packages are superseded. The final source is saved for evaluation, not automatically uploaded.
 
 `LIVE_V7_VALIDATION.md` provides outcomes and limitations; `analysis/live_v7_validation_2026-10-02.json` preserves source identities, map and replay hashes, rule probes, compact match outcomes and measured strategy metrics. Earlier adverse experiments and superseded timing assumptions remain recorded rather than being presented as final-source validation.
+
+## User-requested live evaluation upload
+
+After reviewing the mixed local evidence, the user explicitly requested uploading the exact tested finalc package as **bot bot 4**, description **i shall win**. Upload accepted on 2 October 2026 at 12:24:00 UTC: **submission 14928, server version 6**. The API subsequently reports **active**, with one build attempt and no build error. The upload record and exact local archive manifest are saved in `analysis/live_v7_upload_2026-10-02.json`. No live challenges were created; the user will arrange leader matches. The earlier statements that no upload was performed describe the implementation/validation phase.
