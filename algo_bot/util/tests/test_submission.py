@@ -52,6 +52,7 @@ class SubmissionTests(unittest.TestCase):
                                   ("no-queen-continuation-corridors", "enable_queen_continuation_corridors"),
                                   ("phase-expansion", "enable_phase_expansion"),
                                   ("no-sonar-network", "enable_sonar_network"),
+                                  ("no-sonar-threat-decisions", "enable_sonar_threat_decisions"),
                                   ("no-continuation-defense", "enable_continuation_defense"),
                                   ("no-portal-hazards", "enable_portal_hazards"),
                                   ("feeding", "enable_queen_donation"),

@@ -48,6 +48,8 @@ public:
     auto update(unswbc::Controller const& controller, unswbc::Game const& game) -> void;
     auto receive_report(TeamMessage const& message, int round) -> void;
     [[nodiscard]] auto reports() const -> std::vector<TeamMessage> const&;
+    [[nodiscard]] auto reported_head_steps(unswbc::Controller const& controller, int round) const
+        -> std::vector<int>;
     [[nodiscard]] auto queen_reservations(unswbc::Controller const& controller, int round) const
         -> std::vector<int>;
     [[nodiscard]] auto queen_intent(unswbc::Controller const& controller, int round,

@@ -475,3 +475,65 @@ TEST_CASE("fresh remote queen intent outranks a helper's competing food then exp
     REQUIRE(expired.steps.size() == 1);
     CHECK(expired.steps.front() == unswbc::Direction::NORTH);
 }
+
+TEST_CASE("fresh mapped sonar threats affect queen choices without inventing occupancy") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.length = 2;
+    fixture.controller.unit_count = 4;
+    fixture.game.round_num = 18;
+    for (auto& tile : fixture.controller.vision.tiles) { tile.pearl_time = -1; }
+    fixture.tile({5,5}).dragon_part = fixture.controller.head;
+    fixture.tile({5,6}).dragon_part = unswbc::DragonPart{
+        {5,6},0,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    fixture.tile({6,5}).pearl = true;
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto tiles = fixture.controller.vision.tiles;
+    tiles.erase(std::remove_if(tiles.begin(),tiles.end(),[](auto const& tile) {
+        return tile.get_position() == unswbc::Position{7,5};
+    }),tiles.end());
+    fixture.controller.vision = unswbc::Vision{std::move(tiles)};
+    fixture.game.round_num = 20;
+    world.update(fixture.controller,fixture.game);
+    world.receive_report({sudo_win::MessageType::enemy_head,20,8,7,5,6},20);
+    SECTION("an unseen head on a short mapped route outranks adjacent food") {
+        auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::queen);
+        REQUIRE(!action.steps.empty());
+        CHECK(action.steps.front() != unswbc::Direction::EAST);
+        CHECK_FALSE(world.cell({7,5}).occupant);
+    }
+    SECTION("expired sightings cannot indefinitely starve a queen") {
+        fixture.game.round_num = 22;
+        world.update(fixture.controller,fixture.game);
+        auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::queen);
+        REQUIRE(!action.steps.empty());
+        CHECK(action.steps.front() == unswbc::Direction::EAST);
+    }
+    SECTION("current local clearance supersedes a delayed report") {
+        fixture.controller.vision.tiles.emplace_back(unswbc::Position{7,5});
+        fixture.controller.vision = unswbc::Vision{fixture.controller.vision.tiles};
+        world.update(fixture.controller,fixture.game);
+        auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::queen);
+        REQUIRE(!action.steps.empty());
+        CHECK(action.steps.front() == unswbc::Direction::EAST);
+    }
+    SECTION("known walls prevent geometric warnings from certifying an approach") {
+        // Both sides of this edge are known to be closed.
+        fixture.tile({6,5}).get_edge(unswbc::Direction::EAST)
+            = unswbc::Edge{false,unswbc::EdgeType::KELP};
+        fixture.controller.vision.tiles.emplace_back(unswbc::Position{7,5});
+        fixture.controller.vision = unswbc::Vision{fixture.controller.vision.tiles};
+        fixture.tile({7,5}).get_edge(unswbc::Direction::WEST)
+            = unswbc::Edge{false,unswbc::EdgeType::KELP};
+        world.update(fixture.controller,fixture.game);
+        auto visible = fixture.controller.vision.tiles;
+        std::erase_if(visible,[](auto const& tile) { return tile.get_position() == unswbc::Position{7,5}; });
+        fixture.controller.vision = unswbc::Vision{std::move(visible)};
+        fixture.game.round_num = 21;
+        world.update(fixture.controller,fixture.game);
+        world.receive_report({sudo_win::MessageType::enemy_head,21,8,7,5,6},21);
+        auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::queen);
+        REQUIRE(!action.steps.empty());
+        CHECK(action.steps.front() == unswbc::Direction::EAST);
+    }
+}

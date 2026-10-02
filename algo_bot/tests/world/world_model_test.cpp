@@ -344,3 +344,23 @@ TEST_CASE("portal warnings require observed constraints rather than unknown onwa
     CHECK(report->x == 7);
     CHECK(report->y == 5);
 }
+
+TEST_CASE("queen intent avoids reserving a directly threatened food continuation") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.length = 2;
+    fixture.controller.unit_count = 3;
+    fixture.tile({5,5}).dragon_part = fixture.controller.head;
+    fixture.tile({5,6}).dragon_part = unswbc::DragonPart{
+        {5,6},0,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    fixture.tile({6,4}).pearl = true;
+    fixture.tile({7,4}).dragon_part = unswbc::DragonPart{
+        {7,4},7,unswbc::Team::B,unswbc::Direction::WEST,true};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto action = sudo_win::PlannedAction{};
+    action.kind = sudo_win::ActionKind::move;
+    action.steps = {unswbc::Direction::NORTH};
+    auto const intent = world.queen_intent(fixture.controller,0,action);
+    REQUIRE(intent);
+    CHECK_FALSE((intent->x == 6 && intent->y == 4));
+}

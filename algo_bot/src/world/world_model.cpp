@@ -2,6 +2,7 @@
 
 #include "../../include/sudo_win/geometry/geometry.h"
 #include "../../include/sudo_win/planner/simulation.h"
+#include "../../include/sudo_win/combat/combat.h"
 #include "../../include/sudo_win/config/config.h"
 
 #include <algorithm>
@@ -104,6 +105,38 @@ auto WorldModel::receive_report(TeamMessage const& message, int round) -> void {
 
 auto WorldModel::reports() const -> std::vector<TeamMessage> const& { return reports_; }
 
+auto WorldModel::reported_head_steps(unswbc::Controller const& controller, int round) const
+    -> std::vector<int> {
+    auto steps = std::vector<int>(cells_.size(), -1);
+    if (!config::enable_sonar_network || !config::enable_sonar_threat_decisions) { return steps; }
+    auto origins = std::vector<unswbc::Position>{};
+    for (auto const& report : reports_) {
+        auto const age = round - report.round;
+        auto const origin = unswbc::Position{report.x,report.y};
+        if (report.type != MessageType::enemy_head || age < 0 || age > 1
+            || controller.get_tile(origin) != nullptr || !has_seen(origin)
+            || std::find(origins.begin(),origins.end(),origin) != origins.end()) { continue; }
+        origins.push_back(origin);
+        // Two mapped edges only; this is advisory uncertainty, not certified
+        // attack funding or occupancy. Never extend a sighting through kelp.
+        auto queue = std::vector<std::pair<unswbc::Position,int>>{{origin,0}};
+        for (std::size_t cursor = 0; cursor < queue.size() && cursor < 32U; ++cursor) {
+            auto const [from,distance] = queue[cursor];
+            auto& known = steps[index(from)];
+            if (known < 0 || distance < known) { known = distance; }
+            if (distance == 2) { continue; }
+            for (auto const d : unswbc::Direction::get_direction_list()) {
+                auto const next = transition(from,d);
+                if (!next || std::any_of(queue.begin(),queue.end(),[&](auto const& item) {
+                    return item.first == *next;
+                })) { continue; }
+                queue.emplace_back(*next,distance + 1);
+            }
+        }
+    }
+    return steps;
+}
+
 auto WorldModel::queen_reservations(unswbc::Controller const& controller, int round) const
     -> std::vector<int> {
     auto reserved = std::vector<int>(cells_.size(), 0);
@@ -158,13 +191,26 @@ auto WorldModel::queen_intent(unswbc::Controller const& controller, int round,
     }
     auto best = std::optional<unswbc::Position>{};
     auto best_score = -1;
+    auto best_safety = -1;
+    auto const threats = config::enable_sonar_threat_decisions ? Combat{}.threats(controller,this)
+        : std::vector<ThreatAssessment>{};
+    auto const reports = reported_head_steps(controller,round);
     for (auto const direction : unswbc::Direction::get_direction_list()) {
         auto const next = simulation.advance(controller, state, direction, false, this);
         if (!next) { continue; }
         auto budget = 64;
         auto const score = simulation.survival_depth(controller, *next, 4, budget, this) * 100
             + next->pearls * 10 + (direction == controller.get_dir() ? 1 : 0);
-        if (score > best_score) { best = next->body.front(); best_score = score; }
+        auto safety = 2;
+        if (!threats.empty()) {
+            auto const& threat = threats[index(next->body.front())];
+            safety = threat.level == ThreatLevel::direct
+                || (threat.affordable_steps > 0 && threat.affordable_steps <= 3) ? 0
+                : reports[index(next->body.front())] >= 0 ? 1 : 2;
+        }
+        if (safety > best_safety || (safety == best_safety && score > best_score)) {
+            best = next->body.front(); best_score = score; best_safety = safety;
+        }
     }
     if (!best) { return std::nullopt; }
     return TeamMessage{MessageType::danger, round & 511, controller.get_id(), best->x, best->y, 0};

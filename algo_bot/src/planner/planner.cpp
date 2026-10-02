@@ -49,6 +49,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     auto largest_reachable_area = 0;
     auto const simulation = Simulation{};
     auto const threats = combat_.threats(controller, &world);
+    auto const reported_head_steps = world.reported_head_steps(controller,game.get_round_num());
     auto const initial = simulation.initial_state(controller, &world);
     auto const initial_queen_trap = config::enable_queen_exit_viability
         && safety_.blocks_queen_escape(controller,initial,world);
@@ -189,7 +190,8 @@ auto Planner::choose_action(unswbc::Controller const& controller,
                 && threat.later_affordable_steps > 0 && threat.later_affordable_steps <= 3)
             || (funded_sprint_priority_ && threat.affordable_steps > 0 && threat.affordable_steps <= 2)
             || response.funded_steps > 0;
-        auto const uncertain_attack = response.possible_steps > 0 || response.unresolved_steps > 0;
+        auto const reported_attack = protected_unit && reported_head_steps[route_index(destination)] >= 0;
+        auto const uncertain_attack = response.possible_steps > 0 || response.unresolved_steps > 0 || reported_attack;
         if (response.possible_steps > 0) {
             candidate.combat_score -= (6 - response.possible_steps) * 10000;
         }

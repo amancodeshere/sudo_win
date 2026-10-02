@@ -25,6 +25,7 @@ inline constexpr auto enable_queen_exit_viability = true;
 inline constexpr auto enable_queen_continuation_corridors = true;
 inline constexpr auto enable_phase_expansion = false;
 inline constexpr auto enable_sonar_network = true;
+inline constexpr auto enable_sonar_threat_decisions = true;
 inline constexpr auto enable_continuation_defense = true;
 inline constexpr auto enable_portal_hazards = true;
 inline constexpr auto enable_queen_donation = false;

@@ -43,6 +43,7 @@ PROFILES["no-queen-continuation-corridors"] = {**PROFILES["stable"], "enable_que
 PROFILES["phase-expansion"] = {**PROFILES["stable"], "enable_phase_expansion": True}
 PROFILES["no-phase-expansion"] = {**PROFILES["stable"], "enable_phase_expansion": False}
 PROFILES["no-sonar-network"] = {**PROFILES["stable"], "enable_sonar_network": False}
+PROFILES["no-sonar-threat-decisions"] = {**PROFILES["stable"], "enable_sonar_threat_decisions": False}
 PROFILES["no-continuation-defense"] = {**PROFILES["stable"], "enable_continuation_defense": False}
 PROFILES["no-portal-hazards"] = {**PROFILES["stable"], "enable_portal_hazards": False}
 PROFILES["feeding"] = {**PROFILES["stable"], "enable_queen_donation": True}
