@@ -47,9 +47,17 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     if (game.get_round_num() - target_round_ > config::target_max_age) {
         target_.reset();
     }
-    auto const route = pathfinding_.remembered_target(controller, world, game.get_round_num(), target_,
+    auto route = pathfinding_.remembered_target(controller, world, game.get_round_num(), target_,
         role == Role::queen || role == Role::champion,
         role == Role::scout && controller.get_length() <= 4 && controller.get_unit_count() > 1);
+    if (config::enable_portal_income && game.get_round_num() < 400
+        && game.get_round_num() - last_portal_round_ >= 12
+        && game.get_round_num() - resource_progress_round_ >= 8
+        && (!route || !route->pearl || route->value < 8000)) {
+        auto const relocation = pathfinding_.portal_income_route(controller, world, game.get_round_num(),
+            role == Role::queen || role == Role::champion);
+        if (relocation && (!route || relocation->value > route->value)) { route = relocation; }
+    }
     if (route) {
         if (!target_ || *target_ != route->target) {
             target_round_ = game.get_round_num();
@@ -195,7 +203,8 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             best.kind = sprint ? ActionKind::sprint : ActionKind::move;
             best.steps = steps;
             best.score = candidate.total_score();
-            best.reason = sprint ? "validated short sprint" : "best safe move";
+            best.reason = route && route->portal && route->first_direction == direction
+                ? "approach productive or unexplored portal" : sprint ? "validated short sprint" : "best safe move";
         }
     };
 
@@ -254,7 +263,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
 
     if (config::enable_portal_routing && (role == Role::queen || role == Role::champion)
         && game.get_round_num() < 400 && game.get_round_num() - last_portal_round_ >= 12
-        && game.get_round_num() - resource_progress_round_ >= 12 && (!route || !route->pearl)) {
+        && game.get_round_num() - resource_progress_round_ >= 12 && (!route || !route->pearl || (config::enable_portal_income && route->value < 8000))) {
         if (auto const portal = safety_.surveyed_portal_route(controller, world, game.get_round_num())) {
             last_portal_round_ = game.get_round_num();
             best.kind = ActionKind::move;
@@ -266,7 +275,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     auto const scout_wait = config::enable_portal_routing && role == Role::scout ? 3 : 8;
     if (config::enable_helper_portals && role != Role::queen && role != Role::champion
         && game.get_round_num() - last_portal_round_ >= 12
-        && (best_survival <= 1 || ((!route || !route->pearl)
+        && (best_survival <= 1 || ((!route || !route->pearl || (config::enable_portal_income && route->value < 8000))
             && game.get_round_num() - resource_progress_round_ >= scout_wait
             && (!config::enable_portal_routing || role != Role::scout
                 || pathfinding_.visible_pearl_distance(controller, controller.get_position(), &world) > 3)))) {

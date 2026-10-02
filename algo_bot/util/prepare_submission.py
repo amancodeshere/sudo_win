@@ -34,6 +34,7 @@ PROFILES["no-queen-release"] = {**PROFILES["stable"], "enable_queen_release": Fa
 PROFILES["no-champion-retention"] = {**PROFILES["stable"], "enable_champion_retention": False}
 PROFILES["no-response-defense"] = {**PROFILES["stable"], "enable_response_defense": False}
 PROFILES["no-productive-expansion"] = {**PROFILES["stable"], "enable_productive_expansion": False}
+PROFILES["no-portal-income"] = {**PROFILES["stable"], "enable_portal_income": False}
 PROFILES["diagnostic"] = {**PROFILES["stable"], "enable_indicators": True}
 PROFILES["growth"] = {**PROFILES["stable"]}  # retained CLI alias
 PROFILES["combat"] = {**PROFILES["stable"], "enable_favourable_trades": True}

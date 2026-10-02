@@ -128,7 +128,7 @@ auto Pathfinding::remembered_target(unswbc::Controller const& controller,
         for (auto const direction : unswbc::Direction::get_direction_list()) {
             auto const& edge = cell.edges[geometry::direction_index(direction)];
             auto const* ends = edge.type == unswbc::EdgeType::PORTAL ? world.portal_endpoints(edge.portal_id) : nullptr;
-            portal_frontier = portal_frontier || (config::enable_portal_routing && portal_scout && edge.seen
+            portal_frontier = portal_frontier || (config::enable_portal_routing && portal_scout && !config::enable_portal_income && edge.seen
                 && edge.type == unswbc::EdgeType::PORTAL && (ends == nullptr || ends->size() < 2U));
             if (edge.seen && edge.type == unswbc::EdgeType::EMPTY
                 && !world.has_seen(current.add_dir(direction))) {
@@ -181,6 +181,92 @@ auto Pathfinding::remembered_target(unswbc::Controller const& controller,
     // Keep a viable target unless an alternative is substantially better.
     if (previous && best && previous->value * 5 >= best->value * 4) {
         return previous;
+    }
+    return best;
+}
+
+auto Pathfinding::portal_income_route(unswbc::Controller const& controller,
+                                      WorldModel const& world, int round,
+                                      bool protected_unit) const -> std::optional<TargetRoute> {
+    if (controller.get_unit_count() <= 1
+        || controller.get_length() > (protected_unit ? (controller.get_id() <= 1 ? 8 : 12) : 4)) {
+        return std::nullopt;
+    }
+    auto const index = [&world](unswbc::Position p) {
+        return static_cast<std::size_t>(p.y * world.width() + p.x);
+    };
+    auto distance = std::vector<int>(static_cast<std::size_t>(world.width() * world.height()), -1);
+    auto first = std::vector<unswbc::Direction>(distance.size(), unswbc::Direction::NORTH);
+    auto queue = std::vector<unswbc::Position>{controller.get_position()};
+    distance[index(queue.front())] = 0;
+    auto best = std::optional<TargetRoute>{};
+    for (std::size_t cursor = 0; cursor < queue.size() && cursor < 512U; ++cursor) {
+        auto const from = queue[cursor];
+        auto const steps = distance[index(from)];
+        if (steps > 12) { continue; }
+        for (auto const direction : unswbc::Direction::get_direction_list()) {
+            auto const& edge = world.cell(from).edges[geometry::direction_index(direction)];
+            if (!edge.seen) { continue; }
+            if (edge.type == unswbc::EdgeType::PORTAL) {
+                auto const visited = world.cell(from).last_visited_round;
+                // The current approach tile must remain eligible for crossing.
+                if (from != controller.get_position() && visited >= 0 && round - visited < 24) { continue; }
+                auto const exit = world.transition(from, direction);
+                auto income = 0;
+                auto surveyed = false;
+                for (auto const& report : world.reports()) {
+                    surveyed = surveyed || (exit && report.type == MessageType::empty && report.sender_id > 1
+                        && round - report.round <= 6 && report.value == edge.portal_id + 1024
+                        && report.x == exit->x && report.y == exit->y);
+                }
+                if (exit && world.has_seen(*exit)) {
+                    auto const* tile = controller.get_tile(*exit);
+                    if ((tile && tile->get_dragon()) || world.cell(*exit).occupant) { continue; }
+                    auto region = std::vector<unswbc::Position>{*exit};
+                    auto depths = std::vector<int>{0};
+                    auto onward = 0;
+                    for (std::size_t i = 0; i < region.size() && i < 64U; ++i) {
+                        auto const p = region[i];
+                        auto const& cell = world.cell(p);
+                        auto const age = round - cell.last_seen_round;
+                        auto const remaining = cell.pearl_time - age;
+                        income += age <= config::pearl_memory_max_age
+                            && (cell.has_pearl || (cell.pearl_time >= 0 && remaining >= 0 && remaining <= 12));
+                        if (depths[i] >= 4) { continue; }
+                        for (auto const d : unswbc::Direction::get_direction_list()) {
+                            // An exit back through the entrance is not an onward corridor.
+                            auto const& e = cell.edges[geometry::direction_index(d)];
+                            if (!e.seen || e.type != unswbc::EdgeType::EMPTY) { continue; }
+                            auto const next = p.add_dir(d);
+                            auto const* visible = controller.get_tile(next);
+                            if (!world.has_seen(next) || world.cell(next).occupant
+                                || (visible && visible->get_dragon())
+                                || std::find(region.begin(), region.end(), next) != region.end()) { continue; }
+                            onward += i == 0;
+                            region.push_back(next); depths.push_back(depths[i] + 1);
+                        }
+                    }
+                    if (onward < 2 || region.size() < static_cast<std::size_t>(controller.get_length() + 3)) { continue; }
+                }
+                if (protected_unit && !surveyed && income == 0) { continue; }
+                // A mapped exhausted pocket is never treated as unexplored.
+                if (exit && world.has_seen(*exit) && income == 0 && !surveyed) { continue; }
+                auto const value = ((surveyed || income > 0) ? 40000 + std::min(income, 4) * 4000 : 18000)
+                    / (steps + 2) + (((edge.portal_id + controller.get_id()) % 4
+                        == static_cast<int>(geometry::direction_index(direction))) ? 500 : 0);
+                if (!best || value > best->value) {
+                    best = TargetRoute{from, steps == 0 ? direction : first[index(from)], steps + 1, value, false, true};
+                }
+                continue;
+            }
+            if (edge.type != unswbc::EdgeType::EMPTY) { continue; }
+            auto const next = from.add_dir(direction);
+            auto const* tile = controller.get_tile(next);
+            if (!world.has_seen(next) || distance[index(next)] >= 0 || (tile && tile->get_dragon())) { continue; }
+            distance[index(next)] = steps + 1;
+            first[index(next)] = steps == 0 ? direction : first[index(from)];
+            queue.push_back(next);
+        }
     }
     return best;
 }

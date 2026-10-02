@@ -181,3 +181,60 @@ TEST_CASE("protected farms use observed countdowns and discard overdue predictio
     REQUIRE(stale);
     CHECK_FALSE(stale->pearl);
 }
+
+TEST_CASE("starved portal approaches price destination income and reject exhausted pockets") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 4;
+    fixture.controller.length = 3;
+    fixture.controller.unit_count = 3;
+    for (auto& tile : fixture.controller.vision.tiles) { tile.pearl_time = -1; }
+    fixture.tile({7,5}).get_edge(unswbc::Direction::EAST)
+        = unswbc::Edge{false,unswbc::EdgeType::PORTAL,19};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    SECTION("small helper approaches a remote unexplored entrance") {
+        auto const route = sudo_win::Pathfinding{}.portal_income_route(fixture.controller,world,30,false);
+        REQUIRE(route);
+        CHECK(route->target == unswbc::Position{7,5});
+        CHECK(route->first_direction == unswbc::Direction::EAST);
+        CHECK(route->distance == 3);
+        CHECK(route->portal);
+        CHECK_FALSE(sudo_win::Pathfinding{}.portal_income_route(fixture.controller,world,30,true));
+    }
+    SECTION("protected approach needs a productive mapped destination") {
+        world.receive_report({sudo_win::MessageType::portal,25,6,0,0,39},25);
+        world.receive_report({sudo_win::MessageType::empty,25,6,0,0,1043},25);
+        CHECK(sudo_win::Pathfinding{}.portal_income_route(fixture.controller,world,30,true));
+        CHECK_FALSE(sudo_win::Pathfinding{}.portal_income_route(fixture.controller,world,32,true));
+        fixture.controller.length = 13;
+        CHECK_FALSE(sudo_win::Pathfinding{}.portal_income_route(fixture.controller,world,30,true));
+    }
+    SECTION("remembered productive exits need onward room and actual income") {
+        auto tiles = std::vector<unswbc::Tile>{};
+        for (auto y = 0; y < 10; ++y) {
+            for (auto x = 0; x < 10; ++x) {
+                tiles.emplace_back(unswbc::Position{x,y}); tiles.back().pearl_time = -1;
+            }
+        }
+        fixture.controller.vision = unswbc::Vision{std::move(tiles)};
+        fixture.tile({7,5}).get_edge(unswbc::Direction::EAST) = unswbc::Edge{false,unswbc::EdgeType::PORTAL,19};
+        fixture.tile({0,0}).get_edge(unswbc::Direction::WEST) = unswbc::Edge{false,unswbc::EdgeType::PORTAL,19};
+        fixture.game.round_num = 30;
+        fixture.tile({1,0}).pearl = true;
+        world.update(fixture.controller,fixture.game);
+        CHECK(sudo_win::Pathfinding{}.portal_income_route(fixture.controller,world,30,true));
+        fixture.tile({1,0}).pearl = false;
+        world.update(fixture.controller,fixture.game);
+        CHECK_FALSE(sudo_win::Pathfinding{}.portal_income_route(fixture.controller,world,30,false));
+        fixture.tile({0,0}).pearl = true;
+        for (auto const d : {unswbc::Direction::NORTH,unswbc::Direction::EAST,unswbc::Direction::SOUTH}) {
+            fixture.tile({0,0}).get_edge(d) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+        }
+        world.update(fixture.controller,fixture.game);
+        CHECK_FALSE(sudo_win::Pathfinding{}.portal_income_route(fixture.controller,world,30,false));
+    }
+    SECTION("sole survivor never makes a blind exploration investment") {
+        fixture.controller.unit_count = 1;
+        CHECK_FALSE(sudo_win::Pathfinding{}.portal_income_route(fixture.controller,world,30,false));
+    }
+}

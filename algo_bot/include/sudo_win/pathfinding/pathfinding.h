@@ -14,6 +14,7 @@ struct TargetRoute {
     int distance = 0;
     int value = 0;
     bool pearl = false;
+    bool portal = false;
 };
 
 class Pathfinding {
@@ -25,6 +26,9 @@ public:
                                          bool protected_unit = false,
                                          bool portal_scout = false) const
         -> std::optional<TargetRoute>;
+    [[nodiscard]] auto portal_income_route(unswbc::Controller const& controller,
+                                           WorldModel const& world, int round,
+                                           bool protected_unit) const -> std::optional<TargetRoute>;
     [[nodiscard]] auto visible_reachable_area(unswbc::Controller const& controller,
                                               unswbc::Position start,
                                               WorldModel const* world = nullptr) const -> int;
