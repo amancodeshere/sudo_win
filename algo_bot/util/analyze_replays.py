@@ -75,6 +75,26 @@ class Board:
     def occupancy(self):
         return {p: i for i, d in self.dragons.items() for p in d["body"]}
 
+    def visible_boundaries(self, origin):
+        x, y = origin
+        return {(kind, (x+column-3) % self.width, (y+row-3) % self.height)
+                for kind, rows, columns in (("H", 8, 7), ("V", 7, 8))
+                for row in range(rows) for column in range(columns)}
+
+    def portal_options(self, origin, known_edges):
+        occupied, options = self.occupancy(), []
+        for direction in DIRECTIONS:
+            boundary = self.boundary(origin, direction)
+            token = self.edges.get(boundary, "w")
+            if token in ("w", "."): continue
+            partner = next((p for p in self.portals[token] if p != boundary), None)
+            exit_tile = self.step(origin, direction)
+            options.append({"direction": direction, "portal": token, "exit": exit_tile,
+                            "partner_known": partner in known_edges,
+                            "exit_visible": exit_tile is not None and self.visible(origin, exit_tile),
+                            "occupied": occupied.get(exit_tile)})
+        return options
+
     def alternatives(self, identity):
         head = self.dragons[identity]["body"][0]
         occupied = self.occupancy()
@@ -104,16 +124,20 @@ class Board:
         return "\n".join(out) + "\n"
 
 
-def analyze(path, metadata, output):
+def analyze(path, metadata, output, submission=None):
     raw = path.read_bytes()
     replay = SCHEMA.Replay.from_bytes_packed(raw, traversal_limit_in_words=max(1000000, len(raw)*64))
     if replay.formatVersion > 2: raise ValueError("Unsupported replay format")
-    board = Board(replay.map)
     ours = metadata['ours']
+    bot = replay.botA if ours == 'A' else replay.botB
+    if submission is not None and bot != str(submission): return None
+    board = Board(replay.map)
     stats = {t: {"turns": 0, "moves": 0, "sprints": 0, "sprint_payments": 0, "splits": 0,
-                 "pearls": 0, "max_points": 0, "timeouts": 0, "peak_length": 0} for t in 'AB'}
+                 "pearls": 0, "max_points": 0, "timeouts": 0, "peak_length": 0,
+                 "portal_crossings": 0} for t in 'AB'}
     deaths, last_turn, traces, logs = [], {}, [], []
     round_num, actor = -1, None
+    known_edges, actor_steps = defaultdict(set), 0
     for event in replay.events:
         kind = event.which()
         e = getattr(event, kind).to_dict()
@@ -129,9 +153,12 @@ def analyze(path, metadata, output):
                 board.pearls.discard(p)
         elif kind == 'turnStart':
             actor = e['id']
+            actor_steps = 0
             d = board.dragons[actor]
+            known_edges[actor].update(board.visible_boundaries(d['body'][0]))
             stats[d['team']]['turns'] += 1
-            record = {"id": actor, "round": round_num, "length": len(d['body']), "head": d['body'][0],
+            record = {"id": actor, "team": d['team'], "round": round_num, "length": len(d['body']), "head": d['body'][0],
+                      "portal_options": board.portal_options(d['body'][0], known_edges[actor]),
                       "safe_directions": board.alternatives(actor), "nearby_enemy_heads": [
                           {"id": i, "head": x['body'][0], "length": len(x['body'])}
                           for i, x in board.dragons.items() if x['team'] != d['team'] and board.visible(d['body'][0],x['body'][0])]}
@@ -159,6 +186,9 @@ def analyze(path, metadata, output):
             d = board.dragons[identity]
             d['facing'] = DIRECTIONS[NAMES.index(e['facing'])]
             if round_num >= 0:
+                boundary = board.boundary(d['body'][0], d['facing'])
+                stats[d['team']]['portal_crossings'] += board.edges[boundary] not in ('.', 'w')
+                if identity == actor: actor_steps += 1
                 d['body'].insert(0,point(e['head']))
                 while len(d['body']) > 1 and d['body'][-1] != point(e['tail']): d['body'].pop()
             stats[d['team']]['peak_length'] = max(stats[d['team']]['peak_length'],len(d['body']))
@@ -170,7 +200,8 @@ def analyze(path, metadata, output):
             identity = e['id']
             d = board.dragons.pop(identity)
             deaths.append({"id":identity,"team":d['team'],"round":round_num,"reason":e['reason'],
-                           "length":len(d['body']),"acting_id":actor,"last_turn":last_turn.get(identity)})
+                           "length":len(d['body']),"acting_id":actor,"last_turn":last_turn.get(identity),
+                           "attacking_turn":last_turn.get(actor), "collision_step":actor_steps+1})
         elif kind in ('engineLog','dragonLog') and board.dragons.get(e['id'],{}).get('team') == ours:
             logs.append({'round':round_num, **e})
     result = replay.result.to_dict()
@@ -184,7 +215,7 @@ def analyze(path, metadata, output):
     record = {"game":int(path.stem), **metadata, "map":board.name,"rounds":round_num+1,
               "outcome":"draw" if not winner else "win" if winner == ours else "loss",
               "result":result,"stats":stats,"deaths":deaths,"logs":logs,
-              "replay_sha256":hashlib.sha256(raw).hexdigest(),"bot":replay.botA if ours=='A' else replay.botB}
+              "replay_sha256":hashlib.sha256(raw).hexdigest(),"bot":bot}
     record['loss_class'] = ('none' if record['outcome']=='win' else 'draw' if not winner else
                            'growth deficit' if result['endReason']=='roundLimit' else 'eliminated')
     record['our_death_reasons'] = dict(Counter(d['reason'] for d in own_deaths))
@@ -200,6 +231,7 @@ def main():
     p.add_argument('--replays',type=Path,default=Path('replays'))
     p.add_argument('--team-name',default='sudo win')
     p.add_argument('--output',type=Path,default=Path('build/replay-audit'))
+    p.add_argument('--submission', type=int, help='Only audit replays recording this exact owned submission ID')
     args=p.parse_args();args.output.mkdir(parents=True,exist_ok=True)
     metadata={}
     for f in args.replays.glob('battle-*.json'):
@@ -211,12 +243,14 @@ def main():
     records=[]
     for f in sorted(args.replays.glob('*.replay')):
         if int(f.stem) not in metadata: raise ValueError(f'Missing team metadata for {f}')
-        r=analyze(f,metadata[int(f.stem)],args.output);records.append(r)
+        r=analyze(f,metadata[int(f.stem)],args.output,args.submission)
+        if r is None: continue
+        records.append(r)
         print(f"{f.stem} {r['map']} {r['outcome']} {r['loss_class']} {r['our_death_reasons']}",flush=True)
-    summary={'games':len(records),'outcomes':dict(Counter(r['outcome'] for r in records)),
+    summary={'games':len(records),'submission':args.submission,'outcomes':dict(Counter(r['outcome'] for r in records)),
              'loss_classes':dict(Counter(r['loss_class'] for r in records if r['outcome']=='loss')),
              'our_death_reasons':dict(sum((Counter(r['our_death_reasons']) for r in records),Counter())),
-             'max_points':max(r['stats'][r['ours']]['max_points'] for r in records)}
+             'max_points':max((r['stats'][r['ours']]['max_points'] for r in records),default=0)}
     (args.output/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
     (args.output/'index.json').write_text(json.dumps([{k:v for k,v in r.items() if k not in ('deaths','logs')} for r in records],indent=2)+'\n')
     print(json.dumps(summary,indent=2))
