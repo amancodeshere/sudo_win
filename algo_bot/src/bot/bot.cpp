@@ -123,12 +123,14 @@ auto Bot::execute_turn(unswbc::Controller& controller, unswbc::Game const& game)
             auto const messages = sonar_scheduler_.schedule(controller,world_,game.get_round_num(),report.value_or(fallback));
             auto payloads = std::array<std::uint64_t,4>{};
             for (std::size_t i = 0; i < messages.size(); ++i) {
-                payloads[i] = sonar_.encode(messages[i],static_cast<char>(controller.get_team().value));
+                if (sonar_.can_encode(messages[i])) {
+                    payloads[i] = sonar_.encode(messages[i],static_cast<char>(controller.get_team().value));
+                }
             }
             beam_payloads = payloads;
         }
         if (config::enable_portal_hazards && beam_payloads) {
-            if (auto const warning = world_.portal_warning(controller,game.get_round_num())) {
+            if (auto const warning = world_.portal_warning(controller,game.get_round_num()); warning && sonar_.can_encode(*warning)) {
                 (*beam_payloads)[static_cast<std::size_t>((game.get_round_num() + controller.get_id()) % 4)]
                     = sonar_.encode(*warning,static_cast<char>(controller.get_team().value));
             }
@@ -153,7 +155,9 @@ auto Bot::execute_turn(unswbc::Controller& controller, unswbc::Game const& game)
     if (action.kind == ActionKind::donate) { return; }
     if (beam_payloads) {
         auto const directions = unswbc::Direction::get_direction_list();
-        for (std::size_t i = 0; i < directions.size(); ++i) { controller.send_sonar(directions[i], (*beam_payloads)[i]); }
+        for (std::size_t i = 0; i < directions.size(); ++i) {
+            if ((*beam_payloads)[i] != 0) { controller.send_sonar(directions[i], (*beam_payloads)[i]); }
+        }
     } else if (report_payload) {
         // Directed 64-bit messages, after the action. Rotate opposite beams;
         // delayed aggregate echoes are never treated as empty-space evidence.

@@ -42,10 +42,7 @@ auto Combat::response_threat(unswbc::Controller const& controller,
             enemies.push_back(*part);
         }
     }
-    std::stable_sort(enemies.begin(), enemies.end(), [&](auto const& a, auto const& b) {
-        return geometry::toroidal_manhattan(a.get_position(), target, world.width(), world.height())
-             < geometry::toroidal_manhattan(b.get_position(), target, world.width(), world.height());
-    });
+    if (enemies.empty()) { return result; }
     // A reverse lower bound on the directed visible topology prunes detours.
     // Ignore occupancy here: moving enemy tails can open cells during a sprint.
     auto const index = [&](unswbc::Position p) {
@@ -74,6 +71,13 @@ auto Combat::response_threat(unswbc::Controller const& controller,
             }
         }
     }
+    std::stable_sort(enemies.begin(),enemies.end(),[&](auto const& a, auto const& b) {
+        auto const rank = [&](auto const& enemy) {
+            auto const d = distance[index(enemy.get_position())];
+            return d < 0 ? config::response_step_limit + 1 : d;
+        };
+        return rank(a) < rank(b);
+    });
     auto budget = node_budget;
     auto const simulation = Simulation{};
     auto const unresolved = [&](int steps) {
@@ -90,9 +94,9 @@ auto Combat::response_threat(unswbc::Controller const& controller,
         auto opponent = view;
         opponent.head = enemy;
         opponent.length = std::max(5, observed + 2);
-        auto const invented = opponent.length - std::max(unswbc::Constants::MIN_SIZE, observed);
-        struct Node { SimulationState state; int steps; bool funded; };
-        auto queue = std::vector<Node>{{simulation.initial_state(opponent, &world), 0, true}};
+        auto const known_start = std::max(unswbc::Constants::MIN_SIZE, observed);
+        struct Node { SimulationState state; int steps; bool funded; int known_length; };
+        auto queue = std::vector<Node>{{simulation.initial_state(opponent, &world), 0, true, known_start}};
         auto enemy_budget = 64;
         for (std::size_t cursor = 0; cursor < queue.size(); ++cursor) {
             auto const node = queue[cursor];
@@ -125,15 +129,18 @@ auto Combat::response_threat(unswbc::Controller const& controller,
                 auto next = simulation.advance(opponent, node.state, d, node.steps > 0, &world);
                 if (!next) { continue; }
                 auto const steps = node.steps + 1;
-                auto const funded = node.funded && (node.steps < Simulation::free_steps(
-                    std::max(unswbc::Constants::MIN_SIZE, observed))
-                    || static_cast<int>(node.state.body.size()) - invented > unswbc::Constants::MIN_SIZE);
+                // The uncertain length envelope has a different free-step
+                // allowance. Track proven funding independently so its extra
+                // free movement cannot certify a minimum-length enemy sprint.
+                auto const paid = node.steps >= Simulation::free_steps(known_start);
+                auto const funded = node.funded && (!paid || node.known_length > unswbc::Constants::MIN_SIZE);
+                auto const known_length = node.known_length + next->pearls - node.state.pearls - (paid ? 1 : 0);
                 if (next->body.front() == target) {
                     if (result.possible_steps == 0 || steps < result.possible_steps) { result.possible_steps = steps; }
                     if (funded && (result.funded_steps == 0 || steps < result.funded_steps)) { result.funded_steps = steps; }
                     continue;
                 }
-                queue.push_back({std::move(*next), steps, funded});
+                queue.push_back({std::move(*next), steps, funded, known_length});
             }
         }
     }

@@ -49,3 +49,9 @@ Stage 4 isolated native comparison: 3–3, no errors. A separate twelve-map both
 Optional paid movement now prices queen segments at three times the worker shadow cost and champion segments at twice that cost. Immediate net income remains valued; validated safety improvements and queen corridor releases retain their exemption. Existing regressions still require a paid escape when it is necessary, reject zero-net paid collection tempo and preserve free movement toward income. All new profile flags have packaging-isolation checks, including the opt-in feeding variant.
 
 Release C++ remains 84 cases / 603 assertions; 17 Python tests pass. Frozen combined candidate `build/submission-v5-priced`, plus `v5-no-phase`. Fresh paired pricing comparison seed 840 and phase-ablation seed 841 are running. Judge runs check the integrated defense/network/territory policy against the upload; the feeding policy is not enabled for acceptance by default.
+
+## Integration correctness review
+
+Separated certified response funding from the invented partial-length envelope: invented free-step allowance can no longer fund an attack using observed length alone. A length-four enemy without income cannot certify a four-step sprint; one intermediate pearl can fund it. Added this regression alongside the recorded length-five attack. Response searches now skip topology work entirely when no enemy head is visible and order enemies by directed attack distance, including portals. Sonar field bounds are checked before encoding all scheduled beams, so a helper identity outside the wire range cannot turn a good planned action into an exception fallback.
+
+The stage comparisons above predate this funding refinement; final exact-source native and metered comparisons are required before upload.

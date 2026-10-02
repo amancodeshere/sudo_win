@@ -390,3 +390,24 @@ TEST_CASE("Around UNSW 880180 round 138 detects the observed four step queen att
     CHECK(unfinished.unresolved_steps > 0);
     CHECK(unfinished.unresolved_steps <= 4);
 }
+
+TEST_CASE("partial response envelopes cannot borrow invented free steps for certified funding") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    auto const body = std::vector<unswbc::Position>{{3,5},{3,6},{2,6},{2,5}};
+    auto const dirs = std::vector<unswbc::Direction>{unswbc::Direction::EAST,unswbc::Direction::NORTH,
+        unswbc::Direction::EAST,unswbc::Direction::SOUTH};
+    for (std::size_t i = 0; i < body.size(); ++i) {
+        fixture.tile(body[i]).dragon_part = unswbc::DragonPart{body[i],7,unswbc::Team::B,dirs[i],i == 0};
+    }
+    auto after = sudo_win::SimulationState{};
+    after.body = {{7,5},{7,6}};
+    auto const response = [&] {
+        auto world = sudo_win::WorldModel{fixture.game};
+        world.update(fixture.controller,fixture.game);
+        return sudo_win::Combat{}.response_threat(fixture.controller,after,world);
+    };
+    CHECK(response().funded_steps == 0);
+    CHECK(response().possible_steps == 4);
+    fixture.tile({4,5}).pearl = true;
+    CHECK(response().funded_steps == 4);
+}
