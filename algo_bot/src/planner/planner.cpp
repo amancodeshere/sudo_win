@@ -13,6 +13,10 @@ auto Planner::choose_action(unswbc::Controller const& controller,
                             unswbc::Game const& game,
                             WorldModel const& world,
                             Role role) const -> PlannedAction {
+    if (resource_progress_round_ < 0 || controller.get_length() > previous_length_) {
+        resource_progress_round_ = game.get_round_num();
+    }
+    previous_length_ = controller.get_length();
     if (favourable_trades_ && role != Role::queen) {
         if (auto const trade = combat_.favourable_trade(controller, world)) {
             return *trade;
@@ -188,6 +192,19 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         }
     }
 
+    if (config::enable_helper_portals && role != Role::queen && role != Role::champion
+        && game.get_round_num() - last_portal_round_ >= 12
+        && (best_survival <= 1 || ((!route || !route->pearl)
+            && game.get_round_num() - resource_progress_round_ >= 8))) {
+        if (auto const portal = safety_.helper_portal_probe(controller, world, game.get_round_num())) {
+            last_portal_round_ = game.get_round_num();
+            best.kind = ActionKind::move;
+            best.steps = {*portal};
+            best.reason = "small helper samples portal after local resource exhaustion";
+            return best;
+        }
+    }
+
     auto rescue = std::optional<PlannedAction>{};
     if (best_survival <= 1) {
         rescue = splitting_.rescue(controller, world, best.steps.empty(), role == Role::queen);
@@ -196,7 +213,8 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         }
     }
 
-    if (config::enable_portal_escape && best.steps.empty()) {
+    if (config::enable_portal_escape && (best.steps.empty()
+        || (role != Role::queen && best_survival <= 2))) {
         if (auto const portal = safety_.remembered_portal_escape(controller, world, game.get_round_num())) {
             best.kind = ActionKind::move;
             best.steps = {*portal};

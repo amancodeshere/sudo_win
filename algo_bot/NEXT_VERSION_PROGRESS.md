@@ -17,7 +17,7 @@ No upload or live challenges are part of this task.
 | 1 | Current official judge, fixed queen scoring, free sprint accounting | Complete | 45 C++ cases / 289 assertions, sanitizers, 16 Python tests; native 2–2 / four games, zero candidate errors |
 | 2 | Queen identity, food priority and parent-preserving rescue | Complete | 45 C++ cases / 299 assertions; native 4–4 / eight games, zero candidate errors |
 | 3 | Bounded free sprint search, opening escapes and turn-order-aware threats | Complete | 48 C++ cases / 319 assertions; ordered-threat native comparison 3–5, zero errors |
-| 4 | Earlier remembered portal escapes and helper exploration | Pending | Only 16 successful crossings in 70 games |
+| 4 | Earlier remembered portal escapes and helper exploration | Complete | 49 C++ cases / 326 assertions; native 5–3 against step 3b, zero errors |
 | 5 | Useful sonar reports and helper attacks against enemy queen | Pending | Existing messages are decoded but unused |
 | 6 | Resource-supported helper expansion and endgame coordination | Pending | Repeated rescue cycles and weak food collection |
 | 7 | Combined held-out sandbox checks, repeatability and final package | Pending | Validate actual queen scoring, live payment rules and CPU |
@@ -57,3 +57,7 @@ Implemented an eight-step hard cap, 256 expansion-node budget and two beam candi
 ### Step 3b — funded attacks and turn order
 
 Threat maps now keep separate funded earlier/later enemy routes, including the live free allowance and intermediate pearl income. Queens and last survivors rank endpoints reachable by later funded attacks within three steps below unattacked endpoints. Helpers retain softer risk costs. Stationary split parents and reversed child heads are checked against later funded attacks before rescue certification. Release and ASan/UBSan pass 48 cases / 319 assertions. Native seed 305 on Default, Trophy, Queen of Spades and Devil / both colors: 3–5 against step 3a, no candidate or opponent errors (`build/validation/ordered-threat-native8/`). Defense is integrated; this small diagnostic does not establish a win-rate improvement.
+
+### Step 4 — helper portals
+
+Small nonqueen helpers (length at most four, more than one survivor, not the secondary champion) can take a single uncertain portal step after eight rounds without growth and no resource route, or when local movement is about to fail. Fresh remembered exits are preferred; unknown pairs can be sampled, but known blocked/stale exits are never relabelled as unknown. Twelve-round per-helper cooldown prevents immediate repeated probing. Nonqueens may also escape through a validated remembered exit before their last visible move fails; queens keep the original escape-only gate and certified rescue priority. Complete body knowledge is required. Release and ASan/UBSan pass 49 cases / 326 assertions. Native seed 306 on Portals, Autarky, Prisoners Dilemma and Schooltime / both colors: 5–3, zero errors (`build/validation/portals-native8/`). This is promising diagnostic evidence, with full sandbox validation still required.

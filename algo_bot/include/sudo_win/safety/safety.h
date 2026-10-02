@@ -27,6 +27,9 @@ public:
     [[nodiscard]] auto remembered_portal_escape(unswbc::Controller const& controller,
                                                 WorldModel const& world, int round) const
         -> std::optional<unswbc::Direction>;
+    [[nodiscard]] auto helper_portal_probe(unswbc::Controller const& controller,
+                                          WorldModel const& world, int round) const
+        -> std::optional<unswbc::Direction>;
 };
 
 } // namespace sudo_win

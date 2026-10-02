@@ -133,6 +133,43 @@ auto Safety::remembered_portal_escape(unswbc::Controller const& controller,
     return best;
 }
 
+auto Safety::helper_portal_probe(unswbc::Controller const& controller,
+                                 WorldModel const& world, int round) const
+    -> std::optional<unswbc::Direction> {
+    // This is explicitly uncertain exploration, reserved for expendable helpers.
+    if (controller.get_id() <= 1 || controller.get_length() > 4 || controller.get_unit_count() <= 1) {
+        return std::nullopt;
+    }
+    if (auto const known = remembered_portal_escape(controller, world, round)) {
+        auto const exit = world.transition(controller.get_position(), *known);
+        if (exit && round - world.cell(*exit).last_seen_round <= 4) {
+            return known;
+        }
+    }
+    auto const state = Simulation{}.initial_state(controller, &world);
+    if (!state.unranked_body.empty() || std::any_of(state.body.begin(), state.body.end(), [](auto p) {
+        return p.x < 0 || p.y < 0;
+    })) {
+        return std::nullopt;
+    }
+    auto const* origin = controller.get_tile(controller.get_position());
+    if (origin == nullptr) {
+        return std::nullopt;
+    }
+    for (auto const direction : unswbc::Direction::get_direction_list()) {
+        if (!origin->get_edge(direction).is_portal()) {
+            continue;
+        }
+        auto const exit = world.transition(controller.get_position(), direction);
+        // Known blocked or stale exits are not reclassified as unknown.
+        if (!exit || (!world.has_seen(*exit) && controller.get_tile(*exit) == nullptr
+            && std::find(state.body.begin(), state.body.end(), *exit) == state.body.end())) {
+            return direction;
+        }
+    }
+    return std::nullopt;
+}
+
 auto Safety::least_bad_fallback(unswbc::Controller const& controller) const -> unswbc::Direction {
     auto best = controller.get_dir();
     auto best_rank = 7;

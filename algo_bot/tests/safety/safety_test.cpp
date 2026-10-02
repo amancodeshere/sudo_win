@@ -172,3 +172,46 @@ TEST_CASE("remembered portal escapes keep stale observations separate from safe 
         CHECK(action.steps.front() != unswbc::Direction::EAST);
     }
 }
+
+TEST_CASE("helper portal exploration is bounded by role progress and cooldown") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 4;
+    fixture.controller.unit_count = 2;
+    fixture.controller.length = 3;
+    for (auto& tile : fixture.controller.vision.tiles) {
+        tile.pearl_time = -1;
+    }
+    for (auto const p : std::vector<unswbc::Position>{{5,6},{5,7}}) {
+        fixture.tile(p).dragon_part = unswbc::DragonPart{p,4,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    }
+    fixture.tile({5,5}).get_edge(unswbc::Direction::EAST) = unswbc::Edge{false,unswbc::EdgeType::PORTAL,9};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto planner = sudo_win::Planner{};
+    auto const choose = [&] { return planner.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::scout); };
+    SECTION("a stalled helper probes once then waits before trying again") {
+        CHECK(choose().steps.front() != unswbc::Direction::EAST);
+        fixture.game.round_num = 9;
+        world.update(fixture.controller,fixture.game);
+        auto const probe = choose();
+        REQUIRE(probe.steps.size() == 1);
+        CHECK(probe.steps.front() == unswbc::Direction::EAST);
+        fixture.game.round_num = 10;
+        CHECK(choose().steps.front() != unswbc::Direction::EAST);
+    }
+    SECTION("fixed queens cannot be mistaken for expendable scouts") {
+        fixture.controller.head.dragon_id = 0;
+        CHECK_FALSE(sudo_win::Safety{}.helper_portal_probe(fixture.controller,world,9));
+    }
+    SECTION("the last survivor cannot probe unknown exits") {
+        fixture.controller.unit_count = 1;
+        CHECK_FALSE(sudo_win::Safety{}.helper_portal_probe(fixture.controller,world,9));
+    }
+    SECTION("visible food keeps the helper collecting locally") {
+        choose();
+        fixture.game.round_num = 9;
+        fixture.tile({6,4}).pearl = true;
+        world.update(fixture.controller,fixture.game);
+        CHECK(choose().steps.front() != unswbc::Direction::EAST);
+    }
+}

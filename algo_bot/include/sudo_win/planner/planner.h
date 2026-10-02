@@ -36,6 +36,9 @@ private:
     bool favourable_trades_;
     mutable std::optional<unswbc::Position> target_;
     mutable int target_round_ = -1;
+    mutable int last_portal_round_ = -100;
+    mutable int resource_progress_round_ = -1;
+    mutable int previous_length_ = -1;
     Safety safety_;
     Pathfinding pathfinding_;
     Economy economy_;
