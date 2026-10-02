@@ -45,6 +45,7 @@ PROFILES["no-continuation-defense"] = {**PROFILES["stable"], "enable_continuatio
 PROFILES["no-portal-hazards"] = {**PROFILES["stable"], "enable_portal_hazards": False}
 PROFILES["feeding"] = {**PROFILES["stable"], "enable_queen_donation": True}
 PROFILES["no-feeding"] = {**PROFILES["stable"], "enable_queen_donation": False}
+PROFILES["no-scorer-step-pricing"] = {**PROFILES["stable"], "enable_scorer_step_pricing": False}
 PROFILES["diagnostic"] = {**PROFILES["stable"], "enable_indicators": True}
 PROFILES["growth"] = {**PROFILES["stable"]}  # retained CLI alias
 PROFILES["combat"] = {**PROFILES["stable"], "enable_favourable_trades": True}

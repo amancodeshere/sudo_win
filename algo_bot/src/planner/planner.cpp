@@ -226,7 +226,9 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             return;
         }
         if (config::enable_paid_step_pricing && paid_steps > 0 && !improves_safety && !releases_queen) {
-            candidate.economy_score -= paid_steps * config::score_paid_step_cost;
+            auto const score_weight = config::enable_scorer_step_pricing
+                ? (role == Role::queen ? 3 : role == Role::champion ? 2 : 1) : 1;
+            candidate.economy_score -= paid_steps * config::score_paid_step_cost * score_weight;
         }
         candidate.role_score += roles_.score_move(role,
                                                  reachable_area,

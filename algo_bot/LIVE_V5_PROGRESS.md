@@ -43,3 +43,9 @@ Retirement uses the supported default action plus a recognized `INDICATOR SUDO_W
 The emission integration test caught a fall-through that would have emitted fallback MOVE after the retirement indicator; corrected before acceptance, with a regression asserting indicator-only output. The early `v5-feeding-experiment` artifact/seed-837 run is superseded and must not be uploaded or used as acceptance evidence. Corrected frozen pair: `v5-feeding-verified` and `v5-feeding-verified-control`, seed 838. C++ release and 17 Python tests pass.
 
 Stage 4 isolated native comparison: 3–3, no errors. A separate twelve-map both-colour comparison versus the upload, seed 836, finishes 12–12 with no errors. More activity is not being presented as competitive proof.
+
+## Stage 6 — scoring-aware optional movement cost
+
+Optional paid movement now prices queen segments at three times the worker shadow cost and champion segments at twice that cost. Immediate net income remains valued; validated safety improvements and queen corridor releases retain their exemption. Existing regressions still require a paid escape when it is necessary, reject zero-net paid collection tempo and preserve free movement toward income. All new profile flags have packaging-isolation checks, including the opt-in feeding variant.
+
+Release C++ remains 84 cases / 603 assertions; 17 Python tests pass. Frozen combined candidate `build/submission-v5-priced`, plus `v5-no-phase`. Fresh paired pricing comparison seed 840 and phase-ablation seed 841 are running. Judge runs check the integrated defense/network/territory policy against the upload; the feeding policy is not enabled for acceptance by default.

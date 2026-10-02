@@ -27,6 +27,7 @@ inline constexpr auto enable_sonar_network = true;
 inline constexpr auto enable_continuation_defense = true;
 inline constexpr auto enable_portal_hazards = true;
 inline constexpr auto enable_queen_donation = false;
+inline constexpr auto enable_scorer_step_pricing = true;
 inline constexpr auto score_paid_step_cost = 6000;
 inline constexpr auto response_node_budget = 160;
 inline constexpr auto response_step_limit = 5;
