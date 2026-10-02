@@ -23,6 +23,7 @@ inline constexpr auto enable_resource_population = true;
 inline constexpr auto enable_paid_step_pricing = true;
 inline constexpr auto enable_queen_exit_viability = true;
 inline constexpr auto enable_phase_expansion = true;
+inline constexpr auto enable_sonar_network = true;
 inline constexpr auto score_paid_step_cost = 6000;
 inline constexpr auto response_node_budget = 160;
 inline constexpr auto response_step_limit = 5;

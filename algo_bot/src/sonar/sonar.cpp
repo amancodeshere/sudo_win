@@ -2,6 +2,9 @@
 
 #include "../../include/sudo_win/config/config.h"
 #include <stdexcept>
+#include <algorithm>
+#include "../../include/sudo_win/world/world_model.h"
+#include "../../include/sudo_win/geometry/geometry.h"
 
 namespace sudo_win {
 namespace {
@@ -53,6 +56,67 @@ auto SonarCodec::decode(std::uint64_t payload, int current_round, char team) con
     }
     message.round = current_round - age;
     return message;
+}
+
+auto SonarScheduler::schedule(unswbc::Controller const& controller, WorldModel const& world,
+                               int round, TeamMessage const& primary) -> std::array<TeamMessage, 4> {
+    auto messages = std::array<TeamMessage, 4>{primary,primary,primary,primary};
+    auto danger = std::optional<TeamMessage>{};
+    auto nearest = 10000;
+    for (auto const& tile : controller.get_tiles()) {
+        auto const* part = tile.get_dragon();
+        if (part == nullptr || !part->is_head() || part->get_team() == controller.get_team()) { continue; }
+        auto const distance = geometry::toroidal_manhattan(controller.get_position(), tile.get_position(),
+                                                          world.width(), world.height());
+        if (distance >= nearest) { continue; }
+        nearest = distance;
+        auto observed = 0;
+        for (auto const& segment : controller.get_tiles()) {
+            observed += segment.dragon_part && segment.dragon_part->get_id() == part->get_id();
+        }
+        danger = TeamMessage{MessageType::enemy_head,round,controller.get_id(),
+            tile.get_position().x,tile.get_position().y,part->get_id() <= 1 ? 1024 : std::min(1023,observed)};
+    }
+    std::erase_if(relayed_, [&](auto const& message) { return round - message.round > config::sonar_max_age; });
+    auto relay = std::optional<TeamMessage>{};
+    auto priority = -1;
+    for (auto const& report : world.reports()) {
+        auto const age = round - report.round;
+        if (report.sender_id == controller.get_id() || age < 0 || age > config::sonar_max_age
+            || std::any_of(relayed_.begin(), relayed_.end(), [&](auto const& sent) {
+                return sent.sender_id == report.sender_id && sent.type == report.type && sent.round >= report.round;
+            })) { continue; }
+        auto rank = -1;
+        if (report.type == MessageType::enemy_head && age <= 2) { rank = 90; }
+        if (report.type == MessageType::danger && age <= 1) { rank = 100; }
+        if (report.type == MessageType::champion && age <= 2) { rank = 70; }
+        if (report.type == MessageType::feeder && age <= 3) { rank = 60; }
+        if (report.type == MessageType::empty && age <= 4) { rank = 40; }
+        if (report.type == MessageType::portal) { rank = 30; }
+        if (report.type == MessageType::pearl && age <= 4) { rank = 20; }
+        auto const* local = controller.get_tile({report.x,report.y});
+        if (local != nullptr && ((report.type == MessageType::pearl && !local->has_pearl())
+            || (report.type == MessageType::enemy_head && (local->get_dragon() == nullptr
+                || !local->get_dragon()->is_head() || local->get_dragon()->get_team() == controller.get_team())))) { continue; }
+        if (rank - age > priority) { relay = report; priority = rank - age; }
+    }
+    if (relay) {
+        // Preserve observation time and original identity; one relay per fresh
+        // observation per unit bounds loops and cannot refresh a stale claim.
+        if (relayed_.size() >= 64U) { relayed_.erase(relayed_.begin()); }
+        relayed_.push_back(*relay);
+        messages[2] = *relay;
+    }
+    if (danger) { messages[1] = *danger; messages[3] = *danger; }
+    else if (relay && controller.get_sonar_echoes().enemy_head > 0 && relay->type == MessageType::enemy_head) {
+        // Aggregate previous-turn echoes only change message urgency. They
+        // contain no direction or coordinate and never certify free space.
+        messages[1] = *relay;
+    }
+    // Cycle payload-to-direction assignment to spread information through
+    // changing body/tail beam origins and corridors, without a fixed blind axis.
+    std::rotate(messages.begin(),messages.begin() + ((round + controller.get_id()) % 4),messages.end());
+    return messages;
 }
 
 auto SonarCodec::tag(std::uint64_t body, char team) const -> std::uint16_t {

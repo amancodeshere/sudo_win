@@ -15,6 +15,7 @@ Bot::Bot(unswbc::Game const& game)
 auto Bot::execute_turn(unswbc::Controller& controller, unswbc::Game const& game) -> void {
     auto action = PlannedAction{};
     auto report_payload = std::optional<std::uint64_t>{};
+    auto beam_payloads = std::optional<std::array<std::uint64_t,4>>{};
 #ifndef SUDO_WIN_DEVELOPMENT
     try {
 #endif
@@ -105,6 +106,27 @@ auto Bot::execute_turn(unswbc::Controller& controller, unswbc::Game const& game)
                 }
             }
         }
+        if (config::enable_sonar_network) {
+            auto state = Simulation{}.initial_state(controller, &world_);
+            if (action.kind == ActionKind::split) {
+                state.body.resize(state.body.size() - static_cast<std::size_t>(action.split_size));
+            } else {
+                for (std::size_t i = 0; i < action.steps.size(); ++i) {
+                    auto next = Simulation{}.advance(controller,state,action.steps[i],i > 0,&world_);
+                    if (!next) { break; }
+                    state = std::move(*next);
+                }
+            }
+            auto const fallback = TeamMessage{controller.get_id() <= 1 ? MessageType::champion : MessageType::heartbeat,
+                game.get_round_num(),controller.get_id(),state.body.front().x,state.body.front().y,
+                std::min(2047,static_cast<int>(state.body.size()))};
+            auto const messages = sonar_scheduler_.schedule(controller,world_,game.get_round_num(),report.value_or(fallback));
+            auto payloads = std::array<std::uint64_t,4>{};
+            for (std::size_t i = 0; i < messages.size(); ++i) {
+                payloads[i] = sonar_.encode(messages[i],static_cast<char>(controller.get_team().value));
+            }
+            beam_payloads = payloads;
+        }
         if (report && sonar_.can_encode(*report)) {
             report_payload = sonar_.encode(*report, static_cast<char>(controller.get_team().value));
         }
@@ -122,7 +144,10 @@ auto Bot::execute_turn(unswbc::Controller& controller, unswbc::Game const& game)
         controller.set_indicator_string(std::string{action.reason} + "; growth: " + std::string{planner_.growth_rejection()});
     }
     apply_action(controller, action);
-    if (report_payload) {
+    if (beam_payloads) {
+        auto const directions = unswbc::Direction::get_direction_list();
+        for (std::size_t i = 0; i < directions.size(); ++i) { controller.send_sonar(directions[i], (*beam_payloads)[i]); }
+    } else if (report_payload) {
         // Directed 64-bit messages, after the action. Rotate opposite beams;
         // delayed aggregate echoes are never treated as empty-space evidence.
         auto const beam_phase = game.get_round_num() + (config::enable_portal_routing ? game.get_round_num() / 4 : 0);

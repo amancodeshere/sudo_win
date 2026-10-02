@@ -164,16 +164,16 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             candidate.role_score += (interception_start - interception_end) * 18000 + (8 - interception_end) * 1000;
         }
         for (auto const& report : world.reports()) {
-            if (report.type != MessageType::enemy_head || report.value != 1024
+            if (report.type != MessageType::enemy_head || (!config::enable_sonar_network && report.value != 1024)
                 || game.get_round_num() - report.round > 2) {
                 continue;
             }
             auto const enemy = unswbc::Position{report.x, report.y};
             auto const distance = geometry::toroidal_manhattan(destination, enemy, world.width(), world.height());
-            if (role == Role::queen && distance <= 3) {
-                candidate.exploration_score -= (4 - distance) * 4000;
+            if ((role == Role::queen || (config::enable_sonar_network && role == Role::champion)) && distance <= 4) {
+                candidate.exploration_score -= (5 - distance) * 6000;
             } else if (controller.get_id() > 1 && controller.get_length() <= 3
-                && controller.get_unit_count() > 1 && config::enable_queen_hunting) {
+                && controller.get_unit_count() > 1 && config::enable_queen_hunting && report.value == 1024) {
                 candidate.exploration_score += std::max(0, 8 - distance) * 1000;
             }
         }

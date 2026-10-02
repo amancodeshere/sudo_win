@@ -20,6 +20,7 @@ private:
     Planner planner_;
     RoleManager roles_;
     SonarCodec sonar_;
+    SonarScheduler sonar_scheduler_;
 };
 
 } // namespace sudo_win

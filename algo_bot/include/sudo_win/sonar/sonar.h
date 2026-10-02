@@ -3,8 +3,13 @@
 
 #include <cstdint>
 #include <optional>
+#include <array>
+#include <vector>
+
+namespace unswbc { class Controller; }
 
 namespace sudo_win {
+class WorldModel;
 
 enum class MessageType : std::uint8_t {
     heartbeat = 0,
@@ -36,6 +41,15 @@ public:
 
 private:
     [[nodiscard]] auto tag(std::uint64_t body, char team) const -> std::uint16_t;
+};
+
+class SonarScheduler {
+public:
+    [[nodiscard]] auto schedule(unswbc::Controller const& controller, WorldModel const& world,
+                                int round, TeamMessage const& primary)
+        -> std::array<TeamMessage, 4>;
+private:
+    std::vector<TeamMessage> relayed_;
 };
 
 } // namespace sudo_win
