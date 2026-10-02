@@ -107,7 +107,17 @@ auto SplittingPolicy::rescue(unswbc::Controller const& controller,
         && std::none_of(initial.body.begin(), initial.body.end(), [](auto p) { return p.x < 0 || p.y < 0; });
     auto best = std::optional<PlannedAction>{};
     auto best_depth = 0;
+    auto tail_safe = false;
     if (complete) {
+        // Every split size starts the child at the same old tail. Check its
+        // visibility and threats once, before copying potentially long bodies.
+        auto view = controller;
+        if (auto* child_head = view.get_tile(initial.body.back())) {
+            child_head->dragon_part.reset();
+            tail_safe = Combat{}.threat_level(view, initial.body.back(), &world) != ThreatLevel::direct;
+        }
+    }
+    if (tail_safe) {
         // The parent is already in trouble. Preserve as much length as possible
         // in the escaping tail rather than always rescuing a two-segment child.
         for (auto child_size = controller.get_length() - unswbc::Constants::MIN_SIZE;
@@ -115,15 +125,6 @@ auto SplittingPolicy::rescue(unswbc::Controller const& controller,
             auto child = SimulationState{};
             child.body.assign(initial.body.rbegin(), initial.body.rbegin() + child_size);
             child.unranked_body.assign(initial.body.begin(), initial.body.end() - child_size);
-            auto view = controller;
-            auto* child_head = view.get_tile(child.body.front());
-            if (child_head == nullptr) {
-                continue;
-            }
-            child_head->dragon_part.reset();
-            if (Combat{}.threat_level(view, child.body.front(), &world) == ThreatLevel::direct) {
-                continue;
-            }
             auto budget = 128;
             auto const depth = simulation.survival_depth(controller, child, 4, budget, &world);
             if (depth < 2 || depth <= best_depth) {
