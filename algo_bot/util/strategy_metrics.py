@@ -75,6 +75,12 @@ def measure(path: Path, planned_donors: set[int] | None = None) -> dict:
             board.dragons[e.childId] = {'team': t, 'body': [(p.x, p.y) for p in e.childBody],
                                       'facing': DIRECTIONS[NAMES.index(str(e.childFacing))]}
             stats[t]['children_created'] += 1
+        elif kind == 'sonarPing':
+            t = teams[e.senderId]
+            stats[t]['sonar_pings'] += 1
+            if e.which() == 'hitId' and e.hitId != e.senderId and teams.get(e.hitId) == t:
+                stats[t]['sonar_other_ally_hits'] += 1
+                stats[t]['sonar_queen_ally_hits'] += e.hitId == queens[t]
         elif kind == 'dragonDeath':
             d = board.dragons[e.id]
             t = d['team']

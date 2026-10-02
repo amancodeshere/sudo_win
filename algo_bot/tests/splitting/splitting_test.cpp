@@ -238,6 +238,14 @@ TEST_CASE("early expansion protects the champion and requires separate resources
         fixture.game.round_num = 140;
         CHECK_FALSE(candidate());
     }
+    SECTION("disabling phase expansion restores the existing rich region population cap") {
+        fixture.game.width = 20;
+        fixture.game.height = 100;
+        fixture.controller.unit_count = 21;
+        fixture.tile({7,4}).pearl = true;
+        fixture.tile({7,7}).dragon_part = unswbc::DragonPart{{7,7},8,unswbc::Team::A,unswbc::Direction::NORTH,true};
+        CHECK(candidate().has_value() != sudo_win::config::enable_phase_expansion);
+    }
     SECTION("a legal two-segment child has income and two escape routes") {
         auto const split = candidate();
         REQUIRE(split);

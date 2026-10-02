@@ -28,7 +28,8 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
     });
     auto const productive_region = local_income >= 2 * (regional_workers + 2);
     if (config::enable_resource_population && config::enable_territorial_growth
-        && game.get_round_num() < (config::enable_phase_expansion ? 140 : 100) && productive_region) {
+        && game.get_round_num() < (config::enable_phase_expansion ? 140 : 100)
+        && (config::enable_phase_expansion ? productive_region : local_income >= 4)) {
         cap = std::min(controller.unit_limit, std::clamp(world.width() * world.height() / 32, 8, 48));
     }
     auto const early_investment = config::enable_territorial_growth && ((game.get_round_num() < 80
