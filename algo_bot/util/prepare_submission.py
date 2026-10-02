@@ -11,17 +11,23 @@ import re
 import tomllib
 import zipfile
 
-PROFILES = {
-    "stable": {"enable_splitting": False, "enable_growth_splitting": False, "enable_long_sprint_threats": False, "enable_pocket_priority": False, "enable_funded_sprint_priority": False, "enable_favourable_trades": False, "enable_sonar": False, "enable_indicators": False},
-    "no-sprint": {"enable_sprinting": False, "enable_splitting": False, "enable_growth_splitting": False, "enable_long_sprint_threats": False, "enable_pocket_priority": False, "enable_funded_sprint_priority": False, "enable_favourable_trades": False,
-                  "enable_sonar": False, "enable_indicators": False},
-    "experimental": {"enable_splitting": True, "enable_growth_splitting": True, "enable_long_sprint_threats": True, "enable_pocket_priority": True, "enable_funded_sprint_priority": True, "enable_favourable_trades": True, "enable_sonar": False, "enable_indicators": False},
-    "growth": {"enable_splitting": False, "enable_growth_splitting": True, "enable_long_sprint_threats": False, "enable_pocket_priority": False, "enable_funded_sprint_priority": False, "enable_favourable_trades": False,
-               "enable_sonar": False, "enable_indicators": False},
-}
-PROFILES["combat"] = {**PROFILES["stable"], "enable_favourable_trades": True}
-PROFILES["stable"]["enable_sonar"] = True
+PROFILES = {"stable": {
+    "enable_sprinting": True, "enable_splitting": False, "enable_growth_splitting": True,
+    "enable_long_sprint_threats": False, "enable_pocket_priority": False,
+    "enable_funded_sprint_priority": False, "enable_favourable_trades": False,
+    "enable_helper_portals": True, "enable_portal_escape": True, "enable_queen_hunting": True,
+    "enable_sonar": True, "enable_indicators": False,
+}}
+PROFILES["no-sprint"] = {**PROFILES["stable"], "enable_sprinting": False}
 PROFILES["no-sonar"] = {**PROFILES["stable"], "enable_sonar": False}
+PROFILES["no-growth"] = {**PROFILES["stable"], "enable_growth_splitting": False}
+PROFILES["no-helper-portals"] = {**PROFILES["stable"], "enable_helper_portals": False}
+PROFILES["no-hunting"] = {**PROFILES["stable"], "enable_queen_hunting": False}
+PROFILES["growth"] = {**PROFILES["stable"]}  # retained CLI alias
+PROFILES["combat"] = {**PROFILES["stable"], "enable_favourable_trades": True}
+PROFILES["experimental"] = {**PROFILES["stable"], "enable_splitting": True,
+    "enable_long_sprint_threats": True, "enable_pocket_priority": True,
+    "enable_funded_sprint_priority": True, "enable_favourable_trades": True}
 
 
 def prepare(bot: pathlib.Path, output: pathlib.Path, profile: str) -> dict:

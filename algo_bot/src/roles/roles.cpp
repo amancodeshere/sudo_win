@@ -11,6 +11,9 @@ auto RoleManager::choose_role(unswbc::Controller const& controller, unswbc::Game
     if (controller.get_id() <= 1) {
         return Role::queen;
     }
+    std::erase_if(allies_, [&](auto const& ally) {
+        return game.get_round_num() - ally.second.round > config::ally_estimate_max_age;
+    });
     auto visible_lengths = std::unordered_map<int, int>{};
     if (world != nullptr) {
         for (auto const& report : world->reports()) {

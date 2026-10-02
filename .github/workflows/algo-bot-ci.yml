@@ -94,7 +94,7 @@ jobs:
         run: >-
           python algo_bot/util/benchmark.py
           "$RUNNER_TEMP/sudo-win-submission" "$RUNNER_TEMP/sudo-win-submission"
-          --maps arena.map --seeds 1 --both-colours --repeat 2
+          --maps arena.map --seeds 1 --both-colours --repeat 2 --allow-favourable-trades
           --output "$RUNNER_TEMP/sudo-win-results"
       - name: Upload sandbox metrics and replays
         if: always()

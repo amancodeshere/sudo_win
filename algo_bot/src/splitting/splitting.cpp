@@ -15,7 +15,8 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
                                        Role role, WorldModel const& world) const
     -> std::optional<PlannedAction> {
     constexpr auto child_size = unswbc::Constants::MIN_SIZE;
-    if (role == Role::queen || game.get_round_num() >= 280 || controller.get_unit_count() >= 24
+    if (controller.get_id() <= 1 || role == Role::queen || game.get_round_num() >= 280
+        || controller.get_unit_count() >= config::population_unit_cap
         || controller.get_length() < 4 || controller.get_length() > 12
         || !controller.can_split(child_size)
         || (role == Role::champion && (controller.get_unit_count() > 1 || game.get_round_num() >= 80))) {
@@ -54,17 +55,70 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
     }
     auto parent_resources = 0;
     auto child_resources = 0;
+    auto const area = static_cast<std::size_t>(world.width() * world.height());
+    auto const index = [&](unswbc::Position p) {
+        return static_cast<std::size_t>(p.y * world.width() + p.x);
+    };
+    auto const income_distances = [&](SimulationState const& state) {
+        struct Node { SimulationState state; int distance; };
+        auto distances = std::vector<int>(area, -1);
+        auto queue = std::vector<Node>{{state,0}};
+        distances[index(state.body.front())] = 0;
+        auto budget = 128;
+        for (std::size_t cursor = 0; cursor < queue.size() && budget > 0; ++cursor) {
+            auto const node = queue[cursor];
+            if (node.distance >= 3) { continue; }
+            for (auto const direction : unswbc::Direction::get_direction_list()) {
+                if (budget-- <= 0) { break; }
+                if (auto const next = simulation.advance(controller,node.state,direction,false,&world)) {
+                    auto& distance = distances[index(next->body.front())];
+                    if (distance < 0) { distance = node.distance + 1; }
+                    queue.push_back({*next,node.distance + 1});
+                }
+            }
+        }
+        return distances;
+    };
+    auto const parent_distance = income_distances(parent);
+    auto const child_distance = income_distances(child);
+    auto queen_distance = std::vector<int>(area,-1);
+    auto queen_queue = std::vector<unswbc::Position>{};
+    for (auto const& tile : controller.get_tiles()) {
+        auto const* part = tile.get_dragon();
+        if (part != nullptr && part->is_head() && part->get_id() <= 1
+            && part->get_team() == controller.get_team()) {
+            queen_distance[index(tile.get_position())] = 0;
+            queen_queue.push_back(tile.get_position());
+        }
+    }
+    for (std::size_t cursor = 0; cursor < queen_queue.size() && cursor < 64U; ++cursor) {
+        auto const p = queen_queue[cursor];
+        if (queen_distance[index(p)] >= 3) { continue; }
+        for (auto const direction : unswbc::Direction::get_direction_list()) {
+            auto const next = world.transition(p,direction);
+            auto const* tile = next ? controller.get_tile(*next) : nullptr;
+            if (next && tile != nullptr && tile->get_dragon() == nullptr && queen_distance[index(*next)] < 0) {
+                queen_distance[index(*next)] = queen_distance[index(p)] + 1;
+                queen_queue.push_back(*next);
+            }
+        }
+    }
     for (auto const& tile : controller.get_tiles()) {
         if (!tile.has_pearl() || tile.get_dragon() != nullptr) {
             continue;
         }
         auto const p = tile.get_position();
-        auto const parent_distance = geometry::toroidal_manhattan(parent.body.front(), p, world.width(), world.height());
-        auto const child_distance = geometry::toroidal_manhattan(child.body.front(), p, world.width(), world.height());
-        parent_resources += parent_distance < child_distance && parent_distance <= 3
-            && std::find(parent_tiles.begin(), parent_tiles.end(), p) != parent_tiles.end();
-        child_resources += child_distance < parent_distance && child_distance <= 3
-            && std::find(child_tiles.begin(), child_tiles.end(), p) != child_tiles.end();
+        auto const pd = parent_distance[index(p)];
+        auto const cd = child_distance[index(p)];
+        auto const qd = queen_distance[index(p)];
+        auto claimed = qd >= 0 && ((pd >= 0 && qd <= pd) || (cd >= 0 && qd <= cd));
+        for (auto const& report : world.reports()) {
+            claimed = claimed || (report.type == MessageType::feeder && report.sender_id <= 1
+                && game.get_round_num() - report.round <= 4 && report.x == p.x && report.y == p.y);
+        }
+        if (claimed) { continue; }
+        parent_resources += pd > 0 && (cd < 0 || pd < cd);
+        child_resources += cd > 0 && (pd < 0 || cd < pd);
     }
     if (parent_resources < 1 || child_resources < 1) {
         return std::nullopt;
@@ -195,7 +249,7 @@ auto SplittingPolicy::consider(unswbc::Controller const& controller,
                                Role role,
                                int reachable_area, WorldModel const* world,
                                bool enabled) const -> std::optional<PlannedAction> {
-    if (!enabled || role == Role::queen || world == nullptr || game.get_round_num() >= config::split_stop_round
+    if (!enabled || controller.get_id() <= 1 || role == Role::queen || world == nullptr || game.get_round_num() >= config::split_stop_round
         || (role == Role::champion && (controller.get_unit_count() > 1 || game.get_round_num() >= 200))) {
         return std::nullopt;
     }

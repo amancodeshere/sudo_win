@@ -207,6 +207,10 @@ TEST_CASE("helper portal exploration is bounded by role progress and cooldown") 
         fixture.controller.unit_count = 1;
         CHECK_FALSE(sudo_win::Safety{}.helper_portal_probe(fixture.controller,world,9));
     }
+    SECTION("aggregate enemy sonar contact defers blind exploration without locating the enemy") {
+        fixture.controller.sonar_echoes.enemy_head = 1;
+        CHECK_FALSE(sudo_win::Safety{}.helper_portal_probe(fixture.controller,world,9));
+    }
     SECTION("visible food keeps the helper collecting locally") {
         choose();
         fixture.game.round_num = 9;

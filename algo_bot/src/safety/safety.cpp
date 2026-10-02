@@ -156,6 +156,11 @@ auto Safety::helper_portal_probe(unswbc::Controller const& controller,
     if (origin == nullptr) {
         return std::nullopt;
     }
+    if (controller.get_sonar_echoes().enemy_head > 0) {
+        // Aggregate contact cannot locate an enemy or certify an exit. Defer
+        // blind probing this turn; a fresh remembered candidate above is separate.
+        return std::nullopt;
+    }
     for (auto const direction : unswbc::Direction::get_direction_list()) {
         if (!origin->get_edge(direction).is_portal()) {
             continue;

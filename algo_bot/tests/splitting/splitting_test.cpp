@@ -20,6 +20,7 @@ TEST_CASE("stable splitting policy") {
 
 TEST_CASE("experimental splits require safe parent child and separate pearl income") {
     auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 6;
     auto const body = std::vector<unswbc::Position>{
         {5, 5}, {5, 6}, {5, 7}, {4, 7}, {3, 7}, {2, 7}, {2, 6},
         {2, 5}, {2, 4}, {2, 3}, {3, 3}, {4, 3}, {5, 3}, {6, 3}};
@@ -35,7 +36,7 @@ TEST_CASE("experimental splits require safe parent child and separate pearl inco
             }
         }
         fixture.tile(body[i]).dragon_part = unswbc::DragonPart{
-            body[i], 0, unswbc::Team::A, heading, i == 0};
+            body[i], 6, unswbc::Team::A, heading, i == 0};
     }
     for (auto& tile : fixture.controller.vision.tiles) {
         tile.pearl = tile.get_dragon() == nullptr;
@@ -140,6 +141,7 @@ TEST_CASE("trapped snakes reverse their tails rather than collide") {
 
 TEST_CASE("early expansion protects the champion and requires separate resources") {
     auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 6;
     auto const body = std::vector<unswbc::Position>{{5,5},{5,6},{4,6},{3,6},{2,6},{2,5}};
     fixture.controller.length = static_cast<int>(body.size());
     for (std::size_t i = 0; i < body.size(); ++i) {
@@ -152,7 +154,7 @@ TEST_CASE("early expansion protects the champion and requires separate resources
                 }
             }
         }
-        fixture.tile(body[i]).dragon_part = unswbc::DragonPart{body[i], 0, unswbc::Team::A, heading, i == 0};
+        fixture.tile(body[i]).dragon_part = unswbc::DragonPart{body[i], 6, unswbc::Team::A, heading, i == 0};
     }
     fixture.tile({6,4}).pearl = true;
     fixture.tile({2,4}).pearl = true;
@@ -179,6 +181,8 @@ TEST_CASE("early expansion protects the champion and requires separate resources
     }
     SECTION("fixed queens never split for population investment") {
         CHECK_FALSE(candidate(sudo_win::Role::queen));
+        fixture.controller.head.dragon_id = 1;
+        CHECK_FALSE(candidate(sudo_win::Role::collector));
     }
     SECTION("a solitary early champion can start a second collector") {
         CHECK(candidate(sudo_win::Role::champion));
@@ -188,7 +192,7 @@ TEST_CASE("early expansion protects the champion and requires separate resources
         fixture.tile({3,4}).pearl = false;
         CHECK_FALSE(candidate());
         fixture.tile({2,4}).pearl = true;
-        fixture.controller.unit_count = 24;
+        fixture.controller.unit_count = sudo_win::config::population_unit_cap;
         CHECK_FALSE(candidate());
     }
     SECTION("unit limits and late rounds prevent invalid or late expansion") {
@@ -222,10 +226,30 @@ TEST_CASE("early expansion protects the champion and requires separate resources
             unswbc::Direction::NORTH, unswbc::Direction::EAST, unswbc::Direction::SOUTH};
         for (std::size_t i = 0; i < short_body.size(); ++i) {
             fixture.tile(short_body[i]).dragon_part = unswbc::DragonPart{
-                short_body[i], 0, unswbc::Team::A, headings[i], i == 0};
+                short_body[i], 6, unswbc::Team::A, headings[i], i == 0};
         }
         auto const split = candidate();
         REQUIRE(split);
         CHECK(fixture.controller.can_split(split->split_size));
+    }
+    SECTION("queen claims prevent funding expansion with her reserved income") {
+        auto world = sudo_win::WorldModel{fixture.game};
+        world.update(fixture.controller,fixture.game);
+        world.receive_report({sudo_win::MessageType::feeder,1,0,6,4,1},1);
+        CHECK_FALSE(sudo_win::SplittingPolicy{}.grow_population(fixture.controller,fixture.game,
+            sudo_win::Role::collector,world));
+    }
+    SECTION("geometrically nearby food behind walls cannot fund the child") {
+        for (auto const d : unswbc::Direction::get_direction_list()) {
+            fixture.tile({2,4}).get_edge(d) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+            fixture.tile({3,4}).get_edge(d) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+        }
+        // Block incoming sides too: fixture edges are independently editable.
+        fixture.tile({2,5}).get_edge(unswbc::Direction::NORTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+        fixture.tile({3,5}).get_edge(unswbc::Direction::NORTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+        fixture.tile({2,3}).get_edge(unswbc::Direction::SOUTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+        fixture.tile({3,3}).get_edge(unswbc::Direction::SOUTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+        fixture.tile({4,4}).get_edge(unswbc::Direction::WEST) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+        CHECK_FALSE(candidate());
     }
 }

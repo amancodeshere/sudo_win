@@ -18,9 +18,9 @@ No upload or live challenges are part of this task.
 | 2 | Queen identity, food priority and parent-preserving rescue | Complete | 45 C++ cases / 299 assertions; native 4–4 / eight games, zero candidate errors |
 | 3 | Bounded free sprint search, opening escapes and turn-order-aware threats | Complete | 48 C++ cases / 319 assertions; ordered-threat native comparison 3–5, zero errors |
 | 4 | Earlier remembered portal escapes and helper exploration | Complete | 49 C++ cases / 326 assertions; native 5–3 against step 3b, zero errors |
-| 5 | Useful sonar reports and helper attacks against enemy queen | Implemented; comparisons running | 54 C++ cases / 352 assertions, sanitizers and 16 Python tests pass |
-| 6 | Resource-supported helper expansion and endgame coordination | Pending | Repeated rescue cycles and weak food collection |
-| 7 | Combined held-out sandbox checks, repeatability and final package | Pending | Validate actual queen scoring, live payment rules and CPU |
+| 5 | Useful sonar reports and helper attacks against enemy queen | Complete | Native 3–5; sandbox 1–1, no errors, peak 43,533,506 CPU points |
+| 6 | Resource-supported helper expansion and endgame coordination | Complete | 54 C++ cases / 356 assertions; native 4–4, no errors; four compiler/config checks pass |
+| 7 | Combined held-out sandbox checks, repeatability and final package | In progress | Twenty sandbox games across all ten competition maps are running |
 
 ## Rules that validation must enforce
 
@@ -67,3 +67,11 @@ Small nonqueen helpers (length at most four, more than one survivor, not the sec
 Sonar now sends at most two directed 64-bit beams per action, rotating queen status, legal resource claims, canonical portal endpoints and observed food/enemy-queen sightings. The old eight-bit sender field is replaced with thirteen bits; encoding rejects overflow and decoding reconstructs delayed absolute rounds. At most 64 fresh reports are retained. Reports influence helper roles, resource allocation and soft enemy-queen approach/caution; portal reports extend static pairing only when they do not contradict directly seen edges. They never mark remote tiles seen or override occupancy. The payload tag filters unrelated messages; it is not cryptographic authentication and remote information remains advisory.
 
 Length-two/three helpers with a surviving teammate can deliberately remove a currently visible enemy queen along a fully simulated, funded route. Queens, last survivors and incomplete bodies cannot be sacrificed. Broader length trades remain disabled by default. The independent benchmark classifier explicitly verifies queen victims and rejects sacrificing our queen; intentional head trades require the benchmark opt-in. Release and ASan/UBSan pass 54 cases / 352 assertions; 16 Python tests pass. Frozen source: `build/live-step5-sonar`. Native seed 307 eight-game comparison and sandbox seed 308 two-map CPU checks are running; six native games completed without errors at commit time. Results will be recorded before final promotion.
+
+Completed step 5 comparisons: native seed 307, Portals / Queen of Spades / Trophy / Schooltime, both colors: 3–5; sandbox seed 308, Portals / Schooltime: 1–1, zero errors, candidate peak 43,533,506 (`build/validation/sonar-native8/`, `sonar-sandbox2/`). No broad win-rate advantage is inferred.
+
+### Step 6 — coordinated population and late scoring
+
+Enabled early expansion into a two-segment helper only for nonqueens with independent food routes and multiple six-turn escapes for both resulting snakes. Bounded body simulation replaces geometric distance when allocating that income; walls, stationary split bodies and competing queen claims can invalidate it. Investment stops at eight living units and round 280; the secondary champion is preserved once there are teammates. Fixed queen identity is enforced even if a caller mislabels its role. Late protected snakes keep the paid zero-growth sprint restriction; helper queen removal remains available because it changes the primary score. Ally estimates are now expired rather than accumulated indefinitely. Aggregate enemy-head sonar contact can defer blind probing, without locating an enemy or claiming an exit is blocked/empty.
+
+Stable packaging preserves these promoted feature settings. Each ablation profile changes exactly one flag, and CI explicitly verifies allowed funded helper head trades. Release (Apple Clang, LLVM Clang and GCC), ASan/UBSan and 16 Python tests pass; 54 C++ cases / 356 assertions. Native seed 309 on Default / Schooltime / Trauma / Slithery Fight, both colors: 4–4, zero errors (`build/validation/growth-native8/`). Frozen combined source: `build/live-step6-growth`; broad held-out checks remain in progress.

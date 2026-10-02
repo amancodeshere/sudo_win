@@ -25,7 +25,19 @@ class SubmissionTests(unittest.TestCase):
             self.assertEqual(combat["effective_flags"]["enable_funded_sprint_priority"], "false")
             self.assertEqual(stable["effective_flags"]["enable_splitting"], "false")
             self.assertEqual(experimental["effective_flags"]["enable_splitting"], "true")
-            self.assertEqual(stable["effective_flags"]["enable_growth_splitting"], "false")
+            self.assertEqual(stable["effective_flags"]["enable_growth_splitting"], "true")
+            self.assertEqual(stable["effective_flags"]["enable_sonar"], "true")
+            self.assertEqual(stable["effective_flags"]["enable_helper_portals"], "true")
+            self.assertEqual(stable["effective_flags"]["enable_queen_hunting"], "true")
+            for profile, flag in (("no-growth", "enable_growth_splitting"),
+                                  ("no-sonar", "enable_sonar"),
+                                  ("no-helper-portals", "enable_helper_portals"),
+                                  ("no-hunting", "enable_queen_hunting"),
+                                  ("no-sprint", "enable_sprinting")):
+                ablation = submission.prepare(BOT, root / profile, profile)
+                differences = [key for key in stable["effective_flags"]
+                               if stable["effective_flags"][key] != ablation["effective_flags"][key]]
+                self.assertEqual(differences, [flag])
             self.assertEqual(stable["effective_flags"]["enable_long_sprint_threats"], "false")
             self.assertEqual(stable["effective_flags"]["enable_pocket_priority"], "false")
             self.assertEqual(experimental["effective_flags"]["enable_pocket_priority"], "true")
