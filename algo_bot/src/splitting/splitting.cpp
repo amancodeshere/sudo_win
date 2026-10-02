@@ -115,13 +115,21 @@ auto SplittingPolicy::rescue(unswbc::Controller const& controller,
         auto view = controller;
         if (auto* child_head = view.get_tile(initial.body.back())) {
             child_head->dragon_part.reset();
-            tail_safe = Combat{}.threat_level(view, initial.body.back(), &world) != ThreatLevel::direct;
+            auto const threats = Combat{}.threats(view, &world);
+            auto const p = initial.body.back();
+            auto const& threat = threats[static_cast<std::size_t>(p.y * world.width() + p.x)];
+            tail_safe = threat.level != ThreatLevel::direct
+                && (threat.later_affordable_steps == 0 || threat.later_affordable_steps > 3);
         }
         if (preserve_parent) {
             if (auto* parent_head = view.get_tile(initial.body.front())) {
                 parent_head->dragon_part.reset();
             }
-            parent_safe = Combat{}.threat_level(view, initial.body.front(), &world) != ThreatLevel::direct;
+            auto const threats = Combat{}.threats(view, &world);
+            auto const p = initial.body.front();
+            auto const& threat = threats[static_cast<std::size_t>(p.y * world.width() + p.x)];
+            parent_safe = threat.level != ThreatLevel::direct
+                && (threat.later_affordable_steps == 0 || threat.later_affordable_steps > 3);
         }
     }
     if (tail_safe) {

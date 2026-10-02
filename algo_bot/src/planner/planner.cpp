@@ -85,6 +85,8 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         candidate.combat_score = threat.score * (role == Role::queen ? 3
             : role == Role::champion ? config::score_champion_risk_multiplier : 1);
         auto const threatened = threat.level == ThreatLevel::direct
+            || ((role == Role::queen || controller.get_unit_count() == 1)
+                && threat.later_affordable_steps > 0 && threat.later_affordable_steps <= 3)
             || (funded_sprint_priority_ && threat.affordable_steps > 0 && threat.affordable_steps <= 2);
         auto const entry_trap = steps.size() == 1 && survival < config::survival_search_depth
             && simulation.sealed_entry_pocket(next, world);

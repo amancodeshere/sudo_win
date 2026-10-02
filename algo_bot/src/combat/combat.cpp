@@ -108,7 +108,7 @@ auto Combat::threats(unswbc::Controller const& controller, WorldModel const* wor
         auto budget = 192;
         for (std::size_t cursor = 0; cursor < queue.size() && budget > 0; ++cursor) {
             auto const node = queue[cursor];
-            if (node.steps >= (long_sprints ? 5 : 2)) {
+            if (node.steps >= (long_sprints ? 5 : 3)) {
                 continue;
             }
             for (auto const direction : unswbc::Direction::get_direction_list()) {
@@ -143,6 +143,11 @@ auto Combat::threats(unswbc::Controller const& controller, WorldModel const* wor
                 || affordable[i] < assessment.affordable_steps)) {
                 assessment.affordable_steps = affordable[i];
             }
+            auto& ordered_steps = enemy->get_id() > controller.get_id()
+                ? assessment.later_affordable_steps : assessment.earlier_affordable_steps;
+            if (affordable[i] > 0 && (ordered_steps == 0 || affordable[i] < ordered_steps)) {
+                ordered_steps = affordable[i];
+            }
             if (steps == 1) {
                 assessment.level = ThreatLevel::direct;
                 assessment.score += config::score_enemy_head_risk;
@@ -158,6 +163,9 @@ auto Combat::threats(unswbc::Controller const& controller, WorldModel const* wor
                 // treating all remote routes as certain attacks starves growth.
                 assessment.score += steps == 2 ? config::score_possible_enemy_sprint
                                               : config::score_long_enemy_sprint / (steps - 2);
+                if (enemy->get_id() > controller.get_id() && affordable[i] > 0 && affordable[i] <= 3) {
+                    assessment.score -= steps == 2 ? 15000 : 8000;
+                }
             }
         }
     }

@@ -216,3 +216,20 @@ TEST_CASE("long snakes exploit five free steps with bounded profitable routes") 
     CHECK(state.body.size() == 22);
     CHECK(state.pearls == 5);
 }
+
+TEST_CASE("queens and last survivors avoid funded later attacks without an experimental flag") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.tile({6,5}).pearl = true;
+    for (auto const p : std::vector<unswbc::Position>{{8,5},{8,6},{8,7},{8,8},{7,8}}) {
+        fixture.tile(p).dragon_part = unswbc::DragonPart{p,7,unswbc::Team::B,unswbc::Direction::NORTH,p == unswbc::Position{8,5}};
+    }
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller, fixture.game);
+    auto const action = sudo_win::Planner{false}.choose_action(fixture.controller, fixture.game, world, sudo_win::Role::queen);
+    REQUIRE(action.steps.size() == 1);
+    CHECK(action.steps.front() != unswbc::Direction::EAST);
+    fixture.controller.head.dragon_id = 9;
+    auto const threats = sudo_win::Combat{}.threats(fixture.controller, &world);
+    CHECK(threats[56].later_affordable_steps == 0);
+    CHECK(threats[56].earlier_affordable_steps == 2);
+}

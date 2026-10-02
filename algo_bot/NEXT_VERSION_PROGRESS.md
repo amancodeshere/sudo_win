@@ -16,7 +16,7 @@ No upload or live challenges are part of this task.
 | --- | --- | --- | --- |
 | 1 | Current official judge, fixed queen scoring, free sprint accounting | Complete | 45 C++ cases / 289 assertions, sanitizers, 16 Python tests; native 2–2 / four games, zero candidate errors |
 | 2 | Queen identity, food priority and parent-preserving rescue | Complete | 45 C++ cases / 299 assertions; native 4–4 / eight games, zero candidate errors |
-| 3 | Bounded free sprint search, opening escapes and turn-order-aware threats | In progress | Free movement is underused; two-step attacks dominate elimination |
+| 3 | Bounded free sprint search, opening escapes and turn-order-aware threats | Complete | 48 C++ cases / 319 assertions; ordered-threat native comparison 3–5, zero errors |
 | 4 | Earlier remembered portal escapes and helper exploration | Pending | Only 16 successful crossings in 70 games |
 | 5 | Useful sonar reports and helper attacks against enemy queen | Pending | Existing messages are decoded but unused |
 | 6 | Resource-supported helper expansion and endgame coordination | Pending | Repeated rescue cycles and weak food collection |
@@ -53,3 +53,7 @@ IDs 0 and 1 keep the queen role regardless of color, relative visible lengths or
 Implemented an eight-step hard cap, 256 expansion-node budget and two beam candidates per first direction. The action-start free allowance bounds long routes; every step is simulated with live collision/tail rules. A length-17 queen collects five pearls in five free steps in the regression fixture. Some competition maps deliberately force the starting queen into a cul-de-sac (Autarky / Prisoners Dilemma / Slithery Fight); when all ordinary moves are fatal and parent rescue cannot be certified, a legal split preserves a larger secondary contender rather than repeatedly draining the queen into tiny children. No safety guarantee is attached to this last-resort child.
 
 46 C++ cases / 308 assertions pass in Release and ASan/UBSan. Diagnostic comparison against step 2: native seed 303, four maps / both colors, 4–4 (`build/validation/free-sprint-native8/`). Held-out sandbox seed 304 on Slithery Fight / Portals / both colors: 1–3, zero candidate errors, peak 43,490,830 / 100,000,000 (`build/validation/free-sprint-sandbox4/`). CPU integration is verified; win-rate advantage is not established by this small sample. Broader combined comparisons will determine final strategy settings. Turn-order-aware defense remains in progress.
+
+### Step 3b — funded attacks and turn order
+
+Threat maps now keep separate funded earlier/later enemy routes, including the live free allowance and intermediate pearl income. Queens and last survivors rank endpoints reachable by later funded attacks within three steps below unattacked endpoints. Helpers retain softer risk costs. Stationary split parents and reversed child heads are checked against later funded attacks before rescue certification. Release and ASan/UBSan pass 48 cases / 319 assertions. Native seed 305 on Default, Trophy, Queen of Spades and Devil / both colors: 3–5 against step 3a, no candidate or opponent errors (`build/validation/ordered-threat-native8/`). Defense is integrated; this small diagnostic does not establish a win-rate improvement.

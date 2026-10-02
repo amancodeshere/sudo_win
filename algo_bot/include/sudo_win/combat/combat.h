@@ -17,6 +17,8 @@ struct ThreatAssessment {
     // A visible length lower bound (including pearl income) funds this route.
     // This certifies capability, not that the enemy will choose the attack.
     int affordable_steps = 0;
+    int later_affordable_steps = 0;
+    int earlier_affordable_steps = 0;
 };
 
 class Combat {

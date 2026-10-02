@@ -61,6 +61,23 @@ TEST_CASE("cached threat map accumulates independent possible attacks") {
     CHECK(map[55].score == 2 * sudo_win::config::score_possible_enemy_sprint);
 }
 
+TEST_CASE("threat funding preserves enemy turn order and counts free movement") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 2;
+    for (auto const p : std::vector<unswbc::Position>{{8,5},{8,6},{8,7},{8,8},{7,8}}) {
+        fixture.tile(p).dragon_part = unswbc::DragonPart{p,7,unswbc::Team::B,unswbc::Direction::NORTH,p == unswbc::Position{8,5}};
+    }
+    auto const later = sudo_win::Combat{}.threats(fixture.controller);
+    CHECK(later[56].later_affordable_steps == 2);
+    CHECK(later[55].later_affordable_steps == 3);
+    CHECK(later[56].earlier_affordable_steps == 0);
+    fixture.controller.head.dragon_id = 9;
+    auto const earlier = sudo_win::Combat{}.threats(fixture.controller);
+    CHECK(earlier[56].earlier_affordable_steps == 2);
+    CHECK(earlier[56].later_affordable_steps == 0);
+    CHECK(earlier[55].earlier_affordable_steps == 3);
+}
+
 TEST_CASE("long sprint threats respect segment costs and visible pearl income") {
     auto fixture = sudo_win::test::EngineFixture{};
     for (auto x = 2; x <= 5; ++x) {
@@ -71,7 +88,8 @@ TEST_CASE("long sprint threats respect segment costs and visible pearl income") 
     SECTION("four observed segments afford three steps but not four") {
         auto const threat = map();
         CHECK(threat[28].level == sudo_win::ThreatLevel::possible_sprint);
-        CHECK(threat[28].score == sudo_win::config::score_long_enemy_sprint);
+        CHECK(threat[28].score == sudo_win::config::score_long_enemy_sprint - 8000);
+        CHECK(threat[28].later_affordable_steps == 3);
         CHECK(threat[38].level == sudo_win::ThreatLevel::none);
     }
     SECTION("an intermediate pearl pays for a fourth step") {
