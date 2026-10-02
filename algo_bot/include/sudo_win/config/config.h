@@ -12,6 +12,7 @@ inline constexpr auto enable_champion_farms = true;
 inline constexpr auto enable_portal_routing = true;
 inline constexpr auto enable_movement_economics = true;
 inline constexpr auto enable_interception = true;
+inline constexpr auto enable_tail_clearance = true;
 inline constexpr auto population_unit_cap = 8;
 inline constexpr auto enable_long_sprint_threats = false;
 inline constexpr auto enable_pocket_priority = false;

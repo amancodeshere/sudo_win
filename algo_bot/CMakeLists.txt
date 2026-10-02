@@ -87,6 +87,7 @@ add_executable(
     tests/world/world_model_test.cpp
 )
 target_include_directories(sudo_win_tests PRIVATE tests)
+target_compile_definitions(sudo_win_tests PRIVATE SUDO_WIN_TEST_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/tests")
 target_link_libraries(sudo_win_tests PRIVATE sudo_win_bot catch2_main)
 
 add_test(NAME sudo_win_tests COMMAND sudo_win_tests)

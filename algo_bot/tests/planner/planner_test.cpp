@@ -6,6 +6,8 @@
 #include "../engine_fixture.h"
 
 #include <catch2/catch.hpp>
+#include <fstream>
+#include <sstream>
 
 TEST_CASE("baseline planner") {
     auto fixture = sudo_win::test::EngineFixture{};
@@ -284,4 +286,36 @@ TEST_CASE("helpers retain growth instead of paying it away for collection tempo"
         REQUIRE(action.steps.size() == 2);
         CHECK(action.steps.front() == unswbc::Direction::EAST);
     }
+}
+
+TEST_CASE("a partially observed split child uses free movement to clear queen exits") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.game = unswbc::Game{63,27,64};
+    fixture.controller.head.dragon_id = 14;
+    auto input = std::ifstream{std::string{SUDO_WIN_TEST_SOURCE_DIR} + "/replays/slithery_child_escape.txt"};
+    REQUIRE(input.good());
+    auto* previous = std::cin.rdbuf(input.rdbuf());
+    bool updated = false;
+    try {
+        updated = unswbc::update(fixture.controller,fixture.game);
+    } catch (...) {
+        std::cin.rdbuf(previous);
+        throw;
+    }
+    std::cin.rdbuf(previous);
+    REQUIRE(updated);
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto const initial = sudo_win::Simulation{}.initial_state(fixture.controller,&world);
+    REQUIRE(!initial.unranked_body.empty());
+    auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::champion);
+    REQUIRE(action.steps.size() >= 2);
+    CHECK(action.steps.size() <= static_cast<std::size_t>(sudo_win::Simulation::free_steps(fixture.controller.get_length())));
+    auto state = initial;
+    for (std::size_t i = 0; i < action.steps.size(); ++i) {
+        auto const next = sudo_win::Simulation{}.advance(fixture.controller,state,action.steps[i],i > 0,&world);
+        REQUIRE(next);
+        state = *next;
+    }
+    CHECK(state.body.size() == initial.body.size());
 }

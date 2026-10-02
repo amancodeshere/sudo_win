@@ -39,6 +39,7 @@ class SubmissionTests(unittest.TestCase):
                                   ("no-portal-routes", "enable_portal_routing"),
                                   ("no-economics", "enable_movement_economics"),
                                   ("no-interception", "enable_interception"),
+                                  ("no-tail-clearance", "enable_tail_clearance"),
                                   ("no-sprint", "enable_sprinting")):
                 ablation = submission.prepare(BOT, root / profile, profile)
                 differences = [key for key in stable["effective_flags"]

@@ -29,6 +29,15 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     auto const threats = combat_.threats(controller, &world);
     auto const initial = simulation.initial_state(controller, &world);
     auto const reservations = world.queen_reservations(controller, game.get_round_num());
+    // Unranked visible parts still block the queen. Extra free movement sheds
+    // tail segments without pretending to know their order or clearing occupancy.
+    auto const blocks_queen = config::enable_tail_clearance && controller.get_id() > 1
+        && std::any_of(controller.get_tiles().begin(), controller.get_tiles().end(), [&](auto const& tile) {
+            auto const* part = tile.get_dragon();
+            auto const p = tile.get_position();
+            return part != nullptr && part->get_id() == controller.get_id()
+                && reservations[static_cast<std::size_t>(p.y * world.width() + p.x)] >= 16000;
+        });
     auto const interception = combat_.interception_distances(controller, world, game.get_round_num(), role);
     auto const interception_start = interception[static_cast<std::size_t>(controller.get_position().y * world.width() + controller.get_position().x)];
     auto best_survival = -1;
@@ -95,6 +104,10 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             if (p.x >= 0 && p.y >= 0) {
                 candidate.role_score -= reservations[static_cast<std::size_t>(p.y * world.width() + p.x)];
             }
+        }
+        if (blocks_queen) {
+            candidate.role_score += std::max(0, std::min(static_cast<int>(steps.size()),
+                Simulation::free_steps(controller.get_length())) - 1) * 6000;
         }
         auto const interception_end = interception[static_cast<std::size_t>(destination.y * world.width() + destination.x)];
         if (interception_start > 0 && interception_end >= 0 && interception_end < interception_start) {
