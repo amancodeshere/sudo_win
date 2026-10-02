@@ -95,6 +95,12 @@ auto Bot::execute_turn(unswbc::Controller& controller, unswbc::Game const& game)
                         controller.get_id(), p.x, p.y, 1};
                 }
             }
+            if (config::enable_portal_routing && controller.get_id() > 1
+                && (!report || report->type != MessageType::enemy_head)) {
+                if (auto const survey = world_.portal_survey(controller, game.get_round_num(), action)) {
+                    report = survey;
+                }
+            }
         }
         if (report && sonar_.can_encode(*report)) {
             report_payload = sonar_.encode(*report, static_cast<char>(controller.get_team().value));
@@ -116,7 +122,8 @@ auto Bot::execute_turn(unswbc::Controller& controller, unswbc::Game const& game)
     if (report_payload) {
         // Directed 64-bit messages, after the action. Rotate opposite beams;
         // delayed aggregate echoes are never treated as empty-space evidence.
-        auto const direction = unswbc::Direction{game.get_round_num() % 2 == 0
+        auto const beam_phase = game.get_round_num() + (config::enable_portal_routing ? game.get_round_num() / 4 : 0);
+        auto const direction = unswbc::Direction{beam_phase % 2 == 0
             ? unswbc::Direction::NORTH : unswbc::Direction::EAST};
         controller.send_sonar(direction, *report_payload);
         controller.send_sonar(direction.get_opposite(), *report_payload);

@@ -170,6 +170,80 @@ auto WorldModel::queen_intent(unswbc::Controller const& controller, int round,
     return TeamMessage{MessageType::danger, round & 511, controller.get_id(), best->x, best->y, 0};
 }
 
+auto WorldModel::portal_survey(unswbc::Controller const& controller, int round,
+                               PlannedAction const& action) const -> std::optional<TeamMessage> {
+    auto path = std::vector<unswbc::Position>{};
+    auto position = controller.get_position();
+    if (action.kind != ActionKind::split) {
+        for (auto const direction : action.steps) {
+            auto const next = transition(position, direction);
+            if (!next) { return std::nullopt; }
+            position = *next;
+            path.push_back(position);
+        }
+    }
+    auto best = std::optional<TeamMessage>{};
+    auto best_score = -1;
+    auto survey_candidates = 0;
+    auto const& tiles = controller.get_tiles();
+    for (std::size_t offset = 0; offset < tiles.size(); ++offset) {
+        auto const& tile = tiles[(offset + static_cast<std::size_t>(round / 4 + controller.get_id())) % tiles.size()];
+        auto const p = tile.get_position();
+        if (tile.get_dragon() != nullptr || p == controller.get_position()
+            || std::find(path.begin(), path.end(), p) != path.end()) { continue; }
+        auto portal_id = -1;
+        for (auto const direction : unswbc::Direction::get_direction_list()) {
+            auto const& edge = tile.get_edge(direction);
+            if (edge.is_portal() && edge.get_portal_id() >= 0 && edge.get_portal_id() < 1024) {
+                portal_id = edge.get_portal_id(); break;
+            }
+        }
+        if (portal_id < 0) { continue; }
+        auto onward = 0;
+        for (auto const direction : unswbc::Direction::get_direction_list()) {
+            auto const next = transition(p, direction);
+            auto const* visible = next ? controller.get_tile(*next) : nullptr;
+            onward += visible != nullptr && visible->get_dragon() == nullptr && *next != p;
+        }
+        if (onward < 2) { continue; }
+        auto enemy_near = false;
+        for (auto const& observed : controller.get_tiles()) {
+            auto const* part = observed.get_dragon();
+            if (part != nullptr && part->is_head() && part->get_team() != controller.get_team()
+                && geometry::toroidal_manhattan(p, observed.get_position(), width_, height_) <= 4) {
+                enemy_near = true; break;
+            }
+        }
+        if (enemy_near) { continue; }
+        if (survey_candidates++ >= 4) { break; }
+        auto queue = std::vector<std::pair<unswbc::Position,int>>{{p,0}};
+        auto resources = 0;
+        for (std::size_t cursor = 0; cursor < queue.size() && cursor < 32U; ++cursor) {
+            auto const [current, distance] = queue[cursor];
+            auto const* visible = controller.get_tile(current);
+            if (visible == nullptr) { continue; }
+            resources += visible->has_pearl() || (visible->get_pearl_time() > 0 && visible->get_pearl_time() <= 12);
+            if (distance == 3) { continue; }
+            for (auto const direction : unswbc::Direction::get_direction_list()) {
+                auto const next = transition(current, direction);
+                auto const* target = next ? controller.get_tile(*next) : nullptr;
+                if (target != nullptr && target->get_dragon() == nullptr
+                    && std::none_of(queue.begin(), queue.end(), [&](auto const& entry) { return entry.first == *next; })) {
+                    queue.emplace_back(*next, distance + 1);
+                }
+            }
+        }
+        auto const score = resources * 100 + onward * 10;
+        if (score > best_score) {
+            best_score = score;
+            // This is a recent observation, not a promise that an exit remains empty.
+            best = TeamMessage{MessageType::empty, round & 511, controller.get_id(), p.x, p.y,
+                portal_id + (resources > 0 ? 1024 : 0)};
+        }
+    }
+    return best;
+}
+
 auto WorldModel::own_body(unswbc::Controller const& controller) const
     -> std::vector<unswbc::Position> const* {
     if (own_id_ != controller.get_id() || own_body_.size() != static_cast<std::size_t>(controller.get_length())

@@ -52,6 +52,8 @@ public:
         -> std::vector<int>;
     [[nodiscard]] auto queen_intent(unswbc::Controller const& controller, int round,
                                     PlannedAction const& action) const -> std::optional<TeamMessage>;
+    [[nodiscard]] auto portal_survey(unswbc::Controller const& controller, int round,
+                                     PlannedAction const& action) const -> std::optional<TeamMessage>;
     auto remember_action(unswbc::Controller const& controller, unswbc::Game const& game,
                          PlannedAction const& action) -> void;
     [[nodiscard]] auto own_body(unswbc::Controller const& controller) const

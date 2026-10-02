@@ -175,6 +175,33 @@ auto Safety::helper_portal_probe(unswbc::Controller const& controller,
     return std::nullopt;
 }
 
+auto Safety::surveyed_portal_route(unswbc::Controller const& controller,
+                                  WorldModel const& world, int round) const
+    -> std::optional<unswbc::Direction> {
+    if (controller.get_unit_count() <= 1 || controller.get_length() > (controller.get_id() <= 1 ? 8 : 12)
+        || controller.get_sonar_echoes().enemy_head > 0) { return std::nullopt; }
+    auto const state = Simulation{}.initial_state(controller, &world);
+    if (!state.unranked_body.empty() || std::any_of(state.body.begin(), state.body.end(), [](auto p) { return p.x < 0 || p.y < 0; })) {
+        return std::nullopt;
+    }
+    auto const* origin = controller.get_tile(controller.get_position());
+    if (origin == nullptr) { return std::nullopt; }
+    for (auto const direction : unswbc::Direction::get_direction_list()) {
+        auto const& edge = origin->get_edge(direction);
+        if (!edge.is_portal()) { continue; }
+        auto const exit = world.transition(controller.get_position(), direction);
+        if (!exit || controller.get_tile(*exit) != nullptr || world.cell(*exit).occupant
+            || std::find(state.body.begin(), state.body.end(), *exit) != state.body.end()) { continue; }
+        for (auto const& report : world.reports()) {
+            if (report.type == MessageType::empty && report.sender_id > 1 && round - report.round <= 1
+                && report.value == edge.get_portal_id() + 1024 && report.x == exit->x && report.y == exit->y) {
+                return direction;
+            }
+        }
+    }
+    return std::nullopt;
+}
+
 auto Safety::least_bad_fallback(unswbc::Controller const& controller) const -> unswbc::Direction {
     auto best = controller.get_dir();
     auto best_rank = 7;

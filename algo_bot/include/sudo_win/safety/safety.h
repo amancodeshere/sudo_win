@@ -30,6 +30,9 @@ public:
     [[nodiscard]] auto helper_portal_probe(unswbc::Controller const& controller,
                                           WorldModel const& world, int round) const
         -> std::optional<unswbc::Direction>;
+    [[nodiscard]] auto surveyed_portal_route(unswbc::Controller const& controller,
+                                            WorldModel const& world, int round) const
+        -> std::optional<unswbc::Direction>;
 };
 
 } // namespace sudo_win

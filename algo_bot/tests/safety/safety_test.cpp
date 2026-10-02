@@ -199,6 +199,13 @@ TEST_CASE("helper portal exploration is bounded by role progress and cooldown") 
         fixture.game.round_num = 10;
         CHECK(choose().steps.front() != unswbc::Direction::EAST);
     }
+    SECTION("a designated scout starts exploring after three stalled rounds") {
+        fixture.game.round_num = 0;
+        choose();
+        fixture.game.round_num = 3;
+        world.update(fixture.controller,fixture.game);
+        CHECK(choose().steps.front() == unswbc::Direction::EAST);
+    }
     SECTION("fixed queens cannot be mistaken for expendable scouts") {
         fixture.controller.head.dragon_id = 0;
         CHECK_FALSE(sudo_win::Safety{}.helper_portal_probe(fixture.controller,world,9));
@@ -218,4 +225,36 @@ TEST_CASE("helper portal exploration is bounded by role progress and cooldown") 
         world.update(fixture.controller,fixture.game);
         CHECK(choose().steps.front() != unswbc::Direction::EAST);
     }
+}
+
+TEST_CASE("portal destination surveys are advisory fresh and tied to a mapped pair") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.length = 3;
+    fixture.controller.unit_count = 2;
+    fixture.tile({5,6}).dragon_part = unswbc::DragonPart{{5,6},0,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    fixture.tile({5,7}).dragon_part = unswbc::DragonPart{{5,7},0,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    fixture.tile({5,5}).get_edge(unswbc::Direction::EAST) = unswbc::Edge{false,unswbc::EdgeType::PORTAL,9};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    world.receive_report({sudo_win::MessageType::portal,0,4,0,0,19},0);
+    world.receive_report({sudo_win::MessageType::empty,0,4,0,0,1033},0);
+    CHECK(sudo_win::Safety{}.surveyed_portal_route(fixture.controller,world,1) == unswbc::Direction::EAST);
+    CHECK_FALSE(world.has_seen({0,0}));
+    CHECK(sudo_win::Safety{}.standard_move_reason(fixture.controller,unswbc::Direction::EAST,&world)
+          == sudo_win::SafetyReason::unknown_tile);
+    CHECK_FALSE(sudo_win::Safety{}.surveyed_portal_route(fixture.controller,world,2));
+    fixture.controller.length = 9;
+    CHECK_FALSE(sudo_win::Safety{}.surveyed_portal_route(fixture.controller,world,1));
+    fixture.controller.length = 3;
+    for (auto& tile : fixture.controller.vision.tiles) { tile.pearl_time = -1; }
+    fixture.game.round_num = 0;
+    world.update(fixture.controller,fixture.game);
+    auto planner = sudo_win::Planner{};
+    static_cast<void>(planner.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::queen));
+    fixture.game.round_num = 13;
+    world.update(fixture.controller,fixture.game);
+    world.receive_report({sudo_win::MessageType::empty,13,4,0,0,1033},13);
+    auto const relocation = planner.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::queen);
+    REQUIRE(relocation.steps.size() == 1);
+    CHECK(relocation.steps.front() == unswbc::Direction::EAST);
 }

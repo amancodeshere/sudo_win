@@ -307,3 +307,22 @@ TEST_CASE("queen corridors preserve fixed identities and expire remote intention
     world.receive_report({sudo_win::MessageType::danger,0,7,4,4,0},0);
     CHECK(at(world.queen_reservations(fixture.controller,0),{4,4}) == 0);
 }
+
+TEST_CASE("portal surveys never advertise a tile our planned body will occupy") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 4;
+    for (auto& tile : fixture.controller.vision.tiles) { tile.pearl_time = -1; }
+    fixture.tile({6,5}).get_edge(unswbc::Direction::NORTH) = unswbc::Edge{false,unswbc::EdgeType::PORTAL,9};
+    fixture.tile({7,5}).pearl = true;
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto action = sudo_win::PlannedAction{};
+    action.steps = {unswbc::Direction::WEST};
+    auto const survey = world.portal_survey(fixture.controller,0,action);
+    REQUIRE(survey);
+    CHECK(survey->x == 6);
+    CHECK(survey->y == 5);
+    CHECK(survey->value == 1033);
+    action.steps = {unswbc::Direction::EAST};
+    CHECK_FALSE(world.portal_survey(fixture.controller,0,action));
+}

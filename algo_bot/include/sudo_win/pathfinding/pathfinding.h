@@ -22,7 +22,8 @@ public:
                                          WorldModel const& world,
                                          int round,
                                          std::optional<unswbc::Position> preferred = std::nullopt,
-                                         bool protected_unit = false) const
+                                         bool protected_unit = false,
+                                         bool portal_scout = false) const
         -> std::optional<TargetRoute>;
     [[nodiscard]] auto visible_reachable_area(unswbc::Controller const& controller,
                                               unswbc::Position start,

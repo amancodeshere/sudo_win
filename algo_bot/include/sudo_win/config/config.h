@@ -9,6 +9,7 @@ inline constexpr auto enable_growth_splitting = true;
 inline constexpr auto enable_queen_corridors = true;
 inline constexpr auto enable_territorial_growth = true;
 inline constexpr auto enable_champion_farms = true;
+inline constexpr auto enable_portal_routing = true;
 inline constexpr auto population_unit_cap = 8;
 inline constexpr auto enable_long_sprint_threats = false;
 inline constexpr auto enable_pocket_priority = false;

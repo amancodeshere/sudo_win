@@ -36,7 +36,7 @@ auto Pathfinding::remembered_target(unswbc::Controller const& controller,
                                     WorldModel const& world,
                                     int round,
                                     std::optional<unswbc::Position> preferred,
-                                    bool protected_unit) const
+                                    bool protected_unit, bool portal_scout) const
     -> std::optional<TargetRoute> {
     auto const area = static_cast<std::size_t>(world.width() * world.height());
     auto distance = std::vector<int>(area, -1);
@@ -124,16 +124,21 @@ auto Pathfinding::remembered_target(unswbc::Controller const& controller,
             && age <= (farming ? 64 : 2) && (!farming || remaining >= -2)
             && remaining <= steps + (farming ? 8 : 1);
         auto frontier = 0;
+        auto portal_frontier = false;
         for (auto const direction : unswbc::Direction::get_direction_list()) {
             auto const& edge = cell.edges[geometry::direction_index(direction)];
+            auto const* ends = edge.type == unswbc::EdgeType::PORTAL ? world.portal_endpoints(edge.portal_id) : nullptr;
+            portal_frontier = portal_frontier || (config::enable_portal_routing && portal_scout && edge.seen
+                && edge.type == unswbc::EdgeType::PORTAL && (ends == nullptr || ends->size() < 2U));
             if (edge.seen && edge.type == unswbc::EdgeType::EMPTY
                 && !world.has_seen(current.add_dir(direction))) {
                 ++frontier;
             }
         }
-        if (steps > 0 && (pearl || spawning || frontier > 0)) {
+        if (steps > 0 && (pearl || spawning || frontier > 0 || portal_frontier)) {
             auto const wait = farming && spawning ? std::max(0, remaining - steps) : 0;
-            auto value = (pearl ? 24000 : spawning ? (farming ? 12000 : 8000) : frontier * 2400) / (steps + wait + 1);
+            auto value = (pearl ? 24000 : spawning ? (farming ? 12000 : 8000)
+                : portal_frontier ? 12000 : frontier * 2400) / (steps + wait + 1);
             if (cell.last_visited_round >= 0 && round - cell.last_visited_round < 8
                 && !(farming && (pearl || spawning))) {
                 value /= 4;
