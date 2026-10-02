@@ -1,5 +1,57 @@
 # Submission validation
 
+## Version 4 conservative candidate — latest 2 October 2026 review
+
+The new package is **`build/submission-replay-v4-conservative.zip`**. It has not
+been uploaded during this replay-improvement task. The active baseline is
+submission **14465**, named `bot bot v2`, server version 3, uploaded from
+`build/submission-competition-v3.zip`. Server activation was automatic after
+compilation. [REPLAY_V3_REVIEW.md](REPLAY_V3_REVIEW.md) reviews every one of its
+85 available games and explains the rejected trials.
+
+Promoted behaviour: confirmed own-body memory across lost vision, portals,
+sprints and splits; shortening escapes gated by certified entrance traps;
+last-resort portal escape after ordinary movement and certified rescue fail;
+and one cached tail threat check per rescue search. Broad funded-sprint priority,
+proactive expansion, long forecasts, hard pocket priority and helper head attacks
+remain disabled in the stable package.
+
+| Verification | Result |
+| --- | --- |
+| Final replay snapshot | 333 files / 58 series; 105 newly downloaded across two refreshes; zero errors or unavailable |
+| Exact uploaded ID 14465 replay audit | 85 games, 24 wins / 61 losses; both teams' final standings verified |
+| Isolated body memory vs the preceding escape candidate, ten maps, seed 205, both colours | 16 wins / 4 losses, native diagnostics |
+| Final exact archive vs uploaded 14465, ten competition maps, seed 209, both colours | 12 wins / 8 losses, native diagnostics |
+| Final exact archive vs uploaded 14465, ten competition maps, held-out seed 210, both colours | 12 wins / 8 losses, judge sandbox |
+| Final candidate peak CPU | 36,948,123 / 100,000,000 points |
+| Runtime/protocol errors, invalid actions, detected avoidable visible collisions | None in the final sandbox run |
+| Final sandbox death observations independently checked | 2,040 |
+| Portals, seed 211, both colours, two repetitions each | Four judge runs, identical replay hashes within each colour; 21,766,505 maximum points |
+| C++ tests | 44 cases / 271 assertions; Apple Clang Release and ASan/UBSan Debug, LLVM Clang Release, GCC Release |
+| Python tests | 14 passed |
+| Package integrity | All 32 selected files match source; ZIP passes integrity check; credentials/tests/tools excluded |
+
+These results compare our new candidate with our own uploaded bot, not the
+competition leaders. A 12–8 result on one held-out seed per map does not establish
+first-place strength. Live evaluation is the next step; no new challenges,
+uploads or activations were sent during this task.
+
+### Exact package
+
+- Source copy: `build/submission-replay-v4-conservative/`.
+- ZIP: `build/submission-replay-v4-conservative.zip` (37,430 bytes).
+- Source-and-manifest SHA256: `1ec4b2c0cf721634d87130655b39e596578ec284b1138f3ac54dd0bf5e696a2c`.
+- ZIP SHA256: `03f19d151177bb0635a3f3c0aae39caacd738df1685a4b4b6dd5385a2dd34b17`.
+- Benchmark source-only SHA256: `56e42a5cd33624998634faa44b18800d1de5df7ac26355df75110863b08fc769`.
+- Uploaded baseline source-only SHA256: `8a0a026c6a494efb660b28a388854dffe523c6244259c3990db5878084c87940`.
+- Full judge evidence: `build/validation/replay-v4-conservative-sandbox20/`.
+- Repeat evidence: `build/validation/replay-v4-conservative-repeat4/`.
+
+The similarly named `submission-replay-v4.zip` and
+`submission-replay-v4-final.zip` are rejected broader-escape experiments;
+they are not the delivered package. Their 7–12–1 and 11–9 sandbox results are
+preserved in the review. Native diagnostics cannot measure judge CPU use.
+
 ## Competition candidate — final 2 October 2026 strategy review
 
 The upload candidate is `build/submission-competition-v3.zip`. It keeps larger

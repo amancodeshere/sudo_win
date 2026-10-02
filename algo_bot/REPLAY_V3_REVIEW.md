@@ -2,7 +2,7 @@
 
 Submission **14465**, named `bot bot v2`, was uploaded and compiled successfully on 2 October 2026; the server automatically made it active. Its source ZIP is `build/submission-competition-v3.zip` (SHA256 `77294fe08562e1c62fa54c6010b8f1104dbf92a5c6d871f9e62d569f85125651`). This supersedes the earlier upload status in `STRATEGY_UPDATES.md`.
 
-The download snapshot contains 318 game files: 90 newly downloaded, 228 already present, zero unavailable or failed. Replay bot IDs identify **70 games belonging to 14465**, ending **16 wins / 54 losses**. The remaining 20 new downloads belong to older submissions and are excluded. Every selected replay was processed event by event, and final count, longest length and total length agree with the judge for both teams.
+The initial download snapshot contains 318 game files: 90 newly downloaded, 228 already present, zero unavailable or failed. Replay bot IDs identify **70 games belonging to 14465**, ending **16 wins / 54 losses**. The remaining 20 new downloads belong to older submissions and are excluded. Every initially selected replay was processed event by event, and final count, longest length and total length agree with the judge for both teams.
 
 **34 losses were eliminations; 20 were growth deficits.** Our 2,022 deaths include 878 self-collisions, 803 other-body collisions and 341 head collisions. All self/other-body deaths had no empty, currently visible first-step alternative in their final observation; avoiding the earlier trap matters more than changing the final fallback. No timeout or invalid-action deaths occurred; peak CPU use was 36,289,002 / 100,000,000 points.
 
@@ -170,8 +170,70 @@ The final rules spend segments for same-class survival improvement only when
 the best ordinary route enters a **certified sealed entrance chamber**, not
 merely when the search stops at the vision boundary. Higher immediate safety
 class still permits the existing emergency sprint. A portal is attempted only
-when there is **no legal ordinary move** and no reversed-tail rescue certified
-to escape; certified rescue wins before uncertain teleportation. Fresh empty
+when there is **no legal ordinary move** and no reversed-tail rescue with a legal bounded escape; certified rescue wins before uncertain teleportation. Fresh empty
 exit memory, complete body, distinct onward routes and space checks remain.
 These decisions address the observed regressions without making unseen
 occupancy or truncated lookahead into a safety guarantee.
+
+## Delivered package and final results
+
+The final conservative archive beat the uploaded 14465 source **12–8** on all
+ten competition maps, both colours, in native seed 209 and separately in the
+**judge sandbox at held-out seed 210**. Final candidate peak was
+**36,948,123 / 100,000,000 points**, with zero runtime, protocol,
+invalid-action or detected avoidable visible-collision failures. All 2,040
+sandbox death observations were independently checked. Four repeated Portals
+judge runs at seed 211 produced identical hashes per colour. The final source
+passed 44 C++ cases / 271 assertions on GCC, Clang and ASan/UBSan, and 14 Python
+tests. No superiority over live leaders is claimed by these local comparisons.
+
+Upload **`build/submission-replay-v4-conservative.zip`**, SHA256
+`03f19d151177bb0635a3f3c0aae39caacd738df1685a4b4b6dd5385a2dd34b17`. The broader `replay-v4`/`replay-v4-final` trial packages
+are rejected. The current server submission remains 14465; this task made no
+uploads or new live challenges. The package has been frozen and checked against
+all 32 current selected sources.
+
+From the repository root, using the most recently requested metadata:
+
+```sh
+set -a
+source .env
+set +a
+curl --fail-with-body "$UNSWBC_SERVER/api/v1/submissions" \
+  -H "Authorization: Bearer $UNSWBC_KEY" -H "Origin: $UNSWBC_SERVER" \
+  -F 'name=bot bot v2' \
+  -F 'description=I will sudo win.. better than last time hopefully' \
+  -F 'language=cpp' \
+  -F 'zip=@build/submission-replay-v4-conservative.zip;type=application/zip'
+```
+
+Inspect the returned submission's status and build log. This server previously
+automatically activated 14465 after compilation; check the resulting active ID
+before any explicit activation or leader benchmark. The API controls version
+numbers, independently of the bot name or local package filename.
+
+## Final replay refresh
+
+A final read-only status check confirmed submission 14465 is still active and showed 15 additional completed games. These were downloaded and fully audited too. The final snapshot has **333 replays / 58 series**, with **105 new downloads** across both refreshes and no errors or unavailable replays. Of these, **85 replays belong to 14465: 24 wins / 61 losses**, matching the server record. The other 20 new files belong to the older uploaded version. Both teams' final standings were verified in all 85 selected games.
+
+The additional 15 games went 8–7 (three elimination losses and four growth losses), adding 245 self-collisions, 231 other-body collisions and 30 head collisions. Combined current-version losses comprise **37 eliminations / 24 growth deficits**; deaths total **1,123 self / 1,034 other-body / 371 head**. No invalid-action deaths or timeouts occurred; live peak CPU was **37,197,827** points. These games reinforce the earlier trapping/growth diagnosis. They were played by the uploaded baseline, not the new candidate.
+
+| Game | Map | Opponent | Result | Diagnosis | Final longest ours / opponent |
+| --- | --- | --- | --- | --- | --- |
+| 845743 | Trophy | Proof by Intimidation | win | survived / won | 18 / 13 |
+| 845744 | Queen Of Spades | Proof by Intimidation | win | survived / won | 8 / 22 |
+| 845745 | Autarky | Proof by Intimidation | win | survived / won | 19 / 17 |
+| 845746 | Prisoners Dilemma | Proof by Intimidation | win | survived / won | 15 / 6 |
+| 845747 | Schooltime | Proof by Intimidation | win | survived / won | 16 / 24 |
+| 846523 | Autarky | survivor | loss | round limit: longest 21 vs 26 | 21 / 26 |
+| 846524 | Portals | survivor | win | survived / won | 5 / 0 |
+| 846525 | Slithery Fight | survivor | loss | round limit: longest 23 vs 32 | 23 / 32 |
+| 846526 | Queen Of Spades | survivor | win | survived / won | 9 / 17 |
+| 846527 | Default | survivor | win | survived / won | 22 / 22 |
+| 846584 | Autarky | Just Reboot Normalize | loss | round limit: longest 11 vs 18 | 11 / 18 |
+| 846585 | Default | Just Reboot Normalize | loss | eliminated round 207: hitHeadToHead at enemy step 4 | 0 / 14 |
+| 846586 | Queen Of Spades | Just Reboot Normalize | loss | eliminated round 231: hitHeadToHead at enemy step 2 | 0 / 11 |
+| 846587 | Prisoners Dilemma | Just Reboot Normalize | loss | round limit: longest 8 vs 19 | 8 / 19 |
+| 846588 | Trophy | Just Reboot Normalize | loss | eliminated round 111: hitHeadToHead at enemy step 3 | 0 / 7 |
+
+The merged audit is in `build/live-v3-audit/`; the 15-game refresh also remains in `build/live-v3-additional-audit/`. This report intentionally stops at this final history snapshot rather than claiming coverage of games that complete later.

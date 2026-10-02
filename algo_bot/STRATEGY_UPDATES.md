@@ -1,5 +1,10 @@
 # Strategy updates — 2 October 2026
 
+Historical review before upload 14465. The candidate described here was later
+uploaded as `bot bot v2` and automatically activated. See
+[the latest 85-game review](REPLAY_V3_REVIEW.md) and
+[validation](VALIDATION.md) for the new conservative package and current status.
+
 ## Competition evidence
 
 The user activated submission 14399 (`bot bot`, version 2) after the previous
