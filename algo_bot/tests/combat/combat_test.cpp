@@ -210,3 +210,69 @@ TEST_CASE("small helpers target an enemy queen without requiring a length advant
     world.update(fixture.controller,fixture.game);
     CHECK_FALSE(sudo_win::Combat{}.favourable_trade(fixture.controller,world,true));
 }
+
+TEST_CASE("disposable interceptors choose distinct legal queen escape routes") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 3;
+    fixture.controller.length = 2;
+    fixture.controller.unit_count = 3;
+    fixture.tile({7,5}).dragon_part = unswbc::DragonPart{
+        {7,5},1,unswbc::Team::B,unswbc::Direction::NORTH,true};
+    auto const map = [&](sudo_win::Role role = sudo_win::Role::hunter) {
+        auto world = sudo_win::WorldModel{fixture.game};
+        world.update(fixture.controller,fixture.game);
+        return sudo_win::Combat{}.interception_distances(fixture.controller,world,1,role);
+    };
+    SECTION("helpers spread over different exits") {
+        auto const first = map();
+        REQUIRE(std::count(first.begin(),first.end(),0) == 1);
+        fixture.controller.head.dragon_id = 7;
+        auto const second = map();
+        CHECK(std::find(first.begin(),first.end(),0) - first.begin()
+              != std::find(second.begin(),second.end(),0) - second.begin());
+        CHECK(first[57] == -1); // The enemy head is never treated as a traversable tile.
+    }
+    SECTION("blocked exits and unknown cells are not assigned") {
+        fixture.tile({7,5}).get_edge(unswbc::Direction::NORTH)
+            = unswbc::Edge{false,unswbc::EdgeType::KELP};
+        auto const distances = map();
+        CHECK(distances[47] != 0);
+        CHECK(distances[11] == -1);
+    }
+    SECTION("queens champions growing units and sole survivors retain their jobs") {
+        auto const protected_map = map(sudo_win::Role::champion);
+        CHECK(std::count(protected_map.begin(),protected_map.end(),0) == 0);
+        fixture.controller.head.dragon_id = 0;
+        auto const queen_map = map();
+        CHECK(std::count(queen_map.begin(),queen_map.end(),0) == 0);
+        fixture.controller.head.dragon_id = 3;
+        fixture.controller.length = 5;
+        auto const growing_map = map();
+        CHECK(std::count(growing_map.begin(),growing_map.end(),0) == 0);
+        fixture.controller.length = 2;
+        fixture.controller.unit_count = 1;
+        auto const sole_map = map();
+        CHECK(std::count(sole_map.begin(),sole_map.end(),0) == 0);
+    }
+}
+
+TEST_CASE("interception sightings expire and cannot override present observations") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 3;
+    fixture.controller.length = 2;
+    fixture.controller.unit_count = 2;
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    world.receive_report({sudo_win::MessageType::enemy_head,1,9,7,5,1024},1);
+    auto const distances = sudo_win::Combat{}.interception_distances(fixture.controller,world,1,sudo_win::Role::hunter);
+    CHECK(std::count(distances.begin(),distances.end(),0) == 0);
+    auto tiles = fixture.controller.vision.tiles;
+    tiles.erase(std::remove_if(tiles.begin(),tiles.end(),[](auto const& tile) {
+        return tile.get_position() == unswbc::Position{7,5};
+    }),tiles.end());
+    fixture.controller.vision = unswbc::Vision{std::move(tiles)};
+    auto const fresh = sudo_win::Combat{}.interception_distances(fixture.controller,world,2,sudo_win::Role::hunter);
+    CHECK(std::count(fresh.begin(),fresh.end(),0) == 1);
+    auto const expired = sudo_win::Combat{}.interception_distances(fixture.controller,world,4,sudo_win::Role::hunter);
+    CHECK(std::count(expired.begin(),expired.end(),0) == 0);
+}

@@ -1,11 +1,94 @@
 #include "../../include/sudo_win/combat/combat.h"
 
 #include "../../include/sudo_win/config/config.h"
+#include "../../include/sudo_win/geometry/geometry.h"
 #include "../../include/sudo_win/planner/simulation.h"
 #include "../../include/sudo_win/world/world_model.h"
 #include <algorithm>
 
 namespace sudo_win {
+
+auto Combat::interception_distances(unswbc::Controller const& controller,
+                                     WorldModel const& world, int round, Role role) const -> std::vector<int> {
+    auto distances = std::vector<int>(static_cast<std::size_t>(world.width() * world.height()), -1);
+    if (!config::enable_interception || controller.get_id() <= 1 || controller.get_length() > 4
+        || controller.get_unit_count() <= 1 || (role != Role::hunter && role != Role::blocker)) {
+        return distances;
+    }
+    auto queen = std::optional<unswbc::Position>{};
+    auto nearest = std::numeric_limits<int>::max();
+    auto const accept = [&](unswbc::Position p) {
+        auto const distance = geometry::toroidal_manhattan(controller.get_position(), p, world.width(), world.height());
+        if (distance < nearest) {
+            nearest = distance;
+            queen = p;
+        }
+    };
+    for (auto const& tile : controller.get_tiles()) {
+        auto const* part = tile.get_dragon();
+        if (part != nullptr && part->is_head() && part->get_id() <= 1 && part->get_team() != controller.get_team()) {
+            accept(tile.get_position());
+        }
+    }
+    if (!queen) {
+        for (auto const& report : world.reports()) {
+            if (report.type == MessageType::enemy_head && report.value == 1024
+                && round >= report.round && round - report.round <= 2) {
+                auto const p = unswbc::Position{report.x, report.y};
+                // A present observation takes precedence over an advisory sighting.
+                if (controller.get_tile(p) == nullptr) {
+                    accept(p);
+                }
+            }
+        }
+    }
+    if (!queen || nearest > 9) {
+        return distances;
+    }
+    auto const available = [&](unswbc::Position p) {
+        if (!world.has_seen(p)) {
+            return false;
+        }
+        auto const* tile = controller.get_tile(p);
+        auto const* part = tile != nullptr ? tile->get_dragon() : nullptr;
+        return part == nullptr || (part->get_id() == controller.get_id() && part->is_head());
+    };
+    auto goal = std::optional<unswbc::Position>{};
+    auto const directions = unswbc::Direction::get_direction_list();
+    auto const offset = (controller.get_id() / 4 + (role == Role::blocker ? 1 : 0)) % 4;
+    for (auto i = 0; i < 4; ++i) {
+        auto const target = world.transition(*queen, directions[static_cast<std::size_t>((offset + i) % 4)]);
+        if (target && available(*target)) {
+            goal = target;
+            break;
+        }
+    }
+    if (!goal) {
+        return distances;
+    }
+    auto const index = [&](unswbc::Position p) { return static_cast<std::size_t>(p.y * world.width() + p.x); };
+    distances[index(*goal)] = 0;
+    auto queue = std::vector<unswbc::Position>{*goal};
+    for (std::size_t cursor = 0; cursor < queue.size() && cursor < 128; ++cursor) {
+        auto const p = queue[cursor];
+        if (distances[index(p)] >= 8) {
+            continue;
+        }
+        for (auto const direction : directions) {
+            auto const neighbour = world.transition(p, direction);
+            if (!neighbour || !available(*neighbour) || distances[index(*neighbour)] >= 0) {
+                continue;
+            }
+            auto const reverse = world.transition(*neighbour, direction.get_opposite());
+            if (!reverse || *reverse != p) {
+                continue;
+            }
+            distances[index(*neighbour)] = distances[index(p)] + 1;
+            queue.push_back(*neighbour);
+        }
+    }
+    return distances;
+}
 
 auto Combat::favourable_trade(unswbc::Controller const& controller,
                               WorldModel const& world, bool queen_only) const -> std::optional<PlannedAction> {

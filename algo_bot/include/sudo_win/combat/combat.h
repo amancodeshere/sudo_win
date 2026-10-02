@@ -33,6 +33,9 @@ public:
                                         unswbc::Position destination,
                                         Role role,
                                         WorldModel const* world = nullptr) const -> int;
+    [[nodiscard]] auto interception_distances(unswbc::Controller const& controller,
+                                               WorldModel const& world, int round, Role role) const
+        -> std::vector<int>;
     [[nodiscard]] auto favourable_trade(unswbc::Controller const& controller,
                                                 WorldModel const& world, bool queen_only = false) const -> std::optional<PlannedAction>;
 };

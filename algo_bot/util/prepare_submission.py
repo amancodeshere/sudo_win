@@ -28,6 +28,7 @@ PROFILES["no-territory"] = {**PROFILES["stable"], "enable_territorial_growth": F
 PROFILES["no-farms"] = {**PROFILES["stable"], "enable_champion_farms": False}
 PROFILES["no-portal-routes"] = {**PROFILES["stable"], "enable_portal_routing": False}
 PROFILES["no-economics"] = {**PROFILES["stable"], "enable_movement_economics": False}
+PROFILES["no-interception"] = {**PROFILES["stable"], "enable_interception": False}
 PROFILES["growth"] = {**PROFILES["stable"]}  # retained CLI alias
 PROFILES["combat"] = {**PROFILES["stable"], "enable_favourable_trades": True}
 PROFILES["experimental"] = {**PROFILES["stable"], "enable_splitting": True,

@@ -29,6 +29,8 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     auto const threats = combat_.threats(controller, &world);
     auto const initial = simulation.initial_state(controller, &world);
     auto const reservations = world.queen_reservations(controller, game.get_round_num());
+    auto const interception = combat_.interception_distances(controller, world, game.get_round_num(), role);
+    auto const interception_start = interception[static_cast<std::size_t>(controller.get_position().y * world.width() + controller.get_position().x)];
     auto best_survival = -1;
     auto best_safety_class = -1;
     auto best_sealed_entry = false;
@@ -93,6 +95,10 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             if (p.x >= 0 && p.y >= 0) {
                 candidate.role_score -= reservations[static_cast<std::size_t>(p.y * world.width() + p.x)];
             }
+        }
+        auto const interception_end = interception[static_cast<std::size_t>(destination.y * world.width() + destination.x)];
+        if (interception_start > 0 && interception_end >= 0 && interception_end < interception_start) {
+            candidate.role_score += (interception_start - interception_end) * 18000 + (8 - interception_end) * 1000;
         }
         for (auto const& report : world.reports()) {
             if (report.type != MessageType::enemy_head || report.value != 1024

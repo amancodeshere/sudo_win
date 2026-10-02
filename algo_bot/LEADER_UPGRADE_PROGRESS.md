@@ -9,7 +9,7 @@ Evidence: `LEADER_GAMEPLAY_REVIEW.md`. Current 17 map hashes are in the associat
 | 2 | Earlier territorial expansion | Complete | Release + ASan/UBSan pass 57 cases / 373 assertions; native 5–3 over eight current-map games, no errors |
 | 3 | Queen farming and persistent secondary champion | Complete | 59 cases / 382 assertions, release + sanitizers; 16 Python tests; refined native 6–2, zero errors |
 | 4 | Purposeful portal routes | Complete | 61 cases / 395 assertions, release + sanitizers; native 5–3; sandbox 1–1, no errors, peak 56,860,251 |
-| 5 | Paid-step economics and queen interception | Economics complete; interception next | 62 cases / 400 assertions, release + sanitizers; native 5–3, zero errors |
+| 5 | Paid-step economics and queen interception | Complete | 64 cases / 412 assertions, release + sanitizers; native 5–3 at each substage, zero errors |
 
 Every stage needs focused regression coverage, release and sanitizer checks, paired native comparisons, and saved source snapshots. Combined promotion requires metered games, multiple seeds, both colours and deterministic repeat checks. Native matches do not certify CPU budgets. No upload is part of this task.
 
@@ -44,3 +44,13 @@ Frozen snapshot: `build/leader-stage4-portals`, identical to all 32 selected wor
 Helpers now preserve growth when a paid sprint merely collects enough pearls to replace its movement cost. Free extra steps, positive net growth, validated safety improvements and the separate funded enemy-queen trade remain available. `no-economics` disables this restriction for helpers.
 
 Snapshot `build/leader-stage5a-economics`; seed 608, current Schooltime / Slithery Fight / Default / Stripes, both colours versus stage 4: 5–3, zero errors (`leader-stage5a-native8`). Candidate paid steps were 570 across 79,867 turns, versus 1,166 across 56,418 opponent turns: 7.14 versus 20.67 per thousand turns. Queen survival was three versus four, so reduced spending alone is not evidence of better queen protection. Release and ASan/UBSan pass 62 cases / 400 assertions.
+
+## Stage 5b — coordinated interception
+
+Small hunter/blocker helpers choose different known escape cells around a visible enemy queen or an uncontradicted sighting no more than two rounds old. Reverse route searches stop at eight moves / 128 expanded nodes and verify every reverse edge, including portals. Unknown topology and currently visible bodies are excluded. This adds a bounded progress incentive below survival/safety ranking; ordinary moves never gain permission to collide, and paid neutral sprints remain restricted. Fixed queens, champions, growing helpers and sole survivors retain their existing jobs. `no-interception` isolates this feature.
+
+Snapshot `build/leader-stage5b-interception`; seed 609, current Trophy / Queen of Spades / Devil / Trauma, both colours versus stage 5a: 5–3, zero errors (`leader-stage5b-native8`). Release and ASan/UBSan pass 64 cases / 412 assertions; 16 Python tests pass. Neither this small internal sample nor source inspection establishes superiority over private competition bots.
+
+## Integration follow-up — opening tail clearance
+
+Replay inspection found that Slithery Fight children retain the three cells surrounding their split queen after a single move. A free second step can clear a queen exit, but partially reconstructed bodies do not identify those tail ranks. The next fix will encourage bounded free movement specifically when a helper's visible body blocks a queen corridor, while retaining body simulation and safety ranking.
