@@ -55,7 +55,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         && game.get_round_num() - resource_progress_round_ >= 8
         && (!route || !route->pearl || route->value < 8000)) {
         auto const relocation = pathfinding_.portal_income_route(controller, world, game.get_round_num(),
-            role == Role::queen || role == Role::champion);
+            role == Role::queen || (role == Role::champion && controller.get_length() > 4));
         if (relocation && (!route || relocation->value > route->value)) { route = relocation; }
     }
     if (route) {
@@ -66,6 +66,12 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     } else {
         target_.reset();
     }
+
+    auto const route_distances = config::enable_scoring_coordination && route
+        ? pathfinding_.target_distances(controller, world, route->target, route->portal) : std::vector<int>{};
+    auto const route_index = [&world](unswbc::Position p) {
+        return static_cast<std::size_t>(p.y * world.width() + p.x);
+    };
 
     auto const consider = [&](SimulationState const& next, std::vector<unswbc::Direction> const& steps) {
         auto const direction = steps.front();
@@ -99,8 +105,19 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             auto const first_pearl = first_tile != nullptr && first_tile->has_pearl() ? 1 : 0;
             candidate.economy_score += (next.pearls - first_pearl) * config::score_sprint_tempo;
         }
-        if (route && route->first_direction == direction) {
-            candidate.economy_score += config::score_route_progress + route->value;
+        auto route_progress = false;
+        if (route) {
+            route_progress = route->first_direction == direction;
+            if (config::enable_scoring_coordination) {
+                auto const origin_distance = route_distances[route_index(controller.get_position())];
+                auto const endpoint_distance = route_distances[route_index(destination)];
+                auto const collected = std::find(next.eaten.begin(), next.eaten.end(), route->target) != next.eaten.end();
+                auto const crossing = route->portal && route->target == controller.get_position()
+                    && route->first_direction == direction;
+                route_progress = collected || crossing || (origin_distance > 0
+                    && endpoint_distance >= 0 && endpoint_distance < origin_distance);
+            }
+            if (route_progress) { candidate.economy_score += config::score_route_progress + route->value; }
         }
         auto const last_visit = world.cell(destination).last_visited_round;
         if (last_visit >= 0 && game.get_round_num() - last_visit < 4
@@ -203,7 +220,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             best.kind = sprint ? ActionKind::sprint : ActionKind::move;
             best.steps = steps;
             best.score = candidate.total_score();
-            best.reason = route && route->portal && route->first_direction == direction
+            best.reason = route && route->portal && route_progress
                 ? "approach productive or unexplored portal" : sprint ? "validated short sprint" : "best safe move";
         }
     };
@@ -273,7 +290,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         }
     }
     auto const scout_wait = config::enable_portal_routing && role == Role::scout ? 3 : 8;
-    if (config::enable_helper_portals && role != Role::queen && role != Role::champion
+    if (config::enable_helper_portals && role != Role::queen && (role != Role::champion || (config::enable_scoring_coordination && controller.get_length() <= 4))
         && game.get_round_num() - last_portal_round_ >= 12
         && (best_survival <= 1 || ((!route || !route->pearl || (config::enable_portal_income && route->value < 8000))
             && game.get_round_num() - resource_progress_round_ >= scout_wait

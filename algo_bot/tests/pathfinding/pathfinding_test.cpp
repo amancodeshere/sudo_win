@@ -238,3 +238,44 @@ TEST_CASE("starved portal approaches price destination income and reject exhaust
         CHECK_FALSE(sudo_win::Pathfinding{}.portal_income_route(fixture.controller,world,30,false));
     }
 }
+
+TEST_CASE("route progress measures complete paths and respects directed portal edges") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    for (auto& tile : fixture.controller.vision.tiles) { tile.pearl_time = -1; }
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto distances = sudo_win::Pathfinding{}.target_distances(fixture.controller,world,{7,5});
+    CHECK(distances[55] == 2);
+    CHECK(distances[56] == 1);
+    CHECK(distances[54] == 3); // Returning west after an east step is not progress.
+    fixture.tile({6,5}).get_edge(unswbc::Direction::EAST) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    world.update(fixture.controller,fixture.game);
+    distances = sudo_win::Pathfinding{}.target_distances(fixture.controller,world,{7,5});
+    CHECK(distances[55] == 4);
+    fixture.tile({5,5}).get_edge(unswbc::Direction::EAST) = unswbc::Edge{false,unswbc::EdgeType::PORTAL,9};
+    fixture.tile({7,5}).get_edge(unswbc::Direction::WEST) = unswbc::Edge{false,unswbc::EdgeType::PORTAL,9};
+    world.update(fixture.controller,fixture.game);
+    distances = sudo_win::Pathfinding{}.target_distances(fixture.controller,world,{7,5});
+    CHECK(distances[55] == 1);
+    auto const approach = sudo_win::Pathfinding{}.target_distances(fixture.controller,world,{7,5},true);
+    CHECK(approach[55] > 1);
+}
+
+TEST_CASE("fresh large champion claims override sender ordering without claiming certainty") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 4;
+    fixture.controller.length = 3;
+    for (auto& tile : fixture.controller.vision.tiles) { tile.pearl_time = -1; }
+    fixture.tile({7,5}).pearl = true;
+    fixture.tile({5,7}).pearl = true;
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    world.receive_report({sudo_win::MessageType::heartbeat,0,8,0,0,20},0);
+    world.receive_report({sudo_win::MessageType::feeder,0,8,7,5,1},0);
+    auto const route = sudo_win::Pathfinding{}.remembered_target(fixture.controller,world,0,unswbc::Position{7,5});
+    REQUIRE(route);
+    CHECK(route->target == unswbc::Position{5,7});
+    auto const expired = sudo_win::Pathfinding{}.remembered_target(fixture.controller,world,3,unswbc::Position{7,5});
+    REQUIRE(expired);
+    CHECK(expired->target == unswbc::Position{7,5});
+}

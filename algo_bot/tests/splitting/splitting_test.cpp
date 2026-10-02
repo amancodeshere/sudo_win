@@ -226,6 +226,18 @@ TEST_CASE("early expansion protects the champion and requires separate resources
         fixture.controller.unit_count = 21;
         CHECK_FALSE(candidate());
     }
+    SECTION("rich early regions can fund population beyond the geometric budget") {
+        fixture.game.width = 20;
+        fixture.game.height = 100;
+        fixture.controller.unit_count = 21;
+        fixture.tile({7,4}).pearl = true;
+        CHECK(candidate());
+        fixture.controller.unit_limit = 21;
+        CHECK_FALSE(candidate());
+        fixture.controller.unit_limit = 64;
+        fixture.game.round_num = 100;
+        CHECK_FALSE(candidate());
+    }
     SECTION("a legal two-segment child has income and two escape routes") {
         auto const split = candidate();
         REQUIRE(split);

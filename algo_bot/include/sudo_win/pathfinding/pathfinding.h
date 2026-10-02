@@ -29,6 +29,8 @@ public:
     [[nodiscard]] auto portal_income_route(unswbc::Controller const& controller,
                                            WorldModel const& world, int round,
                                            bool protected_unit) const -> std::optional<TargetRoute>;
+    [[nodiscard]] auto target_distances(unswbc::Controller const& controller, WorldModel const& world,
+                                        unswbc::Position target, bool normal_edges_only = false) const -> std::vector<int>;
     [[nodiscard]] auto visible_reachable_area(unswbc::Controller const& controller,
                                               unswbc::Position start,
                                               WorldModel const* world = nullptr) const -> int;

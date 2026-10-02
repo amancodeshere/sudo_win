@@ -15,11 +15,19 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
                                        Role role, WorldModel const& world) const
     -> std::optional<PlannedAction> {
     constexpr auto child_size = unswbc::Constants::MIN_SIZE;
-    auto const cap = config::enable_territorial_growth
+    auto cap = config::enable_territorial_growth
         ? std::min(controller.unit_limit, std::clamp(world.width() * world.height() / 96, 8, 32))
         : config::population_unit_cap;
+    auto const local_income = std::count_if(controller.get_tiles().begin(), controller.get_tiles().end(), [](auto const& tile) {
+        return tile.get_dragon() == nullptr && (tile.has_pearl() || (tile.get_pearl_time() > 0 && tile.get_pearl_time() <= 12));
+    });
+    if (config::enable_resource_population && config::enable_territorial_growth
+        && game.get_round_num() < 100 && local_income >= 4) {
+        cap = std::min(controller.unit_limit, std::clamp(world.width() * world.height() / 32, 8, 48));
+    }
     auto const early_investment = config::enable_territorial_growth && game.get_round_num() < 80
-        && controller.get_length() >= 8;
+        && controller.get_length() >= (config::enable_scoring_coordination ? 10 : 8)
+        && (!config::enable_scoring_coordination || controller.get_unit_count() < 4);
     auto const reject = [&](std::string_view reason) -> std::optional<PlannedAction> {
         growth_rejection_ = reason;
         return std::nullopt;
@@ -261,7 +269,8 @@ auto SplittingPolicy::rescue(unswbc::Controller const& controller,
                 auto parent_budget = 128;
                 // Saving a large child cannot replace the fixed queen. Do not
                 // credit a parent route that depends on an unobserved child move.
-                if (simulation.survival_depth(controller, parent, 4, parent_budget, &world) < 2) {
+                if (simulation.survival_depth(controller, parent, config::enable_scoring_coordination ? 6 : 4, parent_budget, &world)
+                    < (config::enable_scoring_coordination ? 6 : 2)) {
                     continue;
                 }
                 if (!parent_safe) {

@@ -52,21 +52,25 @@ auto RoleManager::choose_role(unswbc::Controller const& controller, unswbc::Game
             if (game.get_round_num() - estimate.round > config::ally_estimate_max_age) {
                 continue;
             }
-            if (estimate.length > candidate_length || (estimate.length == candidate_length && id < candidate)) {
+            auto const lower_bound = config::enable_scoring_coordination
+                ? estimate.length - 2 * (game.get_round_num() - estimate.round) : estimate.length;
+            if (lower_bound > candidate_length || (lower_bound == candidate_length && id < candidate)) {
                 candidate = id;
-                candidate_length = estimate.length;
+                candidate_length = lower_bound;
             }
         }
         auto const old = allies_.find(champion_id_);
         if (old != allies_.end() && (!config::enable_champion_farms || champion_id_ > 1)
             && game.get_round_num() - old->second.round <= config::ally_estimate_max_age
-            && old->second.length + config::champion_hysteresis > candidate_length) {
+            && (old->second.length - (config::enable_scoring_coordination
+                ? 2 * (game.get_round_num() - old->second.round) : 0)) + config::champion_hysteresis > candidate_length) {
             candidate = champion_id_;
         }
     }
     champion_id_ = candidate;
     if (controller.get_id() == champion_id_ && (!config::enable_champion_farms
-        || controller.get_unit_count() == 1 || controller.get_length() >= (config::enable_champion_retention && game.get_round_num() >= 80 ? 4 : 8))) {
+        || controller.get_unit_count() == 1 || controller.get_length() >= (config::enable_champion_retention && game.get_round_num() >= 80
+            && (!config::enable_scoring_coordination || controller.get_unit_count() < 4) ? 4 : 8))) {
         return Role::champion;
     }
     switch (controller.get_id() % 4) {

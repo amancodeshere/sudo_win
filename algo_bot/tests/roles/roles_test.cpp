@@ -112,3 +112,24 @@ TEST_CASE("election hysteresis cannot borrow a teammate's length for champion el
     world.receive_report({sudo_win::MessageType::heartbeat,100,8,0,0,4},100);
     CHECK(roles.choose_role(fixture.controller,fixture.game,&world) == sudo_win::Role::collector);
 }
+
+TEST_CASE("champion coordination protects durable scorers without freezing rich helper swarms") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 4;
+    fixture.controller.length = 4;
+    fixture.controller.unit_count = 12;
+    fixture.game.round_num = 100;
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto roles = sudo_win::RoleManager{};
+    CHECK(roles.choose_role(fixture.controller,fixture.game,&world) == sudo_win::Role::collector);
+    fixture.controller.length = 8;
+    CHECK(roles.choose_role(fixture.controller,fixture.game,&world) == sudo_win::Role::champion);
+    world.receive_report({sudo_win::MessageType::heartbeat,100,8,0,0,12},100);
+    CHECK(roles.choose_role(fixture.controller,fixture.game,&world) != sudo_win::Role::champion);
+    fixture.game.round_num = 103;
+    CHECK(roles.choose_role(fixture.controller,fixture.game,&world) == sudo_win::Role::champion);
+    fixture.controller.length = 4;
+    fixture.controller.unit_count = 1;
+    CHECK(roles.choose_role(fixture.controller,fixture.game,&world) == sudo_win::Role::champion);
+}

@@ -101,9 +101,14 @@ auto Pathfinding::remembered_target(unswbc::Controller const& controller,
         if (report.type == MessageType::pearl && report.round > world.cell(p).last_seen_round) {
             remote_pearls[i] = true;
         }
+        auto const champion_claim = config::enable_scoring_coordination && std::any_of(world.reports().begin(),
+            world.reports().end(), [&](auto const& heartbeat) {
+                return heartbeat.type == MessageType::heartbeat && heartbeat.sender_id == report.sender_id
+                    && round - heartbeat.round <= 2 && heartbeat.value >= std::max(8, controller.get_length() + 2);
+            });
         if (report.type == MessageType::feeder && controller.get_id() > 1
             && report.sender_id != controller.get_id()
-            && (report.sender_id <= 1 || report.sender_id < controller.get_id())) {
+            && (report.sender_id <= 1 || report.sender_id < controller.get_id() || champion_claim)) {
             auto const remaining = std::max(0, report.value - (round - report.round));
             claims[i] = claims[i] < 0 ? remaining : std::min(claims[i], remaining);
         }
@@ -269,6 +274,40 @@ auto Pathfinding::portal_income_route(unswbc::Controller const& controller,
         }
     }
     return best;
+}
+
+auto Pathfinding::target_distances(unswbc::Controller const& controller, WorldModel const& world,
+                                   unswbc::Position target, bool normal_edges_only) const -> std::vector<int> {
+    auto const index = [&world](unswbc::Position p) { return static_cast<std::size_t>(p.y * world.width() + p.x); };
+    auto distance = std::vector<int>(static_cast<std::size_t>(world.width() * world.height()), -1);
+    auto incoming = std::vector<std::vector<unswbc::Position>>(distance.size());
+    // Reverse actual directed transitions, including portals, rather than
+    // assuming Manhattan distance or symmetric portal orientation.
+    for (auto y = 0; y < world.height(); ++y) {
+        for (auto x = 0; x < world.width(); ++x) {
+            auto const from = unswbc::Position{x,y};
+            if (!world.has_seen(from)) { continue; }
+            for (auto const d : unswbc::Direction::get_direction_list()) {
+                if (normal_edges_only && world.cell(from).edges[geometry::direction_index(d)].type
+                    != unswbc::EdgeType::EMPTY) { continue; }
+                auto const next = world.transition(from,d);
+                auto const* visible = next ? controller.get_tile(*next) : nullptr;
+                if (next && world.has_seen(*next) && (!visible || !visible->get_dragon())) {
+                    incoming[index(*next)].push_back(from);
+                }
+            }
+        }
+    }
+    auto queue = std::vector<unswbc::Position>{target};
+    distance[index(target)] = 0;
+    for (std::size_t cursor = 0; cursor < queue.size() && cursor < config::routing_node_budget; ++cursor) {
+        for (auto const p : incoming[index(queue[cursor])]) {
+            if (distance[index(p)] < 0) {
+                distance[index(p)] = distance[index(queue[cursor])] + 1; queue.push_back(p);
+            }
+        }
+    }
+    return distance;
 }
 
 auto Pathfinding::visible_reachable_area(unswbc::Controller const& controller,

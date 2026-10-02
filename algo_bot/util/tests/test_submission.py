@@ -45,6 +45,8 @@ class SubmissionTests(unittest.TestCase):
                                   ("no-response-defense", "enable_response_defense"),
                                   ("no-productive-expansion", "enable_productive_expansion"),
                                   ("no-portal-income", "enable_portal_income"),
+                                  ("no-scoring-coordination", "enable_scoring_coordination"),
+                                  ("no-resource-population", "enable_resource_population"),
                                   ("no-sprint", "enable_sprinting")):
                 ablation = submission.prepare(BOT, root / profile, profile)
                 differences = [key for key in stable["effective_flags"]
