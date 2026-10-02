@@ -127,6 +127,12 @@ auto Bot::execute_turn(unswbc::Controller& controller, unswbc::Game const& game)
             }
             beam_payloads = payloads;
         }
+        if (config::enable_portal_hazards && beam_payloads) {
+            if (auto const warning = world_.portal_warning(controller,game.get_round_num())) {
+                (*beam_payloads)[static_cast<std::size_t>((game.get_round_num() + controller.get_id()) % 4)]
+                    = sonar_.encode(*warning,static_cast<char>(controller.get_team().value));
+            }
+        }
         if (report && sonar_.can_encode(*report)) {
             report_payload = sonar_.encode(*report, static_cast<char>(controller.get_team().value));
         }

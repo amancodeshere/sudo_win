@@ -106,7 +106,7 @@ The leaders are visibly using more of the available communication bandwidth and,
 What is specifically missing in our implementation:
 
 1. `src/bot/bot.cpp` sends two rotating beams, not four, and shares one phase-selected payload across them.
-2. Our helper supports protocol 3 echoes, but the strategy never calls `get_sonar_echoes()`. Enemy/body contacts outside the vision window therefore do not become risk information in our world model.
+2. Our helper supports protocol 3 echoes. Existing portal safety uses `get_sonar_echoes().enemy_head` to defer blind probing and surveyed routes, but the bot’s message scheduler and world model do not otherwise use echo contacts. Aggregate contacts do not provide coordinates. (Corrected during v5 source verification; the original audit overstated the lack of echo use.)
 3. Enemy-head reports are currently generated only for IDs 0 and 1. Other enemy heads are omitted even though helper attacks dominate many losses.
 4. Report scheduling is round-phase based, so urgent danger or a new farm may compete with routine pearl/portal reports. There is no delivery-aware resend or explicit forwarding of received reports.
 5. Remote reports expire after eight rounds and the report store holds 64 sender/type entries. Durable resource-region ownership and a consistently shared scorer identity need more than intermittent local heartbeats.

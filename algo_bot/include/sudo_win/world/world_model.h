@@ -54,6 +54,9 @@ public:
                                     PlannedAction const& action) const -> std::optional<TeamMessage>;
     [[nodiscard]] auto portal_survey(unswbc::Controller const& controller, int round,
                                      PlannedAction const& action) const -> std::optional<TeamMessage>;
+    [[nodiscard]] auto portal_warning(unswbc::Controller const& controller, int round) const
+        -> std::optional<TeamMessage>;
+    [[nodiscard]] auto portal_hazard(unswbc::Position exit, int portal_id, int round) const -> bool;
     auto remember_action(unswbc::Controller const& controller, unswbc::Game const& game,
                          PlannedAction const& action) -> void;
     [[nodiscard]] auto own_body(unswbc::Controller const& controller) const

@@ -64,6 +64,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         });
     auto const interception = combat_.interception_distances(controller, world, game.get_round_num(), role);
     auto const interception_start = interception[static_cast<std::size_t>(controller.get_position().y * world.width() + controller.get_position().x)];
+    auto best_exposed_continuation = true;
     auto best_survival = -1;
     auto best_safety_class = -1;
     auto best_sealed_entry = false;
@@ -200,6 +201,8 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             && mobility.area < static_cast<int>(next.body.size())
             && simulation.sealed_entry_pocket(next, world);
         auto const safety_class = survival == 0 ? 0 : (threatened || sealed_pocket) ? 1 : uncertain_attack ? 2 : 3;
+        auto const exposed_continuation = config::enable_continuation_defense && protected_unit
+            && safety_.unpressured_exits(controller,next,world,threats) == 0;
         auto const queen_trap = config::enable_queen_exit_viability
             && safety_.blocks_queen_escape(controller,next,world);
         auto const improves_safety = safety_class > best_safety_class
@@ -244,12 +247,14 @@ auto Planner::choose_action(unswbc::Controller const& controller,
 
         if (safety_class > best_safety_class
             || (safety_class == best_safety_class && ((!queen_trap && best_queen_trap)
-                || (queen_trap == best_queen_trap && (survival > best_survival
-                    || (survival == best_survival && candidate.total_score() > best.score)))))) {
+                || (queen_trap == best_queen_trap && ((!exposed_continuation && best_exposed_continuation)
+                    || (exposed_continuation == best_exposed_continuation && (survival > best_survival
+                        || (survival == best_survival && candidate.total_score() > best.score)))))))) {
             best_safety_class = safety_class;
             best_survival = survival;
             best_sealed_entry = entry_trap;
             best_queen_trap = queen_trap;
+            best_exposed_continuation = exposed_continuation;
             best.kind = sprint ? ActionKind::sprint : ActionKind::move;
             best.steps = steps;
             best.score = candidate.total_score();

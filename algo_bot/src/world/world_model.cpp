@@ -170,6 +170,56 @@ auto WorldModel::queen_intent(unswbc::Controller const& controller, int round,
     return TeamMessage{MessageType::danger, round & 511, controller.get_id(), best->x, best->y, 0};
 }
 
+auto WorldModel::portal_hazard(unswbc::Position exit, int portal_id, int round) const -> bool {
+    auto newest_warning = -1;
+    auto newest_productive = -1;
+    for (auto const& report : reports_) {
+        auto const age = round - report.round;
+        if (report.type != MessageType::empty || report.sender_id <= 1 || age < 0 || age > 4
+            || report.x != exit.x || report.y != exit.y || (report.value & 1023) != portal_id) { continue; }
+        if (report.value >= 1024) { newest_productive = std::max(newest_productive,report.round); }
+        else { newest_warning = std::max(newest_warning,report.round); }
+    }
+    return newest_warning >= 0 && newest_warning >= newest_productive;
+}
+
+auto WorldModel::portal_warning(unswbc::Controller const& controller, int round) const -> std::optional<TeamMessage> {
+    if (controller.get_id() <= 1) { return std::nullopt; }
+    for (auto const& tile : controller.get_tiles()) {
+        auto const p = tile.get_position();
+        if (tile.get_dragon() != nullptr) { continue; }
+        auto portal_id = -1;
+        for (auto const d : unswbc::Direction::get_direction_list()) {
+            auto const& edge = tile.get_edge(d);
+            if (edge.is_portal() && edge.get_portal_id() >= 0 && edge.get_portal_id() < 1024) {
+                portal_id = edge.get_portal_id(); break;
+            }
+        }
+        if (portal_id < 0) { continue; }
+        auto onward = 0;
+        auto seen = 0;
+        for (auto const d : unswbc::Direction::get_direction_list()) {
+            // Count normal onward corridors rather than the portal back out.
+            if (tile.get_edge(d).is_portal()) { continue; }
+            auto const next = transition(p,d);
+            auto const* landing = next ? controller.get_tile(*next) : nullptr;
+            seen += !tile.get_edge(d).is_passable() || landing != nullptr;
+            onward += landing != nullptr && landing->get_dragon() == nullptr;
+        }
+        auto enemy_near = false;
+        for (auto const& other : controller.get_tiles()) {
+            auto const* part = other.get_dragon();
+            enemy_near = enemy_near || (part != nullptr && part->is_head()
+                && part->get_team() != controller.get_team()
+                && geometry::toroidal_manhattan(p,other.get_position(),width_,height_) <= 4);
+        }
+        if ((seen >= 3 && onward < 2) || enemy_near) {
+            return TeamMessage{MessageType::empty,round,controller.get_id(),p.x,p.y,portal_id};
+        }
+    }
+    return std::nullopt;
+}
+
 auto WorldModel::portal_survey(unswbc::Controller const& controller, int round,
                                PlannedAction const& action) const -> std::optional<TeamMessage> {
     auto path = std::vector<unswbc::Position>{};

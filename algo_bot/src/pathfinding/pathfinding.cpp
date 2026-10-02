@@ -217,6 +217,7 @@ auto Pathfinding::portal_income_route(unswbc::Controller const& controller,
                 // The current approach tile must remain eligible for crossing.
                 if (from != controller.get_position() && visited >= 0 && round - visited < 24) { continue; }
                 auto const exit = world.transition(from, direction);
+                if (config::enable_portal_hazards && exit && world.portal_hazard(*exit,edge.portal_id,round)) { continue; }
                 auto income = 0;
                 auto surveyed = false;
                 for (auto const& report : world.reports()) {

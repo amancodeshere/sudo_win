@@ -3,10 +3,26 @@
 #include "../../include/sudo_win/planner/simulation.h"
 #include "../../include/sudo_win/config/config.h"
 #include "../../include/sudo_win/geometry/geometry.h"
+#include "../../include/sudo_win/combat/combat.h"
 
 #include <algorithm>
 
 namespace sudo_win {
+
+auto Safety::unpressured_exits(unswbc::Controller const& controller, SimulationState const& after,
+                                WorldModel const& world, std::vector<ThreatAssessment> const& threats) const -> int {
+    auto exits = 0;
+    for (auto const d : unswbc::Direction::get_direction_list()) {
+        auto const next = Simulation{}.advance(controller,after,d,false,&world);
+        if (!next) { continue; }
+        auto const p = next->body.front();
+        auto const& threat = threats[static_cast<std::size_t>(p.y * world.width() + p.x)];
+        // A continuation heuristic, not a claim about an enemy's next position.
+        exits += threat.level != ThreatLevel::direct
+            && !(threat.affordable_steps > 0 && threat.affordable_steps <= 3);
+    }
+    return exits;
+}
 
 auto Safety::is_safe_standard_move(unswbc::Controller const& controller,
                                    unswbc::Direction direction, WorldModel const* world) const -> bool {
@@ -167,6 +183,9 @@ auto Safety::helper_portal_probe(unswbc::Controller const& controller,
         }
         auto const exit = world.transition(controller.get_position(), direction);
         // Known blocked or stale exits are not reclassified as unknown.
+        if (config::enable_portal_hazards && exit && world.portal_hazard(*exit,origin->get_edge(direction).get_portal_id(),round)) {
+            continue;
+        }
         if (!exit || (!world.has_seen(*exit) && controller.get_tile(*exit) == nullptr
             && std::find(state.body.begin(), state.body.end(), *exit) == state.body.end())) {
             return direction;
@@ -190,7 +209,8 @@ auto Safety::surveyed_portal_route(unswbc::Controller const& controller,
         auto const& edge = origin->get_edge(direction);
         if (!edge.is_portal()) { continue; }
         auto const exit = world.transition(controller.get_position(), direction);
-        if (!exit || controller.get_tile(*exit) != nullptr || world.cell(*exit).occupant
+        if (!exit || (config::enable_portal_hazards && world.portal_hazard(*exit,edge.get_portal_id(),round))
+            || controller.get_tile(*exit) != nullptr || world.cell(*exit).occupant
             || std::find(state.body.begin(), state.body.end(), *exit) != state.body.end()) { continue; }
         for (auto const& report : world.reports()) {
             if (report.type == MessageType::empty && report.sender_id > 1 && round - report.round <= 1

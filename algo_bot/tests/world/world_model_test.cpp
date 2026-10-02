@@ -326,3 +326,21 @@ TEST_CASE("portal surveys never advertise a tile our planned body will occupy") 
     action.steps = {unswbc::Direction::EAST};
     CHECK_FALSE(world.portal_survey(fixture.controller,0,action));
 }
+
+TEST_CASE("portal warnings require observed constraints rather than unknown onward cells") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 6;
+    fixture.tile({7,5}).get_edge(unswbc::Direction::EAST) = unswbc::Edge{false,unswbc::EdgeType::PORTAL,19};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    CHECK_FALSE(world.portal_warning(fixture.controller,0));
+    fixture.tile({7,5}).get_edge(unswbc::Direction::NORTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({7,5}).get_edge(unswbc::Direction::SOUTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    world.update(fixture.controller,fixture.game);
+    auto const report = world.portal_warning(fixture.controller,0);
+    REQUIRE(report);
+    CHECK(report->type == sudo_win::MessageType::empty);
+    CHECK(report->value == 19);
+    CHECK(report->x == 7);
+    CHECK(report->y == 5);
+}

@@ -11,9 +11,13 @@ namespace sudo_win {
 enum class SafetyReason { safe, wall, occupied, unknown_tile, unknown_portal };
 class WorldModel;
 struct SimulationState;
+struct ThreatAssessment;
 
 class Safety {
 public:
+    [[nodiscard]] auto unpressured_exits(unswbc::Controller const& controller,
+                                         SimulationState const& after, WorldModel const& world,
+                                         std::vector<ThreatAssessment> const& threats) const -> int;
     [[nodiscard]] auto standard_move_reason(unswbc::Controller const& controller,
                                             unswbc::Direction direction,
                                             WorldModel const* world = nullptr) const -> SafetyReason;

@@ -208,6 +208,17 @@ TEST_CASE("starved portal approaches price destination income and reject exhaust
         fixture.controller.length = 13;
         CHECK_FALSE(sudo_win::Pathfinding{}.portal_income_route(fixture.controller,world,30,true));
     }
+    SECTION("fresh negative surveys veto stale productive claims then expire") {
+        world.receive_report({sudo_win::MessageType::portal,25,6,0,0,39},25);
+        world.receive_report({sudo_win::MessageType::empty,25,6,0,0,1043},25);
+        world.receive_report({sudo_win::MessageType::empty,27,8,0,0,19},27);
+        CHECK(world.portal_hazard({0,0},19,30));
+        CHECK_FALSE(sudo_win::Pathfinding{}.portal_income_route(fixture.controller,world,30,true));
+        CHECK_FALSE(world.portal_hazard({0,0},19,32));
+        world.receive_report({sudo_win::MessageType::empty,28,10,0,0,1043},30);
+        CHECK_FALSE(world.portal_hazard({0,0},19,30));
+        CHECK(sudo_win::Pathfinding{}.portal_income_route(fixture.controller,world,30,true));
+    }
     SECTION("remembered productive exits need onward room and actual income") {
         auto tiles = std::vector<unswbc::Tile>{};
         for (auto y = 0; y < 10; ++y) {

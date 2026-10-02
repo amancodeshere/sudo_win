@@ -1,4 +1,5 @@
 #include "sudo_win/safety/safety.h"
+#include "sudo_win/combat/combat.h"
 #include "sudo_win/world/world_model.h"
 #include "sudo_win/planner/planner.h"
 
@@ -382,4 +383,23 @@ TEST_CASE("validated paid movement can release jointly blocked queen exits") {
     CHECK(state.pearls == 1);
     CHECK(state.body.size() == 3);
     CHECK_FALSE(sudo_win::Safety{}.blocks_queen_escape(fixture.controller,state,world));
+}
+
+TEST_CASE("protected continuations distinguish legal exits from funded enemy pressure") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.tile({7,5}).dragon_part = unswbc::DragonPart{{7,5},7,unswbc::Team::B,unswbc::Direction::WEST,true};
+    for (auto const d : {unswbc::Direction::NORTH,unswbc::Direction::WEST}) {
+        fixture.tile({5,5}).get_edge(d) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    }
+    auto after = sudo_win::SimulationState{};
+    after.body = {{5,5},{5,6}};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto const combat = sudo_win::Combat{};
+    CHECK(sudo_win::Safety{}.unpressured_exits(fixture.controller,after,world,
+        combat.threats(fixture.controller,&world)) == 0);
+    fixture.tile({5,5}).get_edge(unswbc::Direction::WEST) = unswbc::Edge{};
+    world.update(fixture.controller,fixture.game);
+    CHECK(sudo_win::Safety{}.unpressured_exits(fixture.controller,after,world,
+        combat.threats(fixture.controller,&world)) == 1);
 }
