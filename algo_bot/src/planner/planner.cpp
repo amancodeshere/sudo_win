@@ -14,13 +14,34 @@ auto Planner::choose_action(unswbc::Controller const& controller,
                             WorldModel const& world,
                             Role role) const -> PlannedAction {
     growth_rejection_ = "movement or rescue priority";
-    if (resource_progress_round_ < 0 || controller.get_length() > previous_length_) {
+    auto const verified_collection = config::enable_paid_step_pricing && collection_head_
+        && collection_round_ + 1 == game.get_round_num() && *collection_head_ == controller.get_position()
+        && collection_length_ == controller.get_length();
+    if (resource_progress_round_ < 0 || controller.get_length() > previous_length_ || verified_collection) {
         resource_progress_round_ = game.get_round_num();
     }
     previous_length_ = controller.get_length();
+    auto const finish = [&](PlannedAction action) {
+        collection_head_.reset();
+        if (config::enable_paid_step_pricing && action.kind != ActionKind::split && !action.steps.empty()) {
+            auto const simulation = Simulation{};
+            auto state = simulation.initial_state(controller, &world);
+            auto complete = true;
+            for (std::size_t i = 0; i < action.steps.size(); ++i) {
+                auto const next = simulation.advance(controller, state, action.steps[i], i > 0, &world);
+                if (!next) { complete = false; break; }
+                state = *next;
+            }
+            if (complete && state.pearls > 0) {
+                collection_head_ = state.body.front(); collection_length_ = static_cast<int>(state.body.size());
+                collection_round_ = game.get_round_num();
+            }
+        }
+        return action;
+    };
     if ((favourable_trades_ || config::enable_queen_hunting) && role != Role::queen) {
         if (auto const trade = combat_.favourable_trade(controller, world, !favourable_trades_)) {
-            return *trade;
+            return finish(*trade);
         }
     }
     auto const safe_moves = safety_.safe_standard_moves(controller, &world);
@@ -194,6 +215,9 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             && !improves_safety && !releases_queen) {
             return;
         }
+        if (config::enable_paid_step_pricing && paid_steps > 0 && !improves_safety && !releases_queen) {
+            candidate.economy_score -= paid_steps * config::score_paid_step_cost;
+        }
         candidate.role_score += roles_.score_move(role,
                                                  reachable_area,
                                                  world.unseen_neighbour_count(destination),
@@ -220,8 +244,10 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             best.kind = sprint ? ActionKind::sprint : ActionKind::move;
             best.steps = steps;
             best.score = candidate.total_score();
-            best.reason = route && route->portal && route_progress
-                ? "approach productive or unexplored portal" : sprint ? "validated short sprint" : "best safe move";
+            best.reason = config::enable_paid_step_pricing && paid_steps > 0
+                ? (releases_queen ? "paid queen corridor release" : length_gain > 0 ? "paid income investment" : "paid validated escape")
+                : route && route->portal && route_progress ? "approach productive or unexplored portal"
+                : sprint ? "validated free sprint" : "best safe move";
         }
     };
 
@@ -257,6 +283,8 @@ auto Planner::choose_action(unswbc::Controller const& controller,
                     auto const p = next->body.front();
                     auto const gain = static_cast<int>(next->body.size()) - controller.get_length();
                     auto const rank = gain * config::score_immediate_pearl
+                        - (config::enable_paid_step_pricing ? std::max(0,depth - Simulation::free_steps(controller.get_length()))
+                            * config::score_paid_step_cost : 0)
                         + simulation.reachable_area(controller, *next, &world) * config::score_reachable_tile
                         + threats[static_cast<std::size_t>(p.y * world.width() + p.x)].score;
                     expanded.push_back({std::move(*next), std::move(steps), rank});
@@ -286,7 +314,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             best.kind = ActionKind::move;
             best.steps = {*portal};
             best.reason = "starved protected unit follows a fresh advisory portal survey";
-            return best;
+            return finish(best);
         }
     }
     auto const scout_wait = config::enable_portal_routing && role == Role::scout ? 3 : 8;
@@ -301,7 +329,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             best.kind = ActionKind::move;
             best.steps = {*portal};
             best.reason = "small helper samples portal after local resource exhaustion";
-            return best;
+            return finish(best);
         }
     }
 
@@ -309,7 +337,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     if (best_survival <= 1) {
         rescue = splitting_.rescue(controller, world, best.steps.empty(), role == Role::queen);
         if (rescue && rescue->score > 0) {
-            return *rescue;
+            return finish(*rescue);
         }
     }
 
@@ -319,12 +347,12 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             best.kind = ActionKind::move;
             best.steps = {*portal};
             best.reason = "uncertain portal escape through remembered empty exit";
-            return best;
+            return finish(best);
         }
     }
 
     if (rescue) {
-        return *rescue;
+        return finish(*rescue);
     }
 
     if (growth_splitting_) {
@@ -333,7 +361,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         if (expansion) {
             if (expansion->score > best.score) {
                 if (expansion->resource_target) { target_ = expansion->resource_target; target_round_ = game.get_round_num(); }
-                return *expansion;
+                return finish(*expansion);
             }
             growth_rejection_ = "move exceeds investment";
         }
@@ -341,7 +369,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
 
     if (auto const split = splitting_.consider(controller, game, role, largest_reachable_area, &world, splitting_enabled_);
         split.has_value() && split->score > best.score) {
-        return *split;
+        return finish(*split);
     }
 
     if (best.steps.empty()) {
@@ -349,7 +377,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         best.steps = {safety_.least_bad_fallback(controller)};
         best.reason = "mandatory fallback";
     }
-    return best;
+    return finish(best);
 }
 
 } // namespace sudo_win

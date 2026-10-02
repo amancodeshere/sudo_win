@@ -47,6 +47,7 @@ class SubmissionTests(unittest.TestCase):
                                   ("no-portal-income", "enable_portal_income"),
                                   ("no-scoring-coordination", "enable_scoring_coordination"),
                                   ("no-resource-population", "enable_resource_population"),
+                                  ("no-paid-pricing", "enable_paid_step_pricing"),
                                   ("no-sprint", "enable_sprinting")):
                 ablation = submission.prepare(BOT, root / profile, profile)
                 differences = [key for key in stable["effective_flags"]

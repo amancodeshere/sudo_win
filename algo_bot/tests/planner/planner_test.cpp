@@ -120,13 +120,13 @@ TEST_CASE("planner validates and prices every step of short pearl sprints") {
     for (auto x = 6; x <= 8; ++x) {
         fixture.tile({x, 5}).pearl = true;
     }
-    SECTION("an open pearl chain is collected with a profitable sprint") {
+    SECTION("equal net growth retains segments rather than paying for collection tempo") {
         auto world = sudo_win::WorldModel{fixture.game};
         world.update(fixture.controller, fixture.game);
         auto const action = sudo_win::Planner{}.choose_action(fixture.controller, fixture.game,
                                                               world, sudo_win::Role::collector);
-        REQUIRE(action.kind == sudo_win::ActionKind::sprint);
-        REQUIRE(action.steps.size() == 3);
+        REQUIRE(action.kind == sudo_win::ActionKind::move);
+        REQUIRE(action.steps.size() == 1);
         auto simulation = sudo_win::Simulation{};
         auto state = simulation.initial_state(fixture.controller, &world);
         for (std::size_t i = 0; i < action.steps.size(); ++i) {
@@ -134,7 +134,7 @@ TEST_CASE("planner validates and prices every step of short pearl sprints") {
             REQUIRE(next);
             state = *next;
         }
-        CHECK(state.pearls == 3);
+        CHECK(state.pearls == 1);
         CHECK(state.body.size() == 4);
     }
     SECTION("blocked intermediate edges prevent oversprinting through a pearl") {
@@ -227,11 +227,18 @@ TEST_CASE("a shortening sprint escapes a loop that defeats ordinary movement") {
             }
         }
     }
+    auto with_food = false;
+    SECTION("paid movement is retained for a validated escape") {}
+    SECTION("collected escape food resets starvation despite net spending") {
+        fixture.tile({6,5}).pearl = true;
+        with_food = true;
+    }
     auto world = sudo_win::WorldModel{fixture.game};
     world.update(fixture.controller,fixture.game);
-    auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::champion);
+    auto planner = sudo_win::Planner{};
+    auto const action = planner.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::champion);
     REQUIRE(action.kind == sudo_win::ActionKind::sprint);
-    REQUIRE(action.steps.size() == 2);
+    REQUIRE(action.steps.size() == (with_food ? 3 : 2));
     auto simulation = sudo_win::Simulation{};
     auto state = simulation.initial_state(fixture.controller,&world);
     for (std::size_t i = 0; i < action.steps.size(); ++i) {
@@ -240,6 +247,28 @@ TEST_CASE("a shortening sprint escapes a loop that defeats ordinary movement") {
         state = *next;
     }
     CHECK(state.body.size() == 3);
+    CHECK(action.reason == "paid validated escape");
+    if (with_food) {
+        REQUIRE(state.pearls > 0);
+        world.remember_action(fixture.controller,fixture.game,action);
+        for (auto& tile : fixture.controller.vision.tiles) { tile.dragon_part.reset(); tile.pearl = false; }
+        fixture.controller.head.position = state.body.front();
+        fixture.controller.head.dir = action.steps.back();
+        fixture.controller.length = static_cast<int>(state.body.size());
+        for (std::size_t i = 0; i < state.body.size(); ++i) {
+            auto d = action.steps.back();
+            if (i > 0) {
+                for (auto const candidate : unswbc::Direction::get_direction_list()) {
+                    if (state.body[i].add_dir(candidate) == state.body[i-1]) { d = candidate; break; }
+                }
+            }
+            fixture.tile(state.body[i]).dragon_part = unswbc::DragonPart{state.body[i],0,unswbc::Team::A,d,i == 0};
+        }
+        fixture.game.round_num = 1;
+        world.update(fixture.controller,fixture.game);
+        static_cast<void>(planner.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::queen));
+        CHECK(planner.resource_progress_round() == 1);
+    }
     auto budget = 512;
     CHECK(simulation.survival_depth(fixture.controller,state,6,budget,&world) == 6);
 }

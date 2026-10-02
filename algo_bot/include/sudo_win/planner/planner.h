@@ -23,6 +23,7 @@ public:
                      bool favourable_trades = config::enable_favourable_trades)
     : sprinting_{sprinting}, splitting_enabled_{splitting}, growth_splitting_{growth_splitting},
       funded_sprint_priority_{funded_sprint_priority}, favourable_trades_{favourable_trades} {}
+    [[nodiscard]] auto resource_progress_round() const -> int { return resource_progress_round_; }
     [[nodiscard]] auto growth_rejection() const -> std::string_view { return growth_rejection_; }
     [[nodiscard]] auto choose_action(unswbc::Controller const& controller,
                                      unswbc::Game const& game,
@@ -39,6 +40,9 @@ private:
     mutable int target_round_ = -1;
     mutable int last_portal_round_ = -100;
     mutable int resource_progress_round_ = -1;
+    mutable int collection_round_ = -2;
+    mutable std::optional<unswbc::Position> collection_head_;
+    mutable int collection_length_ = -1;
     mutable int previous_length_ = -1;
     mutable std::string_view growth_rejection_ = "not evaluated";
     Safety safety_;
