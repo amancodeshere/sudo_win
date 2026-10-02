@@ -1,8 +1,11 @@
 #include "../../include/sudo_win/planner/planner.h"
 
 #include "../../include/sudo_win/config/config.h"
+#include "../../include/sudo_win/geometry/geometry.h"
 #include "../../include/sudo_win/planner/simulation.h"
 #include "../../include/sudo_win/world/world_model.h"
+
+#include <algorithm>
 
 namespace sudo_win {
 
@@ -136,29 +139,49 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         }
     }
     if (sprinting_) {
-        auto remaining_nodes = config::sprint_node_budget;
-        auto const expand = [&](auto const& self, SimulationState const& state,
-                                std::vector<unswbc::Direction> const& steps) -> void {
-            if (steps.size() >= config::max_sprint_steps || remaining_nodes <= 0) {
-                return;
-            }
-            for (auto const direction : unswbc::Direction::get_direction_list()) {
-                if (remaining_nodes-- <= 0) {
-                    break;
-                }
-                auto const next = simulation.advance(controller, state, direction, true, &world);
-                if (!next) {
-                    continue;
-                }
-                auto extended = steps;
-                extended.push_back(direction);
-                consider(*next, extended);
-                self(self, *next, extended);
-            }
-        };
+        struct SprintNode { SimulationState state; std::vector<unswbc::Direction> steps; int rank; };
+        auto beam = std::vector<SprintNode>{};
         for (auto const direction : safe_moves) {
             if (auto const next = simulation.advance(controller, initial, direction, false, &world)) {
-                expand(expand, *next, {direction});
+                beam.push_back({*next, {direction}, 0});
+            }
+        }
+        auto const step_limit = std::min(config::free_sprint_step_cap,
+            std::max(static_cast<int>(config::max_sprint_steps), Simulation::free_steps(controller.get_length())));
+        auto remaining_nodes = config::free_sprint_node_budget;
+        for (auto depth = 2; depth <= step_limit && !beam.empty() && remaining_nodes > 0; ++depth) {
+            auto expanded = std::vector<SprintNode>{};
+            for (auto const& node : beam) {
+                for (auto const direction : unswbc::Direction::get_direction_list()) {
+                    if (remaining_nodes-- <= 0) {
+                        break;
+                    }
+                    auto next = simulation.advance(controller, node.state, direction, true, &world);
+                    if (!next) {
+                        continue;
+                    }
+                    auto steps = node.steps;
+                    steps.push_back(direction);
+                    auto const p = next->body.front();
+                    auto const gain = static_cast<int>(next->body.size()) - controller.get_length();
+                    auto const rank = gain * config::score_immediate_pearl
+                        + simulation.reachable_area(controller, *next, &world) * config::score_reachable_tile
+                        + threats[static_cast<std::size_t>(p.y * world.width() + p.x)].score;
+                    expanded.push_back({std::move(*next), std::move(steps), rank});
+                }
+            }
+            std::stable_sort(expanded.begin(), expanded.end(), [](auto const& a, auto const& b) {
+                return a.rank > b.rank;
+            });
+            beam.clear();
+            auto retained = std::array<int, 4>{};
+            for (auto& node : expanded) {
+                auto const first = geometry::direction_index(node.steps.front());
+                if (retained[first]++ >= config::sprint_beam_per_direction) {
+                    continue;
+                }
+                consider(node.state, node.steps);
+                beam.push_back(std::move(node));
             }
         }
     }

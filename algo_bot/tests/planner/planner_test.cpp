@@ -190,3 +190,29 @@ TEST_CASE("a shortening sprint escapes a loop that defeats ordinary movement") {
     auto budget = 512;
     CHECK(simulation.survival_depth(fixture.controller,state,6,budget,&world) == 6);
 }
+
+TEST_CASE("long snakes exploit five free steps with bounded profitable routes") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.length = 17;
+    for (auto& tile : fixture.controller.vision.tiles) {
+        tile.pearl_time = -1;
+        tile.pearl = false;
+    }
+    for (auto const p : std::vector<unswbc::Position>{{6,5},{7,5},{8,5},{8,4},{8,3}}) {
+        fixture.tile(p).pearl = true;
+    }
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller, fixture.game);
+    auto const action = sudo_win::Planner{}.choose_action(fixture.controller, fixture.game, world, sudo_win::Role::queen);
+    REQUIRE(action.kind == sudo_win::ActionKind::sprint);
+    REQUIRE(action.steps.size() == 5);
+    auto simulation = sudo_win::Simulation{};
+    auto state = simulation.initial_state(fixture.controller, &world);
+    for (std::size_t i = 0; i < action.steps.size(); ++i) {
+        auto next = simulation.advance(fixture.controller, state, action.steps[i], i > 0, &world);
+        REQUIRE(next);
+        state = *next;
+    }
+    CHECK(state.body.size() == 22);
+    CHECK(state.pearls == 5);
+}

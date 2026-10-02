@@ -134,7 +134,7 @@ TEST_CASE("trapped snakes reverse their tails rather than collide") {
         auto const fatal_fallback = sudo_win::SplittingPolicy{}.rescue(fixture.controller,world,true,true);
         REQUIRE(fatal_fallback);
         CHECK(fatal_fallback->score == 0);
-        CHECK(fatal_fallback->split_size == 2);
+        CHECK(fatal_fallback->split_size == 4);
     }
 }
 

@@ -173,9 +173,11 @@ auto SplittingPolicy::rescue(unswbc::Controller const& controller,
         // This fallback makes no claim about an unseen child's safety.
         best = PlannedAction{};
         best->kind = ActionKind::split;
-        best->split_size = unswbc::Constants::MIN_SIZE;
+        best->split_size = preserve_parent
+            ? controller.get_length() - unswbc::Constants::MIN_SIZE : unswbc::Constants::MIN_SIZE;
         best->score = 0;
-        best->reason = "last-resort legal split instead of certain collision";
+        best->reason = preserve_parent ? "forced queen loss retains secondary contender"
+                                      : "last-resort legal split instead of certain collision";
     }
     return best;
 }
