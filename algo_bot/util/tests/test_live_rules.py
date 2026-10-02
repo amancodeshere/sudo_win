@@ -14,3 +14,4 @@ class LiveRulesTests(unittest.TestCase):
         self.assertTrue(rules['free_sprint_steps'])
         self.assertTrue(rules['fixed_start_length'])
         self.assertTrue(rules['dead_queen_zero'])
+        self.assertTrue(rules['cyclic_turn_order'])

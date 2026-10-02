@@ -57,3 +57,11 @@ The broad balanced native traces retain eight queens versus twelve for v4, inclu
 Added a two-exit obstruction regression, plus three-turn observation regressions from actual Portals game 864977 (helpers 3 and 12). They verify unseen neck occupancy remains blocked across portal movement, growth and splitting. They do not claim that an already trapped minimum-size unit has a winning move, or reconstruct missing sonar messages.
 
 Release across Apple Clang / LLVM Clang / GCC and ASan/UBSan pass **78 cases / 547 assertions**; 16 Python tests pass. Snapshot `build/live-v7-queen-viability`, source SHA-256 `150ff5aa71c52a385b4732391eae1aab97d55171b341902a41ef3520371b7fd0`. Its paired native and metered comparisons are running; previous balanced packages are superseded if this refinement is promoted.
+
+## Correctness audit — defend until our next action, not just this round
+
+The first response implementation incorrectly excluded enemies with lower IDs because they had already acted in the current round. They act again next round before our unit's next action. The correct one-action response horizon includes every currently visible enemy head: higher IDs later this round, lower IDs early next round. This correction matters particularly for late-ID champions. It does not give any enemy two hypothetical actions.
+
+Corrected the regression's ownership IDs and expectation, and extended the official-engine rule verifier to assert the cyclic `0,1,2,3,0,1,2,3` turn order over two rounds. Existing visible financial lower bounds, unknown-length envelopes, body obstacles and fixed node budgets are unchanged. The earlier same-round-only results remain in the progress record as superseded evidence.
+
+Corrected snapshot `build/live-v7-response-cycle`, source SHA-256 `32f0c87bded85193e57567bc437dc1a3e7b155eb0142362c652c666b75b6ee7a`. C++ remains **79 cases / 555 assertions**, all compiler and sanitizer checks passing; 16 Python tests pass, including official-engine turn-order conformance. An exact-source 17-map comparison, a fresh-seed stage comparison and metered tests are running. Earlier `final` and `finalb` artifacts must not be uploaded as the final corrected version.

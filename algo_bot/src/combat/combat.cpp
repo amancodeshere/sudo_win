@@ -36,8 +36,11 @@ auto Combat::response_threat(unswbc::Controller const& controller,
     auto has_portal = false;
     for (auto const& tile : view.get_tiles()) {
         auto const* part = tile.get_dragon();
-        if (part != nullptr && part->is_head() && part->get_team() != controller.get_team()
-            && part->get_id() > controller.get_id()) { enemies.push_back(*part); }
+        // Every visible enemy acts before our next turn: higher IDs this
+        // round, lower IDs next round. Neither gets two simulated actions.
+        if (part != nullptr && part->is_head() && part->get_team() != controller.get_team()) {
+            enemies.push_back(*part);
+        }
         for (auto const d : unswbc::Direction::get_direction_list()) {
             has_portal = has_portal || tile.get_edge(d).is_portal();
         }

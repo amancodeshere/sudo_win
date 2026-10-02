@@ -32,9 +32,12 @@ TEST_CASE("enemy responses use the proposed queen occupancy and partial length e
         CHECK(response.funded_steps == 0);
         CHECK(response.possible_steps != 2);
     }
-    SECTION("an earlier enemy is not given a second turn after our action") {
+    SECTION("an earlier enemy responds next round before our next turn") {
         fixture.controller.head.dragon_id = 9;
-        CHECK(combat.response_threat(fixture.controller,after,world).possible_steps == 0);
+        for (auto& tile : fixture.controller.vision.tiles) {
+            if (tile.dragon_part && tile.dragon_part->dragon_id == 0) { tile.dragon_part->dragon_id = 9; }
+        }
+        CHECK(combat.response_threat(fixture.controller,after,world).funded_steps == 1);
     }
     SECTION("a partial enemy can threaten three steps without certified funding") {
         after.body = {{6,6},{6,5}};

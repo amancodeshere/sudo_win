@@ -55,8 +55,17 @@ def verify_engine_rules(engine=None):
                         debug=0)
     if result.winner != "B" or result.a_queen != 0:
         raise RuntimeError("Judge incorrectly replaces a dead queen with another living dragon")
+    order = []
+    def record_order(identity, block):
+        rnd = int(block.decode().splitlines()[0].split()[1])
+        if rnd <= 1:
+            order.append((rnd, identity))
+        return b"MOVE E\nENDTURN\n"
+    engine.run(fixture([2, 2, 2, 2]), record_order, debug=0)
+    if order != [(rnd, identity) for rnd in (0, 1) for identity in range(4)]:
+        raise RuntimeError("Judge does not cycle dragon IDs before each unit's next action")
     return {"toolkit": version, "engine_sha256": digest, "queen_scoring": True,
-            "free_sprint_steps": True, "fixed_start_length": True, "dead_queen_zero": True}
+            "free_sprint_steps": True, "fixed_start_length": True, "dead_queen_zero": True, "cyclic_turn_order": True}
 
 
 if __name__ == "__main__":
