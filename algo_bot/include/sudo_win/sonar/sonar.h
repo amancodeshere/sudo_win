@@ -14,6 +14,7 @@ enum class MessageType : std::uint8_t {
     champion = 4,
     danger = 5,
     feeder = 6,
+    empty = 7,
 };
 
 struct TeamMessage {
@@ -29,6 +30,7 @@ struct TeamMessage {
 
 class SonarCodec {
 public:
+    [[nodiscard]] auto can_encode(TeamMessage const& message) const -> bool;
     [[nodiscard]] auto encode(TeamMessage const& message) const -> std::uint64_t;
     [[nodiscard]] auto decode(std::uint64_t payload, int current_round) const -> std::optional<TeamMessage>;
 

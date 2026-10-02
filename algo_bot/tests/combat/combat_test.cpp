@@ -142,9 +142,10 @@ TEST_CASE("sprint capability separates observed funding from partial enemy uncer
 
 TEST_CASE("small helpers trade only for provably larger visible enemy heads") {
     auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 6;
     fixture.controller.length = 2;
     fixture.controller.unit_count = 2;
-    fixture.tile({5,6}).dragon_part = unswbc::DragonPart{{5,6},0,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    fixture.tile({5,6}).dragon_part = unswbc::DragonPart{{5,6},6,unswbc::Team::A,unswbc::Direction::NORTH,false};
     for (auto const p : std::vector<unswbc::Position>{{7,5},{7,6},{7,7},{7,8}}) {
         fixture.tile(p).dragon_part = unswbc::DragonPart{p,4,unswbc::Team::B,unswbc::Direction::NORTH,p.y == 5};
     }
@@ -168,6 +169,11 @@ TEST_CASE("small helpers trade only for provably larger visible enemy heads") {
         fixture.controller.unit_count = 1;
         CHECK_FALSE(trade());
     }
+    SECTION("fixed queens are never sacrificed even if their role is mislabelled") {
+        fixture.controller.head.dragon_id = 0;
+        fixture.tile({6,5}).pearl = true;
+        CHECK_FALSE(trade());
+    }
     SECTION("longer growing snakes are preserved") {
         fixture.tile({6,5}).pearl = true;
         fixture.controller.length = 4;
@@ -186,4 +192,21 @@ TEST_CASE("small helpers trade only for provably larger visible enemy heads") {
         fixture.tile({6,5}).dragon_part = unswbc::DragonPart{{6,5},9,unswbc::Team::A,unswbc::Direction::EAST,false};
         CHECK_FALSE(trade());
     }
+}
+
+TEST_CASE("small helpers target an enemy queen without requiring a length advantage") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 6;
+    fixture.controller.length = 2;
+    fixture.controller.unit_count = 2;
+    fixture.tile({5,6}).dragon_part = unswbc::DragonPart{{5,6},6,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    fixture.tile({6,5}).dragon_part = unswbc::DragonPart{{6,5},1,unswbc::Team::B,unswbc::Direction::WEST,true};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto const action = sudo_win::Combat{}.favourable_trade(fixture.controller,world,true);
+    REQUIRE(action);
+    CHECK(action->steps == std::vector<unswbc::Direction>{unswbc::Direction::EAST});
+    fixture.tile({6,5}).dragon_part->dragon_id = 7;
+    world.update(fixture.controller,fixture.game);
+    CHECK_FALSE(sudo_win::Combat{}.favourable_trade(fixture.controller,world,true));
 }

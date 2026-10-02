@@ -34,18 +34,22 @@ class BenchmarkTests(unittest.TestCase):
         self.assertEqual(short["fatal_reason"], "unaffordable sprint")
     def test_head_trade_classifier_keeps_unfunded_and_unfavourable_collisions_fatal(self):
         observation = self.observation(2).replace('UNIT_COUNT 1', 'UNIT_COUNT 2')
+        observation = observation.replace('ID 0', 'ID 6').replace('A 0 ', 'A 6 ')
         observation = observation.replace('6 5 0 -1', '6 5 1 -1')
         enemies = '\n'.join(['B 9 7 5 N 1', 'B 9 7 6 N 0', 'B 9 7 7 N 0', 'B 9 7 8 N 0'])
         observation = observation.replace('DRAGON_BODIES 2', 'DRAGON_BODIES 6')
-        observation = observation.replace('A 0 5 6 N 0', 'A 0 5 6 N 0\n' + enemies)
+        observation = observation.replace('A 6 5 6 N 0', 'A 6 5 6 N 0\n' + enemies)
         result = benchmark.visible_action_check(observation, 'MOVE EE\n')
         self.assertTrue(result['avoidable_collision'])  # Still gated without explicit trial opt-in.
         self.assertEqual(result['favourable_head_trade']['enemy_visible_length'], 4)
         for invalid in (observation.replace('6 5 1 -1', '6 5 0 -1'),
                         observation.replace('UNIT_COUNT 2', 'UNIT_COUNT 1'),
                         observation.replace('B 9', 'A 9'),
+                        observation.replace('ID 6', 'ID 0').replace('A 6 ', 'A 0 '),
                         observation.replace('B 9 7 8 N 0', 'B 8 7 8 N 0')):
             self.assertNotIn('favourable_head_trade', benchmark.visible_action_check(invalid, 'MOVE EE\n'))
+        queen = observation.replace('B 9', 'B 1').replace('B 1 7 8 N 0', 'B 8 7 8 N 0')
+        self.assertTrue(benchmark.visible_action_check(queen, 'MOVE EE\n')['favourable_head_trade']['enemy_queen'])
 
     def test_live_free_step_keeps_tail_that_old_payment_model_released(self):
         obs = self.observation(6)

@@ -18,7 +18,7 @@ No upload or live challenges are part of this task.
 | 2 | Queen identity, food priority and parent-preserving rescue | Complete | 45 C++ cases / 299 assertions; native 4–4 / eight games, zero candidate errors |
 | 3 | Bounded free sprint search, opening escapes and turn-order-aware threats | Complete | 48 C++ cases / 319 assertions; ordered-threat native comparison 3–5, zero errors |
 | 4 | Earlier remembered portal escapes and helper exploration | Complete | 49 C++ cases / 326 assertions; native 5–3 against step 3b, zero errors |
-| 5 | Useful sonar reports and helper attacks against enemy queen | Pending | Existing messages are decoded but unused |
+| 5 | Useful sonar reports and helper attacks against enemy queen | Implemented; comparisons running | 54 C++ cases / 352 assertions, sanitizers and 16 Python tests pass |
 | 6 | Resource-supported helper expansion and endgame coordination | Pending | Repeated rescue cycles and weak food collection |
 | 7 | Combined held-out sandbox checks, repeatability and final package | Pending | Validate actual queen scoring, live payment rules and CPU |
 
@@ -61,3 +61,9 @@ Threat maps now keep separate funded earlier/later enemy routes, including the l
 ### Step 4 — helper portals
 
 Small nonqueen helpers (length at most four, more than one survivor, not the secondary champion) can take a single uncertain portal step after eight rounds without growth and no resource route, or when local movement is about to fail. Fresh remembered exits are preferred; unknown pairs can be sampled, but known blocked/stale exits are never relabelled as unknown. Twelve-round per-helper cooldown prevents immediate repeated probing. Nonqueens may also escape through a validated remembered exit before their last visible move fails; queens keep the original escape-only gate and certified rescue priority. Complete body knowledge is required. Release and ASan/UBSan pass 49 cases / 326 assertions. Native seed 306 on Portals, Autarky, Prisoners Dilemma and Schooltime / both colors: 5–3, zero errors (`build/validation/portals-native8/`). This is promising diagnostic evidence, with full sandbox validation still required.
+
+### Step 5 — bounded reports and queen targeting
+
+Sonar now sends at most two directed 64-bit beams per action, rotating queen status, legal resource claims, canonical portal endpoints and observed food/enemy-queen sightings. The old eight-bit sender field is replaced with thirteen bits; encoding rejects overflow and decoding reconstructs delayed absolute rounds. At most 64 fresh reports are retained. Reports influence helper roles, resource allocation and soft enemy-queen approach/caution; portal reports extend static pairing only when they do not contradict directly seen edges. They never mark remote tiles seen or override occupancy. The payload tag filters unrelated messages; it is not cryptographic authentication and remote information remains advisory.
+
+Length-two/three helpers with a surviving teammate can deliberately remove a currently visible enemy queen along a fully simulated, funded route. Queens, last survivors and incomplete bodies cannot be sacrificed. Broader length trades remain disabled by default. The independent benchmark classifier explicitly verifies queen victims and rejects sacrificing our queen; intentional head trades require the benchmark opt-in. Release and ASan/UBSan pass 54 cases / 352 assertions; 16 Python tests pass. Frozen source: `build/live-step5-sonar`. Native seed 307 eight-game comparison and sandbox seed 308 two-map CPU checks are running; six native games completed without errors at commit time. Results will be recorded before final promotion.

@@ -4,6 +4,7 @@
 
 #include <string>
 #include <exception>
+#include <algorithm>
 
 namespace sudo_win {
 
@@ -12,20 +13,74 @@ Bot::Bot(unswbc::Game const& game)
 
 auto Bot::execute_turn(unswbc::Controller& controller, unswbc::Game const& game) -> void {
     auto action = PlannedAction{};
+    auto report_payload = std::optional<std::uint64_t>{};
 #ifndef SUDO_WIN_DEVELOPMENT
     try {
 #endif
     world_.update(controller, game);
 
     for (auto const payload : controller.get_sonar_messages()) {
+        if (!config::enable_sonar) {
+            break;
+        }
         auto const message = sonar_.decode(payload, game.get_round_num());
         if (!message.has_value()) {
             continue;
         }
+        world_.receive_report(*message, game.get_round_num());
     }
 
-    auto const role = roles_.choose_role(controller, game);
+    auto const role = roles_.choose_role(controller, game, &world_);
     action = planner_.choose_action(controller, game, world_, role);
+    if (config::enable_sonar) {
+        auto report = std::optional<TeamMessage>{};
+        auto const phase = game.get_round_num() % 4;
+        auto const own = controller.get_position();
+        if (phase == 0 && controller.get_id() <= 1) {
+            report = TeamMessage{MessageType::champion, game.get_round_num() & 511,
+                controller.get_id(), own.x, own.y, std::min(controller.get_length(), 2047)};
+        } else if (phase == 1) {
+            if (auto const route = Pathfinding{}.remembered_target(controller, world_, game.get_round_num());
+                route && route->pearl) {
+                report = TeamMessage{MessageType::feeder, game.get_round_num() & 511,
+                    controller.get_id(), route->target.x, route->target.y, std::min(route->distance, 2047)};
+            }
+        } else if (phase == 2) {
+            auto portals = std::vector<TeamMessage>{};
+            for (auto const& tile : controller.get_tiles()) {
+                for (auto const direction : {unswbc::Direction::NORTH, unswbc::Direction::WEST}) {
+                    auto const& edge = tile.get_edge(direction);
+                    auto const p = tile.get_position();
+                    if (edge.is_portal() && edge.get_portal_id() >= 0 && edge.get_portal_id() < 1024) {
+                        portals.push_back({MessageType::portal, game.get_round_num() & 511,
+                            controller.get_id(), p.x, p.y, edge.get_portal_id() * 2
+                                + (direction == unswbc::Direction::WEST ? 1 : 0)});
+                    }
+                }
+            }
+            if (!portals.empty()) {
+                report = portals[static_cast<std::size_t>(game.get_round_num() / 4) % portals.size()];
+            }
+        } else {
+            for (auto const& tile : controller.get_tiles()) {
+                auto const p = tile.get_position();
+                auto const* part = tile.get_dragon();
+                if (part != nullptr && part->is_head() && part->get_id() <= 1
+                    && part->get_team() != controller.get_team()) {
+                    report = TeamMessage{MessageType::enemy_head, game.get_round_num() & 511,
+                        controller.get_id(), p.x, p.y, 1024};
+                    break;
+                }
+                if (!report && tile.has_pearl()) {
+                    report = TeamMessage{MessageType::pearl, game.get_round_num() & 511,
+                        controller.get_id(), p.x, p.y, 1};
+                }
+            }
+        }
+        if (report && sonar_.can_encode(*report)) {
+            report_payload = sonar_.encode(*report);
+        }
+    }
     world_.remember_action(controller, game, action);
 #ifndef SUDO_WIN_DEVELOPMENT
     } catch (std::exception const&) {
@@ -39,6 +94,14 @@ auto Bot::execute_turn(unswbc::Controller& controller, unswbc::Game const& game)
         controller.set_indicator_string(std::string{action.reason});
     }
     apply_action(controller, action);
+    if (report_payload) {
+        // Directed 64-bit messages, after the action. Rotate opposite beams;
+        // delayed aggregate echoes are never treated as empty-space evidence.
+        auto const direction = unswbc::Direction{game.get_round_num() % 2 == 0
+            ? unswbc::Direction::NORTH : unswbc::Direction::EAST};
+        controller.send_sonar(direction, *report_payload);
+        controller.send_sonar(direction.get_opposite(), *report_payload);
+    }
 }
 
 auto Bot::apply_action(unswbc::Controller& controller, PlannedAction const& action) const -> void {

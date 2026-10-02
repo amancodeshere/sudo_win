@@ -21,3 +21,18 @@ TEST_CASE("sonar codec") {
         CHECK_FALSE(codec.decode(payload, 140).has_value());
     }
 }
+
+TEST_CASE("sonar wire format preserves large identities and rejects field truncation") {
+    auto codec = sudo_win::SonarCodec{};
+    auto message = sudo_win::TeamMessage{sudo_win::MessageType::portal, 511, 4097, 63, 63, 2047};
+    auto const decoded = codec.decode(codec.encode(message), 514);
+    REQUIRE(decoded);
+    CHECK(decoded->sender_id == 4097);
+    CHECK(decoded->round == 511);
+    message.sender_id = 8192;
+    CHECK_FALSE(codec.can_encode(message));
+    CHECK_THROWS_AS(codec.encode(message), std::invalid_argument);
+    message.sender_id = 0;
+    message.value = 2048;
+    CHECK_FALSE(codec.can_encode(message));
+}

@@ -1,15 +1,28 @@
 #include "../../include/sudo_win/roles/roles.h"
 #include "../../include/sudo_win/config/config.h"
+#include "../../include/sudo_win/world/world_model.h"
 #include <algorithm>
 
 namespace sudo_win {
 
-auto RoleManager::choose_role(unswbc::Controller const& controller, unswbc::Game const& game) const -> Role {
+auto RoleManager::choose_role(unswbc::Controller const& controller, unswbc::Game const& game,
+                              WorldModel const* world) const -> Role {
     // The starting IDs 0 and 1 are the fixed queens, regardless of colour.
     if (controller.get_id() <= 1) {
         return Role::queen;
     }
     auto visible_lengths = std::unordered_map<int, int>{};
+    if (world != nullptr) {
+        for (auto const& report : world->reports()) {
+            if (report.type == MessageType::champion && report.sender_id <= 1
+                && game.get_round_num() - report.round <= config::ally_estimate_max_age) {
+                auto const existing = allies_.find(report.sender_id);
+                if (existing == allies_.end() || existing->second.round <= report.round) {
+                    allies_[report.sender_id] = {report.value, report.round};
+                }
+            }
+        }
+    }
     for (auto const& tile : controller.get_tiles()) {
         auto const* part = tile.get_dragon();
         if (part != nullptr && part->get_team() == controller.get_team()) {

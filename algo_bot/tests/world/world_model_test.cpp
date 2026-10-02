@@ -240,3 +240,43 @@ TEST_CASE("unknown initial body ranks are learned through confirmed movement") {
     CHECK(sudo_win::Simulation{}.initial_state(fixture.controller,&world).body
           == std::vector<unswbc::Position>{{8,5},{7,5},{6,5}});
 }
+
+TEST_CASE("delayed team reports preserve observation authority and bounded memory") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.game.round_num = 10;
+    auto world = sudo_win::WorldModel{fixture.game};
+    fixture.tile({6,5}).dragon_part = unswbc::DragonPart{{6,5},9,unswbc::Team::B,unswbc::Direction::WEST,false};
+    world.update(fixture.controller,fixture.game);
+    world.receive_report({sudo_win::MessageType::empty,10,4097,6,5,0},10);
+    CHECK(world.cell({6,5}).occupant.has_value());
+    world.receive_report({sudo_win::MessageType::pearl,10,4097,0,0,1},10);
+    CHECK_FALSE(world.has_seen({0,0}));
+    CHECK_FALSE(world.cell({0,0}).has_pearl);
+    auto const count = world.reports().size();
+    world.receive_report({sudo_win::MessageType::champion,10,4097,5,5,10},10);
+    world.receive_report({sudo_win::MessageType::pearl,11,4,5,5,1},10);
+    world.receive_report({sudo_win::MessageType::pearl,1,4,5,5,1},10);
+    world.receive_report({sudo_win::MessageType::pearl,10,4,63,63,1},10);
+    CHECK(world.reports().size() == count);
+    for (auto id = 2; id < 100; ++id) {
+        world.receive_report({sudo_win::MessageType::pearl,10,id,5,5,1},10);
+    }
+    CHECK(world.reports().size() == 64);
+    fixture.game.round_num = 19;
+    world.update(fixture.controller,fixture.game);
+    CHECK(world.reports().empty());
+}
+
+TEST_CASE("reported portal pairs provide static topology without certifying remote landings") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.tile({5,5}).get_edge(unswbc::Direction::EAST) = unswbc::Edge{false,unswbc::EdgeType::PORTAL,9};
+    fixture.tile({6,5}).get_edge(unswbc::Direction::WEST) = unswbc::Edge{false,unswbc::EdgeType::PORTAL,9};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    CHECK_FALSE(world.transition({5,5},unswbc::Direction::EAST));
+    world.receive_report({sudo_win::MessageType::portal,1,4097,0,0,19},1);
+    CHECK(world.transition({5,5},unswbc::Direction::EAST) == unswbc::Position{0,0});
+    CHECK_FALSE(world.has_seen({0,0}));
+    world.receive_report({sudo_win::MessageType::portal,1,4097,2,2,21},1);
+    CHECK(world.portal_endpoints(10) == nullptr); // contradicts a directly seen empty edge
+}

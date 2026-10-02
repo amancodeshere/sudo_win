@@ -89,6 +89,24 @@ auto Pathfinding::remembered_target(unswbc::Controller const& controller,
             }
         }
     }
+    auto remote_pearls = std::vector<bool>(area, false);
+    auto claims = std::vector<int>(area, -1);
+    for (auto const& report : world.reports()) {
+        if (round - report.round > 4) {
+            continue;
+        }
+        auto const p = unswbc::Position{report.x, report.y};
+        auto const i = index(p);
+        if (report.type == MessageType::pearl && report.round > world.cell(p).last_seen_round) {
+            remote_pearls[i] = true;
+        }
+        if (report.type == MessageType::feeder && controller.get_id() > 1
+            && report.sender_id != controller.get_id()
+            && (report.sender_id <= 1 || report.sender_id < controller.get_id())) {
+            auto const remaining = std::max(0, report.value - (round - report.round));
+            claims[i] = claims[i] < 0 ? remaining : std::min(claims[i], remaining);
+        }
+    }
     auto best = std::optional<TargetRoute>{};
     auto previous = std::optional<TargetRoute>{};
     for (std::size_t cursor = 0; cursor < queue.size() && cursor < config::routing_node_budget; ++cursor) {
@@ -97,7 +115,8 @@ auto Pathfinding::remembered_target(unswbc::Controller const& controller,
         auto const steps = distance[current_index];
         auto const& cell = world.cell(current);
         auto const age = round - cell.last_seen_round;
-        auto const pearl = cell.has_pearl && age <= config::pearl_memory_max_age;
+        auto const claim = claims[current_index];
+        auto const pearl = (cell.has_pearl && age <= config::pearl_memory_max_age) || remote_pearls[current_index];
         auto const spawning = !cell.has_pearl && cell.pearl_time >= 0 && age <= 2
                            && cell.pearl_time - age <= steps + 1;
         auto frontier = 0;
@@ -117,6 +136,9 @@ auto Pathfinding::remembered_target(unswbc::Controller const& controller,
                 && ally_distance[current_index] < steps) {
                 // Keep the resource available as a fallback; favour a different
                 // collection route when an ally can reach it first.
+                value /= 4;
+            }
+            if ((pearl || spawning) && claim >= 0 && claim < steps) {
                 value /= 4;
             }
             auto const candidate = TargetRoute{current, first[current_index], steps, value, pearl || spawning};

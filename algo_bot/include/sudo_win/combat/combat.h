@@ -34,7 +34,7 @@ public:
                                         Role role,
                                         WorldModel const* world = nullptr) const -> int;
     [[nodiscard]] auto favourable_trade(unswbc::Controller const& controller,
-                                         WorldModel const& world) const -> std::optional<PlannedAction>;
+                                                WorldModel const& world, bool queen_only = false) const -> std::optional<PlannedAction>;
 };
 
 } // namespace sudo_win

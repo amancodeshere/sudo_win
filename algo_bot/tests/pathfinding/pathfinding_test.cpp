@@ -140,3 +140,25 @@ TEST_CASE("resource routes yield to closer visible allies only on legal paths") 
         CHECK(chosen->target == unswbc::Position{7, 5});
     }
 }
+
+TEST_CASE("fresh queen sonar claims coordinate helper food and expire") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 6;
+    for (auto& tile : fixture.controller.vision.tiles) { tile.pearl_time = -1; }
+    fixture.tile({7,5}).pearl = true;
+    fixture.tile({5,7}).pearl = true;
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    world.receive_report({sudo_win::MessageType::feeder,1,0,7,5,1},1);
+    auto const route = sudo_win::Pathfinding{}.remembered_target(fixture.controller,world,1,unswbc::Position{7,5});
+    REQUIRE(route);
+    CHECK(route->target == unswbc::Position{5,7});
+    fixture.controller.head.dragon_id = 1;
+    auto const queen = sudo_win::Pathfinding{}.remembered_target(fixture.controller,world,1,unswbc::Position{7,5});
+    REQUIRE(queen);
+    CHECK(queen->target == unswbc::Position{7,5});
+    fixture.controller.head.dragon_id = 6;
+    auto const expired = sudo_win::Pathfinding{}.remembered_target(fixture.controller,world,6,unswbc::Position{7,5});
+    REQUIRE(expired);
+    CHECK(expired->target == unswbc::Position{7,5});
+}

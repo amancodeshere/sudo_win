@@ -20,6 +20,8 @@ PROFILES = {
                "enable_sonar": False, "enable_indicators": False},
 }
 PROFILES["combat"] = {**PROFILES["stable"], "enable_favourable_trades": True}
+PROFILES["stable"]["enable_sonar"] = True
+PROFILES["no-sonar"] = {**PROFILES["stable"], "enable_sonar": False}
 
 
 def prepare(bot: pathlib.Path, output: pathlib.Path, profile: str) -> dict:

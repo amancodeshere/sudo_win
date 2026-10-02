@@ -6,11 +6,12 @@
 #include <unordered_map>
 
 namespace sudo_win {
+class WorldModel;
 
 class RoleManager {
 public:
     [[nodiscard]] auto choose_role(unswbc::Controller const& controller,
-                                   unswbc::Game const& game) const -> Role;
+                                   unswbc::Game const& game, WorldModel const* world = nullptr) const -> Role;
     [[nodiscard]] auto score_move(Role role,
                                   int reachable_area,
                                   int frontier_count,

@@ -2,6 +2,7 @@
 
 #include "../../include/sudo_win/geometry/geometry.h"
 #include "../../include/sudo_win/planner/simulation.h"
+#include "../../include/sudo_win/config/config.h"
 
 #include <algorithm>
 #include <cstddef>
@@ -25,6 +26,9 @@ WorldModel::WorldModel(unswbc::Game const& game)
 , cells_(static_cast<std::size_t>(game.width * game.height)) {}
 
 auto WorldModel::update(unswbc::Controller const& controller, unswbc::Game const& game) -> void {
+    std::erase_if(reports_, [&](auto const& report) {
+        return game.get_round_num() - report.round > config::sonar_max_age;
+    });
     cells_[index(controller.get_position())].last_visited_round = game.get_round_num();
     for (auto const& tile : controller.get_tiles()) {
         auto& remembered = cells_[index(tile.get_position())];
@@ -57,6 +61,47 @@ auto WorldModel::update(unswbc::Controller const& controller, unswbc::Game const
     }
     reconcile_body(controller, game);
 }
+
+auto WorldModel::receive_report(TeamMessage const& message, int round) -> void {
+    if (message.x < 0 || message.x >= width_ || message.y < 0 || message.y >= height_
+        || round < message.round || round - message.round > config::sonar_max_age
+        || message.sender_id < 0 || message.sender_id >= 8192 || message.value < 0 || message.value >= 2048
+        || static_cast<unsigned>(message.type) > 7
+        || (message.type == MessageType::champion && message.sender_id > 1)) {
+        return;
+    }
+    auto const found = std::find_if(reports_.begin(), reports_.end(), [&](auto const& existing) {
+        return existing.sender_id == message.sender_id && existing.type == message.type;
+    });
+    if (found != reports_.end()) {
+        if (found->round > message.round) {
+            return;
+        }
+        *found = message;
+    } else {
+        if (reports_.size() >= 64U) {
+            reports_.erase(std::min_element(reports_.begin(), reports_.end(), [](auto const& a, auto const& b) {
+                return a.round < b.round;
+            }));
+        }
+        reports_.push_back(message);
+    }
+    if (message.type == MessageType::portal) {
+        auto const endpoint = PortalEndpoint{{message.x, message.y},
+            (message.value & 1) == 0 ? unswbc::Direction::NORTH : unswbc::Direction::WEST};
+        auto const portal_id = message.value / 2;
+        auto const& local = cell(endpoint.position).edges[geometry::direction_index(endpoint.direction)];
+        auto const* ends = portal_endpoints(portal_id);
+        if ((!local.seen || (local.type == unswbc::EdgeType::PORTAL && local.portal_id == portal_id))
+            && (ends == nullptr || ends->size() < 2U)) {
+            remember_portal(portal_id, endpoint);
+        }
+    }
+    // Reports never mark a tile seen, overwrite local occupancy, or certify an
+    // empty portal exit. Delayed echoes also cannot establish those facts.
+}
+
+auto WorldModel::reports() const -> std::vector<TeamMessage> const& { return reports_; }
 
 auto WorldModel::own_body(unswbc::Controller const& controller) const
     -> std::vector<unswbc::Position> const* {

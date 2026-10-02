@@ -17,8 +17,8 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         resource_progress_round_ = game.get_round_num();
     }
     previous_length_ = controller.get_length();
-    if (favourable_trades_ && role != Role::queen) {
-        if (auto const trade = combat_.favourable_trade(controller, world)) {
+    if ((favourable_trades_ || config::enable_queen_hunting) && role != Role::queen) {
+        if (auto const trade = combat_.favourable_trade(controller, world, !favourable_trades_)) {
             return *trade;
         }
     }
@@ -85,6 +85,20 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             candidate.exploration_score += config::score_recent_visit;
         }
         candidate.exploration_score += world.unseen_neighbour_count(destination) * config::score_frontier;
+        for (auto const& report : world.reports()) {
+            if (report.type != MessageType::enemy_head || report.value != 1024
+                || game.get_round_num() - report.round > 2) {
+                continue;
+            }
+            auto const enemy = unswbc::Position{report.x, report.y};
+            auto const distance = geometry::toroidal_manhattan(destination, enemy, world.width(), world.height());
+            if (role == Role::queen && distance <= 3) {
+                candidate.exploration_score -= (4 - distance) * 4000;
+            } else if (controller.get_id() > 1 && controller.get_length() <= 3
+                && controller.get_unit_count() > 1 && config::enable_queen_hunting) {
+                candidate.exploration_score += std::max(0, 8 - distance) * 1000;
+            }
+        }
         auto const& threat = threats[static_cast<std::size_t>(destination.y * world.width() + destination.x)];
         candidate.combat_score = threat.score * (role == Role::queen ? 3
             : role == Role::champion ? config::score_champion_risk_multiplier : 1);

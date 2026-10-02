@@ -146,12 +146,13 @@ def visible_action_check(stdin: str, stdout: str) -> dict:
                 target in occupants and occupants[target] != identity):
             result.update(fatal_step=step + 1, fatal_reason="occupied", avoidable_collision=bool(safe))
             victim = next((p for p in parts if (int(p[2]), int(p[3])) == target), None)
-            if victim is not None and victim[0] != team and victim[5] == '1' and length <= 3 and unit_count > 1:
+            if victim is not None and victim[0] != team and victim[5] == '1' and identity > 1 and length <= 3 and unit_count > 1:
                 observed_length = sum(p[1] == victim[1] for p in parts)
-                if observed_length >= length + 2:
+                if int(victim[1]) <= 1 or observed_length >= length + 2:
                     result['favourable_head_trade'] = {'enemy_id': int(victim[1]),
                                                      'enemy_visible_length': observed_length,
-                                                     'our_start_length': length}
+                                                     'our_start_length': length,
+                                                     'enemy_queen': int(victim[1]) <= 1}
             break
         if target in unranked or target not in visible_positions:
             break

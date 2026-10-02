@@ -8,13 +8,19 @@
 namespace sudo_win {
 
 auto Combat::favourable_trade(unswbc::Controller const& controller,
-                              WorldModel const& world) const -> std::optional<PlannedAction> {
-    if (controller.get_length() > 3 || controller.get_unit_count() <= 1) {
+                              WorldModel const& world, bool queen_only) const -> std::optional<PlannedAction> {
+    if (controller.get_id() <= 1 || controller.get_length() > 3 || controller.get_unit_count() <= 1) {
         return std::nullopt;
     }
     auto const simulation = Simulation{};
     struct Node { SimulationState state; std::vector<unswbc::Direction> steps; };
-    auto queue = std::vector<Node>{{simulation.initial_state(controller, &world), {}}};
+    auto const initial = simulation.initial_state(controller, &world);
+    if (!initial.unranked_body.empty() || std::any_of(initial.body.begin(), initial.body.end(), [](auto p) {
+        return p.x < 0 || p.y < 0;
+    })) {
+        return std::nullopt;
+    }
+    auto queue = std::vector<Node>{{initial, {}}};
     auto budget = config::sprint_node_budget;
     auto best = std::optional<PlannedAction>{};
     for (std::size_t cursor = 0; cursor < queue.size() && budget > 0; ++cursor) {
@@ -37,7 +43,8 @@ auto Combat::favourable_trade(unswbc::Controller const& controller,
                     auto const* part = part_tile.get_dragon();
                     observed_length += part != nullptr && part->get_id() == enemy->get_id();
                 }
-                if (observed_length < controller.get_length() + 2) {
+                auto const queen = enemy->get_id() <= 1;
+                if ((queen_only && !queen) || (!queen && observed_length < controller.get_length() + 2)) {
                     continue;
                 }
                 auto view = controller;
@@ -51,13 +58,14 @@ auto Combat::favourable_trade(unswbc::Controller const& controller,
                 }
                 auto const score = observed_length * config::score_immediate_pearl
                     - controller.get_length() * config::score_immediate_pearl
-                    - static_cast<int>(steps.size()) * config::score_sprint_tempo;
+                    - static_cast<int>(steps.size()) * config::score_sprint_tempo + (queen ? 1000000 : 0);
                 if (!best || score > best->score) {
                     best = PlannedAction{};
                     best->kind = steps.size() > 1 ? ActionKind::sprint : ActionKind::move;
                     best->steps = std::move(steps);
                     best->score = score;
-                    best->reason = "small helper trades for visibly larger enemy head";
+                    best->reason = queen ? "small helper removes fixed enemy queen"
+                                         : "small helper trades for visibly larger enemy head";
                 }
             } else if (auto const next = simulation.advance(controller, node.state, direction,
                                                               !node.steps.empty(), &world)) {
