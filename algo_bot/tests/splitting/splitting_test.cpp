@@ -1,6 +1,7 @@
 #include "sudo_win/splitting/splitting.h"
 #include "sudo_win/world/world_model.h"
 #include "sudo_win/planner/planner.h"
+#include "sudo_win/planner/simulation.h"
 #include <algorithm>
 
 #include "../engine_fixture.h"
@@ -106,6 +107,14 @@ TEST_CASE("trapped snakes reverse their tails rather than collide") {
         auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::champion);
         REQUIRE(action.kind == sudo_win::ActionKind::split);
         CHECK(fixture.controller.can_split(action.split_size));
+        CHECK(action.split_size == 4);
+        // The original head is trapped; its reversed tail can retain four of
+        // the six segments and move north without crossing either new body.
+        auto child = sudo_win::SimulationState{};
+        child.body.assign(body.rbegin(), body.rbegin() + action.split_size);
+        child.unranked_body.assign(body.begin(), body.end() - action.split_size);
+        CHECK(sudo_win::Simulation{}.advance(fixture.controller, child,
+                                             unswbc::Direction::NORTH, false, &world));
     }
     SECTION("a full team never emits an invalid rescue split") {
         fixture.controller.unit_count = fixture.controller.unit_limit;

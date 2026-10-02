@@ -23,8 +23,10 @@ auto SplittingPolicy::rescue(unswbc::Controller const& controller,
     auto best = std::optional<PlannedAction>{};
     auto best_depth = 0;
     if (complete) {
-        for (auto child_size = unswbc::Constants::MIN_SIZE;
-             child_size <= controller.get_length() - unswbc::Constants::MIN_SIZE; ++child_size) {
+        // The parent is already in trouble. Preserve as much length as possible
+        // in the escaping tail rather than always rescuing a two-segment child.
+        for (auto child_size = controller.get_length() - unswbc::Constants::MIN_SIZE;
+             child_size >= unswbc::Constants::MIN_SIZE; --child_size) {
             auto child = SimulationState{};
             child.body.assign(initial.body.rbegin(), initial.body.rbegin() + child_size);
             child.unranked_body.assign(initial.body.begin(), initial.body.end() - child_size);
