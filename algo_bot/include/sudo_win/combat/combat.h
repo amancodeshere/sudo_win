@@ -3,6 +3,7 @@
 
 #include "../engine/helper.h"
 #include "../types/types.h"
+#include "../config/config.h"
 
 namespace sudo_win {
 class WorldModel;
@@ -17,7 +18,8 @@ struct ThreatAssessment {
 class Combat {
 public:
     [[nodiscard]] auto threats(unswbc::Controller const& controller,
-                               WorldModel const* world = nullptr) const -> std::vector<ThreatAssessment>;
+                               WorldModel const* world = nullptr,
+                               bool long_sprints = config::enable_long_sprint_threats) const -> std::vector<ThreatAssessment>;
     [[nodiscard]] auto threat_level(unswbc::Controller const& controller,
                                     unswbc::Position destination,
                                     WorldModel const* world = nullptr) const -> ThreatLevel;

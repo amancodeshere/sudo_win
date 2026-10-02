@@ -59,3 +59,42 @@ TEST_CASE("cached threat map accumulates independent possible attacks") {
     CHECK(map[56].level == sudo_win::ThreatLevel::direct);
     CHECK(map[55].score == 2 * sudo_win::config::score_possible_enemy_sprint);
 }
+
+TEST_CASE("long sprint threats respect segment costs and visible pearl income") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    for (auto x = 2; x <= 5; ++x) {
+        fixture.tile({x, 2}).dragon_part = unswbc::DragonPart{
+            {x, 2}, 4, unswbc::Team::B, unswbc::Direction::EAST, x == 5};
+    }
+    auto const map = [&] { return sudo_win::Combat{}.threats(fixture.controller, nullptr, true); };
+    SECTION("four observed segments afford three steps but not four") {
+        auto const threat = map();
+        CHECK(threat[28].level == sudo_win::ThreatLevel::possible_sprint);
+        CHECK(threat[28].score == sudo_win::config::score_long_enemy_sprint);
+        CHECK(threat[38].level == sudo_win::ThreatLevel::none);
+    }
+    SECTION("an intermediate pearl pays for a fourth step") {
+        fixture.tile({6, 2}).pearl = true;
+        auto const threat = map();
+        CHECK(threat[38].level == sudo_win::ThreatLevel::possible_sprint);
+        CHECK(threat[38].score == sudo_win::config::score_long_enemy_sprint / 2);
+    }
+    SECTION("two intermediate pearls fund the five-step search horizon") {
+        fixture.tile({6, 2}).pearl = true;
+        fixture.tile({7, 2}).pearl = true;
+        auto const threat = map();
+        CHECK(threat[48].level == sudo_win::ThreatLevel::possible_sprint);
+        CHECK(threat[48].score == sudo_win::config::score_long_enemy_sprint / 3);
+    }
+    SECTION("a partial head sighting is not assumed to fund long sprints") {
+        for (auto x = 2; x < 5; ++x) {
+            fixture.tile({x, 2}).dragon_part.reset();
+        }
+        CHECK(map()[28].level == sudo_win::ThreatLevel::none);
+    }
+    SECTION("blocked exits do not create long attacks") {
+        fixture.tile({5, 2}).get_edge(unswbc::Direction::EAST)
+            = unswbc::Edge{false, unswbc::EdgeType::KELP};
+        CHECK(map()[28].level == sudo_win::ThreatLevel::none);
+    }
+}

@@ -5,6 +5,7 @@ namespace sudo_win::config {
 
 inline constexpr auto enable_sprinting = true;
 inline constexpr auto enable_splitting = false;
+inline constexpr auto enable_long_sprint_threats = false;
 inline constexpr auto enable_sonar = false;
 inline constexpr auto enable_indicators = false;
 inline constexpr auto survival_search_depth = 6;
@@ -41,6 +42,7 @@ inline constexpr auto score_future_pearl_step = 40;
 inline constexpr auto score_enemy_head_risk = -120000;
 inline constexpr auto score_enemy_head_late_risk = -60000;
 inline constexpr auto score_possible_enemy_sprint = -30000;
+inline constexpr auto score_long_enemy_sprint = -1500;
 inline constexpr auto score_champion_risk_multiplier = 2;
 
 inline constexpr auto sonar_secret = 0xD6E8FEB86659FD93ULL;

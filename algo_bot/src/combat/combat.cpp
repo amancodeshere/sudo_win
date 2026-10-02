@@ -6,7 +6,7 @@
 
 namespace sudo_win {
 
-auto Combat::threats(unswbc::Controller const& controller, WorldModel const* world) const
+auto Combat::threats(unswbc::Controller const& controller, WorldModel const* world, bool long_sprints) const
     -> std::vector<ThreatAssessment> {
     auto const width = unswbc::game->width;
     auto const area = static_cast<std::size_t>(width * unswbc::game->height);
@@ -40,10 +40,10 @@ auto Combat::threats(unswbc::Controller const& controller, WorldModel const* wor
                 queue.push_back({*next, 1});
             }
         }
-        auto budget = 128;
+        auto budget = 192;
         for (std::size_t cursor = 0; cursor < queue.size() && budget > 0; ++cursor) {
             auto const node = queue[cursor];
-            if (node.steps >= 2) {
+            if (node.steps >= (long_sprints ? 5 : 2)) {
                 continue;
             }
             for (auto const direction : unswbc::Direction::get_direction_list()) {
@@ -78,7 +78,11 @@ auto Combat::threats(unswbc::Controller const& controller, WorldModel const* wor
                 if (assessment.level == ThreatLevel::none) {
                     assessment.level = ThreatLevel::possible_sprint;
                 }
-                assessment.score += config::score_possible_enemy_sprint;
+                // Longer attacks must fit the observed body's segment budget
+                // (or collect visible pearls). Keep them a small soft cost:
+                // treating all remote routes as certain attacks starves growth.
+                assessment.score += steps == 2 ? config::score_possible_enemy_sprint
+                                              : config::score_long_enemy_sprint / (steps - 2);
             }
         }
     }
