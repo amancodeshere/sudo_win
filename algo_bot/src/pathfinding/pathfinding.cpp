@@ -45,6 +45,50 @@ auto Pathfinding::remembered_target(unswbc::Controller const& controller,
         return static_cast<std::size_t>(p.y * world.width() + p.x);
     };
     distance[index(queue.front())] = 0;
+    // Claims use current visible allies and known legal routes, never stale
+    // remembered occupants or geometric distance through walls/portals.
+    auto ally_distance = std::vector<int>(area, -1);
+    for (auto const& tile : controller.get_tiles()) {
+        auto const* ally = tile.get_dragon();
+        if (ally == nullptr || !ally->is_head() || ally->get_team() != controller.get_team()
+            || ally->get_id() == controller.get_id()) {
+            continue;
+        }
+        auto observed_length = 0;
+        for (auto const& part_tile : controller.get_tiles()) {
+            auto const* part = part_tile.get_dragon();
+            observed_length += part != nullptr && part->get_id() == ally->get_id();
+        }
+        // Small helpers avoid races. A growing champion keeps its collection
+        // priority unless an ally is visibly longer, even in a partial view.
+        if (controller.get_length() > 3 && observed_length <= controller.get_length()) {
+            continue;
+        }
+        auto claimed = std::vector<int>(area, -1);
+        auto pending = std::vector<unswbc::Position>{ally->get_position()};
+        claimed[index(pending.front())] = 0;
+        for (std::size_t cursor = 0; cursor < pending.size() && cursor < 128U; ++cursor) {
+            auto const from = pending[cursor];
+            auto const steps = claimed[index(from)];
+            if (steps >= 6) {
+                continue;
+            }
+            for (auto const direction : unswbc::Direction::get_direction_list()) {
+                auto const next = world.transition(from, direction);
+                auto const* visible = next ? controller.get_tile(*next) : nullptr;
+                if (!next || claimed[index(*next)] >= 0 || visible == nullptr
+                    || visible->get_dragon() != nullptr) {
+                    continue;
+                }
+                auto const next_index = index(*next);
+                claimed[next_index] = steps + 1;
+                if (ally_distance[next_index] < 0 || steps + 1 < ally_distance[next_index]) {
+                    ally_distance[next_index] = steps + 1;
+                }
+                pending.push_back(*next);
+            }
+        }
+    }
     auto best = std::optional<TargetRoute>{};
     auto previous = std::optional<TargetRoute>{};
     for (std::size_t cursor = 0; cursor < queue.size() && cursor < config::routing_node_budget; ++cursor) {
@@ -67,6 +111,12 @@ auto Pathfinding::remembered_target(unswbc::Controller const& controller,
         if (steps > 0 && (pearl || spawning || frontier > 0)) {
             auto value = (pearl ? 24000 : spawning ? 8000 : frontier * 2400) / (steps + 1);
             if (cell.last_visited_round >= 0 && round - cell.last_visited_round < 8) {
+                value /= 4;
+            }
+            if ((pearl || spawning) && steps > 1 && ally_distance[current_index] >= 0
+                && ally_distance[current_index] < steps) {
+                // Keep the resource available as a fallback; favour a different
+                // collection route when an ally can reach it first.
                 value /= 4;
             }
             auto const candidate = TargetRoute{current, first[current_index], steps, value, pearl || spawning};

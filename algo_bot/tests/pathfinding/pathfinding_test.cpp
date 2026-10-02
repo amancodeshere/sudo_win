@@ -78,3 +78,51 @@ TEST_CASE("remembered routes retain targets and reject stale or blocked pearls")
         CHECK(replaced->target == unswbc::Position{7, 5});
     }
 }
+
+TEST_CASE("resource routes yield to closer visible allies only on legal paths") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    for (auto& tile : fixture.controller.vision.tiles) {
+        tile.pearl_time = -1;
+    }
+    fixture.tile({7, 5}).pearl = true;
+    fixture.tile({5, 7}).pearl = true;
+    fixture.tile({7, 4}).dragon_part = unswbc::DragonPart{
+        {7, 4}, 2, unswbc::Team::A, unswbc::Direction::SOUTH, true};
+    auto world = sudo_win::WorldModel{fixture.game};
+    auto const route = [&] {
+        world.update(fixture.controller, fixture.game);
+        return sudo_win::Pathfinding{}.remembered_target(fixture.controller, world, 0,
+                                                          unswbc::Position{7, 5});
+    };
+    SECTION("an ally's nearer pearl sends us to a separate resource") {
+        auto const chosen = route();
+        REQUIRE(chosen);
+        CHECK(chosen->target == unswbc::Position{5, 7});
+    }
+    SECTION("a longer snake keeps growth priority over a small helper") {
+        fixture.controller.length = 10;
+        auto const chosen = route();
+        REQUIRE(chosen);
+        CHECK(chosen->target == unswbc::Position{7, 5});
+    }
+    SECTION("walls prevent an apparent geometric claim") {
+        fixture.tile({7, 4}).get_edge(unswbc::Direction::SOUTH)
+            = unswbc::Edge{false, unswbc::EdgeType::KELP};
+        auto const chosen = route();
+        REQUIRE(chosen);
+        CHECK(chosen->target == unswbc::Position{7, 5});
+    }
+    SECTION("enemy heads do not receive friendly resource priority") {
+        fixture.tile({7, 4}).dragon_part->team = unswbc::Team::B;
+        auto const chosen = route();
+        REQUIRE(chosen);
+        CHECK(chosen->target == unswbc::Position{7, 5});
+    }
+    SECTION("old ally sightings do not keep a resource reserved") {
+        world.update(fixture.controller, fixture.game);
+        fixture.tile({7, 4}).dragon_part.reset();
+        auto const chosen = route();
+        REQUIRE(chosen);
+        CHECK(chosen->target == unswbc::Position{7, 5});
+    }
+}
