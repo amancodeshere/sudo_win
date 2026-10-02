@@ -164,6 +164,24 @@ TEST_CASE("early expansion protects the champion and requires separate resources
         world.update(fixture.controller, fixture.game);
         return sudo_win::SplittingPolicy{}.grow_population(fixture.controller, fixture.game, role, world);
     };
+    SECTION("near-term independent spawners can fund territorial expansion") {
+        fixture.tile({6,4}).pearl = false;
+        fixture.tile({6,4}).pearl_time = 8;
+        fixture.tile({2,4}).pearl = false;
+        fixture.tile({2,4}).pearl_time = 10;
+        fixture.tile({3,4}).pearl = false;
+        CHECK(candidate());
+        fixture.tile({2,4}).pearl_time = 30;
+        CHECK_FALSE(candidate());
+    }
+    SECTION("the map budget allows teams that already start above eight units") {
+        fixture.game.width = 20;
+        fixture.game.height = 100;
+        fixture.controller.unit_count = 9;
+        CHECK(candidate());
+        fixture.controller.unit_count = 21;
+        CHECK_FALSE(candidate());
+    }
     SECTION("a legal two-segment child has income and two escape routes") {
         auto const split = candidate();
         REQUIRE(split);

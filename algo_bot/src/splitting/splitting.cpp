@@ -15,17 +15,30 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
                                        Role role, WorldModel const& world) const
     -> std::optional<PlannedAction> {
     constexpr auto child_size = unswbc::Constants::MIN_SIZE;
+    auto const cap = config::enable_territorial_growth
+        ? std::min(controller.unit_limit, std::clamp(world.width() * world.height() / 96, 8, 32))
+        : config::population_unit_cap;
+    auto const early_investment = config::enable_territorial_growth && game.get_round_num() < 80
+        && controller.get_length() >= 8;
     if (controller.get_id() <= 1 || role == Role::queen || game.get_round_num() >= 280
-        || controller.get_unit_count() >= config::population_unit_cap
-        || controller.get_length() < 4 || controller.get_length() > 12
+        || controller.get_unit_count() >= cap
+        || controller.get_length() < 4 || (!config::enable_territorial_growth && controller.get_length() > 12)
         || !controller.can_split(child_size)
-        || (role == Role::champion && (controller.get_unit_count() > 1 || game.get_round_num() >= 80))) {
+        || (role == Role::champion && !early_investment
+            && (controller.get_unit_count() > 1 || game.get_round_num() >= 80))) {
         return std::nullopt;
     }
     auto const simulation = Simulation{};
     auto parent = simulation.initial_state(controller, &world);
     if (!parent.unranked_body.empty()
         || std::any_of(parent.body.begin(), parent.body.end(), [](auto p) { return p.x < 0 || p.y < 0; })) {
+        return std::nullopt;
+    }
+    auto const reservations = world.queen_reservations(controller, game.get_round_num());
+    if (std::any_of(parent.body.begin(), parent.body.end(), [&](auto p) {
+        return reservations[static_cast<std::size_t>(p.y * world.width() + p.x)] >= 16000;
+    })) {
+        // Splitting freezes the parent's body instead of clearing an escape.
         return std::nullopt;
     }
     auto child = SimulationState{};
@@ -64,10 +77,10 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
         auto distances = std::vector<int>(area, -1);
         auto queue = std::vector<Node>{{state,0}};
         distances[index(state.body.front())] = 0;
-        auto budget = 128;
+        auto budget = config::enable_territorial_growth ? 256 : 128;
         for (std::size_t cursor = 0; cursor < queue.size() && budget > 0; ++cursor) {
             auto const node = queue[cursor];
-            if (node.distance >= 3) { continue; }
+            if (node.distance >= (config::enable_territorial_growth ? 4 : 3)) { continue; }
             for (auto const direction : unswbc::Direction::get_direction_list()) {
                 if (budget-- <= 0) { break; }
                 if (auto const next = simulation.advance(controller,node.state,direction,false,&world)) {
@@ -104,7 +117,9 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
         }
     }
     for (auto const& tile : controller.get_tiles()) {
-        if (!tile.has_pearl() || tile.get_dragon() != nullptr) {
+        auto const future_income = config::enable_territorial_growth && tile.get_pearl_time() > 0
+            && tile.get_pearl_time() <= 12;
+        if ((!tile.has_pearl() && !future_income) || tile.get_dragon() != nullptr) {
             continue;
         }
         auto const p = tile.get_position();
