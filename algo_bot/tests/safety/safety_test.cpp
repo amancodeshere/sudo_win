@@ -5,6 +5,8 @@
 #include "../engine_fixture.h"
 
 #include <catch2/catch.hpp>
+#include "sudo_win/planner/simulation.h"
+#include <fstream>
 
 TEST_CASE("standard movement safety") {
     auto fixture = sudo_win::test::EngineFixture{};
@@ -280,4 +282,72 @@ TEST_CASE("a fresh productive portal survey cannot displace a viable queen farm"
     auto const action = planner.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::queen);
     REQUIRE(action.steps.size() == 1);
     CHECK(action.steps.front() == unswbc::Direction::NORTH);
+}
+
+TEST_CASE("live portal neck traps retain unseen body occupancy across movement and splitting") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.game = unswbc::Game{32,16,64};
+    auto identity = 3;
+    SECTION("helper three splits inside the trapped landing pocket") {}
+    SECTION("helper twelve enters with food and keeps its unseen neck") { identity = 12; }
+    fixture.controller.head.dragon_id = identity;
+    auto input = std::ifstream{std::string{SUDO_WIN_TEST_SOURCE_DIR} + "/replays/portals_"
+        + std::to_string(identity) + "_neck_trap.txt"};
+    REQUIRE(input.good());
+    auto world = sudo_win::WorldModel{fixture.game};
+    for (auto turn = 0; turn < 3; ++turn) {
+        auto* previous = std::cin.rdbuf(input.rdbuf());
+        auto updated = false;
+        try { updated = unswbc::update(fixture.controller,fixture.game); }
+        catch (...) { std::cin.rdbuf(previous); throw; }
+        std::cin.rdbuf(previous);
+        REQUIRE(updated);
+        world.update(fixture.controller,fixture.game);
+        if (turn < 2) {
+            auto action = sudo_win::PlannedAction{};
+            if (identity == 3 && turn == 1) { action.kind = sudo_win::ActionKind::split; action.split_size = 2; }
+            else { action.steps = {identity == 12 && turn == 0 ? unswbc::Direction::NORTH : unswbc::Direction::WEST}; }
+            world.remember_action(fixture.controller,fixture.game,action);
+        }
+    }
+    auto const exit = world.transition(fixture.controller.get_position(),unswbc::Direction::EAST);
+    REQUIRE(exit);
+    auto const state = sudo_win::Simulation{}.initial_state(fixture.controller,&world);
+    REQUIRE(state.body.size() >= 2);
+    CHECK(state.body[1] == *exit);
+    CHECK(fixture.controller.get_tile(*exit) == nullptr);
+    CHECK_FALSE(sudo_win::Simulation{}.advance(fixture.controller,state,unswbc::Direction::EAST,false,&world));
+    CHECK_FALSE(sudo_win::Safety{}.helper_portal_probe(fixture.controller,world,fixture.game.get_round_num()));
+    CHECK_FALSE(sudo_win::Safety{}.remembered_portal_escape(fixture.controller,world,fixture.game.get_round_num()));
+}
+
+TEST_CASE("a helper must not cover all queen exits with its resulting body") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 4;
+    fixture.controller.length = 3;
+    fixture.controller.unit_count = 2;
+    for (auto& tile : fixture.controller.vision.tiles) { tile.pearl_time = -1; }
+    fixture.tile({5,4}).dragon_part = unswbc::DragonPart{{5,4},4,unswbc::Team::A,unswbc::Direction::SOUTH,false};
+    fixture.tile({4,4}).dragon_part = unswbc::DragonPart{{4,4},4,unswbc::Team::A,unswbc::Direction::EAST,false};
+    fixture.tile({6,4}).dragon_part = unswbc::DragonPart{{6,4},0,unswbc::Team::A,unswbc::Direction::NORTH,true};
+    for (auto const d : {unswbc::Direction::NORTH,unswbc::Direction::EAST}) {
+        fixture.tile({6,4}).get_edge(d) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    }
+    fixture.tile({6,5}).pearl = true;
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto const initial = sudo_win::Simulation{}.initial_state(fixture.controller,&world);
+    auto const east = sudo_win::Simulation{}.advance(fixture.controller,initial,unswbc::Direction::EAST,false,&world);
+    auto const west = sudo_win::Simulation{}.advance(fixture.controller,initial,unswbc::Direction::WEST,false,&world);
+    REQUIRE(east);
+    REQUIRE(west);
+    CHECK(sudo_win::Safety{}.blocks_queen_escape(fixture.controller,*east,world));
+    CHECK_FALSE(sudo_win::Safety{}.blocks_queen_escape(fixture.controller,*west,world));
+    auto const action = sudo_win::Planner{false}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::collector);
+    REQUIRE(action.steps.size() == 1);
+    CHECK(action.steps.front() != unswbc::Direction::EAST);
+    // Another ally's obstruction is not something this helper can clear.
+    fixture.tile({5,4}).dragon_part->dragon_id = 8;
+    fixture.tile({6,5}).dragon_part = unswbc::DragonPart{{6,5},8,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    CHECK_FALSE(sudo_win::Safety{}.blocks_queen_escape(fixture.controller,*east,world));
 }

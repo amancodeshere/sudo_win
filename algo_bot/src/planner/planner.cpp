@@ -50,6 +50,8 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     auto const simulation = Simulation{};
     auto const threats = combat_.threats(controller, &world);
     auto const initial = simulation.initial_state(controller, &world);
+    auto const initial_queen_trap = config::enable_queen_exit_viability
+        && safety_.blocks_queen_escape(controller,initial,world);
     auto const reservations = world.queen_reservations(controller, game.get_round_num());
     // Unranked visible parts still block the queen. Extra free movement sheds
     // tail segments without pretending to know their order or clearing occupancy.
@@ -65,6 +67,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     auto best_survival = -1;
     auto best_safety_class = -1;
     auto best_sealed_entry = false;
+    auto best_queen_trap = true;
     if (game.get_round_num() - target_round_ > config::target_max_age) {
         target_.reset();
     }
@@ -195,17 +198,19 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             && mobility.area < static_cast<int>(next.body.size())
             && simulation.sealed_entry_pocket(next, world);
         auto const safety_class = survival == 0 ? 0 : (threatened || sealed_pocket) ? 1 : uncertain_attack ? 2 : 3;
+        auto const queen_trap = config::enable_queen_exit_viability
+            && safety_.blocks_queen_escape(controller,next,world);
         auto const improves_safety = safety_class > best_safety_class
             || (safety_class == best_safety_class && survival > best_survival && best_sealed_entry);
         auto const releases_queen = config::enable_queen_release && controller.get_id() > 1
             && controller.get_length() <= 4 && controller.get_unit_count() > 1 && safety_class == 3
             && survival == config::survival_search_depth
-            && std::any_of(initial.body.begin(), initial.body.end(), [&](auto const p) {
+            && ((initial_queen_trap && !queen_trap) || std::any_of(initial.body.begin(), initial.body.end(), [&](auto const p) {
                 return p.x >= 0 && p.y >= 0
                     && reservations[static_cast<std::size_t>(p.y * world.width() + p.x)] >= 120000
                     && std::find(next.body.begin(), next.body.end(), p) == next.body.end()
                     && std::find(next.unranked_body.begin(), next.unranked_body.end(), p) == next.unranked_body.end();
-            });
+            }));
         if (sprint && length_gain < 0 && !improves_safety && !releases_queen) {
             return;
         }
@@ -236,11 +241,13 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         }
 
         if (safety_class > best_safety_class
-            || (safety_class == best_safety_class && (survival > best_survival
-                || (survival == best_survival && candidate.total_score() > best.score)))) {
+            || (safety_class == best_safety_class && ((!queen_trap && best_queen_trap)
+                || (queen_trap == best_queen_trap && (survival > best_survival
+                    || (survival == best_survival && candidate.total_score() > best.score)))))) {
             best_safety_class = safety_class;
             best_survival = survival;
             best_sealed_entry = entry_trap;
+            best_queen_trap = queen_trap;
             best.kind = sprint ? ActionKind::sprint : ActionKind::move;
             best.steps = steps;
             best.score = candidate.total_score();
@@ -320,6 +327,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     auto const scout_wait = config::enable_portal_routing && role == Role::scout ? 3 : 8;
     if (config::enable_helper_portals && role != Role::queen && (role != Role::champion || (config::enable_scoring_coordination && controller.get_length() <= 4))
         && game.get_round_num() - last_portal_round_ >= 12
+        && (!initial_queen_trap || best_queen_trap)
         && (best_survival <= 1 || ((!route || !route->pearl || (config::enable_portal_income && route->value < 8000))
             && game.get_round_num() - resource_progress_round_ >= scout_wait
             && (!config::enable_portal_routing || role != Role::scout
@@ -334,7 +342,8 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     }
 
     auto rescue = std::optional<PlannedAction>{};
-    if (best_survival <= 1) {
+    if (best_survival <= 1 && (role == Role::queen || best.steps.empty()
+        || !initial_queen_trap || best_queen_trap)) {
         rescue = splitting_.rescue(controller, world, best.steps.empty(), role == Role::queen);
         if (rescue && rescue->score > 0) {
             return finish(*rescue);

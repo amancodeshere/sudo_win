@@ -10,6 +10,7 @@ namespace sudo_win {
 
 enum class SafetyReason { safe, wall, occupied, unknown_tile, unknown_portal };
 class WorldModel;
+struct SimulationState;
 
 class Safety {
 public:
@@ -22,6 +23,8 @@ public:
     [[nodiscard]] auto safe_standard_moves(unswbc::Controller const& controller,
                                            WorldModel const* world = nullptr) const
         -> std::vector<unswbc::Direction>;
+    [[nodiscard]] auto blocks_queen_escape(unswbc::Controller const& controller,
+                                           SimulationState const& after, WorldModel const& world) const -> bool;
     [[nodiscard]] auto least_bad_fallback(unswbc::Controller const& controller) const -> unswbc::Direction;
     // An uncertain escape, never certified as an ordinary safe move.
     [[nodiscard]] auto remembered_portal_escape(unswbc::Controller const& controller,

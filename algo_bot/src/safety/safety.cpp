@@ -202,6 +202,30 @@ auto Safety::surveyed_portal_route(unswbc::Controller const& controller,
     return std::nullopt;
 }
 
+auto Safety::blocks_queen_escape(unswbc::Controller const& controller,
+                                  SimulationState const& after, WorldModel const& world) const -> bool {
+    if (controller.get_id() <= 1) { return false; }
+    for (auto const& tile : controller.get_tiles()) {
+        auto const* queen = tile.get_dragon();
+        if (!queen || !queen->is_head() || queen->get_id() > 1 || queen->get_team() != controller.get_team()) { continue; }
+        auto releasable = 0;
+        auto remaining = 0;
+        for (auto const direction : unswbc::Direction::get_direction_list()) {
+            auto const target = world.transition(tile.get_position(),direction);
+            auto const* next = target ? controller.get_tile(*target) : nullptr;
+            if (!next) { continue; } // An unseen landing is not a certified escape.
+            auto const* part = next->get_dragon();
+            if (part && part->get_id() != controller.get_id()) { continue; }
+            ++releasable;
+            remaining += std::find(after.body.begin(),after.body.end(),*target) == after.body.end()
+                && std::find(after.unranked_body.begin(),after.unranked_body.end(),*target) == after.unranked_body.end();
+        }
+        // Do not blame this unit for a queen trapped exclusively by others.
+        if (releasable > 0 && remaining == 0) { return true; }
+    }
+    return false;
+}
+
 auto Safety::least_bad_fallback(unswbc::Controller const& controller) const -> unswbc::Direction {
     auto best = controller.get_dir();
     auto best_rank = 7;
