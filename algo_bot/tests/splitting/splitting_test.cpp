@@ -130,3 +130,92 @@ TEST_CASE("trapped snakes reverse their tails rather than collide") {
         CHECK_FALSE(sudo_win::SplittingPolicy{}.rescue(fixture.controller,world,true));
     }
 }
+
+TEST_CASE("early expansion protects the champion and requires separate resources") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    auto const body = std::vector<unswbc::Position>{{5,5},{5,6},{4,6},{3,6},{2,6},{2,5}};
+    fixture.controller.length = static_cast<int>(body.size());
+    for (std::size_t i = 0; i < body.size(); ++i) {
+        auto heading = unswbc::Direction{unswbc::Direction::NORTH};
+        if (i > 0) {
+            for (auto const direction : unswbc::Direction::get_direction_list()) {
+                if (body[i].add_dir(direction) == body[i - 1]) {
+                    heading = direction;
+                    break;
+                }
+            }
+        }
+        fixture.tile(body[i]).dragon_part = unswbc::DragonPart{body[i], 0, unswbc::Team::A, heading, i == 0};
+    }
+    fixture.tile({6,4}).pearl = true;
+    fixture.tile({2,4}).pearl = true;
+    fixture.tile({3,4}).pearl = true;
+    auto const candidate = [&](sudo_win::Role role = sudo_win::Role::collector) {
+        auto world = sudo_win::WorldModel{fixture.game};
+        world.update(fixture.controller, fixture.game);
+        return sudo_win::SplittingPolicy{}.grow_population(fixture.controller, fixture.game, role, world);
+    };
+    SECTION("a legal two-segment child has income and two escape routes") {
+        auto const split = candidate();
+        REQUIRE(split);
+        CHECK(split->split_size == 2);
+        CHECK(fixture.controller.can_split(split->split_size));
+        auto world = sudo_win::WorldModel{fixture.game};
+        world.update(fixture.controller, fixture.game);
+        auto const action = sudo_win::Planner{false, false, true}.choose_action(
+            fixture.controller, fixture.game, world, sudo_win::Role::collector);
+        CHECK(action.kind == sudo_win::ActionKind::split);
+    }
+    SECTION("existing champions keep their length") {
+        fixture.controller.unit_count = 2;
+        CHECK_FALSE(candidate(sudo_win::Role::champion));
+    }
+    SECTION("a solitary early champion can start a second collector") {
+        CHECK(candidate(sudo_win::Role::champion));
+    }
+    SECTION("scarcity and overcrowding prevent expansion") {
+        fixture.tile({2,4}).pearl = false;
+        fixture.tile({3,4}).pearl = false;
+        CHECK_FALSE(candidate());
+        fixture.tile({2,4}).pearl = true;
+        fixture.controller.unit_count = 24;
+        CHECK_FALSE(candidate());
+    }
+    SECTION("unit limits and late rounds prevent invalid or late expansion") {
+        fixture.controller.unit_count = fixture.controller.unit_limit;
+        CHECK_FALSE(candidate());
+        fixture.controller.unit_count = 1;
+        fixture.game.round_num = 280;
+        CHECK_FALSE(candidate());
+    }
+    SECTION("enemy attacks on a stationary parent prevent splitting") {
+        fixture.tile({6,5}).dragon_part = unswbc::DragonPart{
+            {6,5}, 3, unswbc::Team::B, unswbc::Direction::WEST, true};
+        CHECK_FALSE(candidate());
+    }
+    SECTION("enemy attacks on the reversed tail prevent splitting") {
+        fixture.tile({2,3}).dragon_part = unswbc::DragonPart{
+            {2,3}, 3, unswbc::Team::B, unswbc::Direction::SOUTH, true};
+        CHECK_FALSE(candidate());
+    }
+    SECTION("incomplete bodies cannot certify expansion") {
+        fixture.tile({4,6}).dragon_part.reset();
+        CHECK_FALSE(candidate());
+    }
+    SECTION("four segments can form two legal minimal collectors") {
+        for (auto& tile : fixture.controller.vision.tiles) {
+            tile.dragon_part.reset();
+        }
+        fixture.controller.length = 4;
+        auto const short_body = std::vector<unswbc::Position>{{5,5},{5,6},{4,6},{4,5}};
+        auto const headings = std::vector<unswbc::Direction>{unswbc::Direction::NORTH,
+            unswbc::Direction::NORTH, unswbc::Direction::EAST, unswbc::Direction::SOUTH};
+        for (std::size_t i = 0; i < short_body.size(); ++i) {
+            fixture.tile(short_body[i]).dragon_part = unswbc::DragonPart{
+                short_body[i], 0, unswbc::Team::A, headings[i], i == 0};
+        }
+        auto const split = candidate();
+        REQUIRE(split);
+        CHECK(fixture.controller.can_split(split->split_size));
+    }
+}

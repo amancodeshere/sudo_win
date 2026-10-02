@@ -10,6 +10,91 @@
 
 namespace sudo_win {
 
+auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
+                                       unswbc::Game const& game,
+                                       Role role, WorldModel const& world) const
+    -> std::optional<PlannedAction> {
+    constexpr auto child_size = unswbc::Constants::MIN_SIZE;
+    if (game.get_round_num() >= 280 || controller.get_unit_count() >= 24
+        || controller.get_length() < 4 || controller.get_length() > 12
+        || !controller.can_split(child_size)
+        || (role == Role::champion && (controller.get_unit_count() > 1 || game.get_round_num() >= 80))) {
+        return std::nullopt;
+    }
+    auto const simulation = Simulation{};
+    auto parent = simulation.initial_state(controller, &world);
+    if (!parent.unranked_body.empty()
+        || std::any_of(parent.body.begin(), parent.body.end(), [](auto p) { return p.x < 0 || p.y < 0; })) {
+        return std::nullopt;
+    }
+    auto child = SimulationState{};
+    child.body.assign(parent.body.rbegin(), parent.body.rbegin() + child_size);
+    parent.body.resize(parent.body.size() - static_cast<std::size_t>(child_size));
+    parent.unranked_body = child.body;
+    child.unranked_body = parent.body;
+    auto const viable = [&](SimulationState const& state) {
+        auto escapes = 0;
+        for (auto const direction : unswbc::Direction::get_direction_list()) {
+            if (auto const next = simulation.advance(controller, state, direction, false, &world)) {
+                auto budget = 128;
+                if (simulation.survival_depth(controller, *next, 6, budget, &world) == 6) {
+                    ++escapes;
+                }
+            }
+        }
+        return escapes >= 2;
+    };
+    if (!viable(parent) || !viable(child)) {
+        return std::nullopt;
+    }
+    auto const parent_tiles = simulation.reachable_positions(controller, parent, &world);
+    auto const child_tiles = simulation.reachable_positions(controller, child, &world);
+    if (parent_tiles.size() < parent.body.size() + 8 || child_tiles.size() < child.body.size() + 8) {
+        return std::nullopt;
+    }
+    auto parent_resources = 0;
+    auto child_resources = 0;
+    for (auto const& tile : controller.get_tiles()) {
+        if (!tile.has_pearl() || tile.get_dragon() != nullptr) {
+            continue;
+        }
+        auto const p = tile.get_position();
+        auto const parent_distance = geometry::toroidal_manhattan(parent.body.front(), p, world.width(), world.height());
+        auto const child_distance = geometry::toroidal_manhattan(child.body.front(), p, world.width(), world.height());
+        parent_resources += parent_distance < child_distance && parent_distance <= 3
+            && std::find(parent_tiles.begin(), parent_tiles.end(), p) != parent_tiles.end();
+        child_resources += child_distance < parent_distance && child_distance <= 3
+            && std::find(child_tiles.begin(), child_tiles.end(), p) != child_tiles.end();
+    }
+    if (parent_resources < 1 || child_resources < 1) {
+        return std::nullopt;
+    }
+    auto view = controller;
+    auto* parent_head = view.get_tile(parent.body.front());
+    auto* child_head = view.get_tile(child.body.front());
+    if (parent_head == nullptr || child_head == nullptr) {
+        return std::nullopt;
+    }
+    parent_head->dragon_part.reset();
+    child_head->dragon_part.reset();
+    auto const threats = Combat{}.threats(view, &world);
+    auto const threat_at = [&](unswbc::Position p) -> ThreatAssessment const& {
+        return threats[static_cast<std::size_t>(p.y * world.width() + p.x)];
+    };
+    if (threat_at(parent.body.front()).level != ThreatLevel::none
+        || threat_at(child.body.front()).level != ThreatLevel::none) {
+        return std::nullopt;
+    }
+    auto action = PlannedAction{};
+    action.kind = ActionKind::split;
+    action.split_size = child_size;
+    action.score = static_cast<int>(parent_tiles.size()) * config::score_reachable_tile
+        + (std::min(child_resources, 3) + 1) * 40000
+        - child_size * config::score_split_segment_cost;
+    action.reason = "early expansion with independent pearl opportunities";
+    return action;
+}
+
 auto SplittingPolicy::rescue(unswbc::Controller const& controller,
                              WorldModel const& world,
                              bool certainly_trapped) const -> std::optional<PlannedAction> {

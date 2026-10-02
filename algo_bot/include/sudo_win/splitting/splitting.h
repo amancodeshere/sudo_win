@@ -12,6 +12,10 @@ class WorldModel;
 
 class SplittingPolicy {
 public:
+    [[nodiscard]] auto grow_population(unswbc::Controller const& controller,
+                                       unswbc::Game const& game,
+                                       Role role, WorldModel const& world) const
+        -> std::optional<PlannedAction>;
     [[nodiscard]] auto rescue(unswbc::Controller const& controller,
                               WorldModel const& world,
                               bool certainly_trapped) const -> std::optional<PlannedAction>;

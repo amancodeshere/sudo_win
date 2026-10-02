@@ -5,6 +5,7 @@ namespace sudo_win::config {
 
 inline constexpr auto enable_sprinting = true;
 inline constexpr auto enable_splitting = false;
+inline constexpr auto enable_growth_splitting = false;
 inline constexpr auto enable_long_sprint_threats = false;
 inline constexpr auto enable_sonar = false;
 inline constexpr auto enable_indicators = false;

@@ -154,6 +154,13 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         }
     }
 
+    if (growth_splitting_) {
+        if (auto const expansion = splitting_.grow_population(controller, game, role, world);
+            expansion && expansion->score > best.score) {
+            return *expansion;
+        }
+    }
+
     if (auto const split = splitting_.consider(controller, game, role, largest_reachable_area, &world, splitting_enabled_);
         split.has_value() && split->score > best.score) {
         return *split;

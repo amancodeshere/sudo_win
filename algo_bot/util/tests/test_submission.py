@@ -18,8 +18,13 @@ class SubmissionTests(unittest.TestCase):
             root = pathlib.Path(work)
             stable = submission.prepare(BOT, root / "stable", "stable")
             experimental = submission.prepare(BOT, root / "experimental", "experimental")
+            growth = submission.prepare(BOT, root / "growth", "growth")
             self.assertEqual(stable["effective_flags"]["enable_splitting"], "false")
             self.assertEqual(experimental["effective_flags"]["enable_splitting"], "true")
+            self.assertEqual(stable["effective_flags"]["enable_growth_splitting"], "false")
+            self.assertEqual(experimental["effective_flags"]["enable_growth_splitting"], "true")
+            self.assertEqual(growth["effective_flags"]["enable_splitting"], "false")
+            self.assertEqual(growth["effective_flags"]["enable_growth_splitting"], "true")
             with zipfile.ZipFile(stable["archive"]) as archive:
                 self.assertIn("src/main.cpp", archive.namelist())
                 self.assertIn("src/planner/simulation.cpp", archive.namelist())
