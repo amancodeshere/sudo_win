@@ -29,15 +29,18 @@ auto Combat::threats(unswbc::Controller const& controller, WorldModel const* wor
         // Partial enemy bodies give a lower bound, not the real sprint budget.
         // Price a possible second step without treating partial length as exact.
         opponent.length = std::max(3, observed_length);
+        auto const unknown_extra = opponent.length - std::max(unswbc::Constants::MIN_SIZE, observed_length);
         auto const simulation = Simulation{};
         auto const initial = simulation.initial_state(opponent, world);
         auto distances = std::vector<int>(area, 0);
-        struct SearchNode { SimulationState state; int steps; };
+        auto affordable = std::vector<int>(area, 0);
+        struct SearchNode { SimulationState state; int steps; bool funded; };
         auto queue = std::vector<SearchNode>{};
         for (auto const direction : unswbc::Direction::get_direction_list()) {
             if (auto const next = simulation.advance(opponent, initial, direction, false, world)) {
                 distances[index(next->body.front())] = 1;
-                queue.push_back({*next, 1});
+                affordable[index(next->body.front())] = 1;
+                queue.push_back({*next, 1, true});
             }
         }
         auto budget = 192;
@@ -59,7 +62,12 @@ auto Combat::threats(unswbc::Controller const& controller, WorldModel const* wor
                 if (distance == 0) {
                     distance = node.steps + 1;
                 }
-                queue.push_back({*next, node.steps + 1});
+                auto const funded = node.funded && static_cast<int>(node.state.body.size()) - unknown_extra
+                    > unswbc::Constants::MIN_SIZE;
+                if (funded && affordable[destination] == 0) {
+                    affordable[destination] = node.steps + 1;
+                }
+                queue.push_back({*next, node.steps + 1, funded});
             }
         }
         for (std::size_t i = 0; i < area; ++i) {
@@ -68,6 +76,10 @@ auto Combat::threats(unswbc::Controller const& controller, WorldModel const* wor
                 continue;
             }
             auto& assessment = result[i];
+            if (affordable[i] > 0 && (assessment.affordable_steps == 0
+                || affordable[i] < assessment.affordable_steps)) {
+                assessment.affordable_steps = affordable[i];
+            }
             if (steps == 1) {
                 assessment.level = ThreatLevel::direct;
                 assessment.score += config::score_enemy_head_risk;

@@ -13,6 +13,9 @@ enum class ThreatLevel { none, possible_sprint, direct };
 struct ThreatAssessment {
     ThreatLevel level = ThreatLevel::none;
     int score = 0;
+    // A visible length lower bound (including pearl income) funds this route.
+    // This certifies capability, not that the enemy will choose the attack.
+    int affordable_steps = 0;
 };
 
 class Combat {

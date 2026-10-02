@@ -135,3 +135,20 @@ TEST_CASE("planner prefers an escape over a pearl in a closed pocket") {
     REQUIRE(action.steps.size() == 1);
     CHECK(action.steps.front() != unswbc::Direction::EAST);
 }
+
+TEST_CASE("a funded two step attack outweighs an adjacent pearl") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.tile({6,5}).pearl = true;
+    fixture.tile({8,5}).dragon_part = unswbc::DragonPart{
+        {8,5},4,unswbc::Team::B,unswbc::Direction::WEST,true};
+    fixture.tile({8,6}).dragon_part = unswbc::DragonPart{
+        {8,6},4,unswbc::Team::B,unswbc::Direction::NORTH,false};
+    fixture.tile({8,7}).dragon_part = unswbc::DragonPart{
+        {8,7},4,unswbc::Team::B,unswbc::Direction::NORTH,false};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller, fixture.game);
+    auto const action = sudo_win::Planner{false, false, false, true}.choose_action(fixture.controller, fixture.game,
+                                                             world, sudo_win::Role::champion);
+    REQUIRE(action.steps.size() == 1);
+    CHECK(action.steps.front() != unswbc::Direction::EAST);
+}

@@ -98,3 +98,25 @@ TEST_CASE("long sprint threats respect segment costs and visible pearl income") 
         CHECK(map()[28].level == sudo_win::ThreatLevel::none);
     }
 }
+
+TEST_CASE("sprint capability separates observed funding from partial enemy uncertainty") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.tile({7,5}).dragon_part = unswbc::DragonPart{
+        {7,5},4,unswbc::Team::B,unswbc::Direction::WEST,true};
+    auto const threat = [&] { return sudo_win::Combat{}.threats(fixture.controller)[55]; };
+    SECTION("a head alone does not prove the second step can be paid") {
+        CHECK(threat().level == sudo_win::ThreatLevel::possible_sprint);
+        CHECK(threat().affordable_steps == 0);
+    }
+    SECTION("a visible pearl funds a minimum length enemy's second step") {
+        fixture.tile({6,5}).pearl = true;
+        CHECK(threat().affordable_steps == 2);
+    }
+    SECTION("three visible body parts fund an attack without pearls") {
+        fixture.tile({8,5}).dragon_part = unswbc::DragonPart{
+            {8,5},4,unswbc::Team::B,unswbc::Direction::WEST,false};
+        fixture.tile({8,6}).dragon_part = unswbc::DragonPart{
+            {8,6},4,unswbc::Team::B,unswbc::Direction::NORTH,false};
+        CHECK(threat().affordable_steps == 2);
+    }
+}

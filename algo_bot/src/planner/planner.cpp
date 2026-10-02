@@ -74,7 +74,8 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         candidate.exploration_score += world.unseen_neighbour_count(destination) * config::score_frontier;
         auto const& threat = threats[static_cast<std::size_t>(destination.y * world.width() + destination.x)];
         candidate.combat_score = threat.score * (role == Role::champion ? config::score_champion_risk_multiplier : 1);
-        auto const threatened = threat.level == ThreatLevel::direct;
+        auto const threatened = threat.level == ThreatLevel::direct
+            || (funded_sprint_priority_ && threat.affordable_steps > 0 && threat.affordable_steps <= 2);
         auto const sealed_pocket = config::enable_pocket_priority && !mobility.open_frontier
             && mobility.area < static_cast<int>(next.body.size())
             && simulation.sealed_entry_pocket(next, world);

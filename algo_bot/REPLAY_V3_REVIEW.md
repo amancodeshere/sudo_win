@@ -102,3 +102,14 @@ set +a
 python3 algo_bot/util/download_replays.py
 python3 algo_bot/util/analyze_replays.py --submission 14465 --output build/live-v3-audit
 ```
+
+## First controlled trial
+
+Funded two-step attacks now carry a separate capability estimate. Visible
+segments and intermediate pearl income fund the path; missing body parts do
+not prove an extra sprint can be paid. Turning that estimate into hard movement
+priority lost **7–13** against the uploaded source on all ten competition maps,
+seed 201, both colours (`build/validation/funded-evasion-native20`). This was
+unmetered diagnostic play with no engine/protocol failures. Broad priority is
+therefore disabled by default (`enable_funded_sprint_priority = false`) and
+available only as an experimental policy. It is not a promoted improvement.
