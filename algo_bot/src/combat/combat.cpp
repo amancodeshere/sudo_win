@@ -55,7 +55,7 @@ auto Combat::favourable_trade(unswbc::Controller const& controller,
                 if (!best || score > best->score) {
                     best = PlannedAction{};
                     best->kind = steps.size() > 1 ? ActionKind::sprint : ActionKind::move;
-                    best->steps = steps;
+                    best->steps = std::move(steps);
                     best->score = score;
                     best->reason = "small helper trades for visibly larger enemy head";
                 }
