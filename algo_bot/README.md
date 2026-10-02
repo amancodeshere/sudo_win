@@ -148,10 +148,19 @@ are applied to the copy, leaving source configuration unchanged:
 
 - `stable`: live free sprints, fixed queen protection, funded turn-order defense,
   bounded helper expansion, helper portal exploration, team sonar reports and
-  small-helper attacks against a currently visible enemy queen;
+  small-helper attacks against a currently visible enemy queen. Leader-driven
+  upgrades add queen escape reservations, map-sized population budgets, protected
+  countdown farms, an independently elected helper champion, portal destination
+  surveys, distributed interception and paid-step economics. Helpers may spend
+  growth to release a visibly trapped queen only with a fully validated safe route;
 - `no-sprint`: stable strategy with sprint generation disabled for ablations;
 - `no-growth`, `no-sonar`, `no-helper-portals`, `no-hunting`: disable exactly
   the named feature; all other stable settings remain identical;
+- `no-corridors`, `no-territory`, `no-farms`, `no-portal-routes`,
+  `no-economics`, `no-interception`, `no-tail-clearance`, `no-queen-release`:
+  single-feature ablations for the leader-driven upgrades;
+- `no-champion-retention`: retain the eight-segment helper threshold throughout
+  the match rather than protecting four-segment scorers after round 80;
 - `growth`: retained alias for the stable strategy;
 - `combat`: adds small-helper trades against visibly larger nonqueen heads;
 - `experimental`: enables investment/expansion splits, longer sprint forecasts,
@@ -246,3 +255,27 @@ trial decisions and the latest candidate. [STRATEGY_UPDATES.md](STRATEGY_UPDATES
 retains the previous review and live leader benchmark instructions.
 See `VALIDATION.md` for measured results and `IMPLEMENTATION_GUIDE.md` for the
 remaining coordination, tactical search, and endgame roadmap.
+
+## Leader-driven upgrade evidence
+
+The validated candidate is `build/submission-competition-v6-final` (and its ZIP).
+`LEADER_V6_VALIDATION.md` records exact-source tests, CPU results, matchup
+tradeoffs and unresolved map weaknesses. Earlier v6 packages are retained
+diagnostic variants. Packaging does not upload or activate a bot.
+
+`LEADER_UPGRADE_PROGRESS.md` records separate feature commits, source snapshots,
+focused regression checks and paired diagnostic results. `LEADER_GAMEPLAY_REVIEW.md`
+contains the observed leader replay comparison. Neither private opponent source
+nor public competition CPU measurements are available; internal wins do not
+establish a leaderboard ranking. The current downloaded map snapshot has 17 maps.
+
+After a benchmark completes, reconstruct additional strategy measurements:
+
+```bash
+/tmp/sudo-win-bench-env/bin/python algo_bot/util/strategy_metrics.py /tmp/sudo-win-results
+```
+
+This saves `strategy-metrics.json` with queen survival, population at rounds 25
+and 100, pearls, portal crossings, declared paid steps and early child deaths.
+Reconstructed final dragon counts, lengths and longest bodies must agree with
+the engine results before the report is accepted.
