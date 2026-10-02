@@ -136,3 +136,50 @@ TEST_CASE("simulation consumes a pearl only once on a looping route") {
     CHECK(state.pearls == 1);
     CHECK(state.body.size() == 3);
 }
+
+TEST_CASE("free sprint allowance uses action starting length and retains body until paid") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    auto simulation = sudo_win::Simulation{};
+    SECTION("a six segment dragon cannot cross its tail retained by a free second step") {
+        fixture.controller.length = 6;
+        auto state = simulation.initial_state(fixture.controller);
+        state.body = {{5,5},{5,6},{5,7},{5,8},{4,8},{4,7}};
+        fixture.tile({4,5}).pearl = true;
+        fixture.tile({4,6}).pearl = true;
+        auto west = simulation.advance(fixture.controller, state, unswbc::Direction::WEST);
+        REQUIRE(west);
+        auto south = simulation.advance(fixture.controller, *west, unswbc::Direction::SOUTH, true);
+        REQUIRE(south);
+        CHECK(south->body.size() == 8);
+        CHECK(south->body.back() == unswbc::Position{4,7});
+        CHECK_FALSE(simulation.advance(fixture.controller, *south, unswbc::Direction::SOUTH, true));
+    }
+    SECTION("pearl growth from four to five does not grant another free action step") {
+        fixture.controller.length = 4;
+        fixture.tile({6,5}).pearl = true;
+        auto first = simulation.advance(fixture.controller, simulation.initial_state(fixture.controller), unswbc::Direction::EAST);
+        REQUIRE(first);
+        CHECK(first->body.size() == 5);
+        auto second = simulation.advance(fixture.controller, *first, unswbc::Direction::EAST, true);
+        REQUIRE(second);
+        CHECK(second->body.size() == 4);
+        CHECK(second->action_start_length == 4);
+    }
+    SECTION("each future turn gets a new allowance from its current length") {
+        fixture.controller.length = 5;
+        auto state = simulation.initial_state(fixture.controller);
+        auto first = simulation.advance(fixture.controller, state, unswbc::Direction::EAST);
+        REQUIRE(first);
+        auto second = simulation.advance(fixture.controller, *first, unswbc::Direction::EAST, true);
+        REQUIRE(second);
+        CHECK(second->body.size() == 5);
+        auto third = simulation.advance(fixture.controller, *second, unswbc::Direction::SOUTH, true);
+        REQUIRE(third);
+        CHECK(third->body.size() == 4);
+        auto next_turn = simulation.advance(fixture.controller, *third, unswbc::Direction::SOUTH);
+        REQUIRE(next_turn);
+        CHECK(next_turn->action_steps == 1);
+        CHECK(next_turn->action_start_length == 4);
+        CHECK(sudo_win::Simulation::free_steps(17) == 5);
+    }
+}

@@ -15,6 +15,7 @@ namespace {
 
 auto Simulation::initial_state(unswbc::Controller const& controller, WorldModel const* world) const -> SimulationState {
     auto state = SimulationState{};
+    state.action_start_length = controller.get_length();
     state.body.resize(static_cast<std::size_t>(controller.get_length()), {-1, -1});
     state.body.front() = controller.get_position();
     if (world != nullptr) {
@@ -61,7 +62,10 @@ auto Simulation::initial_state(unswbc::Controller const& controller, WorldModel 
 auto Simulation::advance(unswbc::Controller const& controller,
                           SimulationState const& state,
                           unswbc::Direction direction,
-                          bool pay_sprint, WorldModel const* world) const -> std::optional<SimulationState> {
+                          bool continue_sprint, WorldModel const* world) const -> std::optional<SimulationState> {
+    auto const start_length = continue_sprint ? state.action_start_length : static_cast<int>(state.body.size());
+    auto const step_index = continue_sprint ? state.action_steps : 0;
+    auto const pay_sprint = step_index >= free_steps(start_length);
     if (state.body.empty() || (pay_sprint && state.body.size() <= unswbc::Constants::MIN_SIZE)) {
         return std::nullopt;
     }
@@ -89,6 +93,8 @@ auto Simulation::advance(unswbc::Controller const& controller,
         return std::nullopt;
     }
     auto next = state;
+    next.action_start_length = start_length;
+    next.action_steps = step_index + 1;
     next.body.insert(next.body.begin(), destination);
     if (tile->has_pearl() && !contains(state.eaten, destination)) {
         next.eaten.push_back(destination);

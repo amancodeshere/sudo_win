@@ -1,5 +1,14 @@
 # Submission validation
 
+## Current live-rule implementation
+
+Follow `NEXT_VERSION_PROGRESS.md` for the new candidate. Toolkit 1.2.5 is pinned,
+and `util/verify_rules.py` independently exercises queen scoring and frozen free
+sprint allowance against its bundled official engine before benchmarks run.
+Earlier sections below are historical results from toolkit 1.2.2; they do not
+establish performance under current queen and sprint rules.
+
+
 ## Version 4 conservative candidate — latest 2 October 2026 review
 
 The new package is **`build/submission-replay-v4-conservative.zip`**. It has not

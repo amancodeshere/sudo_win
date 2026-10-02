@@ -42,7 +42,7 @@ Install the official toolkit and refresh its generated helper when the protocol
 changes:
 
 ```bash
-uv tool install unswbc==1.2.2
+uv tool install unswbc==1.2.5
 unswbc update algo_bot
 unswbc maps
 ```
@@ -116,7 +116,7 @@ XDG_CACHE_HOME=/tmp/sudo-win-cache /tmp/sudo-win-bench-env/bin/python \
   --seeds 1 2 3 --both-colours --repeat 2 --output /tmp/sudo-win-results
 ```
 
-With no `--maps`, every map bundled with toolkit 1.2.2 is used. Narrow iteration
+With no `--maps`, every map bundled with toolkit 1.2.5 is used. Narrow iteration
 with `--maps maps/arena.map`. Runs use the judge sandbox by default and compile
 only manifest-selected files, excluding Catch2 and test entry points. Each
 output directory must be fresh. JSONL records include source/map fingerprints,

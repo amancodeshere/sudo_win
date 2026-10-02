@@ -131,8 +131,10 @@ def visible_action_check(stdin: str, stdout: str) -> dict:
     unranked = set(own) - set(ranked)
     ranked += [None] * (length - len(ranked))
     eaten = set()
+    free_steps = (length + 3) // 4
     for step, direction in enumerate(action.split()[1]):
-        if step and len(ranked) <= 2:
+        paid = step >= free_steps
+        if paid and len(ranked) <= 2:
             result.update(fatal_step=step + 1, fatal_reason="unaffordable sprint", avoidable_collision=bool(safe))
             break
         target, kind = destination(ranked[0], direction)
@@ -158,7 +160,7 @@ def visible_action_check(stdin: str, stdout: str) -> dict:
             eaten.add(target)
         else:
             ranked.pop()
-        if step:
+        if paid:
             ranked.pop()
     return result
 
@@ -263,13 +265,15 @@ def main() -> int:
     if args.repeat < 1 or any(not 0 <= seed < 2**64 for seed in args.seeds):
         parser.error("repeat must be positive and seeds must be unsigned 64-bit integers")
     version = importlib.metadata.version("unswbc")
-    if version != "1.2.2":
-        parser.error(f"requires unswbc==1.2.2, found {version}")
+    if version != "1.2.5":
+        parser.error(f"requires unswbc==1.2.5, found {version}")
     from unswbc import clangtool
     from unswbc.engine import EngineModule
     from unswbc.project import Project
     import unswbc
     maps = args.maps or sorted((pathlib.Path(unswbc.__file__).parent / "templates/maps").glob("*.map"))
+    if not maps or any(not path.is_file() for path in maps):
+        parser.error("each benchmark map must be an existing map file")
     args.output.mkdir(parents=True, exist_ok=True)
     if (args.output / "matches.jsonl").exists():
         parser.error("choose a fresh output directory to preserve earlier results")
@@ -282,6 +286,8 @@ def main() -> int:
         else:
             built = [clangtool.build(path) for path, _ in staged]
         engine = EngineModule()
+        from verify_rules import verify_engine_rules
+        rules = verify_engine_rules(engine)
         for index, map_path in enumerate(maps):
             for seed in args.seeds:
                 for reverse in range(2 if args.both_colours else 1):
@@ -291,7 +297,7 @@ def main() -> int:
                         replay = args.output / f"{index}-{map_path.stem}-{seed}-{reverse}-{repeat}.replay"
                         record = match(engine, map_path, built[::-1] if reverse else built,
                                        seed, not args.native, replay, candidate_team, args.allow_favourable_trades)
-                        record.update(toolkit=version, candidate_team=candidate_team,
+                        record.update(toolkit=version, live_rules=rules, candidate_team=candidate_team,
                                       benchmark_sha256=hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest(),
                                       candidate_sha256=staged[0][1], opponent_sha256=staged[1][1])
                         hashes.append(record["replay_sha256"])
@@ -302,8 +308,11 @@ def main() -> int:
                             "win" if record["winner"] == candidate_team else "loss")
                         if repeat == 0:
                             outcomes[outcome] += 1
-                        failed |= bool(record["errors"]) or any(d["reason"] == "A" for d in record["deaths"])
-                        failed |= any(p["max"] > args.max_points for p in record["points"].values())
+                        # An older opponent can contain known rule bugs. Record
+                        # both teams' failures, but promotion gates our candidate.
+                        failed |= any(e.get('team') == candidate_team for e in record['errors'])
+                        failed |= any(d['team'] == candidate_team and d['reason'] == 'A' for d in record['deaths'])
+                        failed |= record['points'][candidate_team]['max'] > args.max_points
                         print(f"{map_path.name} seed={seed} colour={candidate_team} {outcome} "
                               f"lengths={record['a_length']}:{record['b_length']} "
                               f"points={record['points'][candidate_team]['max']}", flush=True)
@@ -311,6 +320,9 @@ def main() -> int:
     summary = {"outcomes": dict(outcomes), "matches": len(records), "passed": not failed,
                "mode": "native-unmetered" if args.native else "sandbox",
                "max_points": max((p["max"] for r in records for p in r["points"].values()), default=0),
+               "candidate_max_points": max((r['points'][r['candidate_team']]['max'] for r in records), default=0),
+               "candidate_errors": sum(e.get('team') == r['candidate_team'] for r in records for e in r['errors']),
+               "opponent_errors": sum(e.get('team') != r['candidate_team'] for r in records for e in r['errors']),
                "median_rounds": statistics.median(r["rounds"] + 1 for r in records)}
     candidate_actions = Counter()
     for record in records:

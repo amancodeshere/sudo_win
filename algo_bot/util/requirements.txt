@@ -1,3 +1,3 @@
-unswbc==1.2.2
+unswbc==1.2.5
 wasmtime==49.0.0
 pycapnp==2.2.1

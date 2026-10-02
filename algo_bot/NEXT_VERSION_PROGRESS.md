@@ -14,8 +14,8 @@ No upload or live challenges are part of this task.
 
 | Step | Work | Status | Evidence |
 | --- | --- | --- | --- |
-| 1 | Current official judge, fixed queen scoring, free sprint accounting | In progress | Official docs differ from cached engine and simulation |
-| 2 | Queen identity, food priority, parent-preserving rescue and opening escapes | Pending | Queen often dies after repeated splits |
+| 1 | Current official judge, fixed queen scoring, free sprint accounting | Complete | 45 C++ cases / 289 assertions, sanitizers, 16 Python tests; native 2–2 / four games, zero candidate errors |
+| 2 | Queen identity, food priority, parent-preserving rescue and opening escapes | In progress | Queen often dies after repeated splits |
 | 3 | Bounded free sprint search and turn-order-aware threats | Pending | Free movement is underused; two-step attacks dominate elimination |
 | 4 | Earlier remembered portal escapes and helper exploration | Pending | Only 16 successful crossings in 70 games |
 | 5 | Useful sonar reports and helper attacks against enemy queen | Pending | Existing messages are decoded but unused |
@@ -39,3 +39,7 @@ No upload or live challenges are part of this task.
 - Started the requested implementation. Repository was clean at baseline.
 - Earlier local comparisons used an outdated judge and cannot establish live-rule
   superiority. Correct rule conformance comes before tuning strategy.
+
+### Step 1 — live rules
+
+Pinned unswbc 1.2.5 and engine SHA256 `26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546`. Public repository main still contains the older engine; the current official wheel and live-rule probes are the validation authority. Free allowance stays fixed at action-start length, and body predictions, combat funding and the independent collision checker use it. A replay-derived WSS fixture catches retained-tail collisions. Benchmarks report failures for both teams but promotion gates the candidate, so a known-buggy old opponent cannot mask candidate correctness. Native diagnostic evidence: `build/validation/live-rules-native4/` (Autarky / Portals, seed 301, both colors, 2–2, zero errors; no CPU measurement).

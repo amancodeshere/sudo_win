@@ -155,12 +155,12 @@ TEST_CASE("a funded two step attack outweighs an adjacent pearl") {
 
 TEST_CASE("a shortening sprint escapes a loop that defeats ordinary movement") {
     auto fixture = sudo_win::test::EngineFixture{};
-    fixture.controller.length = 5;
+    fixture.controller.length = 4;
     for (auto& tile : fixture.controller.vision.tiles) {
         tile.pearl = false;
         tile.pearl_time = -1;
     }
-    for (auto const p : std::vector<unswbc::Position>{{4,5},{3,5},{2,5},{2,6}}) {
+    for (auto const p : std::vector<unswbc::Position>{{4,5},{3,5},{2,5}}) {
         fixture.tile(p).dragon_part = unswbc::DragonPart{
             p,0,unswbc::Team::A,p.x == 2 && p.y == 6 ? unswbc::Direction::NORTH : unswbc::Direction::EAST,false};
     }
@@ -178,7 +178,7 @@ TEST_CASE("a shortening sprint escapes a loop that defeats ordinary movement") {
     world.update(fixture.controller,fixture.game);
     auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::champion);
     REQUIRE(action.kind == sudo_win::ActionKind::sprint);
-    REQUIRE(action.steps.size() == 3);
+    REQUIRE(action.steps.size() == 2);
     auto simulation = sudo_win::Simulation{};
     auto state = simulation.initial_state(fixture.controller,&world);
     for (std::size_t i = 0; i < action.steps.size(); ++i) {

@@ -132,6 +132,7 @@ def analyze(path, metadata, output, submission=None):
     bot = replay.botA if ours == 'A' else replay.botB
     if submission is not None and bot != str(submission): return None
     board = Board(replay.map)
+    queen_ids = {t: min((i for i, d in board.dragons.items() if d['team'] == t), default=-1) for t in 'AB'}
     stats = {t: {"turns": 0, "moves": 0, "sprints": 0, "sprint_payments": 0, "splits": 0,
                  "pearls": 0, "max_points": 0, "timeouts": 0, "peak_length": 0,
                  "portal_crossings": 0} for t in 'AB'}
@@ -174,7 +175,7 @@ def analyze(path, metadata, output, submission=None):
             steps = action.get('move', [])
             stats[team]['moves'] += bool(steps)
             stats[team]['sprints'] += len(steps) > 1
-            stats[team]['sprint_payments'] += max(0, len(steps)-1)
+            stats[team]['sprint_payments'] += max(0, len(steps)-(len(board.dragons[identity]['body'])+3)//4)
             stats[team]['splits'] += 'split' in action
             stats[team]['max_points'] = max(stats[team]['max_points'], e.get('instructions',{}).get('count',0))
             stats[team]['timeouts'] += e.get('tle', False)
@@ -216,6 +217,8 @@ def analyze(path, metadata, output, submission=None):
               "outcome":"draw" if not winner else "win" if winner == ours else "loss",
               "result":result,"stats":stats,"deaths":deaths,"logs":logs,
               "replay_sha256":hashlib.sha256(raw).hexdigest(),"bot":bot}
+    record['queens'] = {t: {'id': queen_ids[t], 'length': len(board.dragons.get(queen_ids[t], {}).get('body', []))}
+                        for t in 'AB'}
     record['loss_class'] = ('none' if record['outcome']=='win' else 'draw' if not winner else
                            'growth deficit' if result['endReason']=='roundLimit' else 'eliminated')
     record['our_death_reasons'] = dict(Counter(d['reason'] for d in own_deaths))

@@ -124,8 +124,9 @@ auto Combat::threats(unswbc::Controller const& controller, WorldModel const* wor
                 if (distance == 0) {
                     distance = node.steps + 1;
                 }
-                auto const funded = node.funded && static_cast<int>(node.state.body.size()) - unknown_extra
-                    > unswbc::Constants::MIN_SIZE;
+                auto const funded = node.funded && (node.steps < Simulation::free_steps(
+                    std::max(unswbc::Constants::MIN_SIZE, observed_length))
+                    || static_cast<int>(node.state.body.size()) - unknown_extra > unswbc::Constants::MIN_SIZE);
                 if (funded && affordable[destination] == 0) {
                     affordable[destination] = node.steps + 1;
                 }

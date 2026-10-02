@@ -47,6 +47,19 @@ class BenchmarkTests(unittest.TestCase):
                         observation.replace('B 9 7 8 N 0', 'B 8 7 8 N 0')):
             self.assertNotIn('favourable_head_trade', benchmark.visible_action_check(invalid, 'MOVE EE\n'))
 
+    def test_live_free_step_keeps_tail_that_old_payment_model_released(self):
+        obs = self.observation(6)
+        body = ['A 0 5 5 N 1', 'A 0 5 6 N 0', 'A 0 5 7 N 0',
+                'A 0 5 8 N 0', 'A 0 4 8 E 0', 'A 0 4 7 S 0']
+        start = obs.index('DRAGON_BODIES')
+        edges = '\n'.join(['. . . . . . .'] * 8 + ['. . . . . . . .'] * 7)
+        obs = obs[:start] + 'DRAGON_BODIES 6\n' + '\n'.join(body) + '\n' + edges + '\n'
+        obs = obs.replace('4 5 0 -1', '4 5 1 -1').replace('4 6 0 -1', '4 6 1 -1')
+        result = benchmark.visible_action_check(obs, 'MOVE WSS\n')
+        self.assertEqual(result['fatal_step'], 3)
+        self.assertEqual(result['fatal_reason'], 'occupied')
+        self.assertTrue(result['avoidable_collision'])
+
     def test_submission_excludes_test_sources_and_hashes_headers(self):
         with tempfile.TemporaryDirectory() as work:
             root = pathlib.Path(work)

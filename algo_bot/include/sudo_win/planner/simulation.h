@@ -15,6 +15,8 @@ struct SimulationState {
     std::vector<unswbc::Position> unranked_body;
     std::vector<unswbc::Position> eaten;
     int pearls = 0;
+    int action_start_length = 0;
+    int action_steps = 0;
 };
 
 struct MobilityEstimate {
@@ -24,12 +26,15 @@ struct MobilityEstimate {
 
 class Simulation {
 public:
+    [[nodiscard]] static constexpr auto free_steps(int length) -> int {
+        return length / 4 + (length % 4 != 0 ? 1 : 0);
+    }
     [[nodiscard]] auto initial_state(unswbc::Controller const& controller,
                                      WorldModel const* world = nullptr) const -> SimulationState;
     [[nodiscard]] auto advance(unswbc::Controller const& controller,
                                SimulationState const& state,
                                unswbc::Direction direction,
-                               bool pay_sprint = false,
+                               bool continue_sprint = false,
                                WorldModel const* world = nullptr) const -> std::optional<SimulationState>;
     [[nodiscard]] auto survival_depth(unswbc::Controller const& controller,
                                       SimulationState const& state,
