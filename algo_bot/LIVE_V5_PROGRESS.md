@@ -33,3 +33,13 @@ Among equal current safety classes, protected units prefer a continuation outsid
 Source verification corrected the previous replay audit: existing portal safety already consulted enemy-head echoes; the earlier statement of no strategy use was too broad. The v5 scheduler adds separate echo-informed dissemination.
 
 Completed isolated evidence: defense native 6–2; defense metered 1–3, zero errors, peak 65,875,228. Expansion 2–4 with unchanged queen survival (2/6 both sides), population medians (11 / 13.5 at rounds 25 / 100), lower total pearls (4,804 vs 5,412) and retained longest sum (114 vs 141); this policy has not earned final inclusion. Sonar 3–3 native, zero errors. Full combined acceptance and ablations remain required.
+
+## Stage 5 — controlled feeding prototype and recovery instrumentation
+
+Implemented an opt-in (`feeding`) worker-to-queen transfer policy. It requires a starved nonqueen/nonchampion length-4–12 worker, at least three allies, a current-round report confirming the queen's fully visible body, no nearby observed/reported enemy, no immediately available natural queen meal, at least half the donor length recoverable as new pearls within three ordinary moves, and a six-step recipient escape horizon. Paid movement is not used for the predicted pickup. The default remains disabled until representative recovery and competitive results justify it.
+
+Retirement uses the supported default action plus a recognized `INDICATOR SUDO_WIN_DONATION` diagnostic, never an invented engine opcode. Independent benchmark checks reject missing actions without this explicit marker and reject donation markers without complete donor bodies and reachable predicted food. Replay metrics now count verified donations and actual queen recovery within four rounds. Pinned-engine conformance demonstrates alternating donor segments becoming pearls and the fixed queen actually growing from two to four.
+
+The emission integration test caught a fall-through that would have emitted fallback MOVE after the retirement indicator; corrected before acceptance, with a regression asserting indicator-only output. The early `v5-feeding-experiment` artifact/seed-837 run is superseded and must not be uploaded or used as acceptance evidence. Corrected frozen pair: `v5-feeding-verified` and `v5-feeding-verified-control`, seed 838. C++ release and 17 Python tests pass.
+
+Stage 4 isolated native comparison: 3–3, no errors. A separate twelve-map both-colour comparison versus the upload, seed 836, finishes 12–12 with no errors. More activity is not being presented as competitive proof.

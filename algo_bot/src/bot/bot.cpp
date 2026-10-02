@@ -149,7 +149,8 @@ auto Bot::execute_turn(unswbc::Controller& controller, unswbc::Game const& game)
     if (config::enable_indicators) {
         controller.set_indicator_string(std::string{action.reason} + "; growth: " + std::string{planner_.growth_rejection()});
     }
-    apply_action(controller, action);
+    emit_action(controller, action);
+    if (action.kind == ActionKind::donate) { return; }
     if (beam_payloads) {
         auto const directions = unswbc::Direction::get_direction_list();
         for (std::size_t i = 0; i < directions.size(); ++i) { controller.send_sonar(directions[i], (*beam_payloads)[i]); }
@@ -164,8 +165,15 @@ auto Bot::execute_turn(unswbc::Controller& controller, unswbc::Game const& game)
     }
 }
 
-auto Bot::apply_action(unswbc::Controller& controller, PlannedAction const& action) const -> void {
-    if (action.kind == ActionKind::split) {
+auto Bot::emit_action(unswbc::Controller& controller, PlannedAction const& action) -> void {
+    if (action.kind == ActionKind::donate) {
+        // The engine's default action retires the unit. A recognized diagnostic
+        // command records intent; do not invent an unsupported SUICIDE opcode.
+        controller.set_indicator_string("SUDO_WIN_DONATION " + std::to_string(action.recipient_id) + " "
+            + std::to_string(action.resource_target->x) + " " + std::to_string(action.resource_target->y)
+            + " " + std::to_string(action.resource_distance));
+        return;
+    } else if (action.kind == ActionKind::split) {
         controller.do_split(action.split_size);
         return;
     }

@@ -371,6 +371,19 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         return finish(*rescue);
     }
 
+    if (config::enable_queen_donation && game.get_round_num() - resource_progress_round_ >= 8
+        && best_safety_class == 3 && best_survival == config::survival_search_depth && !best.steps.empty()) {
+        auto state = initial;
+        for (std::size_t i = 0; i < best.steps.size(); ++i) {
+            auto next = simulation.advance(controller,state,best.steps[i],i > 0,&world);
+            if (!next) { break; }
+            state = std::move(*next);
+        }
+        if (state.pearls == 0) {
+            if (auto const donation = economy_.queen_donation(controller,game,world,role)) { return finish(*donation); }
+        }
+    }
+
     if (growth_splitting_) {
         auto const expansion = splitting_.grow_population(controller, game, role, world);
         growth_rejection_ = splitting_.growth_rejection();

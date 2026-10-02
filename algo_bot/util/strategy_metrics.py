@@ -9,7 +9,7 @@ from statistics import median
 from analyze_replays import Board, DIRECTIONS, NAMES, SCHEMA
 
 
-def measure(path: Path) -> dict:
+def measure(path: Path, planned_donors: set[int] | None = None) -> dict:
     raw = path.read_bytes()
     replay = SCHEMA.Replay.from_bytes_packed(raw, traversal_limit_in_words=max(1000000, len(raw) * 64))
     if replay.formatVersion > 2:
@@ -17,6 +17,9 @@ def measure(path: Path) -> dict:
     board = Board(replay.map)
     queens = {t: min(i for i, d in board.dragons.items() if d['team'] == t) for t in 'AB'}
     stats = {t: Counter() for t in 'AB'}
+    planned_donors = planned_donors or set()
+    food_origin = {}
+    death_round = {}
     teams = {i: d['team'] for i, d in board.dragons.items()}
     lives = {i: {'turns': 0, 'child': False} for i in teams}
     actor, round_num, action_steps, directions = None, -1, 0, []
@@ -48,6 +51,10 @@ def measure(path: Path) -> dict:
                     t = teams[actor]
                     stats[t]['pearls'] += 1
                     stats[t]['queen_pearls'] += actor == queens[t]
+                    origin = food_origin.pop(p, None)
+                    stats[t]['queen_planned_donor_pearls'] += actor == queens[t] and origin in planned_donors
+                    stats[t]['queen_planned_donor_pearls_within_4'] += (actor == queens[t]
+                        and origin in planned_donors and round_num - death_round[origin] <= 4)
                 board.pearls.discard(p)
         elif kind == 'dragonUpdate':
             d = board.dragons[e.id]
@@ -71,6 +78,11 @@ def measure(path: Path) -> dict:
         elif kind == 'dragonDeath':
             d = board.dragons[e.id]
             t = d['team']
+            death_round[e.id] = round_num
+            stats[t]['planned_donations'] += e.id in planned_donors
+            for p in d['body'][::2]:
+                if p not in board.pearls:
+                    food_origin[p] = e.id
             if e.id == queens[t]:
                 blocker = str(e.reason)
                 if actor == e.id and action_steps < len(directions):
@@ -98,7 +110,7 @@ def summarize(folder: Path) -> dict:
     games = []
     for line in (folder / 'matches.jsonl').read_text().splitlines():
         row = json.loads(line)
-        r = measure(Path(row['replay']))
+        r = measure(Path(row['replay']), {d['id'] for d in row['deaths'] if d.get('verified_donation')})
         games.append(r | {'candidate_team': row['candidate_team'], 'seed': row['seed'], 'winner': row['winner']})
     summary = {}
     for side in ('candidate', 'opponent'):

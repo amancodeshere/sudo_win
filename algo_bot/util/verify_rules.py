@@ -64,8 +64,28 @@ def verify_engine_rules(engine=None):
     engine.run(fixture([2, 2, 2, 2]), record_order, debug=0)
     if order != [(rnd, identity) for rnd in (0, 1) for identity in range(4)]:
         raise RuntimeError("Judge does not cycle dragon IDs before each unit's next action")
+    # The supported default action retires a unit; alternating body cells
+    # become real food and can be collected by the fixed queen.
+    lines = ["MAP 16 8", "MAP_NAME Donation conformance", "UNIT_LIMIT 64", "TILE_COUNT 128"]
+    lines += [f"TILE {x} {y} 0 0" for y in range(8) for x in range(16)]
+    lines += ["EDGE_COUNT 0", "DRAGON_COUNT 5", "DRAGON 0 2 6 4 6 3", "DRAGON 1 2 10 0 9 0",
+              "DRAGON 0 4 5 5 5 6 4 6 4 5", "DRAGON 1 2 10 2 9 2", "DRAGON 0 2 10 4 9 4"]
+    queen_lengths = {}
+    def donation_reply(identity, block):
+        header = dict(line.split(maxsplit=1) for line in block.decode().splitlines()[:4])
+        rnd = int(header["ROUND"])
+        if identity == 2:
+            return b"INDICATOR SUDO_WIN_DONATION 0 5 5 2\nPROTOCOL 3\nENDTURN\n"
+        if identity == 0:
+            queen_lengths[rnd] = int(header["LENGTH"])
+            direction = {0: "S", 1: "W", 2: "S"}.get(rnd, "W")
+            return f"MOVE {direction}\nENDTURN\n".encode()
+        return b"MOVE E\nENDTURN\n"
+    engine.run(("\n".join(lines) + "\n").encode(), donation_reply, debug=0)
+    if queen_lengths.get(4) != 4:
+        raise RuntimeError("Default retirement does not convert alternating donor cells into collectable queen food")
     return {"toolkit": version, "engine_sha256": digest, "queen_scoring": True,
-            "free_sprint_steps": True, "fixed_start_length": True, "dead_queen_zero": True, "cyclic_turn_order": True}
+            "free_sprint_steps": True, "fixed_start_length": True, "dead_queen_zero": True, "cyclic_turn_order": True, "controlled_donation_food": True}
 
 
 if __name__ == "__main__":

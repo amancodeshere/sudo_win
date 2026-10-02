@@ -20,6 +20,24 @@ class BenchmarkTests(unittest.TestCase):
         lines += [". . . . . . ."] * 8 + [". . . . . . . ."] * 7
         return "\n".join(lines) + "\n"
 
+    def test_donation_requires_an_explicit_marker_and_independent_pickup_access(self):
+        observation = self.observation(4).replace("ID 0", "ID 6").replace("ROUND 1", "ROUND 120")
+        observation = observation.replace("UNIT_COUNT 1", "UNIT_COUNT 3")
+        body = ["A 6 5 5 N 1", "A 6 5 6 N 0", "A 6 4 6 E 0", "A 6 4 5 S 0",
+                "A 0 6 5 S 1", "A 0 6 4 S 0"]
+        start = observation.index("DRAGON_BODIES")
+        edges = "\n".join([". . . . . . ."] * 8 + [". . . . . . . ."] * 7)
+        observation = observation[:start] + "DRAGON_BODIES 6\n" + "\n".join(body) + "\n" + edges + "\n"
+        marker = "INDICATOR SUDO_WIN_DONATION 0 5 5 2\n"
+        self.assertIsNone(benchmark.action_metrics(marker.encode())[1])
+        self.assertTrue(benchmark.visible_action_check(observation,marker)["verified_donation"])
+        for invalid in (observation.replace("UNIT_COUNT 3", "UNIT_COUNT 2"),
+                        observation.replace("ROUND 120", "ROUND 119"),
+                        observation.replace("A 6 5 6 N 0", "A 8 5 6 N 0")):
+            self.assertFalse(benchmark.visible_action_check(invalid,marker)["verified_donation"])
+        self.assertIsNotNone(benchmark.action_metrics(b"PROTOCOL 3\n")[1])
+        self.assertFalse(benchmark.visible_action_check(observation,marker.replace("0 5 5", "0 7 7"))["verified_donation"])
+
     def test_visible_collision_gate_checks_own_body_and_sprint_intermediate_steps(self):
         observation = self.observation()
         safe = benchmark.visible_action_check(observation, "MOVE N\n")

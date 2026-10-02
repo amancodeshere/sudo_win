@@ -12,10 +12,9 @@ class Bot {
 public:
     explicit Bot(unswbc::Game const& game);
     auto execute_turn(unswbc::Controller& controller, unswbc::Game const& game) -> void;
+    static auto emit_action(unswbc::Controller& controller, PlannedAction const& action) -> void;
 
 private:
-    auto apply_action(unswbc::Controller& controller, PlannedAction const& action) const -> void;
-
     WorldModel world_;
     Planner planner_;
     RoleManager roles_;

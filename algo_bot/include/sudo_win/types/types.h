@@ -14,6 +14,7 @@ enum class ActionKind {
     move,
     sprint,
     split,
+    donate,
 };
 
 enum class Role {
@@ -29,6 +30,7 @@ struct PlannedAction {
     ActionKind kind = ActionKind::move;
     std::vector<unswbc::Direction> steps;
     int split_size = 0;
+    int recipient_id = -1;
     std::optional<unswbc::Position> resource_target;
     int resource_distance = 0;
     int score = std::numeric_limits<int>::min();

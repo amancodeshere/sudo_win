@@ -40,9 +40,19 @@ def percentile(values: list[int], percent: int) -> int:
     return ordered[max(0, (len(ordered) * percent + 99) // 100 - 1)]
 
 
+def donation_marker(output: str) -> tuple[int, int, int, int] | None:
+    markers = [line for line in output.splitlines() if line.startswith("INDICATOR SUDO_WIN_DONATION")]
+    if len(markers) != 1:
+        return None
+    found = re.fullmatch(r"INDICATOR SUDO_WIN_DONATION ([01]) ([0-9]+) ([0-9]+) ([2-6])", markers[0])
+    return tuple(map(int, found.groups())) if found else None
+
+
 def action_metrics(output: bytes) -> tuple[dict[str, int], str | None]:
     actions = [line for line in output.decode(errors="replace").splitlines()
                if line.startswith(("MOVE ", "SPLIT "))]
+    if not actions and (donation := donation_marker(output.decode(errors="replace"))):
+        return {"donate": 1, "predicted_queen_food": donation[3]}, None
     if len(actions) != 1:
         return {}, f"expected one final action, received {len(actions)}"
     action = actions[0]
@@ -118,8 +128,6 @@ def visible_action_check(stdin: str, stdout: str) -> dict:
     safe = [direction for direction, reason in reasons.items() if reason == "safe"]
     action = next((line for line in stdout.splitlines() if line.startswith("MOVE ")), None)
     result = {"safe_directions": safe, "first_step_reasons": reasons, "avoidable_collision": False}
-    if action is None:
-        return result
     ranked = [head]
     while len(ranked) < length:
         previous = ranked[-1]
@@ -128,6 +136,42 @@ def visible_action_check(stdin: str, stdout: str) -> dict:
         if segment is None:
             break
         ranked.append(segment)
+    if action is None:
+        donation = donation_marker(stdout)
+        if donation is None:
+            return result
+        queen_id, target_x, target_y, expected = donation
+        result["verified_donation"] = False
+        round_num = int(next(line.split()[1] for line in lines if line.startswith("ROUND ")))
+        queens = [p for p in parts if int(p[1]) == queen_id and p[0] == team]
+        queen_head = next(((int(p[2]), int(p[3])) for p in queens if p[5] == "1"), None)
+        if identity <= 1 or unit_count < 3 or not 4 <= length <= 12 or round_num < 120 \
+                or len(ranked) != length or len(queens) < 2 or queen_head is None:
+            return result
+        drops = set(ranked[::2]) - pearl_tiles
+        first = (target_x, target_y)
+        if first not in drops or expected * 2 < length:
+            return result
+        blockers = set(occupants) - set(own)
+        blockers.discard(queen_head)
+        queue = [(queen_head, [], set())]
+        for current, path, collected in queue:
+            if len(path) >= 3:
+                continue
+            for direction in offsets:
+                target, kind = destination(current, direction)
+                if kind != "known" or target not in visible_positions or target in blockers \
+                        or target == queen_head or target in path:
+                    continue
+                route = path + [target]
+                income = collected | ({target} if target in drops else set())
+                first_pickup = next((p for p in route if p in drops), None)
+                if len(income) >= expected and first_pickup == first:
+                    result["verified_donation"] = True
+                    result["predicted_queen_food"] = expected
+                    return result
+                queue.append((target, route, income))
+        return result
     unranked = set(own) - set(ranked)
     ranked += [None] * (length - len(ranked))
     eaten = set()
@@ -199,6 +243,9 @@ def match(engine, map_path, bots, seed, sandbox, replay_path, candidate_team="A"
                                    "stdout": output.decode(errors="replace")}
             metrics, action_error = action_metrics(output)
             actions[team].update(metrics)
+            if metrics.get("donate") and not visible_action_check(
+                    last_turn[dragon_id]["stdin"], last_turn[dragon_id]["stdout"]).get("verified_donation"):
+                errors.append({"id": dragon_id, "team": team, "error": "unverified queen donation"})
             if action_error:
                 errors.append({"id": dragon_id, "team": team, "error": action_error})
             if worker.error:
@@ -221,7 +268,8 @@ def match(engine, map_path, bots, seed, sandbox, replay_path, candidate_team="A"
             diagnostic.write_text(json.dumps(trace, indent=2) + "\n")
             deaths.append({"id": dragon_id, "team": teams[dragon_id], "round": round_num, "reason": reason,
                            "diagnostic": str(diagnostic), "verified_head_trade": bool(
-                               trace.get('visible_check', {}).get('favourable_head_trade')) and reason == 'H'})
+                               trace.get('visible_check', {}).get('favourable_head_trade')) and reason == 'H',
+                           "verified_donation": bool(trace.get('visible_check', {}).get('verified_donation'))})
             worker = live.pop(dragon_id, None)
             if worker:
                 worker.stop()
@@ -329,6 +377,7 @@ def main() -> int:
     for record in records:
         candidate_actions.update(record["actions"][record["candidate_team"]])
     summary["candidate_actions"] = dict(candidate_actions)
+    summary['verified_donations'] = sum(d.get('verified_donation', False) for r in records for d in r['deaths'])
     summary['verified_head_trades'] = sum(d['verified_head_trade'] for r in records for d in r['deaths'])
     (args.output / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
     print(json.dumps(summary, indent=2))
