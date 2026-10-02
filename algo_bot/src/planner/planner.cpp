@@ -80,11 +80,13 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             && mobility.area < static_cast<int>(next.body.size())
             && simulation.sealed_entry_pocket(next, world);
         auto const safety_class = survival == 0 ? 0 : (threatened || sealed_pocket) ? 1 : 2;
-        if (sprint && length_gain < 0 && safety_class <= best_safety_class) {
+        auto const improves_safety = safety_class > best_safety_class
+            || (safety_class == best_safety_class && survival > best_survival);
+        if (sprint && length_gain < 0 && !improves_safety) {
             return;
         }
         if (sprint && length_gain <= 0 && (role == Role::champion || endgame_.active(game))
-            && safety_class <= best_safety_class) {
+            && !improves_safety) {
             return;
         }
         candidate.role_score = roles_.score_move(role,

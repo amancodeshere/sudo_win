@@ -152,3 +152,41 @@ TEST_CASE("a funded two step attack outweighs an adjacent pearl") {
     REQUIRE(action.steps.size() == 1);
     CHECK(action.steps.front() != unswbc::Direction::EAST);
 }
+
+TEST_CASE("a shortening sprint escapes a loop that defeats ordinary movement") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.length = 5;
+    for (auto& tile : fixture.controller.vision.tiles) {
+        tile.pearl = false;
+        tile.pearl_time = -1;
+    }
+    for (auto const p : std::vector<unswbc::Position>{{4,5},{3,5},{2,5},{2,6}}) {
+        fixture.tile(p).dragon_part = unswbc::DragonPart{
+            p,0,unswbc::Team::A,p.x == 2 && p.y == 6 ? unswbc::Direction::NORTH : unswbc::Direction::EAST,false};
+    }
+    auto const loop = std::vector<unswbc::Position>{{5,5},{6,5},{6,4},{5,4}};
+    for (auto const p : loop) {
+        for (auto const d : unswbc::Direction::get_direction_list()) {
+            auto const target = p.add_dir(d);
+            if (std::find(loop.begin(),loop.end(),target) == loop.end()
+                && !(p == unswbc::Position{5,5} && d == unswbc::Direction::WEST)) {
+                fixture.tile(p).get_edge(d) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+            }
+        }
+    }
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::champion);
+    REQUIRE(action.kind == sudo_win::ActionKind::sprint);
+    REQUIRE(action.steps.size() == 3);
+    auto simulation = sudo_win::Simulation{};
+    auto state = simulation.initial_state(fixture.controller,&world);
+    for (std::size_t i = 0; i < action.steps.size(); ++i) {
+        auto next = simulation.advance(fixture.controller,state,action.steps[i],i > 0,&world);
+        REQUIRE(next);
+        state = *next;
+    }
+    CHECK(state.body.size() == 3);
+    auto budget = 512;
+    CHECK(simulation.survival_depth(fixture.controller,state,6,budget,&world) == 6);
+}
