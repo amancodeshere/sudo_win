@@ -266,7 +266,7 @@ TEST_CASE("early expansion protects the champion and requires separate resources
         fixture.controller.unit_count = 4;
         fixture.game.round_num = 100;
         fixture.tile({7,4}).pearl = true;
-        CHECK(candidate(sudo_win::Role::champion));
+        CHECK(candidate(sudo_win::Role::champion).has_value() == sudo_win::config::enable_phase_expansion);
         fixture.game.round_num = 140;
         CHECK_FALSE(candidate(sudo_win::Role::champion));
     }

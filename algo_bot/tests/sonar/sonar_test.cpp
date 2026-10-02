@@ -1,4 +1,6 @@
 #include "sudo_win/sonar/sonar.h"
+#include "sudo_win/bot/bot.h"
+#include <sstream>
 
 #include <catch2/catch.hpp>
 
@@ -97,4 +99,21 @@ TEST_CASE("four beam scheduling carries all enemy heads and preserves relay prov
         auto const messages = scheduler.schedule(fixture.controller,world,12,primary);
         CHECK(std::count(messages.begin(),messages.end(),primary) == 4);
     }
+}
+
+TEST_CASE("sonar identity overflow keeps a valid movement reply") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 8192;
+    fixture.controller.length = 2;
+    fixture.controller.unit_count = 4;
+    fixture.controller.head.dir = unswbc::Direction::SOUTH;
+    fixture.tile({5,5}).dragon_part = fixture.controller.head;
+    fixture.tile({5,4}).dragon_part = unswbc::DragonPart{{5,4},8192,unswbc::Team::A,unswbc::Direction::SOUTH,false};
+    auto output = std::ostringstream{};
+    auto* previous = std::cout.rdbuf(output.rdbuf());
+    sudo_win::Bot{fixture.game}.execute_turn(fixture.controller,fixture.game);
+    std::cout.rdbuf(previous);
+    CHECK(output.str().find("MOVE ") != std::string::npos);
+    CHECK(output.str().find("MOVE N\n") == std::string::npos); // The observed neck is occupied.
+    CHECK(output.str().find("SONAR ") == std::string::npos);
 }
