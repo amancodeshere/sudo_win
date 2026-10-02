@@ -145,9 +145,11 @@ checksum/flag manifest. Choose a fresh output name for later builds. Profiles
 are applied to the copy, leaving source configuration unchanged:
 
 - `stable`: configured sprints and rescue splits; investment splitting, sonar,
-  and indicators disabled;
+  long sprint forecasts, pocket priority, and indicators disabled;
 - `no-sprint`: stable strategy with sprint generation disabled for ablations;
-- `experimental`: enables the resource-backed split policy.
+- `growth`: enables selective collector expansion only;
+- `experimental`: enables investment/expansion splits, longer sprint forecasts,
+  and sealed-pocket priority. These trials are not the promoted upload strategy.
 
 Test the resulting directory through `benchmark.py` before uploading. If the
 toolkit is already authenticated, `unswbc submit build/submission-stable` submits
@@ -189,8 +191,9 @@ python3 algo_bot/util/compare_replay_turns.py /path/to/before /path/to/after \
   --output build/replay-audit/behavior-comparison.json
 ```
 
-The verified 2 October upload is `build/submission-replay-final.zip`; the source
-directory is `build/submission-replay-final/`. Its checksums and validation scope
+The latest upload candidate is `build/submission-competition-v3.zip`; the source
+directory is `build/submission-competition-v3/`. The earlier
+`build/submission-replay-final.zip` is the active version-2 baseline. Its checksums and validation scope
 are recorded in `VALIDATION.md`. Uploading a new version and activating it are
 separate API operations; local preparation does neither.
 
@@ -206,11 +209,15 @@ checks the judge's actual CPU points.
 Legal rescue splitting is available when movement is already fatal or a short
 escape search finds an escaping reversed tail. If the tail is unseen, the
 last-resort split is a survival attempt, not a certified safe child. Fatal
-fallbacks protect allied heads. Resource-backed investment splitting remains
-experimental and disabled by default. Sonar reports are decoded but still not
+fallbacks protect allied heads. Rescue sizing preserves larger escaping children,
+and small collectors yield targets to closer allies while protecting champion
+growth. Investment/expansion splits, extended sprint forecasts and pocket priority
+remain experimental and disabled by default. Sonar reports are decoded but still not
 applied or transmitted.
 The competition build has a planning exception fallback; Debug/RelWithDebInfo
 builds expose exceptions to catch development errors.
 
+See [STRATEGY_UPDATES.md](STRATEGY_UPDATES.md) for the new replay evidence,
+promotion decisions, exact upload command and live leader benchmark instructions.
 See `VALIDATION.md` for measured results and `IMPLEMENTATION_GUIDE.md` for the
 remaining coordination, tactical search, and endgame roadmap.

@@ -1,6 +1,54 @@
 # Submission validation
 
-## Replay-driven candidate — 2 October 2026
+## Competition candidate — final 2 October 2026 strategy review
+
+The upload candidate is `build/submission-competition-v3.zip`. It keeps larger
+escaping rescue children and coordinates small collectors' resource targets
+while protecting long-snake growth. Long-sprint forecasts, hard chamber priority
+and proactive expansion were implemented, tested and left disabled after
+regressing or tying their comparisons. Full decisions and the 20-game review
+against the top two live teams are in [STRATEGY_UPDATES.md](STRATEGY_UPDATES.md).
+
+| Final verification | Result |
+| --- | --- |
+| Exact delivered source archive vs active version 14399, all ten current competition maps, seed 103, both colours | 10 wins / 10 losses; judge sandbox |
+| Candidate peak CPU points | 36,187,732 / 100,000,000 |
+| Whole match maximum including active opponent | 36,343,846 |
+| Protocol/runtime errors, no-valid-action deaths, detected avoidable visible collisions | None |
+| Death observations checked independently for visible collisions | 2,351 |
+| C++ suite | 35 cases / 222 assertions; Apple Clang Release, Apple Clang ASan/UBSan Debug, LLVM Clang 22 Release, GCC 15 Release |
+| Python utilities | 10 tests passed |
+| Expansion fixture, both colours, each repeated | Four judge runs, matching repeat hashes; legal split followed by same-round child action; maximum 18,879,503 points |
+| Live benchmark planner | Read-only API check: 20 unranked games planned for active version 14399 against current top two eligible teams; none queued |
+| Package integrity | All 32 selected files match current source; ZIP integrity verified; credentials/tests/tools excluded |
+
+The final 10–10 result is a tie against our active version on one seed per map.
+The revised coordination separately went 19–11 against the rescue-only candidate
+across all 15 toolkit maps. These are controlled local checks, not proof of an
+advantage over the competition leaders. No new submission has been uploaded or
+activated during this session, and no live challenges were sent. The live top-two
+2–18 result belongs to the previous active submission, not this new candidate.
+
+The downloaded server ZIP for active submission 14399 matches the benchmark
+baseline byte-for-byte in all 32 selected files.
+
+The full evidence is under `build/validation/competition-v3-sandbox/`;
+`STRATEGY_UPDATES.md` lists the other trials and their preserved output folders.
+The first synthetic expansion-fixture attempt had malformed edge records and
+failed before play; its correction and successful rerun are recorded separately.
+The new package's source was frozen before the full judge run. Subsequent changes
+are documentation/tests only and do not change the selected upload sources.
+
+### Final archive
+
+- Selected sources: `build/submission-competition-v3/`.
+- ZIP: `build/submission-competition-v3.zip` (34,029 bytes).
+- Source-and-manifest SHA256: `a1e6155f640cf747b397fbaf203ddd0db699979f35f0708963d8cd6fd1303091`.
+- ZIP SHA256: `77294fe08562e1c62fa54c6010b8f1104dbf92a5c6d871f9e62d569f85125651`.
+- Benchmark source-only SHA256: `8a0a026c6a494efb660b28a388854dffe523c6244259c3990db5878084c87940`.
+- Active baseline source-only SHA256: `c5093754c821b363b8d524abb844da84b3093b98ac6eea5d7c0ec3c6c4574194`.
+
+## Replay-driven candidate — earlier 2 October 2026 package
 
 The competition's original submission (version 14151) went 24–51 over 75 games.
 Every downloaded replay was audited; reconstructed final standings match the

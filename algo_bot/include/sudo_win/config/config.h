@@ -7,6 +7,7 @@ inline constexpr auto enable_sprinting = true;
 inline constexpr auto enable_splitting = false;
 inline constexpr auto enable_growth_splitting = false;
 inline constexpr auto enable_long_sprint_threats = false;
+inline constexpr auto enable_pocket_priority = false;
 inline constexpr auto enable_sonar = false;
 inline constexpr auto enable_indicators = false;
 inline constexpr auto survival_search_depth = 6;
