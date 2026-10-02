@@ -93,3 +93,7 @@ Selected broad replay metrics: queens survive **12/34 vs 14/34**, final queen-le
 Final source passes **88 C++ cases / 619 assertions** under Apple Clang 21, LLVM Clang 22.1.8, GCC 15.2 and ASan/UBSan, plus **17 Python tests** in the pinned SDK environment. Four unique deterministic fixtures (seed 855, Devil/Autarky, both colours) each repeat with identical replay bytes: eight executions, unique outcomes 1–3. All 32 packaged source files and ZIP members match the repository and tested snapshot, and independent regeneration reproduces both hashes. Experimental phase expansion and voluntary feeding stay disabled.
 
 Compact immutable comparison evidence, source fingerprints, per-match replay hashes, pinned rules and all rejected-stage outcomes are saved in `analysis/live_v5_validation_2026-10-03.json`. Verification is complete; upload proceeds under the user's explicit request with exact name **bot bot v5** and description **please actually win**. Live challenge matches have not been queued.
+
+## First v5 upload verified
+
+Submission **15048**, server version **7**, **bot bot v5**, description **please actually win**, builds successfully on its first attempt and is verified as the team's sole active submission. Exact package hashes are recorded in `analysis/live_v5_upload_2026-10-03.json`. The user has since requested further improvements to queen/helper coordination, queen escape, retained scorers, productive portal use and worker/sonar decisions; continue with separately tested candidates and preserve this upload as a frozen baseline.
