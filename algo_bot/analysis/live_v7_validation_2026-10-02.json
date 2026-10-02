@@ -1,0 +1,5736 @@
+{
+  "artifact": {
+    "profile": "stable",
+    "files": [
+      "bot.toml",
+      "helper.hpp",
+      "include/sudo_win/bot/bot.h",
+      "include/sudo_win/combat/combat.h",
+      "include/sudo_win/config/config.h",
+      "include/sudo_win/economy/economy.h",
+      "include/sudo_win/endgame/endgame.h",
+      "include/sudo_win/engine/helper.h",
+      "include/sudo_win/geometry/geometry.h",
+      "include/sudo_win/pathfinding/pathfinding.h",
+      "include/sudo_win/planner/planner.h",
+      "include/sudo_win/planner/simulation.h",
+      "include/sudo_win/roles/roles.h",
+      "include/sudo_win/safety/safety.h",
+      "include/sudo_win/sonar/sonar.h",
+      "include/sudo_win/splitting/splitting.h",
+      "include/sudo_win/types/types.h",
+      "include/sudo_win/world/world_model.h",
+      "src/bot/bot.cpp",
+      "src/combat/combat.cpp",
+      "src/economy/economy.cpp",
+      "src/endgame/endgame.cpp",
+      "src/geometry/geometry.cpp",
+      "src/main.cpp",
+      "src/pathfinding/pathfinding.cpp",
+      "src/planner/planner.cpp",
+      "src/planner/simulation.cpp",
+      "src/roles/roles.cpp",
+      "src/safety/safety.cpp",
+      "src/sonar/sonar.cpp",
+      "src/splitting/splitting.cpp",
+      "src/world/world_model.cpp"
+    ],
+    "source_sha256": "32f0c87bded85193e57567bc437dc1a3e7b155eb0142362c652c666b75b6ee7a",
+    "effective_flags": {
+      "enable_sprinting": "true",
+      "enable_splitting": "false",
+      "enable_growth_splitting": "true",
+      "enable_queen_corridors": "true",
+      "enable_territorial_growth": "true",
+      "enable_champion_farms": "true",
+      "enable_portal_routing": "true",
+      "enable_movement_economics": "true",
+      "enable_interception": "true",
+      "enable_tail_clearance": "true",
+      "enable_queen_release": "true",
+      "enable_champion_retention": "true",
+      "enable_response_defense": "true",
+      "enable_productive_expansion": "true",
+      "enable_portal_income": "true",
+      "enable_scoring_coordination": "true",
+      "enable_resource_population": "true",
+      "enable_paid_step_pricing": "true",
+      "enable_queen_exit_viability": "true",
+      "enable_long_sprint_threats": "false",
+      "enable_pocket_priority": "false",
+      "enable_funded_sprint_priority": "false",
+      "enable_portal_escape": "true",
+      "enable_helper_portals": "true",
+      "enable_favourable_trades": "false",
+      "enable_queen_hunting": "true",
+      "enable_sonar": "true",
+      "enable_indicators": "false"
+    },
+    "archive": "/Users/aman/Desktop/Personal Projects/sudo_win/build/submission-live-v7-finalc.zip",
+    "archive_sha256": "a7b8a93367d32e1b048a6a0ddd88728a7c34745e8d2c4634de237615fdc45141"
+  },
+  "baseline": {
+    "profile": "stable",
+    "files": [
+      "bot.toml",
+      "helper.hpp",
+      "include/sudo_win/bot/bot.h",
+      "include/sudo_win/combat/combat.h",
+      "include/sudo_win/config/config.h",
+      "include/sudo_win/economy/economy.h",
+      "include/sudo_win/endgame/endgame.h",
+      "include/sudo_win/engine/helper.h",
+      "include/sudo_win/geometry/geometry.h",
+      "include/sudo_win/pathfinding/pathfinding.h",
+      "include/sudo_win/planner/planner.h",
+      "include/sudo_win/planner/simulation.h",
+      "include/sudo_win/roles/roles.h",
+      "include/sudo_win/safety/safety.h",
+      "include/sudo_win/sonar/sonar.h",
+      "include/sudo_win/splitting/splitting.h",
+      "include/sudo_win/types/types.h",
+      "include/sudo_win/world/world_model.h",
+      "src/bot/bot.cpp",
+      "src/combat/combat.cpp",
+      "src/economy/economy.cpp",
+      "src/endgame/endgame.cpp",
+      "src/geometry/geometry.cpp",
+      "src/main.cpp",
+      "src/pathfinding/pathfinding.cpp",
+      "src/planner/planner.cpp",
+      "src/planner/simulation.cpp",
+      "src/roles/roles.cpp",
+      "src/safety/safety.cpp",
+      "src/sonar/sonar.cpp",
+      "src/splitting/splitting.cpp",
+      "src/world/world_model.cpp"
+    ],
+    "source_sha256": "c971c782f0341a8ef3eade03d87684ccb668177b9b58193755dab5ab8f94a839",
+    "effective_flags": {
+      "enable_sprinting": "true",
+      "enable_splitting": "false",
+      "enable_growth_splitting": "true",
+      "enable_queen_corridors": "true",
+      "enable_territorial_growth": "true",
+      "enable_champion_farms": "true",
+      "enable_portal_routing": "true",
+      "enable_movement_economics": "true",
+      "enable_interception": "true",
+      "enable_tail_clearance": "true",
+      "enable_queen_release": "true",
+      "enable_champion_retention": "true",
+      "enable_long_sprint_threats": "false",
+      "enable_pocket_priority": "false",
+      "enable_funded_sprint_priority": "false",
+      "enable_portal_escape": "true",
+      "enable_helper_portals": "true",
+      "enable_favourable_trades": "false",
+      "enable_queen_hunting": "true",
+      "enable_sonar": "true",
+      "enable_indicators": "false"
+    },
+    "archive": "/Users/aman/Desktop/Personal Projects/sudo_win/build/submission-competition-v6-final.zip",
+    "archive_sha256": "0e8b1b36aae52f6f60b7259bb929bb89ae34d49f213b2ac7ba6dfd30b2582957"
+  },
+  "runtime_source_fingerprint": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+  "rules": {
+    "toolkit": "1.2.5",
+    "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+    "queen_scoring": true,
+    "free_sprint_steps": true,
+    "fixed_start_length": true,
+    "dead_queen_zero": true,
+    "cyclic_turn_order": true
+  },
+  "tests": {
+    "cpp_cases": 79,
+    "cpp_assertions": 555,
+    "python_tests": 16,
+    "release_compilers": [
+      "Apple Clang 21.0.0",
+      "LLVM Clang 22.1.8",
+      "GCC 15.2.0"
+    ],
+    "asan_ubsan": true
+  },
+  "reproducible_package": true,
+  "maps": [
+    {
+      "id": 11,
+      "name": "Trophy",
+      "sha256": "4f84e990688c1e96ee4c2a7ff0706e4b44f4ee63531dd5c5582cf9157b134fb1"
+    },
+    {
+      "id": 13,
+      "name": "Devil",
+      "sha256": "a09e8f2d3bdd1e40fad31a0ecdf00166cd1090c232c56dcc2557729de737f6aa"
+    },
+    {
+      "id": 15,
+      "name": "Trauma",
+      "sha256": "dcf39d713c060e5ded2d031a7ffe1a27ea60fe4b72ff8fb3fffbabc4f81e2066"
+    },
+    {
+      "id": 17,
+      "name": "Prisoners Dilemma",
+      "sha256": "fd02547854cbcbe36274d4341900610ba1aa1caa35e553c38135def95e0db68d"
+    },
+    {
+      "id": 19,
+      "name": "Autarky",
+      "sha256": "c622b9afe8fea2d034999511f07fc561a4e5e7120615f0f9bf454b3f27fc0a16"
+    },
+    {
+      "id": 20,
+      "name": "Portals",
+      "sha256": "56341e6577da7429efb6f33b64b79b0c4223c4fbd9df995713ad781bead5f423"
+    },
+    {
+      "id": 21,
+      "name": "Slithery Fight",
+      "sha256": "001f3501dc5b76cb35b796f03fcaaed6c90be34741b5da03ab061ba0908347e7"
+    },
+    {
+      "id": 28,
+      "name": "weakhold",
+      "sha256": "4cf0e4e57c12fd4dfbd2ad997e29994e736dd5d8eca1e0f3353e3020d94b08c1"
+    },
+    {
+      "id": 29,
+      "name": "Australia",
+      "sha256": "7fccdee8a73a971bc3dc7a07b13aa56bb214f311249b942869bcc9708084d539"
+    },
+    {
+      "id": 30,
+      "name": "Islands",
+      "sha256": "8a403c0aa6c7affc53ee27283fed1568840bb82517c9d7eb59c69462f66d5fb6"
+    },
+    {
+      "id": 31,
+      "name": "Maze",
+      "sha256": "f154114e3ed9d39efd8516529acf8462328866b1580662228ff35dedd3cd3bdf"
+    },
+    {
+      "id": 32,
+      "name": "Stripes",
+      "sha256": "31b22a24c467edb146f8c6fc291beccce1493617d90ff5bb6eff538c3af24715"
+    },
+    {
+      "id": 33,
+      "name": "Tower Defense",
+      "sha256": "1f097251f44508a5db71c691a361362052934817e99a8975a2521bcaf81c9725"
+    },
+    {
+      "id": 34,
+      "name": "Around UNSW",
+      "sha256": "ea443f10a63c1a37521cfef814b2e9316acf5e56f29e74b9e2c20987ccd0b72a"
+    },
+    {
+      "id": 4,
+      "name": "Default",
+      "sha256": "42d4766ffede5f445692b119a26a6eee687fdc63b5b86776fefdf7fd755789b8"
+    },
+    {
+      "id": 7,
+      "name": "Queen Of Spades",
+      "sha256": "126d71b46443268596285918d910b7f8d875bf3028ca9c5ff6bad97b4e868938"
+    },
+    {
+      "id": 9,
+      "name": "Schooltime",
+      "sha256": "5b9481d0c65454b6d0a6747a581c582414cba37dd99273cc5a23dbca63b31724"
+    }
+  ],
+  "runs": {
+    "live-v7-stage1-native8-complete": {
+      "summary": {
+        "outcomes": {
+          "win": 4,
+          "loss": 4
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 1,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 55460,
+          "movement_steps": 67120,
+          "sprint": 5068,
+          "split": 1068,
+          "split_segments": 3200
+        },
+        "verified_head_trades": 4
+      },
+      "path": "build/validation/live-v7-stage1-native8-complete",
+      "candidate_fingerprints": [
+        "7f7027679a5795b50a156dfc9fee029f2078b720029a513262e14268d6c02b58"
+      ],
+      "opponent_fingerprints": [
+        "49e72de38c93d2759fc16fb00753b010631f0e1510270028da42cfeb8e30c245"
+      ],
+      "matches": [
+        {
+          "map": "20",
+          "seed": 801,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 6,
+          "opponent_longest": 3,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "d23343f510de9d50f08ec5334a1922ac6d0a37f24e3a06f7be9161fc6207eeb6"
+        },
+        {
+          "map": "20",
+          "seed": 801,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 3,
+          "opponent_longest": 6,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f9dd09a2bd14219375eebde1be699b8fb347776ef5981117798b610af882e77e"
+        },
+        {
+          "map": "19",
+          "seed": 801,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 45,
+          "opponent_longest": 29,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "9294dd772cec4d8ab9856a4c531a03c4d8e632464fb34cc28ab6f59167971bf8"
+        },
+        {
+          "map": "19",
+          "seed": 801,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 14,
+          "opponent_longest": 57,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "840f3c4829d27a8946b3827beb1c6d83451c0d657728b9e6d7fd7658c70e318a"
+        },
+        {
+          "map": "21",
+          "seed": 801,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 18,
+          "opponent_longest": 15,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "6d997aba5b1409a9dad5b975afd8ae74ed429c944d9d3c97f34387983861aafe"
+        },
+        {
+          "map": "21",
+          "seed": 801,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 15,
+          "opponent_longest": 23,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "c8736e8a8d2ba36df9ecc61b2590d7e0516114cccf0fb6203747a62319d7af14"
+        },
+        {
+          "map": "4",
+          "seed": 801,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 15,
+          "opponent_longest": 20,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "113f758c64d8da9c3f64cff64ce28eabb3244c6dd7c22de4eece3bf7d9df1aeb"
+        },
+        {
+          "map": "4",
+          "seed": 801,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 14,
+          "opponent_longest": 11,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "15e5f417601cedf0f847d53ae8a948d4be759b4f090567627e98fa076733ed54"
+        }
+      ]
+    },
+    "live-v7-stage1-sandbox2": {
+      "summary": {
+        "outcomes": {
+          "win": 2
+        },
+        "matches": 2,
+        "passed": true,
+        "mode": "sandbox",
+        "max_points": 46524504,
+        "candidate_max_points": 46524504,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 42350,
+          "movement_steps": 48957,
+          "split": 1156,
+          "split_segments": 3235,
+          "sprint": 3026
+        },
+        "verified_head_trades": 1
+      },
+      "path": "build/validation/live-v7-stage1-sandbox2",
+      "candidate_fingerprints": [
+        "7f7027679a5795b50a156dfc9fee029f2078b720029a513262e14268d6c02b58"
+      ],
+      "opponent_fingerprints": [
+        "49e72de38c93d2759fc16fb00753b010631f0e1510270028da42cfeb8e30c245"
+      ],
+      "matches": [
+        {
+          "map": "21",
+          "seed": 802,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 11,
+          "opponent_longest": 9,
+          "candidate_points": 46524504,
+          "candidate_errors": 0,
+          "replay_sha256": "e3b8db0e47f1db2842c9914b2587842a91b52a8267263d2ce5079458262e1f4f"
+        },
+        {
+          "map": "21",
+          "seed": 802,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 30,
+          "opponent_longest": 14,
+          "candidate_points": 43416303,
+          "candidate_errors": 0,
+          "replay_sha256": "57ffbbc30eb9291b4db74f20730f78fdbf1be57bd935d87a737af310fc08c8a2"
+        }
+      ],
+      "strategy_metrics": {
+        "candidate": {
+          "totals": {
+            "turns": 46532,
+            "declared_paid_steps": 572,
+            "pearls": 3645,
+            "queen_pearls": 4,
+            "portal_crossings": 49,
+            "children_created": 1156,
+            "children_dead_within_5_turns": 288,
+            "final_longest": 41
+          },
+          "queens_survived": 0,
+          "queen_blockers": {
+            "self": 2
+          },
+          "median_population": {
+            "25": 11.0,
+            "100": 26.0
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 45889,
+            "declared_paid_steps": 405,
+            "pearls": 3074,
+            "queen_pearls": 4,
+            "portal_crossings": 61,
+            "children_created": 1049,
+            "children_dead_within_5_turns": 257,
+            "final_longest": 23
+          },
+          "queens_survived": 0,
+          "queen_blockers": {
+            "self": 2
+          },
+          "median_population": {
+            "25": 11.0,
+            "100": 24.0
+          }
+        }
+      }
+    },
+    "live-v7-stage2b-native8": {
+      "summary": {
+        "outcomes": {
+          "win": 3,
+          "loss": 5
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 83966,
+          "movement_steps": 99006,
+          "split": 1175,
+          "split_segments": 3796,
+          "sprint": 6486
+        },
+        "verified_head_trades": 7
+      },
+      "path": "build/validation/live-v7-stage2b-native8",
+      "candidate_fingerprints": [
+        "885db711ea71dabdea1438d9831ee141fc406a040ceefaee0a4cb1588e10f8ef"
+      ],
+      "opponent_fingerprints": [
+        "7f7027679a5795b50a156dfc9fee029f2078b720029a513262e14268d6c02b58"
+      ],
+      "matches": [
+        {
+          "map": "19",
+          "seed": 803,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 11,
+          "opponent_queen": 0,
+          "candidate_longest": 55,
+          "opponent_longest": 10,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "ee150af47d405b91a57bb8ae3c62a7b9dbcf0db3f083bb0fb43f33f82373ad43"
+        },
+        {
+          "map": "19",
+          "seed": 803,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 11,
+          "candidate_longest": 10,
+          "opponent_longest": 55,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "00f953f1058edca3eaadce214b9ed88683d0672e85517081ce8be7f3376646f2"
+        },
+        {
+          "map": "30",
+          "seed": 803,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 18,
+          "opponent_longest": 26,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "dc159660a2b617117032a394b73844cd5b1de7eb463e2020490c26e56e6aec37"
+        },
+        {
+          "map": "30",
+          "seed": 803,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 21,
+          "opponent_longest": 15,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "13ac35fcf2e8fcecefb5497ab6b725adcd9ca3a7cbda776c6d6bbd999923b4ea"
+        },
+        {
+          "map": "34",
+          "seed": 803,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 20,
+          "opponent_longest": 19,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "e9f70b9079b7067910a74e5275c7800b54c19f31e9bdd8e535e59009bf56e07d"
+        },
+        {
+          "map": "34",
+          "seed": 803,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 35,
+          "candidate_longest": 25,
+          "opponent_longest": 35,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "7b813d904b2db3955bf273118d2feeaf1fcd8037a5263076c236c62096c6ed71"
+        },
+        {
+          "map": "31",
+          "seed": 803,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 12,
+          "opponent_longest": 14,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "42a31d8a91aa48dc446e34aade764f20b6cf85b2dc8beeff73b7af799dfcf7be"
+        },
+        {
+          "map": "31",
+          "seed": 803,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 6,
+          "opponent_longest": 21,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "efc4b3a06a52ba26ddff01d176f05b9d9933e6bc89982a30dfec87b0ada16993"
+        }
+      ],
+      "strategy_metrics": {
+        "candidate": {
+          "totals": {
+            "turns": 91627,
+            "declared_paid_steps": 398,
+            "portal_crossings": 176,
+            "pearls": 4567,
+            "queen_pearls": 135,
+            "children_created": 1175,
+            "final_queen": 11,
+            "final_longest": 167,
+            "children_dead_within_5_turns": 121
+          },
+          "queens_survived": 1,
+          "queen_blockers": {
+            "hitHeadToHead": 3,
+            "self": 2,
+            "ally": 2
+          },
+          "median_population": {
+            "25": 8.0,
+            "100": 9.5
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 67002,
+            "declared_paid_steps": 264,
+            "portal_crossings": 136,
+            "pearls": 2862,
+            "queen_pearls": 224,
+            "children_created": 783,
+            "final_longest": 195,
+            "final_queen": 46,
+            "children_dead_within_5_turns": 79
+          },
+          "queens_survived": 2,
+          "queen_blockers": {
+            "hitHeadToHead": 1,
+            "self": 3,
+            "ally": 2
+          },
+          "median_population": {
+            "25": 7.5,
+            "100": 9.0
+          }
+        }
+      }
+    },
+    "live-v7-stage2b-sandbox2": {
+      "summary": {
+        "outcomes": {
+          "win": 2
+        },
+        "matches": 2,
+        "passed": false,
+        "mode": "sandbox",
+        "max_points": 43754038,
+        "candidate_max_points": 43754038,
+        "candidate_errors": 1,
+        "opponent_errors": 1,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 42421,
+          "movement_steps": 51115,
+          "split": 522,
+          "split_segments": 1659,
+          "sprint": 3906
+        },
+        "verified_head_trades": 6
+      },
+      "path": "build/validation/live-v7-stage2b-sandbox2",
+      "candidate_fingerprints": [
+        "885db711ea71dabdea1438d9831ee141fc406a040ceefaee0a4cb1588e10f8ef"
+      ],
+      "opponent_fingerprints": [
+        "7f7027679a5795b50a156dfc9fee029f2078b720029a513262e14268d6c02b58"
+      ],
+      "matches": [
+        {
+          "map": "34",
+          "seed": 804,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 18,
+          "opponent_longest": 15,
+          "candidate_points": 31764591,
+          "candidate_errors": 1,
+          "replay_sha256": "0d9de789f1fdecdd5a2d81ddbeb5898340d5b8a31e6fd6ca26d3bf0304b37ad4"
+        },
+        {
+          "map": "34",
+          "seed": 804,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 18,
+          "opponent_queen": 0,
+          "candidate_longest": 18,
+          "opponent_longest": 18,
+          "candidate_points": 43754038,
+          "candidate_errors": 0,
+          "replay_sha256": "dc9d0ea6f7765e219f97e1942bb3d8814bf0e61d1af06d62d0b0747a1eb91349"
+        }
+      ]
+    },
+    "live-v7-stage3-native6": {
+      "summary": {
+        "outcomes": {
+          "loss": 5,
+          "win": 1
+        },
+        "matches": 6,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 57115,
+          "movement_steps": 68598,
+          "split": 1537,
+          "split_segments": 4188,
+          "sprint": 5084
+        },
+        "verified_head_trades": 5
+      },
+      "path": "build/validation/live-v7-stage3-native6",
+      "candidate_fingerprints": [
+        "ac4cb55e6c3f6148bccbd03c3f5da2d282180ee9e4d256165334fcb82922253c"
+      ],
+      "opponent_fingerprints": [
+        "885db711ea71dabdea1438d9831ee141fc406a040ceefaee0a4cb1588e10f8ef"
+      ],
+      "matches": [
+        {
+          "map": "20",
+          "seed": 805,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 3,
+          "candidate_longest": 8,
+          "opponent_longest": 3,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "5e9a6964fc12050f48a66537f2d4daa34b4ee748bb8da3db7c54b1b22610c77b"
+        },
+        {
+          "map": "20",
+          "seed": 805,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 4,
+          "candidate_longest": 6,
+          "opponent_longest": 6,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f25fe3d9cfbdc2938fd2115049b7c2043b75694bb0bc9f0386e31be6af3268f8"
+        },
+        {
+          "map": "4",
+          "seed": 805,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 23,
+          "opponent_longest": 27,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "d40a996bb180e1467055f9c0eda63e8eb21c941f8ae96e78a269f45785965a54"
+        },
+        {
+          "map": "4",
+          "seed": 805,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 9,
+          "opponent_queen": 0,
+          "candidate_longest": 23,
+          "opponent_longest": 13,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f075243a9f7a1145541f84d5f42f7f6fa671cc93a8589539a9f2223139e9bc30"
+        },
+        {
+          "map": "21",
+          "seed": 805,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 12,
+          "opponent_longest": 20,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "316aab0d11a8eb21db79c3a34b7df6fa324e24b203fd68cfc1b85ec24ce7a070"
+        },
+        {
+          "map": "21",
+          "seed": 805,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 7,
+          "opponent_longest": 16,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "30bbab1387ef15c69d0c1923037326e823b130a441a6be9b1214bdae30c2e725"
+        }
+      ],
+      "strategy_metrics": {
+        "candidate": {
+          "totals": {
+            "turns": 63736,
+            "declared_paid_steps": 556,
+            "portal_crossings": 456,
+            "pearls": 4535,
+            "queen_pearls": 55,
+            "children_created": 1537,
+            "children_dead_within_5_turns": 367,
+            "final_longest": 79,
+            "final_queen": 12
+          },
+          "queens_survived": 2,
+          "queen_blockers": {
+            "self": 2,
+            "enemy": 1,
+            "hitHeadToHead": 1
+          },
+          "median_population": {
+            "25": 4.5,
+            "100": 7.5
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 54632,
+            "portal_crossings": 64,
+            "pearls": 3379,
+            "children_created": 1122,
+            "final_queen": 7,
+            "final_longest": 85,
+            "declared_paid_steps": 491,
+            "queen_pearls": 43,
+            "children_dead_within_5_turns": 256
+          },
+          "queens_survived": 2,
+          "queen_blockers": {
+            "ally": 2,
+            "self": 1,
+            "hitHeadToHead": 1
+          },
+          "median_population": {
+            "25": 4.0,
+            "100": 5.5
+          }
+        }
+      }
+    },
+    "live-v7-stage3-sandbox2": {
+      "summary": {
+        "outcomes": {
+          "loss": 2
+        },
+        "matches": 2,
+        "passed": true,
+        "mode": "sandbox",
+        "max_points": 16131037,
+        "candidate_max_points": 15507834,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 7606,
+          "movement_steps": 8361,
+          "split": 214,
+          "split_segments": 529,
+          "sprint": 371
+        },
+        "verified_head_trades": 0
+      },
+      "path": "build/validation/live-v7-stage3-sandbox2",
+      "candidate_fingerprints": [
+        "ac4cb55e6c3f6148bccbd03c3f5da2d282180ee9e4d256165334fcb82922253c"
+      ],
+      "opponent_fingerprints": [
+        "885db711ea71dabdea1438d9831ee141fc406a040ceefaee0a4cb1588e10f8ef"
+      ],
+      "matches": [
+        {
+          "map": "20",
+          "seed": 806,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 3,
+          "candidate_longest": 10,
+          "opponent_longest": 3,
+          "candidate_points": 15507834,
+          "candidate_errors": 0,
+          "replay_sha256": "a92ecb7b320e533dd70da4fe008a838a4172475cc4d01a104a57e1b688cec54b"
+        },
+        {
+          "map": "20",
+          "seed": 806,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 4,
+          "candidate_longest": 8,
+          "opponent_longest": 6,
+          "candidate_points": 15377635,
+          "candidate_errors": 0,
+          "replay_sha256": "2528a649b2a31ed5b368b85ecf34ea924d1512306509c57ff6e473aa3133de30"
+        }
+      ]
+    },
+    "live-v7-stage4-native6": {
+      "summary": {
+        "outcomes": {
+          "win": 3,
+          "loss": 3
+        },
+        "matches": 6,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "split": 665,
+          "split_segments": 2091,
+          "move": 44955,
+          "movement_steps": 54413,
+          "sprint": 4167
+        },
+        "verified_head_trades": 2
+      },
+      "path": "build/validation/live-v7-stage4-native6",
+      "candidate_fingerprints": [
+        "4e1b0246c2340cb8f11fb500b1373a3d1b5e6fa08e8b38a72caca5fb06838f23"
+      ],
+      "opponent_fingerprints": [
+        "ac4cb55e6c3f6148bccbd03c3f5da2d282180ee9e4d256165334fcb82922253c"
+      ],
+      "matches": [
+        {
+          "map": "9",
+          "seed": 807,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 45,
+          "opponent_longest": 20,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f08a203c09fffaced4ae029be0b95662cb6b64c6416bcaf18cac0c73c603b2e7"
+        },
+        {
+          "map": "9",
+          "seed": 807,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 13,
+          "opponent_longest": 10,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "9ce779fd86f9a90edb4ad95d4dee7f8aa8381fc61e7cd6e9aad8f5c8a3434bf6"
+        },
+        {
+          "map": "31",
+          "seed": 807,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 3,
+          "candidate_longest": 8,
+          "opponent_longest": 12,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "6ef4a416cbb80c8a1dc3a75b401cabb65607fa276bbb1de0095875f62ba787cb"
+        },
+        {
+          "map": "31",
+          "seed": 807,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 10,
+          "opponent_longest": 21,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "a47bd27356c5e27b2934e9a26669fa841ca517be44124cbc5c52a45c9071ccab"
+        },
+        {
+          "map": "19",
+          "seed": 807,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 5,
+          "candidate_longest": 43,
+          "opponent_longest": 41,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "980c2b9692ddf5a005fbeaf865b41f6d4eea688fa8db7895bd4feb8897238c1e"
+        },
+        {
+          "map": "19",
+          "seed": 807,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 0,
+          "candidate_longest": 24,
+          "opponent_longest": 60,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "946d84c1cb8386a8f1b937e1acf46c3761a15becac11fa9954c2b3835ee4ab6f"
+        }
+      ]
+    },
+    "live-v7-stage4-sandbox2": {
+      "summary": {
+        "outcomes": {
+          "win": 2
+        },
+        "matches": 2,
+        "passed": true,
+        "mode": "sandbox",
+        "max_points": 52864159,
+        "candidate_max_points": 47686687,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 43062,
+          "movement_steps": 51535,
+          "split": 526,
+          "split_segments": 1755,
+          "sprint": 3756
+        },
+        "verified_head_trades": 4
+      },
+      "path": "build/validation/live-v7-stage4-sandbox2",
+      "candidate_fingerprints": [
+        "4e1b0246c2340cb8f11fb500b1373a3d1b5e6fa08e8b38a72caca5fb06838f23"
+      ],
+      "opponent_fingerprints": [
+        "ac4cb55e6c3f6148bccbd03c3f5da2d282180ee9e4d256165334fcb82922253c"
+      ],
+      "matches": [
+        {
+          "map": "34",
+          "seed": 808,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 29,
+          "opponent_longest": 23,
+          "candidate_points": 47686687,
+          "candidate_errors": 0,
+          "replay_sha256": "c7bdeb6f71046f536ee18a3c6e7ae03c69cb24774f2ea5fbf1beecadb5a29023"
+        },
+        {
+          "map": "34",
+          "seed": 808,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 15,
+          "opponent_queen": 0,
+          "candidate_longest": 15,
+          "opponent_longest": 29,
+          "candidate_points": 47505768,
+          "candidate_errors": 0,
+          "replay_sha256": "01e7aa0122a478c8aa87e8e25dff4d08f18c0ead9b217338d8e6b177c36a7839"
+        }
+      ]
+    },
+    "live-v7-stage5-native4": {
+      "summary": {
+        "outcomes": {
+          "loss": 3,
+          "win": 1
+        },
+        "matches": 4,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 51350,
+          "movement_steps": 60593,
+          "split": 705,
+          "split_segments": 2179,
+          "sprint": 4092
+        },
+        "verified_head_trades": 5
+      },
+      "path": "build/validation/live-v7-stage5-native4",
+      "candidate_fingerprints": [
+        "c8e5b2460555c399a5518367a73d65ecb635fbf36bd1d49e704e14715795e5d5"
+      ],
+      "opponent_fingerprints": [
+        "4e1b0246c2340cb8f11fb500b1373a3d1b5e6fa08e8b38a72caca5fb06838f23"
+      ],
+      "matches": [
+        {
+          "map": "19",
+          "seed": 811,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 37,
+          "opponent_queen": 41,
+          "candidate_longest": 37,
+          "opponent_longest": 41,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "045d0296128a2c4490d096fba8820881ca37b7c961f631fef95a377f6a49286b"
+        },
+        {
+          "map": "19",
+          "seed": 811,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 31,
+          "opponent_queen": 34,
+          "candidate_longest": 31,
+          "opponent_longest": 43,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "0000d16808502b042e2f8963124ac6e0235cc829bb3870c7690604ba10360f45"
+        },
+        {
+          "map": "34",
+          "seed": 811,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 22,
+          "opponent_longest": 20,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "97767467534a7f3e17baac1e06d59dc0a855ec2a920b98ad78a6cbbc6e3e7e26"
+        },
+        {
+          "map": "34",
+          "seed": 811,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 17,
+          "opponent_longest": 23,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "bbb40659c24fac4a5bb0f6a2719a107009a0802e616d612192b682d234bc71af"
+        }
+      ]
+    },
+    "live-v7-integration-native34": {
+      "summary": {
+        "outcomes": {
+          "loss": 19,
+          "win": 14,
+          "draw": 1
+        },
+        "matches": 34,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 285126,
+          "movement_steps": 339747,
+          "sprint": 24053,
+          "split": 5316,
+          "split_segments": 15818
+        },
+        "verified_head_trades": 40
+      },
+      "path": "build/validation/live-v7-integration-native34",
+      "candidate_fingerprints": [
+        "c8e5b2460555c399a5518367a73d65ecb635fbf36bd1d49e704e14715795e5d5"
+      ],
+      "opponent_fingerprints": [
+        "49e72de38c93d2759fc16fb00753b010631f0e1510270028da42cfeb8e30c245"
+      ],
+      "matches": [
+        {
+          "map": "4",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 11,
+          "opponent_longest": 18,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "3f37edf0be443a85c8eea4c5105d16f741540d43c46504c28b801eb1fce4d5c2"
+        },
+        {
+          "map": "4",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 22,
+          "opponent_longest": 14,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "4ed22e3f6f29389948421c430b6b9ab83f0e610071481fb6267325d595a4bc80"
+        },
+        {
+          "map": "7",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 22,
+          "opponent_queen": 0,
+          "candidate_longest": 22,
+          "opponent_longest": 26,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "95262dc63553b546897c0261deab5e25b420ca28e31c2977f1bca71b14ab667c"
+        },
+        {
+          "map": "7",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 11,
+          "opponent_longest": 16,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "39a497ae1f5e33543055259ecc78c7d5b1cdd6085aca364ac1e223b5ef5b739a"
+        },
+        {
+          "map": "9",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 3,
+          "candidate_longest": 18,
+          "opponent_longest": 12,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "7a3f13a6e6022905311a55ef27510e72252ff723a1b2f639d2508acd35134cd3"
+        },
+        {
+          "map": "9",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 20,
+          "opponent_longest": 23,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "2d09949e9f33a249485945e73fb72f69759dc3f43fad5985a24db901755a033b"
+        },
+        {
+          "map": "11",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 11,
+          "opponent_longest": 8,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "b6b0a1d32db052b4bd3097ef1008db711d67cf23efee1cf1ef5afadd10e45ba9"
+        },
+        {
+          "map": "11",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 12,
+          "opponent_longest": 14,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "1b0a912ebb443980a32a53f06721a03b7d52b262093b0827dfec834d1842d469"
+        },
+        {
+          "map": "13",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 17,
+          "opponent_longest": 6,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "dd1eb1ccb21449626f56e4e1b61081e7d8d126c33f891e2a9ce95f2bb9fda553"
+        },
+        {
+          "map": "13",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 11,
+          "opponent_longest": 8,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "df94374f7100abccd22ca8f7e89f9a8377aa2b1788d1865dca794cc4ab6d9e2d"
+        },
+        {
+          "map": "15",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 21,
+          "opponent_queen": 31,
+          "candidate_longest": 21,
+          "opponent_longest": 31,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "39b88e4f594ebfde44342422fd3dd3d4baeafb1281e19055913fdc39cd4f0af8"
+        },
+        {
+          "map": "15",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 31,
+          "opponent_queen": 14,
+          "candidate_longest": 31,
+          "opponent_longest": 14,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "2cd24705f40c3e17125c280f8b92a85f64c21aa08be8ac8248156237ecf48b63"
+        },
+        {
+          "map": "17",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 5,
+          "opponent_longest": 12,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "6491f151bdcec80be9a9b28e759db7773701c3de7a9dc3ab6e26ebbd7d059f60"
+        },
+        {
+          "map": "17",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 5,
+          "opponent_longest": 13,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "75e3b55f86eb5ee722032d6602b9460ae9422db4f392ee803424712880ffe68b"
+        },
+        {
+          "map": "19",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 68,
+          "opponent_queen": 0,
+          "candidate_longest": 68,
+          "opponent_longest": 12,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "0a2f18c371d5c2bfa14d86207951a8e038f2b64a6e7ddb82685025320026a463"
+        },
+        {
+          "map": "19",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 7,
+          "candidate_longest": 29,
+          "opponent_longest": 35,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f09ac36f94d77298f35d34b21a418be1dacbfd6f43d96341d94351024ea60fd6"
+        },
+        {
+          "map": "20",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 3,
+          "candidate_longest": 5,
+          "opponent_longest": 3,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "73f1e7d1cc8dec153e8c506f14611b4bfe90dee249eb88fc7262d9364b71d43e"
+        },
+        {
+          "map": "20",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 4,
+          "candidate_longest": 8,
+          "opponent_longest": 5,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f685d9a53505e801cfd8bc7fc538d96df97702ae93fb213225005f21e0c7b300"
+        },
+        {
+          "map": "21",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 15,
+          "opponent_longest": 17,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "5ca55ec73971929f6c2dad435764c28ddb8065b0eaf4659a85c0429116af8d44"
+        },
+        {
+          "map": "21",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 17,
+          "opponent_longest": 9,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "fbc6a4571efe0402c1d2c52c318549bd87ea71ec721a51fd0f6bb6f88bc2be61"
+        },
+        {
+          "map": "28",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 5,
+          "opponent_queen": 4,
+          "candidate_longest": 5,
+          "opponent_longest": 4,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "eadb98e4151b9158bba0d699c7f4efde3d575b69fc79b9bdaa2e17e9cc0015d9"
+        },
+        {
+          "map": "28",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "draw",
+          "candidate_queen": 4,
+          "opponent_queen": 4,
+          "candidate_longest": 4,
+          "opponent_longest": 4,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "38275a81f2d7ec81cf4033c39a273214568278376c4f2c25f2a50b8fb75d7a29"
+        },
+        {
+          "map": "29",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 22,
+          "opponent_longest": 83,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f64a61cccee889ccd744840918ac83b0b93cd47fab15f68c87c09c2682ef755f"
+        },
+        {
+          "map": "29",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 39,
+          "opponent_longest": 50,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "c93b706a151b0fc2260f3df66507b1838c6caf2712a49ccedc14d431c7eed6f3"
+        },
+        {
+          "map": "30",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 13,
+          "opponent_longest": 13,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "7fae23f76bba65b0598fe71db9107ff31d3c766c0dfa24a2f99ebe5b6b03da0e"
+        },
+        {
+          "map": "30",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 22,
+          "opponent_longest": 22,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "1248a517f841021c2df969fea6a26000cc74b5e2b209236f575a78c1437f5cb7"
+        },
+        {
+          "map": "31",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 10,
+          "opponent_longest": 8,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "8d7a656be24b2db1d8793b2e916f4984145d0510cbdba6ef197288271b4a1029"
+        },
+        {
+          "map": "31",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 11,
+          "opponent_longest": 27,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "0091ee987c0e429615b9c29ae4bfbeb2cffe71278858f8eaf1120b020936f7d2"
+        },
+        {
+          "map": "32",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 8,
+          "opponent_longest": 7,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "6bacb816d6381a8dd6e9025ad5ea0e6599c4791af836f026a380636594926fbd"
+        },
+        {
+          "map": "32",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 3,
+          "opponent_longest": 72,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f6a77043337b5478fb7fe117c2ab114273fb91e24a94b36b3c0ede761e2ced40"
+        },
+        {
+          "map": "33",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 3,
+          "candidate_longest": 36,
+          "opponent_longest": 14,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "6e1f3c28c92d83b4a3e3c68e86d8f7a0729c9ca69b2bbff6c020d006c3145355"
+        },
+        {
+          "map": "33",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 3,
+          "candidate_longest": 18,
+          "opponent_longest": 19,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "498ca447b7e7fe94d7247880e6e816e704e0db15a17b87d91993feff8a72cbde"
+        },
+        {
+          "map": "34",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 28,
+          "opponent_longest": 19,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "4bb7b4a38d8455d5bae85160315174438050a0520cf673075bc6757e1570ad32"
+        },
+        {
+          "map": "34",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 21,
+          "opponent_longest": 24,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "350f553720bc9748878c6841666c19019ba7bdd6ca29ae7e1c1deea7d838ce94"
+        }
+      ],
+      "strategy_metrics": {
+        "candidate": {
+          "totals": {
+            "turns": 314495,
+            "declared_paid_steps": 936,
+            "portal_crossings": 1409,
+            "pearls": 17548,
+            "queen_pearls": 491,
+            "children_created": 5316,
+            "children_dead_within_5_turns": 890,
+            "final_longest": 599,
+            "final_queen": 154
+          },
+          "queens_survived": 7,
+          "queen_blockers": {
+            "ally": 12,
+            "hitHeadToHead": 5,
+            "self": 9,
+            "enemy": 1
+          },
+          "median_population": {
+            "25": 4.0,
+            "100": 6.5
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 200241,
+            "declared_paid_steps": 954,
+            "portal_crossings": 520,
+            "pearls": 10006,
+            "queen_pearls": 511,
+            "children_created": 2981,
+            "children_dead_within_5_turns": 499,
+            "final_longest": 662,
+            "final_queen": 79
+          },
+          "queens_survived": 11,
+          "queen_blockers": {
+            "hitHeadToHead": 10,
+            "ally": 7,
+            "self": 6
+          },
+          "median_population": {
+            "25": 3.0,
+            "100": 4.0
+          }
+        }
+      }
+    },
+    "live-v7-integration-sandbox8": {
+      "summary": {
+        "outcomes": {
+          "loss": 7,
+          "win": 1
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "sandbox",
+        "max_points": 55643382,
+        "candidate_max_points": 51286581,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 129561,
+          "movement_steps": 151849,
+          "split": 2841,
+          "split_segments": 8241,
+          "sprint": 9910
+        },
+        "verified_head_trades": 12
+      },
+      "path": "build/validation/live-v7-integration-sandbox8",
+      "candidate_fingerprints": [
+        "c8e5b2460555c399a5518367a73d65ecb635fbf36bd1d49e704e14715795e5d5"
+      ],
+      "opponent_fingerprints": [
+        "49e72de38c93d2759fc16fb00753b010631f0e1510270028da42cfeb8e30c245"
+      ],
+      "matches": [
+        {
+          "map": "20",
+          "seed": 814,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 3,
+          "candidate_longest": 9,
+          "opponent_longest": 3,
+          "candidate_points": 16227403,
+          "candidate_errors": 0,
+          "replay_sha256": "0008df9ae153f51a431ca9d8dc0bbc8b9db3fad622db773dbe38ccf8df64680e"
+        },
+        {
+          "map": "20",
+          "seed": 814,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 4,
+          "candidate_longest": 9,
+          "opponent_longest": 5,
+          "candidate_points": 15497165,
+          "candidate_errors": 0,
+          "replay_sha256": "34c51f322aa5910ce78d2692a76e4125d2d955d9cc85adf8e0978232656e74bf"
+        },
+        {
+          "map": "21",
+          "seed": 814,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 19,
+          "opponent_longest": 24,
+          "candidate_points": 35817155,
+          "candidate_errors": 0,
+          "replay_sha256": "8eeb7cbe59bdded1d1c0570b8c5712ba47491995db2910b6d92db905dea35465"
+        },
+        {
+          "map": "21",
+          "seed": 814,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 11,
+          "opponent_longest": 15,
+          "candidate_points": 42236140,
+          "candidate_errors": 0,
+          "replay_sha256": "42a5592c3d5251932491bfc960dbed42a579bb2b225f3e428930d9c7efd67e8e"
+        },
+        {
+          "map": "9",
+          "seed": 814,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 17,
+          "opponent_longest": 22,
+          "candidate_points": 38771086,
+          "candidate_errors": 0,
+          "replay_sha256": "bc9ec79693c43697d8e2a700410e10b34439bfd990e2c423878994806447a7fe"
+        },
+        {
+          "map": "9",
+          "seed": 814,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 3,
+          "candidate_longest": 16,
+          "opponent_longest": 19,
+          "candidate_points": 48581433,
+          "candidate_errors": 0,
+          "replay_sha256": "ad6d7a2520dd1f501889231d280304679a0e4e9d7bb79d8747a5ac60cb376072"
+        },
+        {
+          "map": "34",
+          "seed": 814,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 16,
+          "opponent_longest": 20,
+          "candidate_points": 34365374,
+          "candidate_errors": 0,
+          "replay_sha256": "6ac9983385e7d7324398631fef4b90f46506122041b329409dc08a74d3fe6dde"
+        },
+        {
+          "map": "34",
+          "seed": 814,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 22,
+          "opponent_longest": 18,
+          "candidate_points": 51286581,
+          "candidate_errors": 0,
+          "replay_sha256": "8fa072961bbfd14f7a7fc2bc470932a1f50adb033aba1cfa2705e5611a8bfc29"
+        }
+      ]
+    },
+    "live-v7-portal-ablation8": {
+      "summary": {
+        "outcomes": {
+          "loss": 5,
+          "win": 3
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 96051,
+          "movement_steps": 111282,
+          "split": 2409,
+          "split_segments": 6791,
+          "sprint": 6858
+        },
+        "verified_head_trades": 8
+      },
+      "path": "build/validation/live-v7-portal-ablation8",
+      "candidate_fingerprints": [
+        "c8e5b2460555c399a5518367a73d65ecb635fbf36bd1d49e704e14715795e5d5"
+      ],
+      "opponent_fingerprints": [
+        "0aade3e1e32f621c9c9388cc6abb56368a912c46fc98ad61c1d7dec059d912d1"
+      ],
+      "matches": [
+        {
+          "map": "20",
+          "seed": 813,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 8,
+          "opponent_longest": 10,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "d28b7a8820256892ec4f6e31b6911ae409bbc75dc7b56b7b15b944a9505c7572"
+        },
+        {
+          "map": "20",
+          "seed": 813,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 14,
+          "opponent_queen": 0,
+          "candidate_longest": 14,
+          "opponent_longest": 7,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "00a3eba74806a0f1a5ba162c3c11769d5d31ef6d0b8c8e8cf3c8b254c1adcda2"
+        },
+        {
+          "map": "9",
+          "seed": 813,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 11,
+          "opponent_longest": 32,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "c6aea01b274b4b600fdb724f97fe39cc50d108f541bd0d9e71411497ce7b8c40"
+        },
+        {
+          "map": "9",
+          "seed": 813,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 17,
+          "opponent_longest": 22,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "c438d5928308d244623db82c9902c2e4f0b349d8ddd8e1bb83a1ace1bd00c9f8"
+        },
+        {
+          "map": "21",
+          "seed": 813,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 16,
+          "opponent_longest": 14,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "0abd2a786541e71750cad69a6d1392eb76895a8906e9fad9ef2c6942b15f6470"
+        },
+        {
+          "map": "21",
+          "seed": 813,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 20,
+          "opponent_longest": 8,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "6841c0f7553c95c0fc23d42e79b4833e0eed849d3b719150ac77db19c44a51c3"
+        },
+        {
+          "map": "31",
+          "seed": 813,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 10,
+          "opponent_longest": 14,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "5ac07882abe2a34e3e01a4cba34c819109dcb0e47dd37677ac834f3a6cf09b4f"
+        },
+        {
+          "map": "31",
+          "seed": 813,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 10,
+          "opponent_longest": 14,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "6caf023af8c833d4b0dbad6d1dbb2c92ab3d1f6f7bcfd2acc1ab2c98db218893"
+        }
+      ],
+      "strategy_metrics": {
+        "candidate": {
+          "totals": {
+            "turns": 105318,
+            "declared_paid_steps": 508,
+            "portal_crossings": 951,
+            "pearls": 7107,
+            "queen_pearls": 84,
+            "children_created": 2409,
+            "children_dead_within_5_turns": 451,
+            "final_longest": 106,
+            "final_queen": 20
+          },
+          "queens_survived": 3,
+          "queen_blockers": {
+            "ally": 3,
+            "hitHeadToHead": 2
+          },
+          "median_population": {
+            "25": 4.0,
+            "100": 9.5
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 100428,
+            "declared_paid_steps": 525,
+            "portal_crossings": 284,
+            "pearls": 6318,
+            "queen_pearls": 84,
+            "children_created": 2028,
+            "children_dead_within_5_turns": 404,
+            "final_longest": 121,
+            "final_queen": 6
+          },
+          "queens_survived": 2,
+          "queen_blockers": {
+            "self": 4,
+            "hitHeadToHead": 2
+          },
+          "median_population": {
+            "25": 4.0,
+            "100": 7.5
+          }
+        }
+      }
+    },
+    "live-v7-balanced-native34": {
+      "summary": {
+        "outcomes": {
+          "win": 16,
+          "loss": 17,
+          "draw": 1
+        },
+        "matches": 34,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 276427,
+          "movement_steps": 328464,
+          "sprint": 22879,
+          "split": 4805,
+          "split_segments": 14518
+        },
+        "verified_head_trades": 41
+      },
+      "path": "build/validation/live-v7-balanced-native34",
+      "candidate_fingerprints": [
+        "a0c4089463d7a46b031a1cdd548844f90cada61e03b7312aa70a69e15b8a30eb"
+      ],
+      "opponent_fingerprints": [
+        "49e72de38c93d2759fc16fb00753b010631f0e1510270028da42cfeb8e30c245"
+      ],
+      "matches": [
+        {
+          "map": "11",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 26,
+          "opponent_longest": 10,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "da06898adf12497a16579b878d2a022838045f35866faf8a09949042476718df"
+        },
+        {
+          "map": "11",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 15,
+          "opponent_longest": 11,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "44bfabc2c3eccd0dd81817628f16a0e5f51994dca1d1e55635a568b89e17bd0e"
+        },
+        {
+          "map": "13",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 17,
+          "opponent_longest": 6,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "dd1eb1ccb21449626f56e4e1b61081e7d8d126c33f891e2a9ce95f2bb9fda553"
+        },
+        {
+          "map": "13",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 11,
+          "opponent_longest": 8,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "df94374f7100abccd22ca8f7e89f9a8377aa2b1788d1865dca794cc4ab6d9e2d"
+        },
+        {
+          "map": "15",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 31,
+          "candidate_longest": 20,
+          "opponent_longest": 31,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f48403d96dfc96bb034091451ca7c3b64fb67ffafb4133dcb24a48b7cb6ec65a"
+        },
+        {
+          "map": "15",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 20,
+          "opponent_queen": 11,
+          "candidate_longest": 20,
+          "opponent_longest": 11,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "0d28f4d8cfd17326505d416a6351791c04b850732fb3c56be938de5d4d4966ad"
+        },
+        {
+          "map": "17",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 13,
+          "opponent_longest": 23,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f03ebf3234e2a84e5938b07a4e2d58e9019b139453e73b01f89fdedb48c5b415"
+        },
+        {
+          "map": "17",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 8,
+          "opponent_longest": 27,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "081f78cdfb73f8e27ccf35ec49c6cc23511c9b276cfef841dd40b3416b7a76ba"
+        },
+        {
+          "map": "19",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 36,
+          "opponent_queen": 0,
+          "candidate_longest": 43,
+          "opponent_longest": 18,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "a22934e4fc8fc64cfb29cf31a8364391310cda71aa02cf5dc819998678b4b3b1"
+        },
+        {
+          "map": "19",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 29,
+          "candidate_longest": 7,
+          "opponent_longest": 41,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "5b00c0782e397dc804bd28c4e3f29a0b7e7eaf37f6030ccab8357ec0a475603f"
+        },
+        {
+          "map": "20",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 3,
+          "candidate_longest": 7,
+          "opponent_longest": 3,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "b6522db200edc2b07ae321755732b1bef0203ef8a2b4fe6c4c3fc426d05417e1"
+        },
+        {
+          "map": "20",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 4,
+          "candidate_longest": 7,
+          "opponent_longest": 7,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "b27395e87bc8a3ddafa00fc05b3fe7da6043562f81458fc4845634f07e0377eb"
+        },
+        {
+          "map": "21",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 9,
+          "opponent_longest": 10,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "2d858ae0ce2852afed64ecff8b1725267ebdde491e8597e1e93ca76704653a7a"
+        },
+        {
+          "map": "21",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 14,
+          "opponent_longest": 21,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "ef8217825420b1c3d064f739c240a0a2f8972c74521953c18f87f9980499e880"
+        },
+        {
+          "map": "28",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 5,
+          "opponent_queen": 4,
+          "candidate_longest": 5,
+          "opponent_longest": 4,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "eadb98e4151b9158bba0d699c7f4efde3d575b69fc79b9bdaa2e17e9cc0015d9"
+        },
+        {
+          "map": "28",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "draw",
+          "candidate_queen": 4,
+          "opponent_queen": 4,
+          "candidate_longest": 4,
+          "opponent_longest": 4,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "38275a81f2d7ec81cf4033c39a273214568278376c4f2c25f2a50b8fb75d7a29"
+        },
+        {
+          "map": "29",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 27,
+          "opponent_longest": 20,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "64bb891309784ebe8caf0db4bdc2b9f9ebfc119c9c42f85fd4965f4f98a54c73"
+        },
+        {
+          "map": "29",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 15,
+          "candidate_longest": 23,
+          "opponent_longest": 73,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "40e01e4ad5be4f6b544ebcb1c3a5e58c9298338547824f63fd4c52f1d55d80f7"
+        },
+        {
+          "map": "30",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 29,
+          "opponent_longest": 13,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "be4c6454c2012661a85f0410b7781c19e00261eba1ef1f7d0bb11b28c4c4b033"
+        },
+        {
+          "map": "30",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 17,
+          "opponent_longest": 17,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "2e5d4aa9f81f796e69b67f2f4e84becc8a6c69785a51d85d15d3e458d94723f7"
+        },
+        {
+          "map": "31",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 10,
+          "opponent_longest": 7,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "3d748ac8fff9833bfdcc72e90095a714238f839c82e5eba0f188973ecef4369c"
+        },
+        {
+          "map": "31",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 9,
+          "opponent_longest": 16,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "e5b8c76eed26bd0e91fecb1f303ee41fc6db80c31810218409c92d101e8f868e"
+        },
+        {
+          "map": "32",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 8,
+          "opponent_longest": 7,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "6bacb816d6381a8dd6e9025ad5ea0e6599c4791af836f026a380636594926fbd"
+        },
+        {
+          "map": "32",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 3,
+          "opponent_longest": 72,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "10d4c24bf428d6448d8be5f891a5f0f3c5037de3a48c231d5457fdbdf126b51b"
+        },
+        {
+          "map": "33",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 3,
+          "candidate_longest": 36,
+          "opponent_longest": 14,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "6e1f3c28c92d83b4a3e3c68e86d8f7a0729c9ca69b2bbff6c020d006c3145355"
+        },
+        {
+          "map": "33",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 3,
+          "candidate_longest": 18,
+          "opponent_longest": 19,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "498ca447b7e7fe94d7247880e6e816e704e0db15a17b87d91993feff8a72cbde"
+        },
+        {
+          "map": "34",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 17,
+          "opponent_longest": 21,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f612d48ea11b97ec21eba08cfc58ccee7bd89f9eaf37ec71354955d37eda57aa"
+        },
+        {
+          "map": "34",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 23,
+          "opponent_longest": 18,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "3609130be159c5331a15f2b2c5529968ea82b2b2165a6668f93602fc9eea5d4b"
+        },
+        {
+          "map": "4",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 19,
+          "opponent_longest": 19,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "4f802aa7ecdd548266fb32bd3f0f7c165988764f09b031b9fbad0423ecc66a65"
+        },
+        {
+          "map": "4",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 17,
+          "opponent_longest": 21,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "6d81fa756664676c06b937308c92b8bf5de8d699e63863cf49062b13af21f39c"
+        },
+        {
+          "map": "7",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 11,
+          "opponent_queen": 0,
+          "candidate_longest": 11,
+          "opponent_longest": 15,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "e8ddfa3af634d1e9563f9c05973b1312b8ab140dd9c92d78dbe08b39ed948354"
+        },
+        {
+          "map": "7",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 9,
+          "opponent_queen": 0,
+          "candidate_longest": 18,
+          "opponent_longest": 14,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "324264e1ea75a618f7f23b1407dcdbd688744114e5b1899fd6286e1f8293fb97"
+        },
+        {
+          "map": "9",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 17,
+          "opponent_longest": 21,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "0f4830ec1d7164e05f6412df1d5078cf588a1966b02a9c2df8fc8c5cceff6b08"
+        },
+        {
+          "map": "9",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 21,
+          "opponent_longest": 16,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f800d08973820800aa2d1f7b806b66726999efec23bf48fe885a9d2717ae5ab1"
+        }
+      ],
+      "strategy_metrics": {
+        "candidate": {
+          "totals": {
+            "turns": 304111,
+            "declared_paid_steps": 933,
+            "portal_crossings": 805,
+            "pearls": 16436,
+            "queen_pearls": 546,
+            "children_created": 4805,
+            "children_dead_within_5_turns": 846,
+            "final_longest": 549,
+            "final_queen": 91
+          },
+          "queens_survived": 8,
+          "queen_blockers": {
+            "enemy": 1,
+            "ally": 8,
+            "self": 8,
+            "hitHeadToHead": 9
+          },
+          "median_population": {
+            "25": 4.0,
+            "100": 6.5
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 190227,
+            "declared_paid_steps": 925,
+            "portal_crossings": 410,
+            "pearls": 9210,
+            "queen_pearls": 501,
+            "children_created": 2647,
+            "children_dead_within_5_turns": 460,
+            "final_longest": 638,
+            "final_queen": 113
+          },
+          "queens_survived": 12,
+          "queen_blockers": {
+            "hitHeadToHead": 10,
+            "enemy": 4,
+            "ally": 5,
+            "self": 3
+          },
+          "median_population": {
+            "25": 3.0,
+            "100": 4.5
+          }
+        }
+      }
+    },
+    "live-v7-balanced-sandbox8": {
+      "summary": {
+        "outcomes": {
+          "win": 5,
+          "loss": 3
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "sandbox",
+        "max_points": 62615669,
+        "candidate_max_points": 48186845,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 96904,
+          "movement_steps": 115061,
+          "split": 1698,
+          "split_segments": 5253,
+          "sprint": 8211
+        },
+        "verified_head_trades": 20
+      },
+      "path": "build/validation/live-v7-balanced-sandbox8",
+      "candidate_fingerprints": [
+        "a0c4089463d7a46b031a1cdd548844f90cada61e03b7312aa70a69e15b8a30eb"
+      ],
+      "opponent_fingerprints": [
+        "49e72de38c93d2759fc16fb00753b010631f0e1510270028da42cfeb8e30c245"
+      ],
+      "matches": [
+        {
+          "map": "20",
+          "seed": 814,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 8,
+          "opponent_longest": 3,
+          "candidate_points": 15972436,
+          "candidate_errors": 0,
+          "replay_sha256": "8adf2fd84aea442751be38ea3440d30c4f8d5e3c30e8c8891276ccbbba2e0615"
+        },
+        {
+          "map": "20",
+          "seed": 814,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 6,
+          "opponent_queen": 4,
+          "candidate_longest": 7,
+          "opponent_longest": 5,
+          "candidate_points": 16135753,
+          "candidate_errors": 0,
+          "replay_sha256": "66174c66566c062a23a2797f9dccdfd8f9e141df19005a50d70d154a9d04b8e3"
+        },
+        {
+          "map": "21",
+          "seed": 814,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 17,
+          "opponent_longest": 22,
+          "candidate_points": 36100907,
+          "candidate_errors": 0,
+          "replay_sha256": "db684c8fc870e62e2defb1253ca298647530f088f0b412d021ea22507972bc95"
+        },
+        {
+          "map": "21",
+          "seed": 814,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 24,
+          "opponent_longest": 21,
+          "candidate_points": 45141820,
+          "candidate_errors": 0,
+          "replay_sha256": "aa586ed488093615d2eb2dd10cac2b1635c420af408ed7941b57f39423f85eb4"
+        },
+        {
+          "map": "9",
+          "seed": 814,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 23,
+          "opponent_longest": 57,
+          "candidate_points": 42918373,
+          "candidate_errors": 0,
+          "replay_sha256": "c0c6593445008332761a6bbc6383ee17001d2107b8f2f9517b29723a9895eb03"
+        },
+        {
+          "map": "9",
+          "seed": 814,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 39,
+          "opponent_longest": 20,
+          "candidate_points": 48186845,
+          "candidate_errors": 0,
+          "replay_sha256": "0b740d38f1faa23f9cc819a57f880dcd8228bb751e3cc8196788a4f5d72464b2"
+        },
+        {
+          "map": "34",
+          "seed": 814,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 14,
+          "opponent_longest": 39,
+          "candidate_points": 38567455,
+          "candidate_errors": 0,
+          "replay_sha256": "68da93135fad48d6f9e237e8b69d3ec6ee09b648dbcc6548d0bafcacbdb3ffa5"
+        },
+        {
+          "map": "34",
+          "seed": 814,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 21,
+          "opponent_longest": 18,
+          "candidate_points": 40459579,
+          "candidate_errors": 0,
+          "replay_sha256": "88eb56d00920204ecf9368fe31f26945db398b8d994046c409302bc70a076a6d"
+        }
+      ],
+      "strategy_metrics": {
+        "candidate": {
+          "totals": {
+            "turns": 106813,
+            "portal_crossings": 248,
+            "pearls": 5543,
+            "children_created": 1698,
+            "final_queen": 15,
+            "final_longest": 153,
+            "declared_paid_steps": 507,
+            "queen_pearls": 48,
+            "children_dead_within_5_turns": 279
+          },
+          "queens_survived": 4,
+          "queen_blockers": {
+            "ally": 2,
+            "hitHeadToHead": 2
+          },
+          "median_population": {
+            "25": 8.5,
+            "100": 17.5
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 116975,
+            "portal_crossings": 187,
+            "pearls": 6966,
+            "children_created": 1993,
+            "final_queen": 13,
+            "final_longest": 185,
+            "declared_paid_steps": 650,
+            "queen_pearls": 70,
+            "children_dead_within_5_turns": 352
+          },
+          "queens_survived": 4,
+          "queen_blockers": {
+            "hitHeadToHead": 1,
+            "self": 2,
+            "ally": 1
+          },
+          "median_population": {
+            "25": 8.0,
+            "100": 17.0
+          }
+        }
+      }
+    },
+    "live-v7-balanced-portal-ablation8": {
+      "summary": {
+        "outcomes": {
+          "win": 5,
+          "loss": 3
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 91939,
+          "movement_steps": 107878,
+          "split": 2235,
+          "split_segments": 6482,
+          "sprint": 7097
+        },
+        "verified_head_trades": 3
+      },
+      "path": "build/validation/live-v7-balanced-portal-ablation8",
+      "candidate_fingerprints": [
+        "a0c4089463d7a46b031a1cdd548844f90cada61e03b7312aa70a69e15b8a30eb"
+      ],
+      "opponent_fingerprints": [
+        "0aade3e1e32f621c9c9388cc6abb56368a912c46fc98ad61c1d7dec059d912d1"
+      ],
+      "matches": [
+        {
+          "map": "20",
+          "seed": 815,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 0,
+          "candidate_longest": 8,
+          "opponent_longest": 8,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "635bacff82fef50bd6db723139c92c033f3cc37e5b4fd2dbba8c89495b17096f"
+        },
+        {
+          "map": "20",
+          "seed": 815,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 2,
+          "candidate_longest": 5,
+          "opponent_longest": 9,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "02ee800114c400f15358d97ec813ea4978cf374fa67c3881179753b4232f0487"
+        },
+        {
+          "map": "9",
+          "seed": 815,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 34,
+          "opponent_longest": 15,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "8ac9a2dc4a67ccc6046b7ab61162d8d2c37244cc490bdb6ef01ce6b4b623e5d0"
+        },
+        {
+          "map": "9",
+          "seed": 815,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 26,
+          "opponent_longest": 41,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "694bc12a8cc7d3ef2bb68a5a0b7ba96784b30d18ef0aa7f1a6ec55817479154d"
+        },
+        {
+          "map": "21",
+          "seed": 815,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 16,
+          "opponent_longest": 11,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "27b3822d0cb0c19ae6ee37e5e4774df2a44f3cd86a8a4ba5f35ef2c23c80db50"
+        },
+        {
+          "map": "21",
+          "seed": 815,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 31,
+          "opponent_longest": 12,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "c4b1d909a2350e1e3efb21d3250803c903fa6446f08bf31d6a858c42ed6afd3d"
+        },
+        {
+          "map": "31",
+          "seed": 815,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 12,
+          "opponent_longest": 19,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f9cfb15cdd8729ea196071fe556d30101f0378ddbf47a4882c1f046b8231b627"
+        },
+        {
+          "map": "31",
+          "seed": 815,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 19,
+          "opponent_longest": 12,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "baa6819bd8950bbcf2c73675ccad122e0719cd84536856a3b02a6ce560463f47"
+        }
+      ],
+      "strategy_metrics": {
+        "candidate": {
+          "totals": {
+            "turns": 101271,
+            "portal_crossings": 338,
+            "pearls": 6819,
+            "children_created": 2235,
+            "final_queen": 9,
+            "final_longest": 151,
+            "declared_paid_steps": 566,
+            "queen_pearls": 66,
+            "children_dead_within_5_turns": 514
+          },
+          "queens_survived": 3,
+          "queen_blockers": {
+            "self": 3,
+            "ally": 2
+          },
+          "median_population": {
+            "25": 4.0,
+            "100": 9.0
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 100610,
+            "declared_paid_steps": 447,
+            "portal_crossings": 408,
+            "pearls": 5815,
+            "queen_pearls": 50,
+            "children_created": 2030,
+            "children_dead_within_5_turns": 420,
+            "final_longest": 127,
+            "final_queen": 8
+          },
+          "queens_survived": 3,
+          "queen_blockers": {
+            "ally": 3,
+            "self": 2
+          },
+          "median_population": {
+            "25": 4.0,
+            "100": 9.0
+          }
+        }
+      }
+    },
+    "live-v7-balanced-determinism8": {
+      "summary": {
+        "outcomes": {
+          "win": 3,
+          "loss": 1
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 56796,
+          "movement_steps": 68462,
+          "split": 912,
+          "split_segments": 2926,
+          "sprint": 5050
+        },
+        "verified_head_trades": 6
+      },
+      "path": "build/validation/live-v7-balanced-determinism8",
+      "candidate_fingerprints": [
+        "a0c4089463d7a46b031a1cdd548844f90cada61e03b7312aa70a69e15b8a30eb"
+      ],
+      "opponent_fingerprints": [
+        "49e72de38c93d2759fc16fb00753b010631f0e1510270028da42cfeb8e30c245"
+      ],
+      "matches": [
+        {
+          "map": "20",
+          "seed": 816,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 8,
+          "opponent_longest": 3,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "028713b168b087ea19a6df615b9c6279b8bd29ab2ddb1a3c3e6852f3b89703c6"
+        },
+        {
+          "map": "20",
+          "seed": 816,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 8,
+          "opponent_longest": 3,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "028713b168b087ea19a6df615b9c6279b8bd29ab2ddb1a3c3e6852f3b89703c6"
+        },
+        {
+          "map": "20",
+          "seed": 816,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 8,
+          "opponent_longest": 8,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f64ebca38854db7453b753edcc6d1d4fc43905596fcf0f404aa0583158375ba0"
+        },
+        {
+          "map": "20",
+          "seed": 816,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 8,
+          "opponent_longest": 8,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f64ebca38854db7453b753edcc6d1d4fc43905596fcf0f404aa0583158375ba0"
+        },
+        {
+          "map": "9",
+          "seed": 816,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 18,
+          "opponent_longest": 15,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "5663518c9540dfbdcbe8e1fef136fbca7c195bdf02e90449b39b6455775df66e"
+        },
+        {
+          "map": "9",
+          "seed": 816,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 18,
+          "opponent_longest": 15,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "5663518c9540dfbdcbe8e1fef136fbca7c195bdf02e90449b39b6455775df66e"
+        },
+        {
+          "map": "9",
+          "seed": 816,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 17,
+          "opponent_longest": 18,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "332514c254d761e55d9a4701a05237e8ee8e4e83caafda920be02bf2a8d67a1b"
+        },
+        {
+          "map": "9",
+          "seed": 816,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 17,
+          "opponent_longest": 18,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "332514c254d761e55d9a4701a05237e8ee8e4e83caafda920be02bf2a8d67a1b"
+        }
+      ]
+    },
+    "live-v7-final-long-queen-sandbox2": {
+      "summary": {
+        "outcomes": {
+          "win": 1,
+          "loss": 1
+        },
+        "matches": 2,
+        "passed": true,
+        "mode": "sandbox",
+        "max_points": 64516858,
+        "candidate_max_points": 64516858,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 8795,
+          "movement_steps": 10080,
+          "split": 34,
+          "split_segments": 92,
+          "sprint": 514
+        },
+        "verified_head_trades": 2
+      },
+      "path": "build/validation/live-v7-final-long-queen-sandbox2",
+      "candidate_fingerprints": [
+        "a0c4089463d7a46b031a1cdd548844f90cada61e03b7312aa70a69e15b8a30eb"
+      ],
+      "opponent_fingerprints": [
+        "49e72de38c93d2759fc16fb00753b010631f0e1510270028da42cfeb8e30c245"
+      ],
+      "matches": [
+        {
+          "map": "19",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 36,
+          "opponent_queen": 0,
+          "candidate_longest": 43,
+          "opponent_longest": 18,
+          "candidate_points": 60423631,
+          "candidate_errors": 0,
+          "replay_sha256": "a22934e4fc8fc64cfb29cf31a8364391310cda71aa02cf5dc819998678b4b3b1"
+        },
+        {
+          "map": "19",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 29,
+          "candidate_longest": 7,
+          "opponent_longest": 41,
+          "candidate_points": 64516858,
+          "candidate_errors": 0,
+          "replay_sha256": "5b00c0782e397dc804bd28c4e3f29a0b7e7eaf37f6030ccab8357ec0a475603f"
+        }
+      ]
+    },
+    "live-v7-queen-viability-native8": {
+      "summary": {
+        "outcomes": {
+          "loss": 4,
+          "win": 4
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 102567,
+          "movement_steps": 120280,
+          "split": 1977,
+          "split_segments": 5867,
+          "sprint": 7776
+        },
+        "verified_head_trades": 18
+      },
+      "path": "build/validation/live-v7-queen-viability-native8",
+      "candidate_fingerprints": [
+        "6db0116f89ae79a7aa2bfdb5f8fef0275b9b52c5c15dffb541d54333175f9aec"
+      ],
+      "opponent_fingerprints": [
+        "a0c4089463d7a46b031a1cdd548844f90cada61e03b7312aa70a69e15b8a30eb"
+      ],
+      "matches": [
+        {
+          "map": "19",
+          "seed": 818,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 29,
+          "opponent_queen": 44,
+          "candidate_longest": 37,
+          "opponent_longest": 44,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "fe4c01958826160bec24e82521334963f8fd55f4d705946e2f0088abb6fdb9e9"
+        },
+        {
+          "map": "19",
+          "seed": 818,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 44,
+          "opponent_queen": 29,
+          "candidate_longest": 44,
+          "opponent_longest": 37,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "66ad0ab23b4cc7cf7991666687487d44057757f032ebcc940e13c3b0b9c9f61d"
+        },
+        {
+          "map": "11",
+          "seed": 818,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 15,
+          "opponent_longest": 11,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "64b45ca1be6ae731cea9884627f13d8e5812050aab266b7781b1858b2f45c0e0"
+        },
+        {
+          "map": "11",
+          "seed": 818,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 11,
+          "opponent_longest": 15,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "e907f262a1d5b8bde74a4bf38330457bf95ae86753f30d46bf3c485acbed6e9e"
+        },
+        {
+          "map": "34",
+          "seed": 818,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 34,
+          "opponent_longest": 20,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "bc2add8e684b0a1282b8b6376fe3ac60624da1d006e7df5ac9abc528c7b3d467"
+        },
+        {
+          "map": "34",
+          "seed": 818,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 20,
+          "opponent_longest": 34,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "54ac6ed92217ceed3803b75a2d52f0d437137a75e129227133a9dbe172c81287"
+        },
+        {
+          "map": "21",
+          "seed": 818,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 15,
+          "opponent_longest": 15,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "1088cd9b26089ebcb6dafb084ea6aa75219bf803ae86dfdfae0331a996a05730"
+        },
+        {
+          "map": "21",
+          "seed": 818,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 15,
+          "opponent_longest": 15,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "3734ed7305c87edd75f59dffabe65bae4ce10f5d86d8c4e8e81a1a67e6938dd7"
+        }
+      ],
+      "strategy_metrics": {
+        "candidate": {
+          "totals": {
+            "turns": 112320,
+            "portal_crossings": 132,
+            "pearls": 6534,
+            "queen_pearls": 155,
+            "children_created": 1977,
+            "children_dead_within_5_turns": 404,
+            "final_queen": 73,
+            "final_longest": 191,
+            "declared_paid_steps": 614
+          },
+          "queens_survived": 2,
+          "queen_blockers": {
+            "hitHeadToHead": 3,
+            "self": 2,
+            "ally": 1
+          },
+          "median_population": {
+            "25": 13.0,
+            "100": 17.0
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 112320,
+            "portal_crossings": 132,
+            "pearls": 6534,
+            "queen_pearls": 155,
+            "children_created": 1977,
+            "children_dead_within_5_turns": 404,
+            "final_queen": 73,
+            "final_longest": 191,
+            "declared_paid_steps": 614
+          },
+          "queens_survived": 2,
+          "queen_blockers": {
+            "self": 2,
+            "hitHeadToHead": 3,
+            "ally": 1
+          },
+          "median_population": {
+            "25": 13.0,
+            "100": 17.0
+          }
+        }
+      }
+    },
+    "live-v7-queen-viability-sandbox4": {
+      "summary": {
+        "outcomes": {
+          "win": 2,
+          "loss": 2
+        },
+        "matches": 4,
+        "passed": true,
+        "mode": "sandbox",
+        "max_points": 45185372,
+        "candidate_max_points": 45185372,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 52770,
+          "movement_steps": 60329,
+          "split": 1242,
+          "split_segments": 3369,
+          "sprint": 3411
+        },
+        "verified_head_trades": 6
+      },
+      "path": "build/validation/live-v7-queen-viability-sandbox4",
+      "candidate_fingerprints": [
+        "6db0116f89ae79a7aa2bfdb5f8fef0275b9b52c5c15dffb541d54333175f9aec"
+      ],
+      "opponent_fingerprints": [
+        "a0c4089463d7a46b031a1cdd548844f90cada61e03b7312aa70a69e15b8a30eb"
+      ],
+      "matches": [
+        {
+          "map": "19",
+          "seed": 819,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 6,
+          "opponent_queen": 0,
+          "candidate_longest": 50,
+          "opponent_longest": 20,
+          "candidate_points": 45185372,
+          "candidate_errors": 0,
+          "replay_sha256": "e174f230cb14088216785c6ed25cc6906e7ea4ee37d68a95af405d81ff8030db"
+        },
+        {
+          "map": "19",
+          "seed": 819,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 6,
+          "candidate_longest": 20,
+          "opponent_longest": 50,
+          "candidate_points": 37007888,
+          "candidate_errors": 0,
+          "replay_sha256": "3eaf2b8eceb4314d578a009c6f3a8c63de10542c21d1ade765652a3aee531762"
+        },
+        {
+          "map": "21",
+          "seed": 819,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 12,
+          "opponent_longest": 20,
+          "candidate_points": 31442865,
+          "candidate_errors": 0,
+          "replay_sha256": "aefab57c5e0faf4037a4c370a0c55ab87b8f65dd5c6701413b159e9f67ca6055"
+        },
+        {
+          "map": "21",
+          "seed": 819,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 20,
+          "opponent_longest": 12,
+          "candidate_points": 44672616,
+          "candidate_errors": 0,
+          "replay_sha256": "7e69d123d5c60ed838d98e4ce1af5252e5dfee0c19453b2100d1a2a278d06624"
+        }
+      ],
+      "strategy_metrics": {
+        "candidate": {
+          "totals": {
+            "turns": 57423,
+            "declared_paid_steps": 468,
+            "portal_crossings": 88,
+            "pearls": 3740,
+            "queen_pearls": 21,
+            "children_created": 1242,
+            "children_dead_within_5_turns": 300,
+            "final_queen": 6,
+            "final_longest": 102
+          },
+          "queens_survived": 1,
+          "queen_blockers": {
+            "hitHeadToHead": 2,
+            "self": 1
+          },
+          "median_population": {
+            "25": 14.5,
+            "100": 23.0
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 57423,
+            "portal_crossings": 88,
+            "pearls": 3740,
+            "queen_pearls": 21,
+            "children_created": 1242,
+            "children_dead_within_5_turns": 300,
+            "final_longest": 102,
+            "declared_paid_steps": 468,
+            "final_queen": 6
+          },
+          "queens_survived": 1,
+          "queen_blockers": {
+            "hitHeadToHead": 2,
+            "self": 1
+          },
+          "median_population": {
+            "25": 14.5,
+            "100": 23.0
+          }
+        }
+      }
+    },
+    "live-v7-final-native34": {
+      "summary": {
+        "outcomes": {
+          "win": 15,
+          "loss": 18,
+          "draw": 1
+        },
+        "matches": 34,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 276046,
+          "movement_steps": 327605,
+          "sprint": 22653,
+          "split": 4849,
+          "split_segments": 14611
+        },
+        "verified_head_trades": 47
+      },
+      "path": "build/validation/live-v7-final-native34",
+      "candidate_fingerprints": [
+        "6db0116f89ae79a7aa2bfdb5f8fef0275b9b52c5c15dffb541d54333175f9aec"
+      ],
+      "opponent_fingerprints": [
+        "49e72de38c93d2759fc16fb00753b010631f0e1510270028da42cfeb8e30c245"
+      ],
+      "matches": [
+        {
+          "map": "11",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 26,
+          "opponent_longest": 10,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "da06898adf12497a16579b878d2a022838045f35866faf8a09949042476718df"
+        },
+        {
+          "map": "11",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 11,
+          "opponent_longest": 22,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "2f5d733098658e0452187bc3e0f05a2e178472927066dca2f5a6ac7787fe1888"
+        },
+        {
+          "map": "13",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 9,
+          "opponent_longest": 6,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "45beb7453c53bbecab2f4ef4ff46b22cbb1e8973ba096a6533cde1dc966d7e10"
+        },
+        {
+          "map": "13",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 11,
+          "opponent_longest": 8,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "df94374f7100abccd22ca8f7e89f9a8377aa2b1788d1865dca794cc4ab6d9e2d"
+        },
+        {
+          "map": "15",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 31,
+          "candidate_longest": 20,
+          "opponent_longest": 31,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f48403d96dfc96bb034091451ca7c3b64fb67ffafb4133dcb24a48b7cb6ec65a"
+        },
+        {
+          "map": "15",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 20,
+          "opponent_queen": 11,
+          "candidate_longest": 20,
+          "opponent_longest": 11,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "0d28f4d8cfd17326505d416a6351791c04b850732fb3c56be938de5d4d4966ad"
+        },
+        {
+          "map": "17",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 13,
+          "opponent_longest": 23,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f03ebf3234e2a84e5938b07a4e2d58e9019b139453e73b01f89fdedb48c5b415"
+        },
+        {
+          "map": "17",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 8,
+          "opponent_longest": 27,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "081f78cdfb73f8e27ccf35ec49c6cc23511c9b276cfef841dd40b3416b7a76ba"
+        },
+        {
+          "map": "19",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 36,
+          "opponent_queen": 0,
+          "candidate_longest": 43,
+          "opponent_longest": 18,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "a22934e4fc8fc64cfb29cf31a8364391310cda71aa02cf5dc819998678b4b3b1"
+        },
+        {
+          "map": "19",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 29,
+          "candidate_longest": 7,
+          "opponent_longest": 41,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "5b00c0782e397dc804bd28c4e3f29a0b7e7eaf37f6030ccab8357ec0a475603f"
+        },
+        {
+          "map": "20",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 3,
+          "candidate_longest": 7,
+          "opponent_longest": 3,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "b6522db200edc2b07ae321755732b1bef0203ef8a2b4fe6c4c3fc426d05417e1"
+        },
+        {
+          "map": "20",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 4,
+          "candidate_longest": 7,
+          "opponent_longest": 7,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "b27395e87bc8a3ddafa00fc05b3fe7da6043562f81458fc4845634f07e0377eb"
+        },
+        {
+          "map": "21",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 9,
+          "opponent_longest": 10,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "2d858ae0ce2852afed64ecff8b1725267ebdde491e8597e1e93ca76704653a7a"
+        },
+        {
+          "map": "21",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 14,
+          "opponent_longest": 21,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "ef8217825420b1c3d064f739c240a0a2f8972c74521953c18f87f9980499e880"
+        },
+        {
+          "map": "28",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 5,
+          "opponent_queen": 4,
+          "candidate_longest": 5,
+          "opponent_longest": 4,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "eadb98e4151b9158bba0d699c7f4efde3d575b69fc79b9bdaa2e17e9cc0015d9"
+        },
+        {
+          "map": "28",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "draw",
+          "candidate_queen": 4,
+          "opponent_queen": 4,
+          "candidate_longest": 4,
+          "opponent_longest": 4,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "38275a81f2d7ec81cf4033c39a273214568278376c4f2c25f2a50b8fb75d7a29"
+        },
+        {
+          "map": "29",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 27,
+          "opponent_longest": 20,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "64bb891309784ebe8caf0db4bdc2b9f9ebfc119c9c42f85fd4965f4f98a54c73"
+        },
+        {
+          "map": "29",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 13,
+          "candidate_longest": 14,
+          "opponent_longest": 22,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "23cdf1bdb15abf08a7796c707c47320ed00d29cd8f54bb40b5bd5148791d7cca"
+        },
+        {
+          "map": "30",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 29,
+          "opponent_longest": 13,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "be4c6454c2012661a85f0410b7781c19e00261eba1ef1f7d0bb11b28c4c4b033"
+        },
+        {
+          "map": "30",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 17,
+          "opponent_longest": 17,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "2e5d4aa9f81f796e69b67f2f4e84becc8a6c69785a51d85d15d3e458d94723f7"
+        },
+        {
+          "map": "31",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 10,
+          "opponent_longest": 7,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "3d748ac8fff9833bfdcc72e90095a714238f839c82e5eba0f188973ecef4369c"
+        },
+        {
+          "map": "31",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 9,
+          "opponent_longest": 14,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f9be5565340860a90e1da8a95d0f8ed8bab2146ca1beac0bde09823717d4f2a8"
+        },
+        {
+          "map": "32",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 8,
+          "opponent_longest": 7,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "6bacb816d6381a8dd6e9025ad5ea0e6599c4791af836f026a380636594926fbd"
+        },
+        {
+          "map": "32",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 3,
+          "opponent_longest": 72,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "10d4c24bf428d6448d8be5f891a5f0f3c5037de3a48c231d5457fdbdf126b51b"
+        },
+        {
+          "map": "33",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 3,
+          "candidate_longest": 36,
+          "opponent_longest": 14,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "6e1f3c28c92d83b4a3e3c68e86d8f7a0729c9ca69b2bbff6c020d006c3145355"
+        },
+        {
+          "map": "33",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 3,
+          "candidate_longest": 18,
+          "opponent_longest": 19,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "498ca447b7e7fe94d7247880e6e816e704e0db15a17b87d91993feff8a72cbde"
+        },
+        {
+          "map": "34",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 17,
+          "opponent_longest": 21,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f612d48ea11b97ec21eba08cfc58ccee7bd89f9eaf37ec71354955d37eda57aa"
+        },
+        {
+          "map": "34",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 23,
+          "opponent_longest": 18,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "3609130be159c5331a15f2b2c5529968ea82b2b2165a6668f93602fc9eea5d4b"
+        },
+        {
+          "map": "4",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 19,
+          "opponent_longest": 19,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "4f802aa7ecdd548266fb32bd3f0f7c165988764f09b031b9fbad0423ecc66a65"
+        },
+        {
+          "map": "4",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 17,
+          "opponent_longest": 21,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "6d81fa756664676c06b937308c92b8bf5de8d699e63863cf49062b13af21f39c"
+        },
+        {
+          "map": "7",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 11,
+          "opponent_queen": 0,
+          "candidate_longest": 11,
+          "opponent_longest": 15,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "e8ddfa3af634d1e9563f9c05973b1312b8ab140dd9c92d78dbe08b39ed948354"
+        },
+        {
+          "map": "7",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 9,
+          "opponent_queen": 0,
+          "candidate_longest": 18,
+          "opponent_longest": 14,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "324264e1ea75a618f7f23b1407dcdbd688744114e5b1899fd6286e1f8293fb97"
+        },
+        {
+          "map": "9",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 17,
+          "opponent_longest": 21,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "0f4830ec1d7164e05f6412df1d5078cf588a1966b02a9c2df8fc8c5cceff6b08"
+        },
+        {
+          "map": "9",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 21,
+          "opponent_longest": 16,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f800d08973820800aa2d1f7b806b66726999efec23bf48fe885a9d2717ae5ab1"
+        }
+      ],
+      "strategy_metrics": {
+        "candidate": {
+          "totals": {
+            "turns": 303548,
+            "declared_paid_steps": 938,
+            "portal_crossings": 811,
+            "pearls": 16453,
+            "queen_pearls": 560,
+            "children_created": 4849,
+            "children_dead_within_5_turns": 846,
+            "final_longest": 528,
+            "final_queen": 91
+          },
+          "queens_survived": 8,
+          "queen_blockers": {
+            "enemy": 1,
+            "ally": 9,
+            "hitHeadToHead": 10,
+            "self": 6
+          },
+          "median_population": {
+            "25": 4.0,
+            "100": 6.5
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 193259,
+            "declared_paid_steps": 923,
+            "portal_crossings": 428,
+            "pearls": 9383,
+            "queen_pearls": 509,
+            "children_created": 2723,
+            "children_dead_within_5_turns": 491,
+            "final_longest": 596,
+            "final_queen": 111
+          },
+          "queens_survived": 12,
+          "queen_blockers": {
+            "hitHeadToHead": 10,
+            "self": 4,
+            "ally": 5,
+            "enemy": 3
+          },
+          "median_population": {
+            "25": 3.0,
+            "100": 4.5
+          }
+        }
+      }
+    },
+    "live-v7-final-sandbox6": {
+      "summary": {
+        "outcomes": {
+          "win": 4,
+          "loss": 2
+        },
+        "matches": 6,
+        "passed": true,
+        "mode": "sandbox",
+        "max_points": 62615669,
+        "candidate_max_points": 48227376,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 59737,
+          "movement_steps": 71276,
+          "split": 783,
+          "split_segments": 2675,
+          "sprint": 5178
+        },
+        "verified_head_trades": 9
+      },
+      "path": "build/validation/live-v7-final-sandbox6",
+      "candidate_fingerprints": [
+        "6db0116f89ae79a7aa2bfdb5f8fef0275b9b52c5c15dffb541d54333175f9aec"
+      ],
+      "opponent_fingerprints": [
+        "49e72de38c93d2759fc16fb00753b010631f0e1510270028da42cfeb8e30c245"
+      ],
+      "matches": [
+        {
+          "map": "20",
+          "seed": 814,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 8,
+          "opponent_longest": 3,
+          "candidate_points": 15986600,
+          "candidate_errors": 0,
+          "replay_sha256": "8adf2fd84aea442751be38ea3440d30c4f8d5e3c30e8c8891276ccbbba2e0615"
+        },
+        {
+          "map": "20",
+          "seed": 814,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 6,
+          "opponent_queen": 4,
+          "candidate_longest": 7,
+          "opponent_longest": 5,
+          "candidate_points": 16150485,
+          "candidate_errors": 0,
+          "replay_sha256": "66174c66566c062a23a2797f9dccdfd8f9e141df19005a50d70d154a9d04b8e3"
+        },
+        {
+          "map": "9",
+          "seed": 814,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 23,
+          "opponent_longest": 57,
+          "candidate_points": 42951898,
+          "candidate_errors": 0,
+          "replay_sha256": "c0c6593445008332761a6bbc6383ee17001d2107b8f2f9517b29723a9895eb03"
+        },
+        {
+          "map": "9",
+          "seed": 814,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 39,
+          "opponent_longest": 20,
+          "candidate_points": 48227376,
+          "candidate_errors": 0,
+          "replay_sha256": "0b740d38f1faa23f9cc819a57f880dcd8228bb751e3cc8196788a4f5d72464b2"
+        },
+        {
+          "map": "34",
+          "seed": 814,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 14,
+          "opponent_longest": 39,
+          "candidate_points": 38587103,
+          "candidate_errors": 0,
+          "replay_sha256": "68da93135fad48d6f9e237e8b69d3ec6ee09b648dbcc6548d0bafcacbdb3ffa5"
+        },
+        {
+          "map": "34",
+          "seed": 814,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 21,
+          "opponent_longest": 18,
+          "candidate_points": 40479695,
+          "candidate_errors": 0,
+          "replay_sha256": "88eb56d00920204ecf9368fe31f26945db398b8d994046c409302bc70a076a6d"
+        }
+      ],
+      "strategy_metrics": {
+        "candidate": {
+          "totals": {
+            "turns": 65698,
+            "portal_crossings": 198,
+            "pearls": 2768,
+            "children_created": 783,
+            "final_queen": 15,
+            "final_longest": 112,
+            "declared_paid_steps": 101,
+            "queen_pearls": 33,
+            "children_dead_within_5_turns": 79
+          },
+          "queens_survived": 4,
+          "queen_blockers": {
+            "ally": 1,
+            "hitHeadToHead": 1
+          },
+          "median_population": {
+            "25": 4.0,
+            "100": 5.5
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 75340,
+            "portal_crossings": 137,
+            "pearls": 4027,
+            "children_created": 1022,
+            "final_queen": 13,
+            "final_longest": 142,
+            "declared_paid_steps": 278,
+            "queen_pearls": 44,
+            "children_dead_within_5_turns": 130
+          },
+          "queens_survived": 4,
+          "queen_blockers": {
+            "ally": 1,
+            "self": 1
+          },
+          "median_population": {
+            "25": 4.5,
+            "100": 10.5
+          }
+        }
+      }
+    },
+    "live-v7-final-determinism8": {
+      "summary": {
+        "outcomes": {
+          "win": 3,
+          "loss": 1
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 56796,
+          "movement_steps": 68462,
+          "split": 912,
+          "split_segments": 2926,
+          "sprint": 5050
+        },
+        "verified_head_trades": 6
+      },
+      "path": "build/validation/live-v7-final-determinism8",
+      "candidate_fingerprints": [
+        "6db0116f89ae79a7aa2bfdb5f8fef0275b9b52c5c15dffb541d54333175f9aec"
+      ],
+      "opponent_fingerprints": [
+        "49e72de38c93d2759fc16fb00753b010631f0e1510270028da42cfeb8e30c245"
+      ],
+      "matches": [
+        {
+          "map": "20",
+          "seed": 816,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 8,
+          "opponent_longest": 3,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "028713b168b087ea19a6df615b9c6279b8bd29ab2ddb1a3c3e6852f3b89703c6"
+        },
+        {
+          "map": "20",
+          "seed": 816,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 8,
+          "opponent_longest": 3,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "028713b168b087ea19a6df615b9c6279b8bd29ab2ddb1a3c3e6852f3b89703c6"
+        },
+        {
+          "map": "20",
+          "seed": 816,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 8,
+          "opponent_longest": 8,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f64ebca38854db7453b753edcc6d1d4fc43905596fcf0f404aa0583158375ba0"
+        },
+        {
+          "map": "20",
+          "seed": 816,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 8,
+          "opponent_longest": 8,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f64ebca38854db7453b753edcc6d1d4fc43905596fcf0f404aa0583158375ba0"
+        },
+        {
+          "map": "9",
+          "seed": 816,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 18,
+          "opponent_longest": 15,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "5663518c9540dfbdcbe8e1fef136fbca7c195bdf02e90449b39b6455775df66e"
+        },
+        {
+          "map": "9",
+          "seed": 816,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 18,
+          "opponent_longest": 15,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "5663518c9540dfbdcbe8e1fef136fbca7c195bdf02e90449b39b6455775df66e"
+        },
+        {
+          "map": "9",
+          "seed": 816,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 17,
+          "opponent_longest": 18,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "332514c254d761e55d9a4701a05237e8ee8e4e83caafda920be02bf2a8d67a1b"
+        },
+        {
+          "map": "9",
+          "seed": 816,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 17,
+          "opponent_longest": 18,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "332514c254d761e55d9a4701a05237e8ee8e4e83caafda920be02bf2a8d67a1b"
+        }
+      ]
+    },
+    "live-v7-cycle-native34": {
+      "summary": {
+        "outcomes": {
+          "loss": 16,
+          "win": 17,
+          "draw": 1
+        },
+        "matches": 34,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 269048,
+          "movement_steps": 321620,
+          "sprint": 23080,
+          "split": 4679,
+          "split_segments": 14241
+        },
+        "verified_head_trades": 46
+      },
+      "path": "build/validation/live-v7-cycle-native34",
+      "candidate_fingerprints": [
+        "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826"
+      ],
+      "opponent_fingerprints": [
+        "49e72de38c93d2759fc16fb00753b010631f0e1510270028da42cfeb8e30c245"
+      ],
+      "matches": [
+        {
+          "map": "11",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 10,
+          "opponent_longest": 11,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "502346ed4f0a4b4872b5ca0704b05687a3761be76b293b26bf2350680efa6336"
+        },
+        {
+          "map": "11",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 14,
+          "opponent_longest": 11,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "a8838e38a9098103e8bdac5df2bfbb0264947f68155a3a50bdc3c0e00db38493"
+        },
+        {
+          "map": "13",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 20,
+          "opponent_longest": 8,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "84290236856bcee0b4e4056b5d80cf6f8545743c9923954ff3485e16e37a151c"
+        },
+        {
+          "map": "13",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 16,
+          "opponent_longest": 12,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f1928c5ed8ac15466feffba8b3ace48e15109d4027dd7bf68ba828fa27a0f6d5"
+        },
+        {
+          "map": "15",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 31,
+          "candidate_longest": 20,
+          "opponent_longest": 31,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f48403d96dfc96bb034091451ca7c3b64fb67ffafb4133dcb24a48b7cb6ec65a"
+        },
+        {
+          "map": "15",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 20,
+          "opponent_queen": 11,
+          "candidate_longest": 20,
+          "opponent_longest": 11,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "0d28f4d8cfd17326505d416a6351791c04b850732fb3c56be938de5d4d4966ad"
+        },
+        {
+          "map": "17",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 11,
+          "opponent_longest": 17,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "50f4ed9a3e50167b83692b2aa7cf6688cd1df0eba3c7fa3e64eb3093f19d5ada"
+        },
+        {
+          "map": "17",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 12,
+          "opponent_longest": 11,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "953b5454c1c72c910b688e2fabfbc3d20547c7b0a59820e9cbbeb73e9f1fc82a"
+        },
+        {
+          "map": "19",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 58,
+          "opponent_queen": 0,
+          "candidate_longest": 58,
+          "opponent_longest": 12,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "604d1dedcf243f4a6ea0b0312ac7e0fe0f8b047f19e93c35b79a7e673a89e8c3"
+        },
+        {
+          "map": "19",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 13,
+          "opponent_longest": 45,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "5538d828bdbcdda177e3cf0a2113bee8f11fb9a495cb2c85486a2cdf5efdf507"
+        },
+        {
+          "map": "20",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 3,
+          "candidate_longest": 7,
+          "opponent_longest": 3,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "b6522db200edc2b07ae321755732b1bef0203ef8a2b4fe6c4c3fc426d05417e1"
+        },
+        {
+          "map": "20",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 4,
+          "candidate_longest": 7,
+          "opponent_longest": 7,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "b27395e87bc8a3ddafa00fc05b3fe7da6043562f81458fc4845634f07e0377eb"
+        },
+        {
+          "map": "21",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 12,
+          "opponent_longest": 21,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "b879cb79325dec7a6b0e4f5fca69515ded44e6960410b858f3623db1b047735f"
+        },
+        {
+          "map": "21",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 13,
+          "opponent_longest": 8,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f3c1783cb34ea431b998b77f11dc1a8539a79c9c5ddfcad5049c26f55c7ba807"
+        },
+        {
+          "map": "28",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 5,
+          "opponent_queen": 4,
+          "candidate_longest": 5,
+          "opponent_longest": 4,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "eadb98e4151b9158bba0d699c7f4efde3d575b69fc79b9bdaa2e17e9cc0015d9"
+        },
+        {
+          "map": "28",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "draw",
+          "candidate_queen": 4,
+          "opponent_queen": 4,
+          "candidate_longest": 4,
+          "opponent_longest": 4,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "38275a81f2d7ec81cf4033c39a273214568278376c4f2c25f2a50b8fb75d7a29"
+        },
+        {
+          "map": "29",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 26,
+          "opponent_queen": 0,
+          "candidate_longest": 38,
+          "opponent_longest": 19,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "914f39b23fa92a0c30e1a8f460e7b42d96c1835713dac69081d885a98e145e33"
+        },
+        {
+          "map": "29",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 10,
+          "opponent_queen": 0,
+          "candidate_longest": 24,
+          "opponent_longest": 19,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "93b70a4995458d19c2472d8548740ac15c51aa6a6592737cca0d6c41cfbc26a0"
+        },
+        {
+          "map": "30",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 23,
+          "opponent_longest": 30,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "538b4045b2c0e18ca020218738ddd8fccbb3de4e9fcde3468afe6e8e858ea0d4"
+        },
+        {
+          "map": "30",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 20,
+          "opponent_longest": 25,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "20aba73f37302cf019a5456f66d558c6cccaff85b22cb6a39d7b54bac5fdd9c6"
+        },
+        {
+          "map": "31",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 14,
+          "opponent_longest": 10,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "ea4959ecb0a5786af8c8ad440506a12996a482f676b092faed7084871912dba0"
+        },
+        {
+          "map": "31",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 12,
+          "opponent_longest": 13,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "89350e90f781d63dd9ffadb64c9a515f6978724e2ff6836cceecfb6a2581eac7"
+        },
+        {
+          "map": "32",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 12,
+          "opponent_longest": 9,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "296389c7954b8698f1f1cb2ce3101939ce1fffc1485b3701fccaf3dedbc0605f"
+        },
+        {
+          "map": "32",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 3,
+          "opponent_longest": 72,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "10d4c24bf428d6448d8be5f891a5f0f3c5037de3a48c231d5457fdbdf126b51b"
+        },
+        {
+          "map": "33",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 3,
+          "candidate_longest": 36,
+          "opponent_longest": 14,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "6e1f3c28c92d83b4a3e3c68e86d8f7a0729c9ca69b2bbff6c020d006c3145355"
+        },
+        {
+          "map": "33",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 5,
+          "candidate_longest": 7,
+          "opponent_longest": 19,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "98569b95caf14121fd835e73191ae51b7602f9fa7c3ce309103c415c34e7bacf"
+        },
+        {
+          "map": "34",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 19,
+          "opponent_queen": 0,
+          "candidate_longest": 35,
+          "opponent_longest": 25,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "89c17d0cc1a61948dd84c7f87bc1eacc50b00b98f95003b13d2fa41869fc0d99"
+        },
+        {
+          "map": "34",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 16,
+          "opponent_queen": 0,
+          "candidate_longest": 26,
+          "opponent_longest": 18,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f361db759ab10e141a7a3451b34fc4dbe97d7b6c767509395c419257b1f923ff"
+        },
+        {
+          "map": "4",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 19,
+          "opponent_longest": 18,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "6accc5ff471413d4c906148ece5ca1a7cc8a40e52ecebfebf85088ac6f3f5f4e"
+        },
+        {
+          "map": "4",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 17,
+          "opponent_longest": 21,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "5367531ae4587cede4127e684cf3478fdd4ff9f3c72b053152d0b36b7e6ee618"
+        },
+        {
+          "map": "7",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 11,
+          "opponent_queen": 0,
+          "candidate_longest": 11,
+          "opponent_longest": 15,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "01539073342fc063654c17072324b8f96c4164c6264bb5d6c74cf42e796543f5"
+        },
+        {
+          "map": "7",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 22,
+          "opponent_queen": 0,
+          "candidate_longest": 22,
+          "opponent_longest": 17,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "8a1f0989d96bd5f0d88c8862c938d99423a3cbe640369284636a5d206c5bd594"
+        },
+        {
+          "map": "9",
+          "seed": 812,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 3,
+          "candidate_longest": 22,
+          "opponent_longest": 27,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "ade79069ea0e5bbd20a5691a77f7a070704de3c4ee8e7af36a82c6409bd42f3b"
+        },
+        {
+          "map": "9",
+          "seed": 812,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 19,
+          "opponent_longest": 20,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "50ceae172e046ad303935c973df1201dbe2c4bda329ff648330db8c7cce18c54"
+        }
+      ],
+      "strategy_metrics": {
+        "candidate": {
+          "totals": {
+            "turns": 296807,
+            "declared_paid_steps": 951,
+            "portal_crossings": 712,
+            "pearls": 16008,
+            "queen_pearls": 589,
+            "children_created": 4679,
+            "children_dead_within_5_turns": 839,
+            "final_longest": 602,
+            "final_queen": 194
+          },
+          "queens_survived": 11,
+          "queen_blockers": {
+            "self": 9,
+            "hitHeadToHead": 9,
+            "ally": 5
+          },
+          "median_population": {
+            "25": 4.0,
+            "100": 6.5
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 195283,
+            "declared_paid_steps": 914,
+            "pearls": 9744,
+            "queen_pearls": 485,
+            "children_created": 2901,
+            "children_dead_within_5_turns": 512,
+            "final_longest": 607,
+            "portal_crossings": 441,
+            "final_queen": 71
+          },
+          "queens_survived": 10,
+          "queen_blockers": {
+            "hitHeadToHead": 10,
+            "enemy": 4,
+            "ally": 5,
+            "self": 5
+          },
+          "median_population": {
+            "25": 3.0,
+            "100": 5.0
+          }
+        }
+      }
+    },
+    "live-v7-cycle-sandbox8": {
+      "summary": {
+        "outcomes": {
+          "loss": 6,
+          "win": 2
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "sandbox",
+        "max_points": 53918021,
+        "candidate_max_points": 53610292,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 124762,
+          "movement_steps": 149936,
+          "split": 2333,
+          "split_segments": 7284,
+          "sprint": 10910
+        },
+        "verified_head_trades": 7
+      },
+      "path": "build/validation/live-v7-cycle-sandbox8",
+      "candidate_fingerprints": [
+        "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826"
+      ],
+      "opponent_fingerprints": [
+        "49e72de38c93d2759fc16fb00753b010631f0e1510270028da42cfeb8e30c245"
+      ],
+      "matches": [
+        {
+          "map": "19",
+          "seed": 820,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 20,
+          "opponent_queen": 33,
+          "candidate_longest": 63,
+          "opponent_longest": 33,
+          "candidate_points": 53610292,
+          "candidate_errors": 0,
+          "replay_sha256": "e13b360a0c5c189dfc8d8384fd6644db8aeb36df4d8ff34b4e4c921147f5c991"
+        },
+        {
+          "map": "19",
+          "seed": 820,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 20,
+          "opponent_queen": 2,
+          "candidate_longest": 26,
+          "opponent_longest": 47,
+          "candidate_points": 43953514,
+          "candidate_errors": 0,
+          "replay_sha256": "6cbcf490c2d7b11b185db404437465f67d32e1e9dfacdefc88ad25e9d0cc5d36"
+        },
+        {
+          "map": "21",
+          "seed": 820,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 14,
+          "opponent_longest": 24,
+          "candidate_points": 47108261,
+          "candidate_errors": 0,
+          "replay_sha256": "d89d78c4c3050cc22cae8c8f981c48fa38acfa13df9f7cb2ec8049539bde151c"
+        },
+        {
+          "map": "21",
+          "seed": 820,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 18,
+          "opponent_longest": 35,
+          "candidate_points": 42884826,
+          "candidate_errors": 0,
+          "replay_sha256": "04063d675e6c295a05aecc47230ad69944cfe42a44b441915d0281230f00a39f"
+        },
+        {
+          "map": "9",
+          "seed": 820,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 16,
+          "opponent_longest": 18,
+          "candidate_points": 51636012,
+          "candidate_errors": 0,
+          "replay_sha256": "5586275ed44f0fa3ec7637c65605fa74d1cf833ce191cce92d24e3742e3820af"
+        },
+        {
+          "map": "9",
+          "seed": 820,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 17,
+          "opponent_longest": 19,
+          "candidate_points": 39693879,
+          "candidate_errors": 0,
+          "replay_sha256": "fdcae5e2bb65e56afad9ae38f0471fb11abd4f8a41715b83893487fedba97648"
+        },
+        {
+          "map": "34",
+          "seed": 820,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 10,
+          "opponent_queen": 0,
+          "candidate_longest": 16,
+          "opponent_longest": 24,
+          "candidate_points": 50977735,
+          "candidate_errors": 0,
+          "replay_sha256": "87bbffac4b3e81dbecef9b9aa007e1eb25b571fcb85c6b2b5580c9e0fed34c6b"
+        },
+        {
+          "map": "34",
+          "seed": 820,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 21,
+          "opponent_longest": 27,
+          "candidate_points": 45220563,
+          "candidate_errors": 0,
+          "replay_sha256": "13c9a8ed6acdea1ea2722f336c2e966d38c373d28b49237ae78dea90755526c6"
+        }
+      ],
+      "strategy_metrics": {
+        "candidate": {
+          "totals": {
+            "turns": 138005,
+            "declared_paid_steps": 596,
+            "portal_crossings": 245,
+            "pearls": 8437,
+            "queen_pearls": 97,
+            "children_created": 2333,
+            "children_dead_within_5_turns": 431,
+            "final_queen": 56,
+            "final_longest": 191
+          },
+          "queens_survived": 5,
+          "queen_blockers": {
+            "self": 2,
+            "ally": 1
+          },
+          "median_population": {
+            "25": 12.5,
+            "100": 21.5
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 91836,
+            "portal_crossings": 133,
+            "pearls": 4640,
+            "queen_pearls": 96,
+            "children_created": 1411,
+            "children_dead_within_5_turns": 274,
+            "final_queen": 41,
+            "final_longest": 227,
+            "declared_paid_steps": 531
+          },
+          "queens_survived": 4,
+          "queen_blockers": {
+            "self": 2,
+            "ally": 1,
+            "hitHeadToHead": 1
+          },
+          "median_population": {
+            "25": 11.0,
+            "100": 13.5
+          }
+        }
+      }
+    },
+    "live-v7-cycle-native8": {
+      "summary": {
+        "outcomes": {
+          "win": 4,
+          "loss": 4
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 94465,
+          "movement_steps": 110551,
+          "split": 2140,
+          "split_segments": 6225,
+          "sprint": 7145
+        },
+        "verified_head_trades": 13
+      },
+      "path": "build/validation/live-v7-cycle-native8",
+      "candidate_fingerprints": [
+        "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826"
+      ],
+      "opponent_fingerprints": [
+        "6db0116f89ae79a7aa2bfdb5f8fef0275b9b52c5c15dffb541d54333175f9aec"
+      ],
+      "matches": [
+        {
+          "map": "20",
+          "seed": 821,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 0,
+          "candidate_longest": 8,
+          "opponent_longest": 6,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "1e7e8ae77397bf48114ac44be1bf7e9db050151ff7dd55821c0f19031e0915b6"
+        },
+        {
+          "map": "20",
+          "seed": 821,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 3,
+          "candidate_longest": 6,
+          "opponent_longest": 8,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "afbe146a790b03809c15869834f7e1e7059fd18eb6fb3c2c4704f94264405493"
+        },
+        {
+          "map": "31",
+          "seed": 821,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 3,
+          "candidate_longest": 17,
+          "opponent_longest": 8,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "9e745a728125a1f76f1e0714a070778a7f787eef35c70ca5e2030cdecf9bf17f"
+        },
+        {
+          "map": "31",
+          "seed": 821,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 13,
+          "opponent_queen": 0,
+          "candidate_longest": 16,
+          "opponent_longest": 18,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "11e9f44e4130caf4d655c074baaea41d46d822b65dd7f261d395630c9396b984"
+        },
+        {
+          "map": "9",
+          "seed": 821,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 25,
+          "opponent_longest": 16,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "c529a8bcd7a63107fe98fd7f1415d535990dcaf95c85dbf794088041c8d78e33"
+        },
+        {
+          "map": "9",
+          "seed": 821,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 12,
+          "opponent_longest": 16,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "a0511d983f84e592c02a8c143d557d33c302b25f8e2c89b5418cc2d57a437907"
+        },
+        {
+          "map": "21",
+          "seed": 821,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 10,
+          "opponent_longest": 15,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "4281c9599e5eafd620e1bb08ed2cdbbd4ee5551e5e1dce9ebafaa595f94eb162"
+        },
+        {
+          "map": "21",
+          "seed": 821,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 22,
+          "opponent_longest": 9,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "d611624c4f403cebdc81046380f18bdfe6bddf58f5d6e2b95370790fc694dacf"
+        }
+      ],
+      "strategy_metrics": {
+        "candidate": {
+          "totals": {
+            "turns": 103750,
+            "portal_crossings": 476,
+            "pearls": 6132,
+            "children_created": 2140,
+            "final_queen": 22,
+            "final_longest": 116,
+            "declared_paid_steps": 459,
+            "queen_pearls": 51,
+            "children_dead_within_5_turns": 426
+          },
+          "queens_survived": 4,
+          "queen_blockers": {
+            "ally": 2,
+            "hitHeadToHead": 2
+          },
+          "median_population": {
+            "25": 4.0,
+            "100": 7.0
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 102845,
+            "declared_paid_steps": 486,
+            "portal_crossings": 444,
+            "pearls": 6612,
+            "queen_pearls": 54,
+            "children_created": 2182,
+            "children_dead_within_5_turns": 442,
+            "final_longest": 96,
+            "final_queen": 12
+          },
+          "queens_survived": 4,
+          "queen_blockers": {
+            "ally": 2,
+            "hitHeadToHead": 2
+          },
+          "median_population": {
+            "25": 4.0,
+            "100": 7.0
+          }
+        }
+      }
+    },
+    "live-v7-cycle-determinism8": {
+      "summary": {
+        "outcomes": {
+          "win": 2,
+          "loss": 2
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 56084,
+          "movement_steps": 67444,
+          "split": 848,
+          "split_segments": 2522,
+          "sprint": 4820
+        },
+        "verified_head_trades": 6
+      },
+      "path": "build/validation/live-v7-cycle-determinism8",
+      "candidate_fingerprints": [
+        "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826"
+      ],
+      "opponent_fingerprints": [
+        "49e72de38c93d2759fc16fb00753b010631f0e1510270028da42cfeb8e30c245"
+      ],
+      "matches": [
+        {
+          "map": "20",
+          "seed": 816,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 8,
+          "opponent_longest": 3,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "028713b168b087ea19a6df615b9c6279b8bd29ab2ddb1a3c3e6852f3b89703c6"
+        },
+        {
+          "map": "20",
+          "seed": 816,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 8,
+          "opponent_longest": 3,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "028713b168b087ea19a6df615b9c6279b8bd29ab2ddb1a3c3e6852f3b89703c6"
+        },
+        {
+          "map": "20",
+          "seed": 816,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 8,
+          "opponent_longest": 8,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f64ebca38854db7453b753edcc6d1d4fc43905596fcf0f404aa0583158375ba0"
+        },
+        {
+          "map": "20",
+          "seed": 816,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 8,
+          "opponent_longest": 8,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f64ebca38854db7453b753edcc6d1d4fc43905596fcf0f404aa0583158375ba0"
+        },
+        {
+          "map": "9",
+          "seed": 816,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 14,
+          "opponent_longest": 25,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "d103254219f9cd41cdbeb983b848a1589beb6ded7600af42c483ad5230998ec9"
+        },
+        {
+          "map": "9",
+          "seed": 816,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 14,
+          "opponent_longest": 25,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "d103254219f9cd41cdbeb983b848a1589beb6ded7600af42c483ad5230998ec9"
+        },
+        {
+          "map": "9",
+          "seed": 816,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 15,
+          "opponent_longest": 23,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "6199df2fc5c76dde9829bbd0550bace7b3a9f8168521cdddd1cd7cece660b454"
+        },
+        {
+          "map": "9",
+          "seed": 816,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 15,
+          "opponent_longest": 23,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "6199df2fc5c76dde9829bbd0550bace7b3a9f8168521cdddd1cd7cece660b454"
+        }
+      ]
+    },
+    "live-v7-aggressive-native8": {
+      "summary": {
+        "outcomes": {
+          "loss": 7,
+          "win": 1
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "split": 2411,
+          "split_segments": 7169,
+          "move": 126702,
+          "movement_steps": 149519,
+          "sprint": 10210
+        },
+        "verified_head_trades": 57
+      },
+      "path": "build/validation/live-v7-aggressive-native8",
+      "candidate_fingerprints": [
+        "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826"
+      ],
+      "opponent_fingerprints": [
+        "c1c5196a6a0381457cffc03bfd0c1eab28d1509d7027c61c3c983106aa134159"
+      ],
+      "matches": [
+        {
+          "map": "21",
+          "seed": 822,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 11,
+          "opponent_longest": 20,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "9895fe855e67d144773fb830c80f5e59b71fd005b6393e85aba60dd8afd70dc6"
+        },
+        {
+          "map": "21",
+          "seed": 822,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 10,
+          "opponent_longest": 23,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "f3e6e63d4bcb156cedcae969495e849d5c55f7bfe6a590e73dfe90d7174fdea9"
+        },
+        {
+          "map": "9",
+          "seed": 822,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 14,
+          "opponent_longest": 14,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "ee3755f8f9c3fc12ef0dbd837036b4af5fe5633112f85c30d74f3d1abf85a677"
+        },
+        {
+          "map": "9",
+          "seed": 822,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 15,
+          "opponent_longest": 20,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "add91a0191965f20047ea53ff11a28446850d20877cc24acbe1cc9ecbfb4e1c8"
+        },
+        {
+          "map": "4",
+          "seed": 822,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 12,
+          "opponent_longest": 13,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "4ef08c3903088599862aef64eeb2828961feb4c8e6b255ed4e72c23e9368021c"
+        },
+        {
+          "map": "4",
+          "seed": 822,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 16,
+          "opponent_longest": 19,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "5bc4dc0028ec35813710dd65a141746665e6bd7c38aa1152cb97f18095c5ec08"
+        },
+        {
+          "map": "34",
+          "seed": 822,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 5,
+          "opponent_queen": 0,
+          "candidate_longest": 31,
+          "opponent_longest": 22,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "ba07e928a899f53869f8a0e1a4dac135b6c9e6876debe9f5208849380baf58ee"
+        },
+        {
+          "map": "34",
+          "seed": 822,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 21,
+          "opponent_longest": 29,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "39dd514b83d36e2d9f8b1344f2703ceefa2def0aceff5f7badc143b06a1b1666"
+        }
+      ],
+      "strategy_metrics": {
+        "candidate": {
+          "totals": {
+            "turns": 139323,
+            "declared_paid_steps": 549,
+            "children_created": 2411,
+            "portal_crossings": 204,
+            "pearls": 7714,
+            "queen_pearls": 73,
+            "children_dead_within_5_turns": 430,
+            "final_longest": 130,
+            "final_queen": 11
+          },
+          "queens_survived": 3,
+          "queen_blockers": {
+            "ally": 2,
+            "self": 2,
+            "hitHeadToHead": 1
+          },
+          "median_population": {
+            "25": 9.0,
+            "100": 28.5
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 117340,
+            "declared_paid_steps": 682,
+            "children_created": 1966,
+            "portal_crossings": 152,
+            "pearls": 6308,
+            "queen_pearls": 51,
+            "children_dead_within_5_turns": 398,
+            "final_longest": 160,
+            "final_queen": 6
+          },
+          "queens_survived": 2,
+          "queen_blockers": {
+            "ally": 3,
+            "hitHeadToHead": 2,
+            "self": 1
+          },
+          "median_population": {
+            "25": 9.0,
+            "100": 12.0
+          }
+        }
+      }
+    },
+    "live-v4-aggressive-native8": {
+      "summary": {
+        "outcomes": {
+          "loss": 5,
+          "win": 3
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "split": 1894,
+          "split_segments": 5810,
+          "move": 102020,
+          "movement_steps": 122159,
+          "sprint": 8855
+        },
+        "verified_head_trades": 67
+      },
+      "path": "build/validation/live-v4-aggressive-native8",
+      "candidate_fingerprints": [
+        "49e72de38c93d2759fc16fb00753b010631f0e1510270028da42cfeb8e30c245"
+      ],
+      "opponent_fingerprints": [
+        "c1c5196a6a0381457cffc03bfd0c1eab28d1509d7027c61c3c983106aa134159"
+      ],
+      "matches": [
+        {
+          "map": "21",
+          "seed": 822,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 15,
+          "opponent_longest": 18,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "9879b8b32e13421b22b233a4023f68b34d87dc707e47ebf80ffafc7bc0efbff4"
+        },
+        {
+          "map": "21",
+          "seed": 822,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 14,
+          "opponent_longest": 15,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "a5d4f8c086e0ebe1f2f7a8a3dceabdb3baf4e9ea916547d85c3d88f28a922352"
+        },
+        {
+          "map": "9",
+          "seed": 822,
+          "candidate_team": "A",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 12,
+          "opponent_longest": 25,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "d6e75db70dad7d468c8a74a1d11b0fcb628ad019cd4902d7d3921bfb822a6c18"
+        },
+        {
+          "map": "9",
+          "seed": 822,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 3,
+          "opponent_queen": 3,
+          "candidate_longest": 24,
+          "opponent_longest": 32,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "fbe6b871448e7761f29247716957900792d30a48f06eb3ba8308ea667820c450"
+        },
+        {
+          "map": "4",
+          "seed": 822,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 23,
+          "opponent_longest": 23,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "8594dd5b8aaeb75e4c2d0c6c6ff1bae8d75b99b7416dcb98cecbf14f94548b07"
+        },
+        {
+          "map": "4",
+          "seed": 822,
+          "candidate_team": "B",
+          "outcome": "loss",
+          "candidate_queen": 0,
+          "opponent_queen": 23,
+          "candidate_longest": 23,
+          "opponent_longest": 23,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "78dd3653a5b97d291fd00a4da2486f85c158ab66aaa80f9424e7668570620e5a"
+        },
+        {
+          "map": "34",
+          "seed": 822,
+          "candidate_team": "A",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 44,
+          "opponent_longest": 36,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "ae9ff82a8f9e244064e10ec29ce989b726222410475c9265e2e14d33edc12212"
+        },
+        {
+          "map": "34",
+          "seed": 822,
+          "candidate_team": "B",
+          "outcome": "win",
+          "candidate_queen": 0,
+          "opponent_queen": 0,
+          "candidate_longest": 28,
+          "opponent_longest": 22,
+          "candidate_points": 0,
+          "candidate_errors": 0,
+          "replay_sha256": "c3d0a939af17232bcd1d0046fb746faaf60735cd04797f145e77d422624bd23e"
+        }
+      ],
+      "strategy_metrics": {
+        "candidate": {
+          "totals": {
+            "turns": 112769,
+            "declared_paid_steps": 667,
+            "children_created": 1894,
+            "portal_crossings": 151,
+            "pearls": 6548,
+            "queen_pearls": 70,
+            "children_dead_within_5_turns": 385,
+            "final_longest": 183,
+            "final_queen": 6
+          },
+          "queens_survived": 2,
+          "queen_blockers": {
+            "self": 4,
+            "ally": 2
+          },
+          "median_population": {
+            "25": 9.0,
+            "100": 11.5
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 121339,
+            "declared_paid_steps": 735,
+            "children_created": 1989,
+            "portal_crossings": 160,
+            "pearls": 7054,
+            "queen_pearls": 84,
+            "children_dead_within_5_turns": 372,
+            "final_longest": 194,
+            "final_queen": 29
+          },
+          "queens_survived": 3,
+          "queen_blockers": {
+            "hitHeadToHead": 2,
+            "self": 3
+          },
+          "median_population": {
+            "25": 9.0,
+            "100": 13.0
+          }
+        }
+      }
+    }
+  },
+  "limitations": [
+    "Opponents are frozen own-bot versions, not private leader executables.",
+    "Native games cannot certify CPU usage.",
+    "Replay regressions omit sonar reports and do not establish full-policy counterfactual wins.",
+    "Win improvements are modest and depend on map and seed; this is not demonstrated leader superiority."
+  ],
+  "stress_opponent": {
+    "artifact": {
+      "profile": "combat",
+      "files": [
+        "bot.toml",
+        "helper.hpp",
+        "include/sudo_win/bot/bot.h",
+        "include/sudo_win/combat/combat.h",
+        "include/sudo_win/config/config.h",
+        "include/sudo_win/economy/economy.h",
+        "include/sudo_win/endgame/endgame.h",
+        "include/sudo_win/engine/helper.h",
+        "include/sudo_win/geometry/geometry.h",
+        "include/sudo_win/pathfinding/pathfinding.h",
+        "include/sudo_win/planner/planner.h",
+        "include/sudo_win/planner/simulation.h",
+        "include/sudo_win/roles/roles.h",
+        "include/sudo_win/safety/safety.h",
+        "include/sudo_win/sonar/sonar.h",
+        "include/sudo_win/splitting/splitting.h",
+        "include/sudo_win/types/types.h",
+        "include/sudo_win/world/world_model.h",
+        "src/bot/bot.cpp",
+        "src/combat/combat.cpp",
+        "src/economy/economy.cpp",
+        "src/endgame/endgame.cpp",
+        "src/geometry/geometry.cpp",
+        "src/main.cpp",
+        "src/pathfinding/pathfinding.cpp",
+        "src/planner/planner.cpp",
+        "src/planner/simulation.cpp",
+        "src/roles/roles.cpp",
+        "src/safety/safety.cpp",
+        "src/sonar/sonar.cpp",
+        "src/splitting/splitting.cpp",
+        "src/world/world_model.cpp"
+      ],
+      "source_sha256": "9cbec55fec42631f55b01f486b63755bf9c9d76ae6a5d553c7378854e474659f",
+      "effective_flags": {
+        "enable_sprinting": "true",
+        "enable_splitting": "false",
+        "enable_growth_splitting": "true",
+        "enable_queen_corridors": "true",
+        "enable_territorial_growth": "true",
+        "enable_champion_farms": "true",
+        "enable_portal_routing": "true",
+        "enable_movement_economics": "true",
+        "enable_interception": "true",
+        "enable_tail_clearance": "true",
+        "enable_queen_release": "true",
+        "enable_champion_retention": "true",
+        "enable_long_sprint_threats": "false",
+        "enable_pocket_priority": "false",
+        "enable_funded_sprint_priority": "false",
+        "enable_portal_escape": "true",
+        "enable_helper_portals": "true",
+        "enable_favourable_trades": "true",
+        "enable_queen_hunting": "true",
+        "enable_sonar": "true",
+        "enable_indicators": "false"
+      },
+      "archive": "/Users/aman/Desktop/Personal Projects/sudo_win/build/live-v4-aggressive-reference.zip",
+      "archive_sha256": "76e29eb1fe10a73fcf40d55ae3aae6e5489305c86aa00338e883006d5ce1476b"
+    },
+    "description": "Frozen uploaded v4 with only enable_favourable_trades changed to true; not a private competition leader."
+  }
+}
