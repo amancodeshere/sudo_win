@@ -188,10 +188,12 @@ auto Planner::choose_action(unswbc::Controller const& controller,
                 && threat.later_affordable_steps > 0 && threat.later_affordable_steps <= 3)
             || (funded_sprint_priority_ && threat.affordable_steps > 0 && threat.affordable_steps <= 2)
             || response.funded_steps > 0;
-        auto const uncertain_attack = response.possible_steps > 0 && response.possible_steps <= 3;
+        auto const uncertain_attack = (response.possible_steps > 0 && response.possible_steps <= 3)
+            || response.unresolved_steps > 0;
         if (response.possible_steps > 0) {
             candidate.combat_score -= (6 - response.possible_steps) * 10000;
         }
+        if (response.unresolved_steps > 0) { candidate.combat_score -= 12000; }
         auto const entry_trap = steps.size() == 1 && survival < config::survival_search_depth
             && simulation.sealed_entry_pocket(next, world);
         auto const sealed_pocket = config::enable_pocket_priority && !mobility.open_frontier

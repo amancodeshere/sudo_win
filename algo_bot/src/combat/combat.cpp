@@ -9,7 +9,8 @@
 namespace sudo_win {
 
 auto Combat::response_threat(unswbc::Controller const& controller,
-                             SimulationState const& after, WorldModel const& world) const -> ResponseThreat {
+                             SimulationState const& after, WorldModel const& world,
+                             int node_budget) const -> ResponseThreat {
     auto result = ResponseThreat{};
     if (after.body.empty()) { return result; }
     auto view = controller;
@@ -33,7 +34,6 @@ auto Combat::response_threat(unswbc::Controller const& controller,
     for (auto const p : after.unranked_body) { block(p); }
     auto const target = after.body.front();
     auto enemies = std::vector<unswbc::DragonPart>{};
-    auto has_portal = false;
     for (auto const& tile : view.get_tiles()) {
         auto const* part = tile.get_dragon();
         // Every visible enemy acts before our next turn: higher IDs this
@@ -41,27 +41,54 @@ auto Combat::response_threat(unswbc::Controller const& controller,
         if (part != nullptr && part->is_head() && part->get_team() != controller.get_team()) {
             enemies.push_back(*part);
         }
-        for (auto const d : unswbc::Direction::get_direction_list()) {
-            has_portal = has_portal || tile.get_edge(d).is_portal();
-        }
     }
     std::stable_sort(enemies.begin(), enemies.end(), [&](auto const& a, auto const& b) {
         return geometry::toroidal_manhattan(a.get_position(), target, world.width(), world.height())
              < geometry::toroidal_manhattan(b.get_position(), target, world.width(), world.height());
     });
-    auto budget = config::response_node_budget;
+    // A reverse lower bound on the directed visible topology prunes detours.
+    // Ignore occupancy here: moving enemy tails can open cells during a sprint.
+    auto const index = [&](unswbc::Position p) {
+        return static_cast<std::size_t>(p.y * world.width() + p.x);
+    };
+    auto reverse = std::vector<std::vector<unswbc::Position>>(
+        static_cast<std::size_t>(world.width() * world.height()));
+    for (auto const& tile : view.get_tiles()) {
+        for (auto const d : unswbc::Direction::get_direction_list()) {
+            auto const next = world.transition(tile.get_position(), d);
+            if (next && view.get_tile(*next) != nullptr) {
+                reverse[index(*next)].push_back(tile.get_position());
+            }
+        }
+    }
+    auto distance = std::vector<int>(reverse.size(), -1);
+    auto frontier = std::vector<unswbc::Position>{target};
+    distance[index(target)] = 0;
+    for (std::size_t cursor = 0; cursor < frontier.size(); ++cursor) {
+        auto const p = frontier[cursor];
+        if (distance[index(p)] >= config::response_step_limit) { continue; }
+        for (auto const previous : reverse[index(p)]) {
+            if (distance[index(previous)] < 0) {
+                distance[index(previous)] = distance[index(p)] + 1;
+                frontier.push_back(previous);
+            }
+        }
+    }
+    auto budget = node_budget;
     auto const simulation = Simulation{};
+    auto const unresolved = [&](int steps) {
+        if (result.unresolved_steps == 0 || steps < result.unresolved_steps) {
+            result.unresolved_steps = steps;
+        }
+    };
     for (auto const& enemy : enemies) {
-        if (!has_portal && geometry::toroidal_manhattan(enemy.get_position(), target,
-                world.width(), world.height()) > config::response_step_limit) { continue; }
+        if (distance[index(enemy.get_position())] < 0) { continue; }
         auto observed = 0;
         for (auto const& tile : view.get_tiles()) {
             observed += tile.dragon_part && tile.dragon_part->get_id() == enemy.get_id();
         }
         auto opponent = view;
         opponent.head = enemy;
-        // Missing segments can fund a short attack. Keep this envelope separate
-        // from funding established by observed length and intermediate food.
         opponent.length = std::max(5, observed + 2);
         auto const invented = opponent.length - std::max(unswbc::Constants::MIN_SIZE, observed);
         struct Node { SimulationState state; int steps; bool funded; };
@@ -70,10 +97,31 @@ auto Combat::response_threat(unswbc::Controller const& controller,
         for (std::size_t cursor = 0; cursor < queue.size(); ++cursor) {
             auto const node = queue[cursor];
             if (node.steps >= config::response_step_limit) { continue; }
-            for (auto const d : unswbc::Direction::get_direction_list()) {
-                // Always check every visible enemy's immediate attack, even
-                // after another search consumed the shared continuation budget.
-                if (node.steps > 0 && (budget-- <= 0 || enemy_budget-- <= 0)) { break; }
+            // Shortest plausible attacks first; directed portal distances, not
+            // Manhattan distance, determine which branches can reach the head.
+            auto directions = unswbc::Direction::get_direction_list();
+            std::stable_sort(directions.begin(), directions.end(), [&](auto a, auto b) {
+                auto const rank = [&](auto d) {
+                    auto const p = world.transition(node.state.body.front(), d);
+                    return p && view.get_tile(*p) != nullptr && distance[index(*p)] >= 0
+                        ? distance[index(*p)] : config::response_step_limit + 1;
+                };
+                return rank(a) < rank(b);
+            });
+            for (auto const d : directions) {
+                auto const p = world.transition(node.state.body.front(), d);
+                if (!p || view.get_tile(*p) == nullptr || distance[index(*p)] < 0
+                    || node.steps + 1 + distance[index(*p)] > config::response_step_limit) { continue; }
+                // Every enemy's first step is checked even if another enemy
+                // used the continuation budget. Preserve unfinished routes.
+                if (node.steps > 0) {
+                    if (budget <= 0 || enemy_budget <= 0) {
+                        unresolved(node.steps + 1 + distance[index(*p)]);
+                        continue;
+                    }
+                    --budget;
+                    --enemy_budget;
+                }
                 auto next = simulation.advance(opponent, node.state, d, node.steps > 0, &world);
                 if (!next) { continue; }
                 auto const steps = node.steps + 1;
@@ -85,7 +133,7 @@ auto Combat::response_threat(unswbc::Controller const& controller,
                     if (funded && (result.funded_steps == 0 || steps < result.funded_steps)) { result.funded_steps = steps; }
                     continue;
                 }
-                if (budget > 0 && enemy_budget > 0) { queue.push_back({std::move(*next), steps, funded}); }
+                queue.push_back({std::move(*next), steps, funded});
             }
         }
     }

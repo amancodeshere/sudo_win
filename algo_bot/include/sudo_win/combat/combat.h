@@ -13,6 +13,8 @@ struct SimulationState;
 struct ResponseThreat {
     int funded_steps = 0;
     int possible_steps = 0;
+    // An unfinished plausible route is uncertainty, never a safety proof.
+    int unresolved_steps = 0;
 };
 
 enum class ThreatLevel { none, possible_sprint, direct };
@@ -30,7 +32,8 @@ struct ThreatAssessment {
 class Combat {
 public:
     [[nodiscard]] auto response_threat(unswbc::Controller const& controller,
-                                       SimulationState const& after, WorldModel const& world) const -> ResponseThreat;
+                                       SimulationState const& after, WorldModel const& world,
+                                       int node_budget = config::response_node_budget) const -> ResponseThreat;
     [[nodiscard]] auto threats(unswbc::Controller const& controller,
                                WorldModel const* world = nullptr,
                                bool long_sprints = config::enable_long_sprint_threats) const -> std::vector<ThreatAssessment>;

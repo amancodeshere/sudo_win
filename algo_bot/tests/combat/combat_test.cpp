@@ -322,3 +322,71 @@ TEST_CASE("interception sightings expire and cannot override present observation
     auto const expired = sudo_win::Combat{}.interception_distances(fixture.controller,world,4,sudo_win::Role::hunter);
     CHECK(std::count(expired.begin(),expired.end(),0) == 0);
 }
+
+TEST_CASE("Around UNSW 880180 round 138 detects the observed four step queen attack") {
+    // Recorded visible topology and bodies, not a server counterfactual win.
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.game.width = 64;
+    fixture.game.height = 64;
+    fixture.game.round_num = 138;
+    fixture.controller.length = 11;
+    fixture.controller.head.position = {16,47};
+    fixture.controller.head.dir = unswbc::Direction::SOUTH;
+    auto tiles = std::vector<unswbc::Tile>{};
+    for (auto y = 44; y <= 50; ++y) {
+        for (auto x = 13; x <= 19; ++x) { tiles.emplace_back(unswbc::Position{x,y}); }
+    }
+    fixture.controller.vision = unswbc::Vision{std::move(tiles)};
+    fixture.tile({16,47}).dragon_part = unswbc::DragonPart{{16,47},0,unswbc::Team::A,unswbc::Direction::SOUTH,true};
+    fixture.tile({16,46}).dragon_part = unswbc::DragonPart{{16,46},0,unswbc::Team::A,unswbc::Direction::SOUTH,false};
+    fixture.tile({15,46}).dragon_part = unswbc::DragonPart{{15,46},0,unswbc::Team::A,unswbc::Direction::EAST,false};
+    fixture.tile({14,46}).dragon_part = unswbc::DragonPart{{14,46},0,unswbc::Team::A,unswbc::Direction::EAST,false};
+    fixture.tile({13,46}).dragon_part = unswbc::DragonPart{{13,46},0,unswbc::Team::A,unswbc::Direction::EAST,false};
+    fixture.tile({16,44}).dragon_part = unswbc::DragonPart{{16,44},52,unswbc::Team::B,unswbc::Direction::EAST,true};
+    fixture.tile({15,44}).dragon_part = unswbc::DragonPart{{15,44},52,unswbc::Team::B,unswbc::Direction::EAST,false};
+    fixture.tile({19,45}).dragon_part = unswbc::DragonPart{{19,45},92,unswbc::Team::B,unswbc::Direction::EAST,false};
+    fixture.tile({19,46}).dragon_part = unswbc::DragonPart{{19,46},92,unswbc::Team::B,unswbc::Direction::NORTH,false};
+    fixture.tile({18,48}).dragon_part = unswbc::DragonPart{{18,48},130,unswbc::Team::B,unswbc::Direction::NORTH,true};
+    fixture.tile({18,49}).dragon_part = unswbc::DragonPart{{18,49},130,unswbc::Team::B,unswbc::Direction::NORTH,false};
+    fixture.tile({18,50}).dragon_part = unswbc::DragonPart{{18,50},130,unswbc::Team::B,unswbc::Direction::NORTH,false};
+    fixture.tile({17,50}).dragon_part = unswbc::DragonPart{{17,50},130,unswbc::Team::B,unswbc::Direction::EAST,false};
+    fixture.tile({16,50}).dragon_part = unswbc::DragonPart{{16,50},130,unswbc::Team::B,unswbc::Direction::EAST,false};
+    fixture.tile({19,50}).dragon_part = unswbc::DragonPart{{19,50},139,unswbc::Team::B,unswbc::Direction::SOUTH,false};
+    fixture.tile({14,50}).dragon_part = unswbc::DragonPart{{14,50},175,unswbc::Team::A,unswbc::Direction::SOUTH,false};
+    fixture.tile({13,44}).get_edge(unswbc::Direction::NORTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({13,44}).get_edge(unswbc::Direction::EAST) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({14,44}).get_edge(unswbc::Direction::WEST) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({15,44}).get_edge(unswbc::Direction::SOUTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({16,44}).get_edge(unswbc::Direction::SOUTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({18,44}).get_edge(unswbc::Direction::EAST) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({19,44}).get_edge(unswbc::Direction::NORTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({19,44}).get_edge(unswbc::Direction::WEST) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({15,45}).get_edge(unswbc::Direction::NORTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({16,45}).get_edge(unswbc::Direction::NORTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({16,45}).get_edge(unswbc::Direction::EAST) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({17,45}).get_edge(unswbc::Direction::WEST) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({18,45}).get_edge(unswbc::Direction::SOUTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({18,45}).get_edge(unswbc::Direction::EAST) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({19,45}).get_edge(unswbc::Direction::WEST) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({18,46}).get_edge(unswbc::Direction::NORTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({13,48}).get_edge(unswbc::Direction::SOUTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({14,48}).get_edge(unswbc::Direction::SOUTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({15,48}).get_edge(unswbc::Direction::SOUTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({13,49}).get_edge(unswbc::Direction::NORTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({14,49}).get_edge(unswbc::Direction::NORTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({15,49}).get_edge(unswbc::Direction::NORTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({15,50}).get_edge(unswbc::Direction::EAST) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({16,50}).get_edge(unswbc::Direction::SOUTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    fixture.tile({16,50}).get_edge(unswbc::Direction::WEST) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    auto after = sudo_win::SimulationState{};
+    after.body = {{15,47},{16,47},{16,46},{15,46},{14,46},{13,46},{12,46},{11,46},{11,45},{11,44},{11,43}};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller, fixture.game);
+    auto const response = sudo_win::Combat{}.response_threat(fixture.controller, after, world);
+    CHECK(response.funded_steps == 4);
+    CHECK(response.possible_steps == 4);
+    auto const unfinished = sudo_win::Combat{}.response_threat(fixture.controller, after, world, 0);
+    CHECK(unfinished.funded_steps == 0);
+    CHECK(unfinished.unresolved_steps > 0);
+    CHECK(unfinished.unresolved_steps <= 4);
+}
