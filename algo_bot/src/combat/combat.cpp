@@ -5,6 +5,7 @@
 #include "../../include/sudo_win/planner/simulation.h"
 #include "../../include/sudo_win/world/world_model.h"
 #include <algorithm>
+#include <unordered_map>
 
 namespace sudo_win {
 
@@ -231,8 +232,70 @@ auto Combat::interception_distances(unswbc::Controller const& controller,
 
 auto Combat::favourable_trade(unswbc::Controller const& controller,
                               WorldModel const& world, bool queen_only) const -> std::optional<PlannedAction> {
-    if (controller.get_id() <= 1 || controller.get_length() > 3 || controller.get_unit_count() <= 1) {
+    auto const expanded = config::enable_funded_queen_attacks && queen_only
+        && controller.get_length() > 3 && controller.get_length() <= 10;
+    if (controller.get_id() <= 1 || (controller.get_length() > 3 && !expanded)
+        || controller.get_unit_count() <= 1) {
         return std::nullopt;
+    }
+    auto const step_limit = expanded ? 6U : config::max_sprint_steps;
+    auto distance = std::vector<int>{};
+    auto const index = [&](unswbc::Position p) {
+        return static_cast<std::size_t>(p.y * world.width() + p.x);
+    };
+    if (expanded) {
+        auto own_queen = false;
+        auto lengths = std::unordered_map<int, int>{};
+        auto target = std::optional<unswbc::Position>{};
+        auto enemy_id = -1;
+        for (auto const& tile : controller.get_tiles()) {
+            auto const* part = tile.get_dragon();
+            if (part == nullptr) { continue; }
+            ++lengths[part->get_id()];
+            if (part->is_head() && part->get_id() <= 1) {
+                if (part->get_team() == controller.get_team()) { own_queen = true; }
+                else { target = part->get_position(); enemy_id = part->get_id(); }
+            }
+        }
+        if (!own_queen || !target) { return std::nullopt; }
+        auto retained_scorer = false;
+        for (auto const& tile : controller.get_tiles()) {
+            auto const* part = tile.get_dragon();
+            if (part != nullptr && part->get_team() == controller.get_team()
+                && part->get_id() > 1 && part->get_id() != controller.get_id()
+                && lengths[part->get_id()] >= controller.get_length()) {
+                retained_scorer = true;
+            }
+        }
+        if (!retained_scorer && lengths[enemy_id] < controller.get_length() + 2) {
+            return std::nullopt;
+        }
+        // Distance is a lower bound only. Simulation certifies every actual
+        // visible step including occupancy, portals and action-start funding.
+        auto reverse = std::vector<std::vector<unswbc::Position>>(
+            static_cast<std::size_t>(world.width() * world.height()));
+        for (auto const& tile : controller.get_tiles()) {
+            for (auto const d : unswbc::Direction::get_direction_list()) {
+                auto const next = world.transition(tile.get_position(), d);
+                if (next && controller.get_tile(*next) != nullptr) {
+                    reverse[index(*next)].push_back(tile.get_position());
+                }
+            }
+        }
+        distance.assign(reverse.size(), -1);
+        distance[index(*target)] = 0;
+        auto frontier = std::vector<unswbc::Position>{*target};
+        for (std::size_t cursor = 0; cursor < frontier.size(); ++cursor) {
+            auto const p = frontier[cursor];
+            if (distance[index(p)] >= static_cast<int>(step_limit)) { continue; }
+            for (auto const previous : reverse[index(p)]) {
+                if (distance[index(previous)] < 0) {
+                    distance[index(previous)] = distance[index(p)] + 1;
+                    frontier.push_back(previous);
+                }
+            }
+        }
+        if (distance[index(controller.get_position())] < 0) { return std::nullopt; }
     }
     auto const simulation = Simulation{};
     struct Node { SimulationState state; std::vector<unswbc::Direction> steps; };
@@ -247,14 +310,17 @@ auto Combat::favourable_trade(unswbc::Controller const& controller,
     auto best = std::optional<PlannedAction>{};
     for (std::size_t cursor = 0; cursor < queue.size() && budget > 0; ++cursor) {
         auto const node = queue[cursor];
-        if (node.steps.size() >= config::max_sprint_steps) {
+        if (node.steps.size() >= step_limit) {
             continue;
         }
         for (auto const direction : unswbc::Direction::get_direction_list()) {
-            if (budget-- <= 0) {
-                break;
-            }
             auto const target = world.transition(node.state.body.front(), direction);
+            if (expanded && (!target || controller.get_tile(*target) == nullptr
+                || distance[index(*target)] < 0
+                || static_cast<int>(node.steps.size()) + 1 + distance[index(*target)] > static_cast<int>(step_limit))) {
+                continue;
+            }
+            if (budget-- <= 0) { break; }
             auto const* tile = target ? controller.get_tile(*target) : nullptr;
             auto const* enemy = tile != nullptr ? tile->get_dragon() : nullptr;
             auto steps = node.steps;
@@ -286,7 +352,8 @@ auto Combat::favourable_trade(unswbc::Controller const& controller,
                     best->kind = steps.size() > 1 ? ActionKind::sprint : ActionKind::move;
                     best->steps = std::move(steps);
                     best->score = score;
-                    best->reason = queen ? "small helper removes fixed enemy queen"
+                    best->reason = queen ? (expanded ? "funded helper removes score-relevant fixed enemy queen"
+                                                    : "small helper removes fixed enemy queen")
                                          : "small helper trades for visibly larger enemy head";
                 }
             } else if (auto const next = simulation.advance(controller, node.state, direction,

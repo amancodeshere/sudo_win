@@ -475,3 +475,70 @@ TEST_CASE("fresh remote queen intent outranks a helper's competing food then exp
     REQUIRE(expired.steps.size() == 1);
     CHECK(expired.steps.front() == unswbc::Direction::NORTH);
 }
+
+TEST_CASE("funded medium helpers remove a score-relevant visible queen through the full planner") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.game.width = 16; fixture.game.height = 14;
+    fixture.controller.head.dragon_id = 2;
+    auto length = 4;
+    SECTION("four segments can fund a three-step head trade") { length = 4; }
+    SECTION("seven segments can fund a six-step head trade") { length = 7; }
+    SECTION("ten segments can fund a four-step head trade") { length = 10; }
+    auto input = std::ifstream{std::string{SUDO_WIN_TEST_SOURCE_DIR} + "/replays/funded_queen_" + std::to_string(length) + ".txt"};
+    REQUIRE(input.good());
+    auto* previous = std::cin.rdbuf(input.rdbuf());
+    auto const updated = unswbc::update(fixture.controller,fixture.game);
+    std::cin.rdbuf(previous); REQUIRE(updated);
+    auto world = sudo_win::WorldModel{fixture.game}; world.update(fixture.controller,fixture.game);
+    auto roles = sudo_win::RoleManager{};
+    auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,
+        roles.choose_role(fixture.controller,fixture.game,&world));
+    REQUIRE(action.steps.size() == (length == 4 ? 3U : length == 7 ? 6U : 4U));
+    CHECK(action.reason == "funded helper removes score-relevant fixed enemy queen");
+}
+
+TEST_CASE("expanded queen attacks require funding and a preserved score argument") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.game.width = 16; fixture.game.height = 14;
+    fixture.controller.head.dragon_id = 2;
+    auto input = std::ifstream{std::string{SUDO_WIN_TEST_SOURCE_DIR} + "/replays/funded_queen_7.txt"};
+    REQUIRE(input.good()); auto* previous = std::cin.rdbuf(input.rdbuf());
+    auto const updated = unswbc::update(fixture.controller,fixture.game);
+    std::cin.rdbuf(previous); REQUIRE(updated);
+    auto const expanded = std::string_view{"funded helper removes score-relevant fixed enemy queen"};
+    auto expect_attack = false;
+    SECTION("unseen own queen gives no primary score argument") {
+        for (auto& tile : fixture.controller.vision.tiles) {
+            if (tile.dragon_part && tile.dragon_part->get_id() == 0) { tile.dragon_part.reset(); }
+        }
+    }
+    SECTION("locally largest helper is not sacrificed for a small queen") {
+        for (auto& tile : fixture.controller.vision.tiles) {
+            if (tile.dragon_part && tile.dragon_part->get_id() == 4) { tile.dragon_part.reset(); }
+        }
+    }
+    SECTION("a partially observed own body does not certify the attack") {
+        fixture.tile({4,9}).dragon_part.reset();
+    }
+    SECTION("length four cannot pay for six steps without intermediate food") {
+        fixture.controller.length = 4;
+        for (auto p : std::vector<unswbc::Position>{{3,8},{3,9},{4,9}}) { fixture.tile(p).dragon_part.reset(); }
+    }
+    SECTION("intermediate food can fund the route but never changes free allowance") {
+        fixture.controller.length = 4;
+        for (auto p : std::vector<unswbc::Position>{{3,8},{3,9},{4,9}}) { fixture.tile(p).dragon_part.reset(); }
+        for (auto p : std::vector<unswbc::Position>{{6,6},{6,5},{5,5},{4,5},{4,4}}) { fixture.tile(p).pearl = true; }
+        expect_attack = true;
+    }
+    SECTION("an allied head occupying all first steps is never traded") {
+        for (auto d : unswbc::Direction::get_direction_list()) {
+            auto const p = fixture.controller.get_position().add_dir(d);
+            fixture.tile(p).dragon_part = unswbc::DragonPart{p,6,unswbc::Team::A,d,true};
+        }
+    }
+    auto world = sudo_win::WorldModel{fixture.game}; world.update(fixture.controller,fixture.game);
+    auto const attack = sudo_win::Combat{}.favourable_trade(fixture.controller,world,true);
+    CHECK(attack.has_value() == expect_attack);
+    auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::hunter);
+    CHECK((action.reason == expanded) == expect_attack);
+}

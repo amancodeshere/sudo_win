@@ -16,7 +16,7 @@ PROFILES = {"stable": {
     "enable_long_sprint_threats": False, "enable_pocket_priority": False,
     "enable_funded_sprint_priority": False, "enable_favourable_trades": False,
     "enable_helper_portals": True, "enable_portal_escape": True, "enable_queen_hunting": True,
-    "enable_sonar": True, "enable_indicators": False,
+    "enable_sonar": True, "enable_indicators": False, "enable_funded_queen_attacks": False,
 }}
 PROFILES["no-sprint"] = {**PROFILES["stable"], "enable_sprinting": False}
 PROFILES["no-sonar"] = {**PROFILES["stable"], "enable_sonar": False}
@@ -60,6 +60,9 @@ PROFILES["combat"] = {**PROFILES["stable"], "enable_favourable_trades": True}
 PROFILES["experimental"] = {**PROFILES["stable"], "enable_splitting": True,
     "enable_long_sprint_threats": True, "enable_pocket_priority": True,
     "enable_funded_sprint_priority": True, "enable_favourable_trades": True}
+
+PROFILES["funded-queen"] = {**PROFILES["stable"], "enable_funded_queen_attacks": True}
+PROFILES["no-funded-queen"] = {**PROFILES["stable"], "enable_funded_queen_attacks": False}
 
 
 def prepare(bot: pathlib.Path, output: pathlib.Path, profile: str) -> dict:

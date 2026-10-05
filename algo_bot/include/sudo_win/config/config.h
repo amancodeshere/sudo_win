@@ -39,6 +39,7 @@ inline constexpr auto enable_portal_escape = true;
 inline constexpr auto enable_helper_portals = true;
 inline constexpr auto enable_favourable_trades = false;
 inline constexpr auto enable_queen_hunting = true;
+inline constexpr auto enable_funded_queen_attacks = true;
 inline constexpr auto portal_exit_max_age = 16;
 inline constexpr auto enable_sonar = true;
 inline constexpr auto enable_indicators = false;
