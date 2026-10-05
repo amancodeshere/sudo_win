@@ -5,7 +5,6 @@
 #include "../../include/sudo_win/planner/simulation.h"
 #include "../../include/sudo_win/world/world_model.h"
 #include <algorithm>
-#include <unordered_map>
 
 namespace sudo_win {
 
@@ -231,7 +230,7 @@ auto Combat::interception_distances(unswbc::Controller const& controller,
 }
 
 auto Combat::favourable_trade(unswbc::Controller const& controller,
-                              WorldModel const& world, bool queen_only) const -> std::optional<PlannedAction> {
+                              WorldModel const& world, bool queen_only, bool retained_scorer) const -> std::optional<PlannedAction> {
     auto const expanded = config::enable_funded_queen_attacks && queen_only
         && controller.get_length() > 3 && controller.get_length() <= 10;
     if (controller.get_id() <= 1 || (controller.get_length() > 3 && !expanded)
@@ -244,32 +243,19 @@ auto Combat::favourable_trade(unswbc::Controller const& controller,
         return static_cast<std::size_t>(p.y * world.width() + p.x);
     };
     if (expanded) {
-        auto own_queen = false;
-        auto lengths = std::unordered_map<int, int>{};
+        if (retained_scorer) { return std::nullopt; }
         auto target = std::optional<unswbc::Position>{};
-        auto enemy_id = -1;
         for (auto const& tile : controller.get_tiles()) {
             auto const* part = tile.get_dragon();
-            if (part == nullptr) { continue; }
-            ++lengths[part->get_id()];
-            if (part->is_head() && part->get_id() <= 1) {
-                if (part->get_team() == controller.get_team()) { own_queen = true; }
-                else { target = part->get_position(); enemy_id = part->get_id(); }
+            if (part != nullptr && part->is_head() && part->get_id() <= 1
+                && part->get_team() != controller.get_team()) {
+                target = part->get_position();
             }
         }
-        if (!own_queen || !target) { return std::nullopt; }
-        auto retained_scorer = false;
-        for (auto const& tile : controller.get_tiles()) {
-            auto const* part = tile.get_dragon();
-            if (part != nullptr && part->get_team() == controller.get_team()
-                && part->get_id() > 1 && part->get_id() != controller.get_id()
-                && lengths[part->get_id()] >= controller.get_length()) {
-                retained_scorer = true;
-            }
-        }
-        if (!retained_scorer && lengths[enemy_id] < controller.get_length() + 2) {
-            return std::nullopt;
-        }
+        if (!target) { return std::nullopt; }
+        // Removing the fixed enemy queen reduces their primary score to zero
+        // without changing ours. This remains relevant when our queen is remote
+        // or dead; the elected retained scorer is protected separately.
         // Distance is a lower bound only. Simulation certifies every actual
         // visible step including occupancy, portals and action-start funding.
         auto reverse = std::vector<std::vector<unswbc::Position>>(

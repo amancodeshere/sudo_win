@@ -40,7 +40,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         return action;
     };
     if ((favourable_trades_ || config::enable_queen_hunting) && role != Role::queen) {
-        if (auto const trade = combat_.favourable_trade(controller, world, !favourable_trades_)) {
+        if (auto const trade = combat_.favourable_trade(controller, world, !favourable_trades_, role == Role::champion)) {
             return finish(*trade);
         }
     }

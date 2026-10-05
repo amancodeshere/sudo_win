@@ -489,6 +489,10 @@ TEST_CASE("funded medium helpers remove a score-relevant visible queen through t
     auto* previous = std::cin.rdbuf(input.rdbuf());
     auto const updated = unswbc::update(fixture.controller,fixture.game);
     std::cin.rdbuf(previous); REQUIRE(updated);
+    if (length == 10) {
+        // Exact engine-valid eleventh segment retains a larger ally scorer.
+        fixture.tile({3,10}).dragon_part = unswbc::DragonPart{{3,10},4,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    }
     auto world = sudo_win::WorldModel{fixture.game}; world.update(fixture.controller,fixture.game);
     auto roles = sudo_win::RoleManager{};
     auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,
@@ -507,14 +511,36 @@ TEST_CASE("expanded queen attacks require funding and a preserved score argument
     std::cin.rdbuf(previous); REQUIRE(updated);
     auto const expanded = std::string_view{"funded helper removes score-relevant fixed enemy queen"};
     auto expect_attack = false;
-    SECTION("unseen own queen gives no primary score argument") {
+    auto role = sudo_win::Role::hunter;
+    SECTION("remote own queen still benefits from reduced enemy primary score") {
+        expect_attack = true;
         for (auto& tile : fixture.controller.vision.tiles) {
             if (tile.dragon_part && tile.dragon_part->get_id() == 0) { tile.dragon_part.reset(); }
         }
     }
-    SECTION("locally largest helper is not sacrificed for a small queen") {
+    SECTION("a worker can remove a queen without requiring a nearby ally scorer") {
+        expect_attack = true;
         for (auto& tile : fixture.controller.vision.tiles) {
             if (tile.dragon_part && tile.dragon_part->get_id() == 4) { tile.dragon_part.reset(); }
+        }
+    }
+    SECTION("an elected retained champion is protected") {
+        role = sudo_win::Role::champion;
+    }
+    SECTION("full role election retains the late sole secondary scorer") {
+        for (auto& tile : fixture.controller.vision.tiles) {
+            if (tile.dragon_part && tile.dragon_part->get_id() == 4) { tile.dragon_part.reset(); }
+        }
+        fixture.controller.unit_count = 2;
+        fixture.game.round_num = 300;
+        auto elected_world = sudo_win::WorldModel{fixture.game};
+        elected_world.update(fixture.controller,fixture.game);
+        role = sudo_win::RoleManager{}.choose_role(fixture.controller,fixture.game,&elected_world);
+        REQUIRE(role == sudo_win::Role::champion);
+    }
+    SECTION("ordinary nonqueen head trades are not expanded") {
+        for (auto& tile : fixture.controller.vision.tiles) {
+            if (tile.dragon_part && tile.dragon_part->get_id() == 1) { tile.dragon_part->dragon_id = 9; }
         }
     }
     SECTION("a partially observed own body does not certify the attack") {
@@ -537,8 +563,8 @@ TEST_CASE("expanded queen attacks require funding and a preserved score argument
         }
     }
     auto world = sudo_win::WorldModel{fixture.game}; world.update(fixture.controller,fixture.game);
-    auto const attack = sudo_win::Combat{}.favourable_trade(fixture.controller,world,true);
+    auto const attack = sudo_win::Combat{}.favourable_trade(fixture.controller,world,true,role == sudo_win::Role::champion);
     CHECK(attack.has_value() == expect_attack);
-    auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::hunter);
+    auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,role);
     CHECK((action.reason == expanded) == expect_attack);
 }

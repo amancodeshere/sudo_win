@@ -48,7 +48,7 @@ public:
                                                WorldModel const& world, int round, Role role) const
         -> std::vector<int>;
     [[nodiscard]] auto favourable_trade(unswbc::Controller const& controller,
-                                                WorldModel const& world, bool queen_only = false) const -> std::optional<PlannedAction>;
+                                                WorldModel const& world, bool queen_only = false, bool retained_scorer = false) const -> std::optional<PlannedAction>;
 };
 
 } // namespace sudo_win
