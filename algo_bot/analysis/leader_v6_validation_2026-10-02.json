@@ -1,0 +1,1686 @@
+{
+  "package": {
+    "profile": "stable",
+    "files": [
+      "bot.toml",
+      "helper.hpp",
+      "include/sudo_win/bot/bot.h",
+      "include/sudo_win/combat/combat.h",
+      "include/sudo_win/config/config.h",
+      "include/sudo_win/economy/economy.h",
+      "include/sudo_win/endgame/endgame.h",
+      "include/sudo_win/engine/helper.h",
+      "include/sudo_win/geometry/geometry.h",
+      "include/sudo_win/pathfinding/pathfinding.h",
+      "include/sudo_win/planner/planner.h",
+      "include/sudo_win/planner/simulation.h",
+      "include/sudo_win/roles/roles.h",
+      "include/sudo_win/safety/safety.h",
+      "include/sudo_win/sonar/sonar.h",
+      "include/sudo_win/splitting/splitting.h",
+      "include/sudo_win/types/types.h",
+      "include/sudo_win/world/world_model.h",
+      "src/bot/bot.cpp",
+      "src/combat/combat.cpp",
+      "src/economy/economy.cpp",
+      "src/endgame/endgame.cpp",
+      "src/geometry/geometry.cpp",
+      "src/main.cpp",
+      "src/pathfinding/pathfinding.cpp",
+      "src/planner/planner.cpp",
+      "src/planner/simulation.cpp",
+      "src/roles/roles.cpp",
+      "src/safety/safety.cpp",
+      "src/sonar/sonar.cpp",
+      "src/splitting/splitting.cpp",
+      "src/world/world_model.cpp"
+    ],
+    "source_sha256": "c971c782f0341a8ef3eade03d87684ccb668177b9b58193755dab5ab8f94a839",
+    "effective_flags": {
+      "enable_sprinting": "true",
+      "enable_splitting": "false",
+      "enable_growth_splitting": "true",
+      "enable_queen_corridors": "true",
+      "enable_territorial_growth": "true",
+      "enable_champion_farms": "true",
+      "enable_portal_routing": "true",
+      "enable_movement_economics": "true",
+      "enable_interception": "true",
+      "enable_tail_clearance": "true",
+      "enable_queen_release": "true",
+      "enable_champion_retention": "true",
+      "enable_long_sprint_threats": "false",
+      "enable_pocket_priority": "false",
+      "enable_funded_sprint_priority": "false",
+      "enable_portal_escape": "true",
+      "enable_helper_portals": "true",
+      "enable_favourable_trades": "false",
+      "enable_queen_hunting": "true",
+      "enable_sonar": "true",
+      "enable_indicators": "false"
+    },
+    "archive": "/Users/aman/Desktop/Personal Projects/sudo_win/build/submission-competition-v6-final.zip",
+    "archive_sha256": "0e8b1b36aae52f6f60b7259bb929bb89ae34d49f213b2ac7ba6dfd30b2582957"
+  },
+  "toolkit": "1.2.5",
+  "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+  "map_snapshot": "2026-10-02 download; 17 maps",
+  "suites": {
+    "leader-v6-final-sandbox34": {
+      "summary": {
+        "outcomes": {
+          "win": 20,
+          "loss": 14
+        },
+        "matches": 34,
+        "passed": true,
+        "mode": "sandbox",
+        "max_points": 60730866,
+        "candidate_max_points": 56902887,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "split": 3809,
+          "split_segments": 11794,
+          "move": 220040,
+          "movement_steps": 264999,
+          "sprint": 19562
+        },
+        "verified_head_trades": 31
+      },
+      "strategy": {
+        "candidate": {
+          "totals": {
+            "turns": 243411,
+            "declared_paid_steps": 1177,
+            "children_created": 3809,
+            "portal_crossings": 501,
+            "children_dead_within_5_turns": 642,
+            "pearls": 13055,
+            "queen_pearls": 463,
+            "final_queen": 104,
+            "final_longest": 677
+          },
+          "queens_survived": 11,
+          "queen_blockers": {
+            "ally": 9,
+            "hitHeadToHead": 4,
+            "enemy": 4,
+            "self": 6
+          },
+          "median_population": {
+            "25": 3.5,
+            "100": 5.0
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 190266,
+            "declared_paid_steps": 1809,
+            "children_created": 2308,
+            "portal_crossings": 264,
+            "children_dead_within_5_turns": 347,
+            "pearls": 9214,
+            "queen_pearls": 397,
+            "final_queen": 104,
+            "final_longest": 584
+          },
+          "queens_survived": 12,
+          "queen_blockers": {
+            "ally": 11,
+            "enemy": 1,
+            "hitHeadToHead": 5,
+            "self": 5
+          },
+          "median_population": {
+            "25": 3.0,
+            "100": 3.5
+          }
+        }
+      },
+      "candidate_benchmark_sha256": "49e72de38c93d2759fc16fb00753b010631f0e1510270028da42cfeb8e30c245",
+      "opponent_benchmark_sha256": "f619db18e68cddbf3c84afc722220057b77cd3f3153dad072002baf65e106d33",
+      "games": [
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/9.map",
+          "map_sha256": "5b9481d0c65454b6d0a6747a581c582414cba37dd99273cc5a23dbca63b31724",
+          "candidate_team": "A",
+          "seed": 701,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox34/0-9-701-0-0.replay",
+          "replay_sha256": "2529570d9af24423b2442eefd14ecd4cd35175039829f06e03438dd7491f3760",
+          "a_queen": 3,
+          "b_queen": 3,
+          "a_longest": 37,
+          "b_longest": 22
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/9.map",
+          "map_sha256": "5b9481d0c65454b6d0a6747a581c582414cba37dd99273cc5a23dbca63b31724",
+          "candidate_team": "B",
+          "seed": 701,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox34/0-9-701-1-0.replay",
+          "replay_sha256": "ab24a3f5d2615689d60637f0607efcb8e266ba59fd44f2eb96abf4d5b6af3b8e",
+          "a_queen": 3,
+          "b_queen": 3,
+          "a_longest": 12,
+          "b_longest": 20
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/20.map",
+          "map_sha256": "56341e6577da7429efb6f33b64b79b0c4223c4fbd9df995713ad781bead5f423",
+          "candidate_team": "A",
+          "seed": 701,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox34/1-20-701-0-0.replay",
+          "replay_sha256": "4acb047979f074e2c864d55326a068e41636abc6ea00b9751243d393098c4f70",
+          "a_queen": 4,
+          "b_queen": 5,
+          "a_longest": 6,
+          "b_longest": 5
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/20.map",
+          "map_sha256": "56341e6577da7429efb6f33b64b79b0c4223c4fbd9df995713ad781bead5f423",
+          "candidate_team": "B",
+          "seed": 701,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox34/1-20-701-1-0.replay",
+          "replay_sha256": "c2c759cad3c1b089cf321e4cf2b68a6ed68c4e309721456af8a80907beb27181",
+          "a_queen": 3,
+          "b_queen": 3,
+          "a_longest": 8,
+          "b_longest": 3
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/21.map",
+          "map_sha256": "001f3501dc5b76cb35b796f03fcaaed6c90be34741b5da03ab061ba0908347e7",
+          "candidate_team": "A",
+          "seed": 701,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox34/2-21-701-0-0.replay",
+          "replay_sha256": "9f2cb97e174afac872a1e5adf92b16141f3279dc605ad8f97f9e22f4b6cdb06b",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 18,
+          "b_longest": 14
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/21.map",
+          "map_sha256": "001f3501dc5b76cb35b796f03fcaaed6c90be34741b5da03ab061ba0908347e7",
+          "candidate_team": "B",
+          "seed": 701,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox34/2-21-701-1-0.replay",
+          "replay_sha256": "dbd52f0eedac79b8baeb73026f854c6b85a8ccdacca385e1a76626866a1d51f6",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 12,
+          "b_longest": 18
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/7.map",
+          "map_sha256": "126d71b46443268596285918d910b7f8d875bf3028ca9c5ff6bad97b4e868938",
+          "candidate_team": "A",
+          "seed": 701,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox34/3-7-701-0-0.replay",
+          "replay_sha256": "a6ec778d03408e11a27f257d45bcf4101284d59f6b8678d4b68b59eba9f02a28",
+          "a_queen": 0,
+          "b_queen": 24,
+          "a_longest": 28,
+          "b_longest": 24
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/7.map",
+          "map_sha256": "126d71b46443268596285918d910b7f8d875bf3028ca9c5ff6bad97b4e868938",
+          "candidate_team": "B",
+          "seed": 701,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox34/3-7-701-1-0.replay",
+          "replay_sha256": "e8a8990f7fd6b00426f9a70ea5352792f25bcf41350af6c829266820a217b664",
+          "a_queen": 3,
+          "b_queen": 0,
+          "a_longest": 18,
+          "b_longest": 18
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/32.map",
+          "map_sha256": "31b22a24c467edb146f8c6fc291beccce1493617d90ff5bb6eff538c3af24715",
+          "candidate_team": "A",
+          "seed": 701,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox34/4-32-701-0-0.replay",
+          "replay_sha256": "3793a510131be0133c84f77e7c29ca0703148f6ecf46211762e1ec406a4beae5",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 13,
+          "b_longest": 8
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/32.map",
+          "map_sha256": "31b22a24c467edb146f8c6fc291beccce1493617d90ff5bb6eff538c3af24715",
+          "candidate_team": "B",
+          "seed": 701,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox34/4-32-701-1-0.replay",
+          "replay_sha256": "3d46092ae39a81e05b6212905cec260edc5093a9ae4651c211af0f8d16f95be1",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 10,
+          "b_longest": 8
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/4.map",
+          "map_sha256": "42d4766ffede5f445692b119a26a6eee687fdc63b5b86776fefdf7fd755789b8",
+          "candidate_team": "A",
+          "seed": 701,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox34/5-4-701-0-0.replay",
+          "replay_sha256": "ba4d309762c36a166b73a6f09f3da802fc52f4afa9e7443ecba517749b50e088",
+          "a_queen": 0,
+          "b_queen": 16,
+          "a_longest": 49,
+          "b_longest": 16
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/4.map",
+          "map_sha256": "42d4766ffede5f445692b119a26a6eee687fdc63b5b86776fefdf7fd755789b8",
+          "candidate_team": "B",
+          "seed": 701,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox34/5-4-701-1-0.replay",
+          "replay_sha256": "ed29e2f2403b0611e91fd78518ba6b29c61b32b3de96ce374baf21cb6d6384f6",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 19,
+          "b_longest": 21
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/33.map",
+          "map_sha256": "1f097251f44508a5db71c691a361362052934817e99a8975a2521bcaf81c9725",
+          "candidate_team": "A",
+          "seed": 701,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox34/6-33-701-0-0.replay",
+          "replay_sha256": "aa46e622981cb31f176f7449896723c1cdad10cc52c6d6f9d3fc473d6b58115f",
+          "a_queen": 0,
+          "b_queen": 8,
+          "a_longest": 28,
+          "b_longest": 8
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/33.map",
+          "map_sha256": "1f097251f44508a5db71c691a361362052934817e99a8975a2521bcaf81c9725",
+          "candidate_team": "B",
+          "seed": 701,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox34/6-33-701-1-0.replay",
+          "replay_sha256": "222bdb1c2e2f4e6ea9ae785377d86493a9e05bae2a247b87e2f4298622e6d7bf",
+          "a_queen": 2,
+          "b_queen": 0,
+          "a_longest": 20,
+          "b_longest": 12
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/30.map",
+          "map_sha256": "8a403c0aa6c7affc53ee27283fed1568840bb82517c9d7eb59c69462f66d5fb6",
+          "candidate_team": "A",
+          "seed": 701,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox34/7-30-701-0-0.replay",
+          "replay_sha256": "0260896f332a36a834ac16310bdc96940756577258aa60345581f4929d21e60d",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 58,
+          "b_longest": 40
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/30.map",
+          "map_sha256": "8a403c0aa6c7affc53ee27283fed1568840bb82517c9d7eb59c69462f66d5fb6",
+          "candidate_team": "B",
+          "seed": 701,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox34/7-30-701-1-0.replay",
+          "replay_sha256": "7d2c51bffe1345bd157fc73d7024a2d165922ba839c6bffeb7812f62de96ef58",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 33,
+          "b_longest": 30
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/34.map",
+          "map_sha256": "ea443f10a63c1a37521cfef814b2e9316acf5e56f29e74b9e2c20987ccd0b72a",
+          "candidate_team": "A",
+          "seed": 701,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox34/8-34-701-0-0.replay",
+          "replay_sha256": "e9bd43a72adaf30a046c68457ae3881b68e818379a84e012aeb3be61995f3c0b",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 23,
+          "b_longest": 13
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/34.map",
+          "map_sha256": "ea443f10a63c1a37521cfef814b2e9316acf5e56f29e74b9e2c20987ccd0b72a",
+          "candidate_team": "B",
+          "seed": 701,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox34/8-34-701-1-0.replay",
+          "replay_sha256": "9890bfd0b457cd15cfb713406b8f08f7cd42d4d9238e3db6004440b1f6127f17",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 14,
+          "b_longest": 16
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/11.map",
+          "map_sha256": "4f84e990688c1e96ee4c2a7ff0706e4b44f4ee63531dd5c5582cf9157b134fb1",
+          "candidate_team": "A",
+          "seed": 701,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox34/9-11-701-0-0.replay",
+          "replay_sha256": "32b00ffd015cd65ea720334a86e02e276ff64292413edbaee46c675e6dbfdcc6",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 16,
+          "b_longest": 11
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/11.map",
+          "map_sha256": "4f84e990688c1e96ee4c2a7ff0706e4b44f4ee63531dd5c5582cf9157b134fb1",
+          "candidate_team": "B",
+          "seed": 701,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox34/9-11-701-1-0.replay",
+          "replay_sha256": "f971aae63de683ec06bf1c2c4fa4062c6768191c20622ccccc7cc3319785f9d4",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 0,
+          "b_longest": 27
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/28.map",
+          "map_sha256": "4cf0e4e57c12fd4dfbd2ad997e29994e736dd5d8eca1e0f3353e3020d94b08c1",
+          "candidate_team": "A",
+          "seed": 701,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox34/10-28-701-0-0.replay",
+          "replay_sha256": "33508b9809b8a74156aa7baac1f84f82a21fd628848252b16412d70cd5f81039",
+          "a_queen": 4,
+          "b_queen": 0,
+          "a_longest": 4,
+          "b_longest": 12
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/28.map",
+          "map_sha256": "4cf0e4e57c12fd4dfbd2ad997e29994e736dd5d8eca1e0f3353e3020d94b08c1",
+          "candidate_team": "B",
+          "seed": 701,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox34/10-28-701-1-0.replay",
+          "replay_sha256": "c3cfcde4996cb81f3441ce8ee5e8766470a5aa5a17b310e94e2a4a399d4176ca",
+          "a_queen": 4,
+          "b_queen": 4,
+          "a_longest": 18,
+          "b_longest": 4
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/31.map",
+          "map_sha256": "f154114e3ed9d39efd8516529acf8462328866b1580662228ff35dedd3cd3bdf",
+          "candidate_team": "A",
+          "seed": 701,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox34/11-31-701-0-0.replay",
+          "replay_sha256": "53e381301f3ae9c33515c2bf53331d12d81a3e26726ab441cd3aef9159d79df8",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 10,
+          "b_longest": 14
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/31.map",
+          "map_sha256": "f154114e3ed9d39efd8516529acf8462328866b1580662228ff35dedd3cd3bdf",
+          "candidate_team": "B",
+          "seed": 701,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox34/11-31-701-1-0.replay",
+          "replay_sha256": "aeeecd950131abf4c82fab80841600ae1b5c7640bd778582cb3e157ae2b8f36b",
+          "a_queen": 0,
+          "b_queen": 3,
+          "a_longest": 26,
+          "b_longest": 14
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/17.map",
+          "map_sha256": "fd02547854cbcbe36274d4341900610ba1aa1caa35e553c38135def95e0db68d",
+          "candidate_team": "A",
+          "seed": 701,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox34/12-17-701-0-0.replay",
+          "replay_sha256": "005e6dff1072cdcd8e1fb7b6d2086315bda95e925d199040943912afd145be16",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 22,
+          "b_longest": 14
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/17.map",
+          "map_sha256": "fd02547854cbcbe36274d4341900610ba1aa1caa35e553c38135def95e0db68d",
+          "candidate_team": "B",
+          "seed": 701,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox34/12-17-701-1-0.replay",
+          "replay_sha256": "f8d9fafaed8f40071a085c64152e3e436f0ada5512ef913721c3f5e3920a77d9",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 6,
+          "b_longest": 8
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/29.map",
+          "map_sha256": "7fccdee8a73a971bc3dc7a07b13aa56bb214f311249b942869bcc9708084d539",
+          "candidate_team": "A",
+          "seed": 701,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox34/13-29-701-0-0.replay",
+          "replay_sha256": "e53b6c9e50cda151a5c7803dcc9cca4bc0b668ab51a162c34d4c3cb6befb20c9",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 21,
+          "b_longest": 27
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/29.map",
+          "map_sha256": "7fccdee8a73a971bc3dc7a07b13aa56bb214f311249b942869bcc9708084d539",
+          "candidate_team": "B",
+          "seed": 701,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox34/13-29-701-1-0.replay",
+          "replay_sha256": "238f4809233c478293dd1abb12a684e20d1f9cba149a94664c4bb974adc1fa27",
+          "a_queen": 0,
+          "b_queen": 20,
+          "a_longest": 21,
+          "b_longest": 32
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/19.map",
+          "map_sha256": "c622b9afe8fea2d034999511f07fc561a4e5e7120615f0f9bf454b3f27fc0a16",
+          "candidate_team": "A",
+          "seed": 701,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox34/14-19-701-0-0.replay",
+          "replay_sha256": "5444b27ab93e9ce09eb654fcb0316e9cd7f9e55ebe45338390e4e44b543487f2",
+          "a_queen": 14,
+          "b_queen": 0,
+          "a_longest": 15,
+          "b_longest": 23
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/19.map",
+          "map_sha256": "c622b9afe8fea2d034999511f07fc561a4e5e7120615f0f9bf454b3f27fc0a16",
+          "candidate_team": "B",
+          "seed": 701,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox34/14-19-701-1-0.replay",
+          "replay_sha256": "f0b07557e15b8f25c44abea0c7f30380670d1f31abfbd8b848d08e58872a4a06",
+          "a_queen": 6,
+          "b_queen": 0,
+          "a_longest": 44,
+          "b_longest": 33
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/13.map",
+          "map_sha256": "a09e8f2d3bdd1e40fad31a0ecdf00166cd1090c232c56dcc2557729de737f6aa",
+          "candidate_team": "A",
+          "seed": 701,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox34/15-13-701-0-0.replay",
+          "replay_sha256": "cfdd8cea48b2c483376cbc9ed165b3afd6ac99f18d52685818936e6b1ea9d1b0",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 10,
+          "b_longest": 7
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/13.map",
+          "map_sha256": "a09e8f2d3bdd1e40fad31a0ecdf00166cd1090c232c56dcc2557729de737f6aa",
+          "candidate_team": "B",
+          "seed": 701,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox34/15-13-701-1-0.replay",
+          "replay_sha256": "68cdd6094eebb7f9ca819089bc16cbf1c0fa1abd8e5bced690f93871b1d101db",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 9,
+          "b_longest": 9
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/15.map",
+          "map_sha256": "dcf39d713c060e5ded2d031a7ffe1a27ea60fe4b72ff8fb3fffbabc4f81e2066",
+          "candidate_team": "A",
+          "seed": 701,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox34/16-15-701-0-0.replay",
+          "replay_sha256": "43535c3a5b1c430abc0dbd327d17268a6583ef72205a3490c62276b1d91c2095",
+          "a_queen": 25,
+          "b_queen": 27,
+          "a_longest": 25,
+          "b_longest": 27
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/15.map",
+          "map_sha256": "dcf39d713c060e5ded2d031a7ffe1a27ea60fe4b72ff8fb3fffbabc4f81e2066",
+          "candidate_team": "B",
+          "seed": 701,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox34/16-15-701-1-0.replay",
+          "replay_sha256": "d513e9377ac48e3b7eeaf7e4422897120e08709c3a32a65e2cb5fc94457a0a17",
+          "a_queen": 0,
+          "b_queen": 21,
+          "a_longest": 29,
+          "b_longest": 21
+        }
+      ]
+    },
+    "leader-v6-final-sandbox16": {
+      "summary": {
+        "outcomes": {
+          "win": 8,
+          "loss": 8
+        },
+        "matches": 16,
+        "passed": true,
+        "mode": "sandbox",
+        "max_points": 60464865,
+        "candidate_max_points": 51985836,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 194131,
+          "movement_steps": 228199,
+          "split": 3874,
+          "split_segments": 11923,
+          "sprint": 14925
+        },
+        "verified_head_trades": 21
+      },
+      "strategy": {
+        "candidate": {
+          "totals": {
+            "turns": 212930,
+            "declared_paid_steps": 1187,
+            "portal_crossings": 346,
+            "children_created": 3874,
+            "pearls": 12828,
+            "queen_pearls": 254,
+            "children_dead_within_5_turns": 694,
+            "final_longest": 227,
+            "final_queen": 19
+          },
+          "queens_survived": 5,
+          "queen_blockers": {
+            "self": 4,
+            "ally": 5,
+            "hitHeadToHead": 2
+          },
+          "median_population": {
+            "25": 7.5,
+            "100": 11.5
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 170225,
+            "declared_paid_steps": 2069,
+            "portal_crossings": 200,
+            "children_created": 2812,
+            "pearls": 9818,
+            "queen_pearls": 126,
+            "children_dead_within_5_turns": 443,
+            "final_longest": 250,
+            "final_queen": 16
+          },
+          "queens_survived": 4,
+          "queen_blockers": {
+            "self": 4,
+            "ally": 8
+          },
+          "median_population": {
+            "25": 6.5,
+            "100": 7.0
+          }
+        }
+      },
+      "candidate_benchmark_sha256": "49e72de38c93d2759fc16fb00753b010631f0e1510270028da42cfeb8e30c245",
+      "opponent_benchmark_sha256": "f619db18e68cddbf3c84afc722220057b77cd3f3153dad072002baf65e106d33",
+      "games": [
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/34.map",
+          "map_sha256": "ea443f10a63c1a37521cfef814b2e9316acf5e56f29e74b9e2c20987ccd0b72a",
+          "candidate_team": "A",
+          "seed": 702,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox16/0-34-702-0-0.replay",
+          "replay_sha256": "1942012f1021d1c5dc3c9b0e3141396d5f1914e23f7c2d2f13b3a1b85d8280ba",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 31,
+          "b_longest": 22
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/34.map",
+          "map_sha256": "ea443f10a63c1a37521cfef814b2e9316acf5e56f29e74b9e2c20987ccd0b72a",
+          "candidate_team": "B",
+          "seed": 702,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox16/0-34-702-1-0.replay",
+          "replay_sha256": "ff6fa824980abc503a712e5da666dd5692e1befdaf95fb32995340998129da1a",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 36,
+          "b_longest": 29
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/34.map",
+          "map_sha256": "ea443f10a63c1a37521cfef814b2e9316acf5e56f29e74b9e2c20987ccd0b72a",
+          "candidate_team": "A",
+          "seed": 703,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox16/0-34-703-0-0.replay",
+          "replay_sha256": "8d218218811b20f90617f327f2e4bd58dc80833b9079ca5208c9a2328a97dc0c",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 23,
+          "b_longest": 22
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/34.map",
+          "map_sha256": "ea443f10a63c1a37521cfef814b2e9316acf5e56f29e74b9e2c20987ccd0b72a",
+          "candidate_team": "B",
+          "seed": 703,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox16/0-34-703-1-0.replay",
+          "replay_sha256": "d95ef629d942951cd67a82fde818b2095fa850b5f8b43dc3acf0184d336c4c76",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 30,
+          "b_longest": 21
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/21.map",
+          "map_sha256": "001f3501dc5b76cb35b796f03fcaaed6c90be34741b5da03ab061ba0908347e7",
+          "candidate_team": "A",
+          "seed": 702,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox16/1-21-702-0-0.replay",
+          "replay_sha256": "658dc2905c82166db68f70d1326bd8a5a00f19cd83a06ecd237669654b652ac4",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 8,
+          "b_longest": 22
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/21.map",
+          "map_sha256": "001f3501dc5b76cb35b796f03fcaaed6c90be34741b5da03ab061ba0908347e7",
+          "candidate_team": "B",
+          "seed": 702,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox16/1-21-702-1-0.replay",
+          "replay_sha256": "abc674e0c7528abd3c7f39d96a315d40ff7aec7c055341b7a44735ab31c01c6a",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 17,
+          "b_longest": 11
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/21.map",
+          "map_sha256": "001f3501dc5b76cb35b796f03fcaaed6c90be34741b5da03ab061ba0908347e7",
+          "candidate_team": "A",
+          "seed": 703,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox16/1-21-703-0-0.replay",
+          "replay_sha256": "3c72d7b63dad1b09eb485c0b77036e1e1e88811d7d5969f6e09eb034e9aba227",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 22,
+          "b_longest": 16
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/21.map",
+          "map_sha256": "001f3501dc5b76cb35b796f03fcaaed6c90be34741b5da03ab061ba0908347e7",
+          "candidate_team": "B",
+          "seed": 703,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox16/1-21-703-1-0.replay",
+          "replay_sha256": "e22d29298dd58f4eeab4218fe167013f59675c3dbe4ea79d253d7bcdead2505b",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 8,
+          "b_longest": 17
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/20.map",
+          "map_sha256": "56341e6577da7429efb6f33b64b79b0c4223c4fbd9df995713ad781bead5f423",
+          "candidate_team": "A",
+          "seed": 702,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox16/2-20-702-0-0.replay",
+          "replay_sha256": "71feb7306f0a5d111a6bbb08c024d494e07ab8137cc3194d8d749af51a293fd6",
+          "a_queen": 4,
+          "b_queen": 5,
+          "a_longest": 6,
+          "b_longest": 5
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/20.map",
+          "map_sha256": "56341e6577da7429efb6f33b64b79b0c4223c4fbd9df995713ad781bead5f423",
+          "candidate_team": "B",
+          "seed": 702,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox16/2-20-702-1-0.replay",
+          "replay_sha256": "6b367f8b4fd1cb30ba6bf74e83cf035d671d3a0ecdd0f4a95687de56dfcccdfc",
+          "a_queen": 3,
+          "b_queen": 3,
+          "a_longest": 8,
+          "b_longest": 3
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/20.map",
+          "map_sha256": "56341e6577da7429efb6f33b64b79b0c4223c4fbd9df995713ad781bead5f423",
+          "candidate_team": "A",
+          "seed": 703,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox16/2-20-703-0-0.replay",
+          "replay_sha256": "fe87fb02d0b9348c993fc5cf2e872462be17a6945eea16086955b853b8677e9d",
+          "a_queen": 4,
+          "b_queen": 5,
+          "a_longest": 6,
+          "b_longest": 5
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/20.map",
+          "map_sha256": "56341e6577da7429efb6f33b64b79b0c4223c4fbd9df995713ad781bead5f423",
+          "candidate_team": "B",
+          "seed": 703,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox16/2-20-703-1-0.replay",
+          "replay_sha256": "dd3596738fb16b493cba19389f6aa531bec3989273ea638397a6a65b9cbd0f33",
+          "a_queen": 3,
+          "b_queen": 3,
+          "a_longest": 8,
+          "b_longest": 3
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/31.map",
+          "map_sha256": "f154114e3ed9d39efd8516529acf8462328866b1580662228ff35dedd3cd3bdf",
+          "candidate_team": "A",
+          "seed": 702,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox16/3-31-702-0-0.replay",
+          "replay_sha256": "ea4a46fbf2d187011693a3e6f1f21b9382ac0699d0b80a48d82c8e6a6fe96628",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 16,
+          "b_longest": 9
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/31.map",
+          "map_sha256": "f154114e3ed9d39efd8516529acf8462328866b1580662228ff35dedd3cd3bdf",
+          "candidate_team": "B",
+          "seed": 702,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox16/3-31-702-1-0.replay",
+          "replay_sha256": "55a20231a057f28e4bd6add517d93e2ae458bf9de9591762b82f16f9e32c15c9",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 10,
+          "b_longest": 12
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/31.map",
+          "map_sha256": "f154114e3ed9d39efd8516529acf8462328866b1580662228ff35dedd3cd3bdf",
+          "candidate_team": "A",
+          "seed": 703,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-sandbox16/3-31-703-0-0.replay",
+          "replay_sha256": "3b94f8589bc7e7d01bb2d8b5438fd2db5504944115c0a2870239dabd15c9491a",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 8,
+          "b_longest": 7
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/31.map",
+          "map_sha256": "f154114e3ed9d39efd8516529acf8462328866b1580662228ff35dedd3cd3bdf",
+          "candidate_team": "B",
+          "seed": 703,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-sandbox16/3-31-703-1-0.replay",
+          "replay_sha256": "b5a707aaaf21aa88bbac1f55b3caea3baad794b3278c7e25c8e88db554a912fb",
+          "a_queen": 0,
+          "b_queen": 5,
+          "a_longest": 25,
+          "b_longest": 11
+        }
+      ]
+    },
+    "leader-v6-final-native34-bot3": {
+      "summary": {
+        "outcomes": {
+          "loss": 16,
+          "win": 18
+        },
+        "matches": 34,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "split": 3734,
+          "split_segments": 11507,
+          "move": 224121,
+          "movement_steps": 266869,
+          "sprint": 18480
+        },
+        "verified_head_trades": 31
+      },
+      "strategy": {
+        "candidate": {
+          "totals": {
+            "turns": 246335,
+            "declared_paid_steps": 1126,
+            "children_created": 3734,
+            "portal_crossings": 621,
+            "children_dead_within_5_turns": 607,
+            "pearls": 13266,
+            "queen_pearls": 509,
+            "final_queen": 95,
+            "final_longest": 569
+          },
+          "queens_survived": 11,
+          "queen_blockers": {
+            "self": 6,
+            "ally": 15,
+            "enemy": 1,
+            "hitHeadToHead": 1
+          },
+          "median_population": {
+            "25": 3.5,
+            "100": 5.0
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 194734,
+            "declared_paid_steps": 1829,
+            "children_created": 2421,
+            "children_dead_within_5_turns": 353,
+            "pearls": 9396,
+            "queen_pearls": 383,
+            "final_queen": 53,
+            "final_longest": 545,
+            "portal_crossings": 188
+          },
+          "queens_survived": 8,
+          "queen_blockers": {
+            "ally": 7,
+            "self": 8,
+            "enemy": 1,
+            "hitHeadToHead": 10
+          },
+          "median_population": {
+            "25": 3.0,
+            "100": 4.0
+          }
+        }
+      },
+      "candidate_benchmark_sha256": "49e72de38c93d2759fc16fb00753b010631f0e1510270028da42cfeb8e30c245",
+      "opponent_benchmark_sha256": "56e42a5cd33624998634faa44b18800d1de5df7ac26355df75110863b08fc769",
+      "games": [
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/9.map",
+          "map_sha256": "5b9481d0c65454b6d0a6747a581c582414cba37dd99273cc5a23dbca63b31724",
+          "candidate_team": "A",
+          "seed": 704,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-native34-bot3/0-9-704-0-0.replay",
+          "replay_sha256": "747f51b3a93a3d625a2d5a3ed7c054eee4f7147164fddec159543b0720e94af8",
+          "a_queen": 3,
+          "b_queen": 3,
+          "a_longest": 16,
+          "b_longest": 27
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/9.map",
+          "map_sha256": "5b9481d0c65454b6d0a6747a581c582414cba37dd99273cc5a23dbca63b31724",
+          "candidate_team": "B",
+          "seed": 704,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-native34-bot3/0-9-704-1-0.replay",
+          "replay_sha256": "adbaaa1a0c58fdf9363ac28c4d228143c167377350b7f1f359661242c2eb02d5",
+          "a_queen": 3,
+          "b_queen": 3,
+          "a_longest": 9,
+          "b_longest": 26
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/20.map",
+          "map_sha256": "56341e6577da7429efb6f33b64b79b0c4223c4fbd9df995713ad781bead5f423",
+          "candidate_team": "A",
+          "seed": 704,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-native34-bot3/1-20-704-0-0.replay",
+          "replay_sha256": "443f4f1565e4ceb787b3edb3b78786ce19734f22ec4dc9da535a47dfc9e39431",
+          "a_queen": 4,
+          "b_queen": 5,
+          "a_longest": 6,
+          "b_longest": 5
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/20.map",
+          "map_sha256": "56341e6577da7429efb6f33b64b79b0c4223c4fbd9df995713ad781bead5f423",
+          "candidate_team": "B",
+          "seed": 704,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-native34-bot3/1-20-704-1-0.replay",
+          "replay_sha256": "5d51dbc8c11f1699f5cdd10e44926079b13d4a3caed0332f89a30c0bacc4ab4f",
+          "a_queen": 3,
+          "b_queen": 3,
+          "a_longest": 6,
+          "b_longest": 3
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/21.map",
+          "map_sha256": "001f3501dc5b76cb35b796f03fcaaed6c90be34741b5da03ab061ba0908347e7",
+          "candidate_team": "A",
+          "seed": 704,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-native34-bot3/2-21-704-0-0.replay",
+          "replay_sha256": "c752b599822f548ff48c004155b486b8af63c79a946f0ee0f06497efba274d09",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 25,
+          "b_longest": 10
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/21.map",
+          "map_sha256": "001f3501dc5b76cb35b796f03fcaaed6c90be34741b5da03ab061ba0908347e7",
+          "candidate_team": "B",
+          "seed": 704,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-native34-bot3/2-21-704-1-0.replay",
+          "replay_sha256": "bd3286a21a0dd6629a3da3034c5b9f434c6474e6eeb917abe815df6942abe2be",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 31,
+          "b_longest": 10
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/7.map",
+          "map_sha256": "126d71b46443268596285918d910b7f8d875bf3028ca9c5ff6bad97b4e868938",
+          "candidate_team": "A",
+          "seed": 704,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-native34-bot3/3-7-704-0-0.replay",
+          "replay_sha256": "14b4024926510c1b5a1e047bde70239505e1f0a55913243f4d982f0a6f105a24",
+          "a_queen": 0,
+          "b_queen": 17,
+          "a_longest": 32,
+          "b_longest": 31
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/7.map",
+          "map_sha256": "126d71b46443268596285918d910b7f8d875bf3028ca9c5ff6bad97b4e868938",
+          "candidate_team": "B",
+          "seed": 704,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-native34-bot3/3-7-704-1-0.replay",
+          "replay_sha256": "f66d2797eb2f71609bec610fe8d737fb863c26312f71ad9829892dc26c0aeb77",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 13,
+          "b_longest": 13
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/32.map",
+          "map_sha256": "31b22a24c467edb146f8c6fc291beccce1493617d90ff5bb6eff538c3af24715",
+          "candidate_team": "A",
+          "seed": 704,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-native34-bot3/4-32-704-0-0.replay",
+          "replay_sha256": "91e22314d95cafa7e52f084be5a2c39fe9b242ab6a53af5b1c685f32f8948724",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 9,
+          "b_longest": 9
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/32.map",
+          "map_sha256": "31b22a24c467edb146f8c6fc291beccce1493617d90ff5bb6eff538c3af24715",
+          "candidate_team": "B",
+          "seed": 704,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-native34-bot3/4-32-704-1-0.replay",
+          "replay_sha256": "c1539f1c1bc5fccf2989e7ecf764f68f7ea226c4100320e1d4b36c3d73735c8b",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 5,
+          "b_longest": 11
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/4.map",
+          "map_sha256": "42d4766ffede5f445692b119a26a6eee687fdc63b5b86776fefdf7fd755789b8",
+          "candidate_team": "A",
+          "seed": 704,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-native34-bot3/5-4-704-0-0.replay",
+          "replay_sha256": "0b5c880ab1df06cd10043dd711832519266b151c97fe8b80f505e4afa3471421",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 21,
+          "b_longest": 11
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/4.map",
+          "map_sha256": "42d4766ffede5f445692b119a26a6eee687fdc63b5b86776fefdf7fd755789b8",
+          "candidate_team": "B",
+          "seed": 704,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-native34-bot3/5-4-704-1-0.replay",
+          "replay_sha256": "1ba809671c9482bfeb091affe2b308388ea1f31bb79cda891d006e71fc74dd13",
+          "a_queen": 5,
+          "b_queen": 0,
+          "a_longest": 16,
+          "b_longest": 21
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/33.map",
+          "map_sha256": "1f097251f44508a5db71c691a361362052934817e99a8975a2521bcaf81c9725",
+          "candidate_team": "A",
+          "seed": 704,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-native34-bot3/6-33-704-0-0.replay",
+          "replay_sha256": "2a7ff923912f50da733c961d38869b628f46461d91a3f3dadf608ba632380183",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 18,
+          "b_longest": 10
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/33.map",
+          "map_sha256": "1f097251f44508a5db71c691a361362052934817e99a8975a2521bcaf81c9725",
+          "candidate_team": "B",
+          "seed": 704,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-native34-bot3/6-33-704-1-0.replay",
+          "replay_sha256": "6b69433165fb90885d314e4b7882e519dbaf0be837a44cda981eafce26158e15",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 7,
+          "b_longest": 19
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/30.map",
+          "map_sha256": "8a403c0aa6c7affc53ee27283fed1568840bb82517c9d7eb59c69462f66d5fb6",
+          "candidate_team": "A",
+          "seed": 704,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-native34-bot3/7-30-704-0-0.replay",
+          "replay_sha256": "9c5f75e1236479c91fab8a712991d01b2b4f2bab3f38dc297674b4669b22f912",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 27,
+          "b_longest": 28
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/30.map",
+          "map_sha256": "8a403c0aa6c7affc53ee27283fed1568840bb82517c9d7eb59c69462f66d5fb6",
+          "candidate_team": "B",
+          "seed": 704,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-native34-bot3/7-30-704-1-0.replay",
+          "replay_sha256": "38a5ec21969984f1cb5d57c3dd9dd8ce7fd1babf5e39f870d2a69d96413c4672",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 12,
+          "b_longest": 50
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/34.map",
+          "map_sha256": "ea443f10a63c1a37521cfef814b2e9316acf5e56f29e74b9e2c20987ccd0b72a",
+          "candidate_team": "A",
+          "seed": 704,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-native34-bot3/8-34-704-0-0.replay",
+          "replay_sha256": "5cf25a9de0c5c4be63d2670738c0314a20e9797c20b3d2cb0112fb39a9a3424e",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 34,
+          "b_longest": 25
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/34.map",
+          "map_sha256": "ea443f10a63c1a37521cfef814b2e9316acf5e56f29e74b9e2c20987ccd0b72a",
+          "candidate_team": "B",
+          "seed": 704,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-native34-bot3/8-34-704-1-0.replay",
+          "replay_sha256": "91d9ddf21440fe3272cf45a448e9e84cf459a6162b314cb8cfddbb21836394cf",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 16,
+          "b_longest": 22
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/11.map",
+          "map_sha256": "4f84e990688c1e96ee4c2a7ff0706e4b44f4ee63531dd5c5582cf9157b134fb1",
+          "candidate_team": "A",
+          "seed": 704,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-native34-bot3/9-11-704-0-0.replay",
+          "replay_sha256": "353d74085c86c41cb89c2bd025b4cda92b911557b3f5b8d66fc680326d40e1d3",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 23,
+          "b_longest": 6
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/11.map",
+          "map_sha256": "4f84e990688c1e96ee4c2a7ff0706e4b44f4ee63531dd5c5582cf9157b134fb1",
+          "candidate_team": "B",
+          "seed": 704,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-native34-bot3/9-11-704-1-0.replay",
+          "replay_sha256": "3fd4a2a074b69acc98f16e917988f3510276d4323f40daba4e9b5d51d481f517",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 13,
+          "b_longest": 5
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/28.map",
+          "map_sha256": "4cf0e4e57c12fd4dfbd2ad997e29994e736dd5d8eca1e0f3353e3020d94b08c1",
+          "candidate_team": "A",
+          "seed": 704,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-native34-bot3/10-28-704-0-0.replay",
+          "replay_sha256": "ec0c492e7fa9ec6855e02291c71c0f962b91fe258d5897c99b2efd668b01aee3",
+          "a_queen": 4,
+          "b_queen": 0,
+          "a_longest": 4,
+          "b_longest": 9
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/28.map",
+          "map_sha256": "4cf0e4e57c12fd4dfbd2ad997e29994e736dd5d8eca1e0f3353e3020d94b08c1",
+          "candidate_team": "B",
+          "seed": 704,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-native34-bot3/10-28-704-1-0.replay",
+          "replay_sha256": "6ebc62216a12ed64c18968c3b05426ec5ee6b39ae915840e4c712c1da7405efb",
+          "a_queen": 4,
+          "b_queen": 4,
+          "a_longest": 20,
+          "b_longest": 4
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/31.map",
+          "map_sha256": "f154114e3ed9d39efd8516529acf8462328866b1580662228ff35dedd3cd3bdf",
+          "candidate_team": "A",
+          "seed": 704,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-native34-bot3/11-31-704-0-0.replay",
+          "replay_sha256": "26b8767ccd09556a3f39daac4c70df10fd61a6b440ce0894cf3c09265b5fe026",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 8,
+          "b_longest": 14
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/31.map",
+          "map_sha256": "f154114e3ed9d39efd8516529acf8462328866b1580662228ff35dedd3cd3bdf",
+          "candidate_team": "B",
+          "seed": 704,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-native34-bot3/11-31-704-1-0.replay",
+          "replay_sha256": "925b5dd2d02ce8cdd76b0b7630ba3a07d12383b9b70b49391ae2d41f7e4bbd58",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 17,
+          "b_longest": 7
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/17.map",
+          "map_sha256": "fd02547854cbcbe36274d4341900610ba1aa1caa35e553c38135def95e0db68d",
+          "candidate_team": "A",
+          "seed": 704,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-native34-bot3/12-17-704-0-0.replay",
+          "replay_sha256": "d9fb5e2dac3e5f19fb5af0e1478b895de07a00ba85c8efbdf2177f12415ce486",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 9,
+          "b_longest": 11
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/17.map",
+          "map_sha256": "fd02547854cbcbe36274d4341900610ba1aa1caa35e553c38135def95e0db68d",
+          "candidate_team": "B",
+          "seed": 704,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-native34-bot3/12-17-704-1-0.replay",
+          "replay_sha256": "bc99ce043031bfb20e77e948335ad7e1feddb425cb33247eeef9667f62b84712",
+          "a_queen": 0,
+          "b_queen": 7,
+          "a_longest": 21,
+          "b_longest": 10
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/29.map",
+          "map_sha256": "7fccdee8a73a971bc3dc7a07b13aa56bb214f311249b942869bcc9708084d539",
+          "candidate_team": "A",
+          "seed": 704,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-native34-bot3/13-29-704-0-0.replay",
+          "replay_sha256": "9a8a9ff902aa33429ac5c1c68de44d30dcbb33375e4e5411caef234762629258",
+          "a_queen": 15,
+          "b_queen": 13,
+          "a_longest": 29,
+          "b_longest": 23
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/29.map",
+          "map_sha256": "7fccdee8a73a971bc3dc7a07b13aa56bb214f311249b942869bcc9708084d539",
+          "candidate_team": "B",
+          "seed": 704,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-native34-bot3/13-29-704-1-0.replay",
+          "replay_sha256": "91d4987340906eb11aa7a4ae8b20d4dea5e5b0862b5da64b72519ad139155f7f",
+          "a_queen": 0,
+          "b_queen": 23,
+          "a_longest": 19,
+          "b_longest": 27
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/19.map",
+          "map_sha256": "c622b9afe8fea2d034999511f07fc561a4e5e7120615f0f9bf454b3f27fc0a16",
+          "candidate_team": "A",
+          "seed": 704,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-native34-bot3/14-19-704-0-0.replay",
+          "replay_sha256": "821782ad4c43b43636ae85229abfe601646116c69a5af792f5c6633c42413615",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 23,
+          "b_longest": 23
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/19.map",
+          "map_sha256": "c622b9afe8fea2d034999511f07fc561a4e5e7120615f0f9bf454b3f27fc0a16",
+          "candidate_team": "B",
+          "seed": 704,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-native34-bot3/14-19-704-1-0.replay",
+          "replay_sha256": "4d6bc8901e9907ce2b565ba468b53e8fca86e6eb1f09535b1ea2752939e131fa",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 48,
+          "b_longest": 8
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/13.map",
+          "map_sha256": "a09e8f2d3bdd1e40fad31a0ecdf00166cd1090c232c56dcc2557729de737f6aa",
+          "candidate_team": "A",
+          "seed": 704,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-native34-bot3/15-13-704-0-0.replay",
+          "replay_sha256": "c9d91228e48a0e67f97793aed25699435000f8ed14ac0c1b10e863716b193780",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 7,
+          "b_longest": 4
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/13.map",
+          "map_sha256": "a09e8f2d3bdd1e40fad31a0ecdf00166cd1090c232c56dcc2557729de737f6aa",
+          "candidate_team": "B",
+          "seed": 704,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-native34-bot3/15-13-704-1-0.replay",
+          "replay_sha256": "59960992db9e6a6724f6137fd76c9d9e76915be48a32e27f0d40bf9c352549de",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 12,
+          "b_longest": 13
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/15.map",
+          "map_sha256": "dcf39d713c060e5ded2d031a7ffe1a27ea60fe4b72ff8fb3fffbabc4f81e2066",
+          "candidate_team": "A",
+          "seed": 704,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-native34-bot3/16-15-704-0-0.replay",
+          "replay_sha256": "e59b3c5934d81e015e654fe5ab74d7fd49e0caa3ef8ac39ad715c7f804e225a5",
+          "a_queen": 14,
+          "b_queen": 0,
+          "a_longest": 14,
+          "b_longest": 13
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/15.map",
+          "map_sha256": "dcf39d713c060e5ded2d031a7ffe1a27ea60fe4b72ff8fb3fffbabc4f81e2066",
+          "candidate_team": "B",
+          "seed": 704,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-native34-bot3/16-15-704-1-0.replay",
+          "replay_sha256": "0afb48624a89371a26d11790c9b124bc9fd545ce123861db4f9a11e54e16e54e",
+          "a_queen": 0,
+          "b_queen": 15,
+          "a_longest": 21,
+          "b_longest": 15
+        }
+      ]
+    },
+    "leader-v6-final-determinism8": {
+      "summary": {
+        "outcomes": {
+          "loss": 2,
+          "win": 2
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "sandbox",
+        "max_points": 50351870,
+        "candidate_max_points": 50351870,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 107584,
+          "movement_steps": 125512,
+          "sprint": 8334,
+          "split": 2882,
+          "split_segments": 8172
+        },
+        "verified_head_trades": 40
+      },
+      "strategy": {
+        "candidate": {
+          "totals": {
+            "turns": 118800,
+            "declared_paid_steps": 1284,
+            "pearls": 8476,
+            "queen_pearls": 90,
+            "children_created": 2882,
+            "children_dead_within_5_turns": 692,
+            "final_longest": 102,
+            "portal_crossings": 128
+          },
+          "queens_survived": 0,
+          "queen_blockers": {
+            "enemy": 2,
+            "hitHeadToHead": 2,
+            "ally": 4
+          },
+          "median_population": {
+            "25": 7.5,
+            "100": 17.5
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 118800,
+            "declared_paid_steps": 1284,
+            "pearls": 8476,
+            "queen_pearls": 90,
+            "children_created": 2882,
+            "children_dead_within_5_turns": 692,
+            "final_longest": 102,
+            "portal_crossings": 128
+          },
+          "queens_survived": 0,
+          "queen_blockers": {
+            "hitHeadToHead": 2,
+            "enemy": 2,
+            "ally": 4
+          },
+          "median_population": {
+            "25": 7.5,
+            "100": 17.5
+          }
+        }
+      },
+      "candidate_benchmark_sha256": "49e72de38c93d2759fc16fb00753b010631f0e1510270028da42cfeb8e30c245",
+      "opponent_benchmark_sha256": "49e72de38c93d2759fc16fb00753b010631f0e1510270028da42cfeb8e30c245",
+      "games": [
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/13.map",
+          "map_sha256": "a09e8f2d3bdd1e40fad31a0ecdf00166cd1090c232c56dcc2557729de737f6aa",
+          "candidate_team": "A",
+          "seed": 710,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-determinism8/0-13-710-0-0.replay",
+          "replay_sha256": "0afef381e3efa7bf64a818d56ced695b3861c88f115901816cb66f88f8975b90",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 9,
+          "b_longest": 13
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/13.map",
+          "map_sha256": "a09e8f2d3bdd1e40fad31a0ecdf00166cd1090c232c56dcc2557729de737f6aa",
+          "candidate_team": "A",
+          "seed": 710,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-determinism8/0-13-710-0-1.replay",
+          "replay_sha256": "0afef381e3efa7bf64a818d56ced695b3861c88f115901816cb66f88f8975b90",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 9,
+          "b_longest": 13
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/13.map",
+          "map_sha256": "a09e8f2d3bdd1e40fad31a0ecdf00166cd1090c232c56dcc2557729de737f6aa",
+          "candidate_team": "B",
+          "seed": 710,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-determinism8/0-13-710-1-0.replay",
+          "replay_sha256": "855c3593ef8100e341e84e664eec33515e6a5b756b8e44913e36acf36e0dc036",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 9,
+          "b_longest": 13
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/13.map",
+          "map_sha256": "a09e8f2d3bdd1e40fad31a0ecdf00166cd1090c232c56dcc2557729de737f6aa",
+          "candidate_team": "B",
+          "seed": 710,
+          "winner": "B",
+          "replay": "build/validation/leader-v6-final-determinism8/0-13-710-1-1.replay",
+          "replay_sha256": "855c3593ef8100e341e84e664eec33515e6a5b756b8e44913e36acf36e0dc036",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 9,
+          "b_longest": 13
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/21.map",
+          "map_sha256": "001f3501dc5b76cb35b796f03fcaaed6c90be34741b5da03ab061ba0908347e7",
+          "candidate_team": "A",
+          "seed": 710,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-determinism8/1-21-710-0-0.replay",
+          "replay_sha256": "7f9b2f2b92d3d302a868cd682a8432e5a29d190431955b24857d287102a1dd49",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 17,
+          "b_longest": 12
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/21.map",
+          "map_sha256": "001f3501dc5b76cb35b796f03fcaaed6c90be34741b5da03ab061ba0908347e7",
+          "candidate_team": "A",
+          "seed": 710,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-determinism8/1-21-710-0-1.replay",
+          "replay_sha256": "7f9b2f2b92d3d302a868cd682a8432e5a29d190431955b24857d287102a1dd49",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 17,
+          "b_longest": 12
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/21.map",
+          "map_sha256": "001f3501dc5b76cb35b796f03fcaaed6c90be34741b5da03ab061ba0908347e7",
+          "candidate_team": "B",
+          "seed": 710,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-determinism8/1-21-710-1-0.replay",
+          "replay_sha256": "19fdf83c69d74d90e5c65b5368e9fda2655a6a0bce3d7ad00310156e24d4e5c0",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 17,
+          "b_longest": 12
+        },
+        {
+          "map": "/tmp/sudo-win-leader-study/current-maps/21.map",
+          "map_sha256": "001f3501dc5b76cb35b796f03fcaaed6c90be34741b5da03ab061ba0908347e7",
+          "candidate_team": "B",
+          "seed": 710,
+          "winner": "A",
+          "replay": "build/validation/leader-v6-final-determinism8/1-21-710-1-1.replay",
+          "replay_sha256": "19fdf83c69d74d90e5c65b5368e9fda2655a6a0bce3d7ad00310156e24d4e5c0",
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 17,
+          "b_longest": 12
+        }
+      ]
+    }
+  },
+  "map_hashes": {
+    "9": "5b9481d0c65454b6d0a6747a581c582414cba37dd99273cc5a23dbca63b31724",
+    "20": "56341e6577da7429efb6f33b64b79b0c4223c4fbd9df995713ad781bead5f423",
+    "21": "001f3501dc5b76cb35b796f03fcaaed6c90be34741b5da03ab061ba0908347e7",
+    "7": "126d71b46443268596285918d910b7f8d875bf3028ca9c5ff6bad97b4e868938",
+    "32": "31b22a24c467edb146f8c6fc291beccce1493617d90ff5bb6eff538c3af24715",
+    "4": "42d4766ffede5f445692b119a26a6eee687fdc63b5b86776fefdf7fd755789b8",
+    "33": "1f097251f44508a5db71c691a361362052934817e99a8975a2521bcaf81c9725",
+    "30": "8a403c0aa6c7affc53ee27283fed1568840bb82517c9d7eb59c69462f66d5fb6",
+    "34": "ea443f10a63c1a37521cfef814b2e9316acf5e56f29e74b9e2c20987ccd0b72a",
+    "11": "4f84e990688c1e96ee4c2a7ff0706e4b44f4ee63531dd5c5582cf9157b134fb1",
+    "28": "4cf0e4e57c12fd4dfbd2ad997e29994e736dd5d8eca1e0f3353e3020d94b08c1",
+    "31": "f154114e3ed9d39efd8516529acf8462328866b1580662228ff35dedd3cd3bdf",
+    "17": "fd02547854cbcbe36274d4341900610ba1aa1caa35e553c38135def95e0db68d",
+    "29": "7fccdee8a73a971bc3dc7a07b13aa56bb214f311249b942869bcc9708084d539",
+    "19": "c622b9afe8fea2d034999511f07fc561a4e5e7120615f0f9bf454b3f27fc0a16",
+    "13": "a09e8f2d3bdd1e40fad31a0ecdf00166cd1090c232c56dcc2557729de737f6aa",
+    "15": "dcf39d713c060e5ded2d031a7ffe1a27ea60fe4b72ff8fb3fffbabc4f81e2066"
+  },
+  "vs_v5_maps": {
+    "9": {
+      "win": 2
+    },
+    "20": {
+      "loss": 6
+    },
+    "21": {
+      "win": 4,
+      "loss": 2
+    },
+    "7": {
+      "loss": 2
+    },
+    "32": {
+      "win": 1,
+      "loss": 1
+    },
+    "4": {
+      "loss": 1,
+      "win": 1
+    },
+    "33": {
+      "loss": 2
+    },
+    "30": {
+      "win": 1,
+      "loss": 1
+    },
+    "34": {
+      "win": 4,
+      "loss": 2
+    },
+    "11": {
+      "win": 2
+    },
+    "28": {
+      "win": 1,
+      "loss": 1
+    },
+    "31": {
+      "loss": 1,
+      "win": 5
+    },
+    "17": {
+      "win": 2
+    },
+    "29": {
+      "loss": 1,
+      "win": 1
+    },
+    "19": {
+      "win": 1,
+      "loss": 1
+    },
+    "13": {
+      "win": 2
+    },
+    "15": {
+      "loss": 1,
+      "win": 1
+    }
+  },
+  "vs_v5_combined": {
+    "win": 28,
+    "loss": 22,
+    "draw": 0,
+    "candidate": {
+      "totals": {
+        "turns": 456341,
+        "declared_paid_steps": 2364,
+        "children_created": 7683,
+        "portal_crossings": 847,
+        "children_dead_within_5_turns": 1336,
+        "pearls": 25883,
+        "queen_pearls": 717,
+        "final_queen": 123,
+        "final_longest": 904
+      },
+      "queens_survived": 16
+    },
+    "opponent": {
+      "totals": {
+        "turns": 360491,
+        "declared_paid_steps": 3878,
+        "children_created": 5120,
+        "portal_crossings": 464,
+        "children_dead_within_5_turns": 790,
+        "pearls": 19032,
+        "queen_pearls": 523,
+        "final_queen": 120,
+        "final_longest": 834
+      },
+      "queens_survived": 16
+    }
+  }
+}

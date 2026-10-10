@@ -67,7 +67,18 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+__pycache__/
+*.pyc
+.unswbc-build/
+replays/
+!algo_bot/tests/replays/
+!algo_bot/tests/replays/*.txt
 
 # ide files
 .idea/
 .vscode/
+
+# local API credentials
+.env
+.env.*
+!.env.example

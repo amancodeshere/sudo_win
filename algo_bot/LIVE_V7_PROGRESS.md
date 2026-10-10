@@ -1,0 +1,95 @@
+# Live replay upgrades — implementation progress
+
+Baseline: `c17d014`, uploaded submission 14744 (`bot bot v4`), frozen sources in `build/submission-competition-v6-final`. The 81-game assessment is `LIVE_V4_LEADER_REVIEW.md`.
+
+The authorized work is five separately validated priorities: candidate-specific enemy-response defense; productive early expansion; portal income and exploration; durable secondary champions; movement economics. Each stage will have a source snapshot, functional regressions, a comparison with its predecessor, and a separate `aman/feat: ...` commit. Final integration will compare with the exact uploaded baseline on current maps and verify metered CPU, rule conformance and deterministic packaging. Source changes do not imply a new upload.
+
+## 1. Enemy responses — complete
+
+Added a bounded response search for later-moving visible enemies on the proposed body's resulting occupancy. Retained neck and split-child cells still block; departing cells no longer falsely shield the destination. Visible funding and a bounded partial-length uncertainty envelope remain distinct. Protected units rank short uncertain attacks below clear endpoints, and funded attacks below both. Queen rescue checks stationary parents with the same response model. Search is limited to five steps and a shared 160-node continuation budget per candidate, with immediate attacks checked for every visible enemy. The `no-response-defense` profile isolates this change.
+
+Release and ASan/UBSan pass **70 cases / 465 assertions**, including three observed live attacks (Stripes 864982, Slithery Fight 865145, Tower Defense 864983). Sixteen Python tests pass, including the isolated ablation. Frozen snapshot `build/live-v7-stage1-defense`: native seed 801, Portals / Autarky / Slithery Fight / Default, both colours, **4–4**, zero candidate errors (`live-v7-stage1-native8-complete`). The frozen opponent had one recorded error. Metered Slithery Fight seed 802, both colours, **2–0**, zero errors and peak **46,524,504 / 100,000,000** (`live-v7-stage1-sandbox2`). Both queens still die on that opening map; these wins do not establish improved queen survival against leaders. The first native attempt stopped after four games because the host's file-descriptor limit was too small; its partial results are excluded. Subsequent benchmark commands use `ulimit -n 4096`.
+
+## 2. Productive expansion — complete, integration tradeoffs remain
+
+Viable narrow corridors require one full six-turn branch per resulting unit rather than two immediate branches. Both units still require room to grow, complete bodies, and independent reachable income. Equidistant food is assigned once between parent and child; it cannot fund both. Investment scores account for the child's future food and remaining population budget. Well-fed early queens can invest two segments while retaining at least six, below four units, with safe stationary-parent response checks. The parent keeps and advertises its separate food target.
+
+Growth rejection reasons are exposed in the `diagnostic` profile; production indicators remain disabled. `util/decision_metrics.py` summarizes them. Release and ASan/UBSan pass **71 cases / 476 assertions**; 16 Python tests pass. Snapshot `build/live-v7-stage2b-expansion`: current Autarky / Islands / Around UNSW / Maze, seed 803, both colours, versus stage 1, **3–5**, zero errors with independently verified intentional helper queen trades enabled (`live-v7-stage2b-native8`). Metered Around UNSW, seed 804, both colours, **2–0**, peak **43,754,038** (`live-v7-stage2b-sandbox2`). That run omitted the trade CLI flag and reported one intentional length-three helper attack on the enemy queen; `review_benchmark.py` independently rechecked the saved observation and found no unintended failure. Original warnings remain saved. All subsequent competitive runs enable `--allow-favourable-trades` explicitly.
+
+This stage is not an isolated universal win: the first draft excluding queen investment scored 4–4 on the same native subset. The combined-stage validation must decide whether the queen investment tradeoff should remain enabled. The diagnostic copy of the final stage uses the same decision code with indicators enabled; its initial counts show population budgets frequently binding before round 100, in addition to segment scarcity and independent-income requirements. Portal access and champion retention remain outstanding.
+
+## 3. Portal income — implemented, promotion conditional
+
+Added bounded entrance routing for starved units, destination food/countdown valuation, helper entrance diversification, and rejection of known exhausted or cramped exits. Protected approaches require productive destination evidence; the existing one-round survey guard still controls unseen crossings. Reports up to six rounds old can motivate an approach but never certify the landing. The `no-portal-income` profile restores previous routing for integration comparisons.
+
+Release passes 72 cases / 489 assertions; ASan/UBSan and 16 Python tests pass (the final three additional portal assertions are included in the next sanitizer run). Snapshot `build/live-v7-stage3-portals`: Portals / Default / Slithery Fight, seed 805 both colours, **1–5** against stage 2, zero errors. Metered Portals seed 806 both colours **0–2**, zero errors, candidate peak **15,507,834**. These are adverse results; this draft is not promoted on the claim that portal activity alone improves wins. Integration must compare the portal ablation and retain or revise only the better combined policy. Routing progress and secondary scoring dragons remain unresolved.
+
+## 4. Secondary scorers and coordination — implemented
+
+Route rewards now use reverse BFS over actual directed transitions and the final simulated endpoint (or a collected target), so starting toward food and then turning away cannot borrow the same progress bonus. Fresh larger champion heartbeats let food claims override sender-ID ordering. Election discounts possible spending since a remote report; four-segment helpers in populations of four or more remain workers, while a sole survivor retains scorer protection. Small secondary scorers may explore portals when additional units remain. Established champions keep at least eight segments when early investment is considered, and queen rescue requires a full six-step parent horizon with the child frozen as an obstacle.
+
+Food-rich regions can exceed the old area/96 population budget during the first 100 rounds, up to area/32 and the engine limit, bounded at 48. Every individual investment still requires independent income and viable parent/child corridors. `no-resource-population` and `no-scoring-coordination` isolate these changes.
+
+Release and ASan/UBSan pass **75 cases / 507 assertions**, and 16 Python tests pass. Frozen snapshot `build/live-v7-stage4-scoring`. Native Schooltime / Maze / Autarky seed 807 both colours and metered Around UNSW seed 808 both colours are running against stage 3; their completed results will be recorded with the next progress commit. The first two Schooltime games were wins, but no complete-stage performance claim is made yet.
+
+Stage 4 comparisons completed: native **3–3**, metered **2–0**, zero candidate or opponent errors, metered candidate peak **47,686,687**. Schooltime won both native colours; Maze lost both. This reinforces the need for broader integration rather than promotion from one map.
+
+## 5. Movement economics — implemented
+
+Added a 6,000-point shadow cost per paid step when it is not a validated safety improvement or queen corridor release. Beam ordering includes the same cost. Chosen paid actions identify income investment, escape, or corridor release in diagnostic indicators. Starvation uses actual validated collection from the previous action, confirmed against the next observation's head and length, so net spending during a food-collecting escape is not mistaken for no income. Unknown portal landings and failed simulations cannot generate collection credit. The `no-paid-pricing` profile isolates this policy.
+
+Release and ASan/UBSan pass **75 cases / 516 assertions**; 16 Python tests pass. Existing legal escape and queen release regressions remain passing. The former equal-net-growth paid chain test now verifies that the free prefix is preferred; a second escape regression confirms that collected food resets resource progress despite net length loss. Frozen snapshot `build/live-v7-stage5-economics` (source SHA-256 `7da1a18de74da04cdf29f129ba57e34ad636ce30643a168e10fef04b027a3145`). Stage comparison, all-17-map paired integration against uploaded v4, an isolated portal comparison, compiler checks and metered integration are in progress. Final promotion is pending those results.
+
+## Integration refinement — portal ambition balanced with income retention
+
+The initial full-policy portal ablation finished **3–5** (seed 813, Portals / Schooltime / Slithery Fight / Maze, both colours), zero errors. It increased portal crossings **951 vs 284** and food **7,107 vs 6,318**, but retained less final longest length (**106 vs 121** summed over eight games). Increased activity alone was insufficient. The stage-5 economics comparison was **1–3** on four Autarky / Around UNSW games; this small isolated sample is retained as adverse evidence, not rewritten as success.
+
+Restored existing unmapped-portal scouting for small helpers. New entrance routing now requires actual productive destination evidence, rather than replacing the baseline exploration rule. Protected units retain any viable food route instead of leaving a farm merely because food is several steps away. Fresh surveys still allow relocation after genuine local exhaustion. Added a regression where an immediately available fresh portal survey must not displace the queen's three-step pearl route.
+
+Revised snapshot `build/live-v7-balanced-portals`, source SHA-256 `e848fce0a85675f4167623729f33c5f63730c015913f5a108e6df46785763aee`. The revised all-17-map comparison, fresh-seed portal ablation and exact-source metered tests are running. Draft integration results will remain separately recorded and cannot count as validation of revised bytes.
+
+## Integration refinement — preserve a visible queen escape
+
+Balanced-policy validation completed: native all 17 current maps seed 812 both colours **16–17–1**, metered Portals / Slithery Fight / Schooltime / Around UNSW seed 814 both colours **5–3**, and metered Autarky seed 812 both colours **1–1** (peak **64,516,858**). Four repeat pairs matched byte-for-byte. The isolated revised portal comparison was **5–3** on fresh seed 815. These results are modest: the broad native test is not evidence of overall superiority. The earlier draft was **14–19–1** native and **1–7** metered on the corresponding subsets.
+
+The broad balanced native traces retain eight queens versus twelve for v4, including eight own queen deaths against allies versus five for v4. Added an exact visible-occupancy check for whether a candidate helper's resulting body covers every known queen exit. Among equally classified safe moves, leaving a queen escape takes priority over extra helper survival depth or food score. Helpers cannot claim they caused a trap entirely blocked by other units. A fully validated paid move may release a jointly blocked queen corridor; blind portal probing and stationary rescue cannot override a proven ordinary release.
+
+Added a two-exit obstruction regression, plus three-turn observation regressions from actual Portals game 864977 (helpers 3 and 12). They verify unseen neck occupancy remains blocked across portal movement, growth and splitting. They do not claim that an already trapped minimum-size unit has a winning move, or reconstruct missing sonar messages.
+
+Release across Apple Clang / LLVM Clang / GCC and ASan/UBSan pass **78 cases / 547 assertions**; 16 Python tests pass. Snapshot `build/live-v7-queen-viability`, source SHA-256 `150ff5aa71c52a385b4732391eae1aab97d55171b341902a41ef3520371b7fd0`. Its paired native and metered comparisons are running; previous balanced packages are superseded if this refinement is promoted.
+
+## Correctness audit — defend until our next action, not just this round
+
+The first response implementation incorrectly excluded enemies with lower IDs because they had already acted in the current round. They act again next round before our unit's next action. The correct one-action response horizon includes every currently visible enemy head: higher IDs later this round, lower IDs early next round. This correction matters particularly for late-ID champions. It does not give any enemy two hypothetical actions.
+
+Corrected the regression's ownership IDs and expectation, and extended the official-engine rule verifier to assert the cyclic `0,1,2,3,0,1,2,3` turn order over two rounds. Existing visible financial lower bounds, unknown-length envelopes, body obstacles and fixed node budgets are unchanged. The earlier same-round-only results remain in the progress record as superseded evidence.
+
+Corrected snapshot `build/live-v7-response-cycle`, source SHA-256 `32f0c87bded85193e57567bc437dc1a3e7b155eb0142362c652c666b75b6ee7a`. C++ remains **79 cases / 555 assertions**, all compiler and sanitizer checks passing; 16 Python tests pass, including official-engine turn-order conformance. An exact-source 17-map comparison, a fresh-seed stage comparison and metered tests are running. Earlier `final` and `finalb` artifacts must not be uploaded as the final corrected version.
+
+## Final validation — implemented and packaged; competitive promotion withheld
+
+All five priorities and the integration/correctness refinements are complete. Added the paid joint-corridor-release regression: the validated two-step move collects one pearl, retains length three, and clears the queen's known exits. Final checks pass **79 C++ cases / 555 assertions** on three release compilers and ASan/UBSan, plus **16 Python tests**.
+
+Exact corrected-source comparisons: all 17 maps seed 812 both colours **17–16–1**; metered Autarky / Slithery Fight / Schooltime / Around UNSW seed 820 **2–6**, candidate peak **53,610,292 / 100,000,000**; four-map comparison with the queen-exit predecessor seed 821 **4–4**. All have zero recorded errors. Four deterministic repeat pairs have identical replay hashes; the four unique fixtures score **2–2**.
+
+A frozen v4 variant changing only `enable_favourable_trades=true` tests broader head attacks. On the same four maps and seed 822, finalc scores **1–7**, versus original v4 **3–5**. Both pass action checks with zero errors. This regression and the adverse metered results mean the combined version is **not established as a competitive replacement for v4**. No private leader executable was used and no upload was performed. More income and population are demonstrated; retaining that income as surviving scoring length remains unresolved.
+
+Final artifact `build/submission-live-v7-finalc.zip`, source SHA-256 `32f0c87bded85193e57567bc437dc1a3e7b155eb0142362c652c666b75b6ee7a`, ZIP SHA-256 `a7b8a93367d32e1b048a6a0ddd88728a7c34745e8d2c4634de237615fdc45141`. Independently regenerated ZIP hashes match; all 32 selected source files match current source bytes and exact archive membership. Older `final` and `finalb` packages are superseded. The final source is saved for evaluation, not automatically uploaded.
+
+`LIVE_V7_VALIDATION.md` provides outcomes and limitations; `analysis/live_v7_validation_2026-10-02.json` preserves source identities, map and replay hashes, rule probes, compact match outcomes and measured strategy metrics. Earlier adverse experiments and superseded timing assumptions remain recorded rather than being presented as final-source validation.
+
+## User-requested live evaluation upload
+
+After reviewing the mixed local evidence, the user explicitly requested uploading the exact tested finalc package as **bot bot 4**, description **i shall win**. Upload accepted on 2 October 2026 at 12:24:00 UTC: **submission 14928, server version 6**. The API subsequently reports **active**, with one build attempt and no build error. The upload record and exact local archive manifest are saved in `analysis/live_v7_upload_2026-10-02.json`. No live challenges were created; the user will arrange leader matches. The earlier statements that no upload was performed describe the implementation/validation phase.
+
+## Post-upload replay assessment — submission 14928
+
+Downloaded 56 recent own-team replays, verified 51 headers belonging to the new upload and excluded five AlgoMaster games from old submission 14744. New-bot outcomes: **3–48** across three 17-map unranked series (tungtung67 0–17, EternalWisdom 3–14, Adrak vali chai 0–17). Downloaded and assessed 15 current top-three-versus-horse games on predefined maps as a separate strategic/sonar comparison. All 66 included reconstructions match engine final states and winners; own maximum instruction count is **61,997,211**, zero reported timeouts.
+
+The report `LIVE_BOT4_REPLAY_REVIEW.md` and tracked evidence `analysis/live_bot4_replay_review_2026-10-02.json` cover each map, enemy attacks, queen rescues, early territory, scorer retention, sonar delivery and pearl provenance. Own round-100 medians remain four units / 16 segments versus opponents' 21 / 50. Queens survive 5/51; 30 die in head attacks and 33 of the 46 dead queens are length two. Other-ally sonar deliveries are approximately 245 versus 995 per 1,000 turns. Source inspection confirms the current strategy ignores protocol-3 echo data and reports only enemy queen heads.
+
+A diagnostic-only larger response budget detects the visible funded four-step attack missed by the normal reconstructed model at Around UNSW 880180, round 138; search completeness needs explicit treatment rather than treating exhausted search as clearance. Native queen reconstruction has historical action differences and is not an exact server-state counterfactual. No larger-budget variant was uploaded.
+
+Food provenance reveals substantial allied-death feeding of top teams' queens: Cutlery 183/200 pearls, SSS 118/130, horse 355/395, compared with our 38/359. Collection and timing are directly measured; deliberate donor coordination remains an inference. The report proposes controlled resource transfer experiments alongside safer early expansion and communication improvements.
+
+All raw own replays are in `replays/`; API captures, leader replays, full audits, exact reconstructed queen histories, diagnostics and investigation script copies are in `build/validation/live-bot4-submission14928-study/`. Upload source/ZIP hashes remain unchanged. This assessment makes no strategy change, new upload or challenge.

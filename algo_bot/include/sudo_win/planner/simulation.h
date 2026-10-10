@@ -1,0 +1,59 @@
+#ifndef SUDO_WIN_PLANNER_SIMULATION_H
+#define SUDO_WIN_PLANNER_SIMULATION_H
+
+#include "../engine/helper.h"
+
+#include <optional>
+#include <vector>
+
+namespace sudo_win {
+class WorldModel;
+
+struct SimulationState {
+    // Head first. Unseen segments have the sentinel {-1, -1}.
+    std::vector<unswbc::Position> body;
+    std::vector<unswbc::Position> unranked_body;
+    std::vector<unswbc::Position> eaten;
+    int pearls = 0;
+    int action_start_length = 0;
+    int action_steps = 0;
+};
+
+struct MobilityEstimate {
+    int area = 0;
+    bool open_frontier = false;
+};
+
+class Simulation {
+public:
+    [[nodiscard]] static constexpr auto free_steps(int length) -> int {
+        return length / 4 + (length % 4 != 0 ? 1 : 0);
+    }
+    [[nodiscard]] auto initial_state(unswbc::Controller const& controller,
+                                     WorldModel const* world = nullptr) const -> SimulationState;
+    [[nodiscard]] auto advance(unswbc::Controller const& controller,
+                               SimulationState const& state,
+                               unswbc::Direction direction,
+                               bool continue_sprint = false,
+                               WorldModel const* world = nullptr) const -> std::optional<SimulationState>;
+    [[nodiscard]] auto survival_depth(unswbc::Controller const& controller,
+                                      SimulationState const& state,
+                                      int remaining_depth,
+                                      int& node_budget,
+                                      WorldModel const* world = nullptr) const -> int;
+    [[nodiscard]] auto reachable_area(unswbc::Controller const& controller,
+                                      SimulationState const& state,
+                                      WorldModel const* world = nullptr) const -> int;
+    [[nodiscard]] auto reachable_positions(unswbc::Controller const& controller,
+                                           SimulationState const& state,
+                                           WorldModel const* world = nullptr) const -> std::vector<unswbc::Position>;
+    [[nodiscard]] auto remembered_mobility(unswbc::Controller const& controller,
+                                           SimulationState const& state,
+                                           WorldModel const& world) const -> MobilityEstimate;
+    [[nodiscard]] auto sealed_entry_pocket(SimulationState const& state,
+                                          WorldModel const& world) const -> bool;
+};
+
+} // namespace sudo_win
+
+#endif // SUDO_WIN_PLANNER_SIMULATION_H

@@ -1,0 +1,3786 @@
+{
+  "recorded_at_utc": "2026-10-02T15:20:24.508559+00:00",
+  "upload_name": "bot bot v5",
+  "upload_description": "please actually win",
+  "artifact": {
+    "profile": "stable",
+    "files": [
+      "bot.toml",
+      "helper.hpp",
+      "include/sudo_win/bot/bot.h",
+      "include/sudo_win/combat/combat.h",
+      "include/sudo_win/config/config.h",
+      "include/sudo_win/economy/economy.h",
+      "include/sudo_win/endgame/endgame.h",
+      "include/sudo_win/engine/helper.h",
+      "include/sudo_win/geometry/geometry.h",
+      "include/sudo_win/pathfinding/pathfinding.h",
+      "include/sudo_win/planner/planner.h",
+      "include/sudo_win/planner/simulation.h",
+      "include/sudo_win/roles/roles.h",
+      "include/sudo_win/safety/safety.h",
+      "include/sudo_win/sonar/sonar.h",
+      "include/sudo_win/splitting/splitting.h",
+      "include/sudo_win/types/types.h",
+      "include/sudo_win/world/world_model.h",
+      "src/bot/bot.cpp",
+      "src/combat/combat.cpp",
+      "src/economy/economy.cpp",
+      "src/endgame/endgame.cpp",
+      "src/geometry/geometry.cpp",
+      "src/main.cpp",
+      "src/pathfinding/pathfinding.cpp",
+      "src/planner/planner.cpp",
+      "src/planner/simulation.cpp",
+      "src/roles/roles.cpp",
+      "src/safety/safety.cpp",
+      "src/sonar/sonar.cpp",
+      "src/splitting/splitting.cpp",
+      "src/world/world_model.cpp"
+    ],
+    "source_sha256": "d797f5adb34dda4af29da68f1102a6d4e1933dbc59cde2fc163fd9126cd68ace",
+    "effective_flags": {
+      "enable_sprinting": "true",
+      "enable_splitting": "false",
+      "enable_growth_splitting": "true",
+      "enable_queen_corridors": "true",
+      "enable_territorial_growth": "true",
+      "enable_champion_farms": "true",
+      "enable_portal_routing": "true",
+      "enable_movement_economics": "true",
+      "enable_interception": "true",
+      "enable_tail_clearance": "true",
+      "enable_queen_release": "true",
+      "enable_champion_retention": "true",
+      "enable_response_defense": "true",
+      "enable_productive_expansion": "true",
+      "enable_portal_income": "true",
+      "enable_scoring_coordination": "true",
+      "enable_resource_population": "true",
+      "enable_paid_step_pricing": "true",
+      "enable_queen_exit_viability": "true",
+      "enable_phase_expansion": "false",
+      "enable_sonar_network": "true",
+      "enable_continuation_defense": "true",
+      "enable_portal_hazards": "true",
+      "enable_queen_donation": "false",
+      "enable_scorer_step_pricing": "true",
+      "enable_long_sprint_threats": "false",
+      "enable_pocket_priority": "false",
+      "enable_funded_sprint_priority": "false",
+      "enable_portal_escape": "true",
+      "enable_helper_portals": "true",
+      "enable_favourable_trades": "false",
+      "enable_queen_hunting": "true",
+      "enable_sonar": "true",
+      "enable_indicators": "false"
+    },
+    "archive": "build/submission-v5-final.zip",
+    "archive_sha256": "4e7a2e88bba4b7f2ca50f814b710f33738d6f6b57dd2b645d999abecb84195b9",
+    "verified_source_files": 32,
+    "archive_matches_repository": true,
+    "independent_regeneration_matches": true,
+    "benchmark_fingerprint": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260"
+  },
+  "checks": {
+    "cpp": {
+      "cases": 88,
+      "assertions": 619,
+      "configurations": [
+        "Apple Clang 21 release",
+        "LLVM Clang 22.1.8 release",
+        "GCC 15.2 release",
+        "ASan/UBSan debug"
+      ],
+      "all_passed": true
+    },
+    "python": {
+      "tests": 17,
+      "all_passed": true,
+      "environment": "/tmp/sudo-win-live-venv/bin/python"
+    },
+    "engine_toolkit": "unswbc 1.2.5",
+    "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+    "instruction_limit": 100000000,
+    "selected_peak_instructions": 75778850
+  },
+  "final_comparisons": {
+    "v5-selected-all-maps": {
+      "summary": {
+        "outcomes": {
+          "win": 14,
+          "loss": 20
+        },
+        "matches": 34,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 252811,
+          "movement_steps": 299275,
+          "sprint": 20599,
+          "split": 4381,
+          "split_segments": 13354
+        },
+        "verified_donations": 0,
+        "verified_head_trades": 36
+      },
+      "matches": [
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/4.map",
+          "map_sha256": "42d4766ffede5f445692b119a26a6eee687fdc63b5b86776fefdf7fd755789b8",
+          "seed": 853,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 9,
+          "b_queen": 0,
+          "a_longest": 16,
+          "b_longest": 13,
+          "a_dragons": 21,
+          "b_dragons": 20,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/0-4-853-0-0.replay",
+          "replay_sha256": "06b037c8f09733abddcbd5731fb58dbe48b132d7949fcd320cb209125de10ef5",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/4.map",
+          "map_sha256": "42d4766ffede5f445692b119a26a6eee687fdc63b5b86776fefdf7fd755789b8",
+          "seed": 853,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 23,
+          "b_longest": 16,
+          "a_dragons": 16,
+          "b_dragons": 20,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/0-4-853-1-0.replay",
+          "replay_sha256": "b67b5851cdc9928499ceb8504e8ad28fb81c3e9a35f6b4e79142b72337d760e1",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/7.map",
+          "map_sha256": "126d71b46443268596285918d910b7f8d875bf3028ca9c5ff6bad97b4e868938",
+          "seed": 853,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 21,
+          "a_longest": 18,
+          "b_longest": 21,
+          "a_dragons": 2,
+          "b_dragons": 17,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/1-7-853-0-0.replay",
+          "replay_sha256": "1ebe2bb2fadef422f021525af1ddc28c61907fa7627d4246031d05261280c608",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/7.map",
+          "map_sha256": "126d71b46443268596285918d910b7f8d875bf3028ca9c5ff6bad97b4e868938",
+          "seed": 853,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 23,
+          "b_longest": 21,
+          "a_dragons": 16,
+          "b_dragons": 8,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/1-7-853-1-0.replay",
+          "replay_sha256": "17a945c23bbc71b97c22f596ed2e608d11ae99f9e11cb954b4429e69532fb025",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/9.map",
+          "map_sha256": "5b9481d0c65454b6d0a6747a581c582414cba37dd99273cc5a23dbca63b31724",
+          "seed": 853,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 3,
+          "b_queen": 3,
+          "a_longest": 29,
+          "b_longest": 19,
+          "a_dragons": 33,
+          "b_dragons": 63,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/2-9-853-0-0.replay",
+          "replay_sha256": "d7829475488cd04fe02586e4b45896dd5e9ef27db0b57e4c69de1941e378dd9d",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/9.map",
+          "map_sha256": "5b9481d0c65454b6d0a6747a581c582414cba37dd99273cc5a23dbca63b31724",
+          "seed": 853,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 3,
+          "b_queen": 3,
+          "a_longest": 16,
+          "b_longest": 16,
+          "a_dragons": 64,
+          "b_dragons": 57,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/2-9-853-1-0.replay",
+          "replay_sha256": "360aca1105c26a5676f30ba2218a79d8523ab37a26c7f5b943a34103bbb60be2",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/11.map",
+          "map_sha256": "4f84e990688c1e96ee4c2a7ff0706e4b44f4ee63531dd5c5582cf9157b134fb1",
+          "seed": 853,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 8,
+          "b_longest": 16,
+          "a_dragons": 29,
+          "b_dragons": 25,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/3-11-853-0-0.replay",
+          "replay_sha256": "0d11a0e4d07b86dba1d1f3478f47faacc2345f0b277335a7d241adc5f6bc57d8",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/11.map",
+          "map_sha256": "4f84e990688c1e96ee4c2a7ff0706e4b44f4ee63531dd5c5582cf9157b134fb1",
+          "seed": 853,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 14,
+          "b_longest": 7,
+          "a_dragons": 30,
+          "b_dragons": 28,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/3-11-853-1-0.replay",
+          "replay_sha256": "f73f844b77f51c3a04bc087d9851a19d91a7ca1e9558576af94a8f1ad370642d",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/13.map",
+          "map_sha256": "a09e8f2d3bdd1e40fad31a0ecdf00166cd1090c232c56dcc2557729de737f6aa",
+          "seed": 853,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 8,
+          "b_longest": 10,
+          "a_dragons": 40,
+          "b_dragons": 13,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/4-13-853-0-0.replay",
+          "replay_sha256": "2313d5cdaba4559132486a3c041efaed905fcc3eec5946829ef9c324a0e83925",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/13.map",
+          "map_sha256": "a09e8f2d3bdd1e40fad31a0ecdf00166cd1090c232c56dcc2557729de737f6aa",
+          "seed": 853,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 8,
+          "b_longest": 14,
+          "a_dragons": 28,
+          "b_dragons": 20,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/4-13-853-1-0.replay",
+          "replay_sha256": "b018b4865aea994d4cb5a6e2dad83ed7f11ee6e50273f6aa2bb525c5f28f02a6",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/15.map",
+          "map_sha256": "dcf39d713c060e5ded2d031a7ffe1a27ea60fe4b72ff8fb3fffbabc4f81e2066",
+          "seed": 853,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 22,
+          "b_queen": 23,
+          "a_longest": 22,
+          "b_longest": 23,
+          "a_dragons": 2,
+          "b_dragons": 2,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/5-15-853-0-0.replay",
+          "replay_sha256": "e782568694fe77dc3b147d5837d86f5ebe61f060625084d8cdffc23bda1a7a7d",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/15.map",
+          "map_sha256": "dcf39d713c060e5ded2d031a7ffe1a27ea60fe4b72ff8fb3fffbabc4f81e2066",
+          "seed": 853,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 15,
+          "b_queen": 18,
+          "a_longest": 21,
+          "b_longest": 18,
+          "a_dragons": 2,
+          "b_dragons": 3,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/5-15-853-1-0.replay",
+          "replay_sha256": "11599d96aa50b8b16db09236ba4cee06afb7190102d58649c0c4f4a923ae1d10",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/17.map",
+          "map_sha256": "fd02547854cbcbe36274d4341900610ba1aa1caa35e553c38135def95e0db68d",
+          "seed": 853,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 9,
+          "b_longest": 8,
+          "a_dragons": 9,
+          "b_dragons": 10,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/6-17-853-0-0.replay",
+          "replay_sha256": "402b49a1384ea9d2a24a6e808867d39cf932a542d35994fe1b23a154a724e103",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/17.map",
+          "map_sha256": "fd02547854cbcbe36274d4341900610ba1aa1caa35e553c38135def95e0db68d",
+          "seed": 853,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 8,
+          "b_longest": 9,
+          "a_dragons": 7,
+          "b_dragons": 9,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/6-17-853-1-0.replay",
+          "replay_sha256": "d7cdd44187d33981607326da729863f06fb6ffd88d46672a32c9b7fb7b700b35",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/19.map",
+          "map_sha256": "c622b9afe8fea2d034999511f07fc561a4e5e7120615f0f9bf454b3f27fc0a16",
+          "seed": 853,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 33,
+          "b_queen": 0,
+          "a_longest": 33,
+          "b_longest": 51,
+          "a_dragons": 17,
+          "b_dragons": 5,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/7-19-853-0-0.replay",
+          "replay_sha256": "3c9980c0bdcefb5c4be33014dc7e2dccc6cc6297eb7b38bd7fd8cc6115deb9ef",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/19.map",
+          "map_sha256": "c622b9afe8fea2d034999511f07fc561a4e5e7120615f0f9bf454b3f27fc0a16",
+          "seed": 853,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 53,
+          "b_queen": 0,
+          "a_longest": 53,
+          "b_longest": 20,
+          "a_dragons": 16,
+          "b_dragons": 10,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/7-19-853-1-0.replay",
+          "replay_sha256": "9ddb0e552596276e9a4b48d5b6a665368f958b2acf36d7f15d929087fd1c24b0",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/20.map",
+          "map_sha256": "56341e6577da7429efb6f33b64b79b0c4223c4fbd9df995713ad781bead5f423",
+          "seed": 853,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 3,
+          "b_queen": 5,
+          "a_longest": 8,
+          "b_longest": 6,
+          "a_dragons": 2,
+          "b_dragons": 29,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/8-20-853-0-0.replay",
+          "replay_sha256": "33b737126f98d8cb17e094a7f82f64fa0f23b355f8716a53da2864cd02e939ab",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/20.map",
+          "map_sha256": "56341e6577da7429efb6f33b64b79b0c4223c4fbd9df995713ad781bead5f423",
+          "seed": 853,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 3,
+          "b_queen": 4,
+          "a_longest": 8,
+          "b_longest": 6,
+          "a_dragons": 2,
+          "b_dragons": 20,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/8-20-853-1-0.replay",
+          "replay_sha256": "7d0f50c14a5d776a5cc2358ec320e31200e5aab14a801ac935db9d9357627772",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/21.map",
+          "map_sha256": "001f3501dc5b76cb35b796f03fcaaed6c90be34741b5da03ab061ba0908347e7",
+          "seed": 853,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 13,
+          "b_longest": 13,
+          "a_dragons": 57,
+          "b_dragons": 46,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/9-21-853-0-0.replay",
+          "replay_sha256": "054239c8865b5abf358778f41c7c67c0e817ea20d139de8891e5635e319bb0e0",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/21.map",
+          "map_sha256": "001f3501dc5b76cb35b796f03fcaaed6c90be34741b5da03ab061ba0908347e7",
+          "seed": 853,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 22,
+          "b_longest": 12,
+          "a_dragons": 60,
+          "b_dragons": 45,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/9-21-853-1-0.replay",
+          "replay_sha256": "13b9b9ccf90e5c5a186e21b6c155548c86302f64160df0f3ac44d1e10fd3e955",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/28.map",
+          "map_sha256": "4cf0e4e57c12fd4dfbd2ad997e29994e736dd5d8eca1e0f3353e3020d94b08c1",
+          "seed": 853,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 5,
+          "b_queen": 4,
+          "a_longest": 5,
+          "b_longest": 4,
+          "a_dragons": 2,
+          "b_dragons": 2,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/10-28-853-0-0.replay",
+          "replay_sha256": "a7edee991a9efecd3afaea80ddd14dd57e627f58c6c13649b101272fbe98e6ca",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/28.map",
+          "map_sha256": "4cf0e4e57c12fd4dfbd2ad997e29994e736dd5d8eca1e0f3353e3020d94b08c1",
+          "seed": 853,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 5,
+          "b_queen": 4,
+          "a_longest": 5,
+          "b_longest": 4,
+          "a_dragons": 2,
+          "b_dragons": 2,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/10-28-853-1-0.replay",
+          "replay_sha256": "9abdd209e7f3243df3b34e82ea6b601f7bd4326d0ba0ffb255c6e5354cd9abac",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/29.map",
+          "map_sha256": "7fccdee8a73a971bc3dc7a07b13aa56bb214f311249b942869bcc9708084d539",
+          "seed": 853,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 15,
+          "a_longest": 24,
+          "b_longest": 52,
+          "a_dragons": 64,
+          "b_dragons": 30,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/11-29-853-0-0.replay",
+          "replay_sha256": "9533437f566325c96888cbee68b71cd2b78c4b13dcf0b19f000990c2e80ed7d5",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/29.map",
+          "map_sha256": "7fccdee8a73a971bc3dc7a07b13aa56bb214f311249b942869bcc9708084d539",
+          "seed": 853,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 19,
+          "b_longest": 15,
+          "a_dragons": 50,
+          "b_dragons": 62,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/11-29-853-1-0.replay",
+          "replay_sha256": "32d7d23fb6d275db5c2b7e19a83d3b0b3a8147d3b7c134bfc225afbbaa5021ba",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/30.map",
+          "map_sha256": "8a403c0aa6c7affc53ee27283fed1568840bb82517c9d7eb59c69462f66d5fb6",
+          "seed": 853,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 20,
+          "b_longest": 17,
+          "a_dragons": 50,
+          "b_dragons": 37,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/12-30-853-0-0.replay",
+          "replay_sha256": "3f84de80c2664f26960657327ea799315f5102e10fb02f7f6fc5f690fd9d7b1b",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/30.map",
+          "map_sha256": "8a403c0aa6c7affc53ee27283fed1568840bb82517c9d7eb59c69462f66d5fb6",
+          "seed": 853,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 19,
+          "b_longest": 17,
+          "a_dragons": 64,
+          "b_dragons": 29,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/12-30-853-1-0.replay",
+          "replay_sha256": "bf5528d987417642ed49ec366fb9ec7dcca4be758b01844c309ed63b358bea11",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/31.map",
+          "map_sha256": "f154114e3ed9d39efd8516529acf8462328866b1580662228ff35dedd3cd3bdf",
+          "seed": 853,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 14,
+          "b_longest": 12,
+          "a_dragons": 26,
+          "b_dragons": 44,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/13-31-853-0-0.replay",
+          "replay_sha256": "400898565d8490dd2b74fa74114ecb2bd2a6dd6a5cf7615b6176d855aea3feee",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/31.map",
+          "map_sha256": "f154114e3ed9d39efd8516529acf8462328866b1580662228ff35dedd3cd3bdf",
+          "seed": 853,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 15,
+          "b_longest": 16,
+          "a_dragons": 51,
+          "b_dragons": 22,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/13-31-853-1-0.replay",
+          "replay_sha256": "936ba8848cc5fe99866ce7cb827539ba4fe29692e25f678707b89c1f77ddf034",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/32.map",
+          "map_sha256": "31b22a24c467edb146f8c6fc291beccce1493617d90ff5bb6eff538c3af24715",
+          "seed": 853,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 4,
+          "b_longest": 8,
+          "a_dragons": 4,
+          "b_dragons": 15,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/14-32-853-0-0.replay",
+          "replay_sha256": "0575e7b751b5a04e6b7eb758341c3eb5429169d25c989a0428fbc5527439873c",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/32.map",
+          "map_sha256": "31b22a24c467edb146f8c6fc291beccce1493617d90ff5bb6eff538c3af24715",
+          "seed": 853,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 6,
+          "b_longest": 6,
+          "a_dragons": 14,
+          "b_dragons": 10,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/14-32-853-1-0.replay",
+          "replay_sha256": "c1d322c2c9c926c4521627956d980bef08549c074ddbeb627cd90947b2265361",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/33.map",
+          "map_sha256": "1f097251f44508a5db71c691a361362052934817e99a8975a2521bcaf81c9725",
+          "seed": 853,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 6,
+          "b_queen": 14,
+          "a_longest": 10,
+          "b_longest": 14,
+          "a_dragons": 25,
+          "b_dragons": 1,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/15-33-853-0-0.replay",
+          "replay_sha256": "0d6e676694d111c8b159f4734cc8bd0d2392580eb51e459e60b990f2e5131a0e",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/33.map",
+          "map_sha256": "1f097251f44508a5db71c691a361362052934817e99a8975a2521bcaf81c9725",
+          "seed": 853,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 8,
+          "b_queen": 14,
+          "a_longest": 8,
+          "b_longest": 14,
+          "a_dragons": 1,
+          "b_dragons": 1,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/15-33-853-1-0.replay",
+          "replay_sha256": "25f69468a0cfad38289aaeabac23d5f7a183dd8ff98db98b58d6620c1a8b35cf",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/34.map",
+          "map_sha256": "ea443f10a63c1a37521cfef814b2e9316acf5e56f29e74b9e2c20987ccd0b72a",
+          "seed": 853,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 2,
+          "a_longest": 15,
+          "b_longest": 15,
+          "a_dragons": 62,
+          "b_dragons": 64,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/16-34-853-0-0.replay",
+          "replay_sha256": "8f0ac300b2dd37ee24cb66962a2e1197a1a580319998f29630c89d2e0bda73e5",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/34.map",
+          "map_sha256": "ea443f10a63c1a37521cfef814b2e9316acf5e56f29e74b9e2c20987ccd0b72a",
+          "seed": 853,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 43,
+          "b_longest": 15,
+          "a_dragons": 62,
+          "b_dragons": 60,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-all-maps/16-34-853-1-0.replay",
+          "replay_sha256": "da30ecbb2cfa6cc30bb07f5e08f4ef5f8b9ccb90705d5293e5b2c3d7fc1f6915",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        }
+      ],
+      "strategy_metrics": {
+        "candidate": {
+          "totals": {
+            "turns": 277791,
+            "declared_paid_steps": 1057,
+            "portal_crossings": 689,
+            "sonar_pings": 1096936,
+            "sonar_other_ally_hits": 319770,
+            "sonar_queen_ally_hits": 7314,
+            "pearls": 13557,
+            "queen_pearls": 462,
+            "children_created": 4381,
+            "children_dead_within_5_turns": 800,
+            "final_queen": 124,
+            "final_longest": 482
+          },
+          "queens_survived": 12,
+          "queen_blockers": {
+            "ally": 11,
+            "hitHeadToHead": 4,
+            "enemy": 4,
+            "self": 3
+          },
+          "median_population": {
+            "25": 3.5,
+            "100": 6.5
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 276404,
+            "declared_paid_steps": 866,
+            "portal_crossings": 1147,
+            "sonar_pings": 316090,
+            "sonar_other_ally_hits": 78405,
+            "sonar_queen_ally_hits": 1923,
+            "pearls": 14064,
+            "queen_pearls": 420,
+            "children_created": 4290,
+            "children_dead_within_5_turns": 710,
+            "final_longest": 613,
+            "final_queen": 174
+          },
+          "queens_survived": 14,
+          "queen_blockers": {
+            "ally": 6,
+            "hitHeadToHead": 8,
+            "self": 6
+          },
+          "median_population": {
+            "25": 3.5,
+            "100": 7.0
+          }
+        }
+      }
+    },
+    "v5-selected-metered": {
+      "summary": {
+        "outcomes": {
+          "loss": 4,
+          "win": 4
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "sandbox",
+        "max_points": 75778850,
+        "candidate_max_points": 75778850,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "split": 2413,
+          "split_segments": 7064,
+          "move": 114894,
+          "movement_steps": 133885,
+          "sprint": 8488
+        },
+        "verified_donations": 0,
+        "verified_head_trades": 5
+      },
+      "matches": [
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "sandbox",
+          "map": "build/validation/live-v7-maps/9.map",
+          "map_sha256": "5b9481d0c65454b6d0a6747a581c582414cba37dd99273cc5a23dbca63b31724",
+          "seed": 854,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 3,
+          "b_queen": 3,
+          "a_longest": 15,
+          "b_longest": 27,
+          "a_dragons": 56,
+          "b_dragons": 59,
+          "points": {
+            "A": {
+              "max": 43025191,
+              "p50": 8048361,
+              "p95": 18616226
+            },
+            "B": {
+              "max": 39529641,
+              "p50": 7629714,
+              "p95": 18569995
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-metered/0-9-854-0-0.replay",
+          "replay_sha256": "38a33c0e0b2a35af238990c8703bc19a10134e03566d92ff5b8412fbe13a4af4",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "sandbox",
+          "map": "build/validation/live-v7-maps/9.map",
+          "map_sha256": "5b9481d0c65454b6d0a6747a581c582414cba37dd99273cc5a23dbca63b31724",
+          "seed": 854,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 3,
+          "b_queen": 3,
+          "a_longest": 14,
+          "b_longest": 20,
+          "a_dragons": 61,
+          "b_dragons": 61,
+          "points": {
+            "A": {
+              "max": 49827385,
+              "p50": 7829071,
+              "p95": 20959664
+            },
+            "B": {
+              "max": 45891332,
+              "p50": 8116567,
+              "p95": 19287899
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-metered/0-9-854-1-0.replay",
+          "replay_sha256": "9bce4c16b01bd1426ca582cfd75461f9ae1370d86a10dc57737a39b3ea588b1e",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "sandbox",
+          "map": "build/validation/live-v7-maps/21.map",
+          "map_sha256": "001f3501dc5b76cb35b796f03fcaaed6c90be34741b5da03ab061ba0908347e7",
+          "seed": 854,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 8,
+          "b_longest": 15,
+          "a_dragons": 64,
+          "b_dragons": 63,
+          "points": {
+            "A": {
+              "max": 35260847,
+              "p50": 6629717,
+              "p95": 15959647
+            },
+            "B": {
+              "max": 45949584,
+              "p50": 6612647,
+              "p95": 15067586
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-metered/1-21-854-0-0.replay",
+          "replay_sha256": "ae5a0eea6b0dda948e0df71e56a960c520e9515535cad1596d487f5bf8cfa6c3",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "sandbox",
+          "map": "build/validation/live-v7-maps/21.map",
+          "map_sha256": "001f3501dc5b76cb35b796f03fcaaed6c90be34741b5da03ab061ba0908347e7",
+          "seed": 854,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 11,
+          "b_longest": 19,
+          "a_dragons": 61,
+          "b_dragons": 63,
+          "points": {
+            "A": {
+              "max": 34983459,
+              "p50": 6196132,
+              "p95": 15372774
+            },
+            "B": {
+              "max": 51920285,
+              "p50": 6607052,
+              "p95": 15587915
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-metered/1-21-854-1-0.replay",
+          "replay_sha256": "b41330e4c6a7a475501e4e3efeb799938e1c7ba54107f000db810fdd30296f49",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "sandbox",
+          "map": "build/validation/live-v7-maps/34.map",
+          "map_sha256": "ea443f10a63c1a37521cfef814b2e9316acf5e56f29e74b9e2c20987ccd0b72a",
+          "seed": 854,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 39,
+          "a_longest": 16,
+          "b_longest": 39,
+          "a_dragons": 61,
+          "b_dragons": 60,
+          "points": {
+            "A": {
+              "max": 44686912,
+              "p50": 8894341,
+              "p95": 20769721
+            },
+            "B": {
+              "max": 72446981,
+              "p50": 8876019,
+              "p95": 25285054
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-metered/2-34-854-0-0.replay",
+          "replay_sha256": "07b23ed282f81835dd393cbbfd2d3bad9e668e5348b28c39198144c4679b37ad",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "sandbox",
+          "map": "build/validation/live-v7-maps/34.map",
+          "map_sha256": "ea443f10a63c1a37521cfef814b2e9316acf5e56f29e74b9e2c20987ccd0b72a",
+          "seed": 854,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 17,
+          "b_longest": 18,
+          "a_dragons": 64,
+          "b_dragons": 62,
+          "points": {
+            "A": {
+              "max": 40000079,
+              "p50": 9290447,
+              "p95": 23693686
+            },
+            "B": {
+              "max": 75778850,
+              "p50": 9011012,
+              "p95": 22471068
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-metered/2-34-854-1-0.replay",
+          "replay_sha256": "4f4884350a7e34155430dbec2e239cef900a681bd0efd986267d8e09c59c5877",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "sandbox",
+          "map": "build/validation/live-v7-maps/20.map",
+          "map_sha256": "56341e6577da7429efb6f33b64b79b0c4223c4fbd9df995713ad781bead5f423",
+          "seed": 854,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 3,
+          "b_queen": 0,
+          "a_longest": 8,
+          "b_longest": 8,
+          "a_dragons": 2,
+          "b_dragons": 26,
+          "points": {
+            "A": {
+              "max": 18341302,
+              "p50": 9454010,
+              "p95": 15326452
+            },
+            "B": {
+              "max": 15414997,
+              "p50": 5946691,
+              "p95": 11011542
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-metered/3-20-854-0-0.replay",
+          "replay_sha256": "ccfc3d8b29f52a9bcfa9cbb43fd3d17b31c99e0e1314cbea83f9cee1badfd2f0",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "sandbox",
+          "map": "build/validation/live-v7-maps/20.map",
+          "map_sha256": "56341e6577da7429efb6f33b64b79b0c4223c4fbd9df995713ad781bead5f423",
+          "seed": 854,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 3,
+          "b_queen": 0,
+          "a_longest": 8,
+          "b_longest": 6,
+          "a_dragons": 2,
+          "b_dragons": 24,
+          "points": {
+            "A": {
+              "max": 16112247,
+              "p50": 8989305,
+              "p95": 14493283
+            },
+            "B": {
+              "max": 15803500,
+              "p50": 6260053,
+              "p95": 11302778
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-metered/3-20-854-1-0.replay",
+          "replay_sha256": "639a0f7e194265ef6d1e12f58ba698c5c14b244e4e4add5669fbf012002a0494",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        }
+      ],
+      "strategy_metrics": {
+        "candidate": {
+          "totals": {
+            "turns": 125795,
+            "declared_paid_steps": 605,
+            "children_created": 2413,
+            "sonar_pings": 495092,
+            "sonar_other_ally_hits": 152729,
+            "portal_crossings": 399,
+            "children_dead_within_5_turns": 459,
+            "pearls": 7399,
+            "queen_pearls": 48,
+            "final_queen": 9,
+            "final_longest": 110,
+            "sonar_queen_ally_hits": 1742
+          },
+          "queens_survived": 3,
+          "queen_blockers": {
+            "hitHeadToHead": 3,
+            "ally": 2
+          },
+          "median_population": {
+            "25": 9.0,
+            "100": 15.5
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 120043,
+            "declared_paid_steps": 542,
+            "children_created": 2207,
+            "sonar_pings": 128666,
+            "portal_crossings": 328,
+            "children_dead_within_5_turns": 399,
+            "pearls": 6951,
+            "queen_pearls": 61,
+            "sonar_other_ally_hits": 39005,
+            "final_queen": 48,
+            "final_longest": 139,
+            "sonar_queen_ally_hits": 600
+          },
+          "queens_survived": 4,
+          "queen_blockers": {
+            "hitHeadToHead": 2,
+            "ally": 2
+          },
+          "median_population": {
+            "25": 9.5,
+            "100": 17.0
+          }
+        }
+      }
+    },
+    "v5-selected-aggressive": {
+      "summary": {
+        "outcomes": {
+          "win": 4,
+          "loss": 4
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "split": 2726,
+          "split_segments": 8114,
+          "move": 127579,
+          "movement_steps": 152205,
+          "sprint": 10991
+        },
+        "verified_donations": 0,
+        "verified_head_trades": 66
+      },
+      "matches": [
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "c1c5196a6a0381457cffc03bfd0c1eab28d1509d7027c61c3c983106aa134159",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/9.map",
+          "map_sha256": "5b9481d0c65454b6d0a6747a581c582414cba37dd99273cc5a23dbca63b31724",
+          "seed": 844,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 3,
+          "b_queen": 3,
+          "a_longest": 12,
+          "b_longest": 11,
+          "a_dragons": 64,
+          "b_dragons": 55,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-aggressive/0-9-844-0-0.replay",
+          "replay_sha256": "afe47bddc7b659434a43ff5bf89dd3f5b01438ab8c71def9d5ff79976fe8eb49",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "c1c5196a6a0381457cffc03bfd0c1eab28d1509d7027c61c3c983106aa134159",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/9.map",
+          "map_sha256": "5b9481d0c65454b6d0a6747a581c582414cba37dd99273cc5a23dbca63b31724",
+          "seed": 844,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 3,
+          "b_queen": 3,
+          "a_longest": 13,
+          "b_longest": 27,
+          "a_dragons": 26,
+          "b_dragons": 61,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-aggressive/0-9-844-1-0.replay",
+          "replay_sha256": "3d96c89f3e1e137a672a40fbc55ebdfd978380ae8889f91c4e35688f1a176451",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "c1c5196a6a0381457cffc03bfd0c1eab28d1509d7027c61c3c983106aa134159",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/21.map",
+          "map_sha256": "001f3501dc5b76cb35b796f03fcaaed6c90be34741b5da03ab061ba0908347e7",
+          "seed": 844,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 11,
+          "b_longest": 30,
+          "a_dragons": 61,
+          "b_dragons": 49,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-aggressive/1-21-844-0-0.replay",
+          "replay_sha256": "8e54cdf6500a877a8051d4203c975a3d87ddf933933cb933a05d52438d05e7f9",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "c1c5196a6a0381457cffc03bfd0c1eab28d1509d7027c61c3c983106aa134159",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/21.map",
+          "map_sha256": "001f3501dc5b76cb35b796f03fcaaed6c90be34741b5da03ab061ba0908347e7",
+          "seed": 844,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 22,
+          "b_longest": 10,
+          "a_dragons": 51,
+          "b_dragons": 60,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-aggressive/1-21-844-1-0.replay",
+          "replay_sha256": "8f4aab94844864bd810edcb7b3fc268d41a5c006599cde832c2c760e14b00734",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "c1c5196a6a0381457cffc03bfd0c1eab28d1509d7027c61c3c983106aa134159",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/34.map",
+          "map_sha256": "ea443f10a63c1a37521cfef814b2e9316acf5e56f29e74b9e2c20987ccd0b72a",
+          "seed": 844,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 36,
+          "b_queen": 0,
+          "a_longest": 36,
+          "b_longest": 13,
+          "a_dragons": 60,
+          "b_dragons": 61,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-aggressive/2-34-844-0-0.replay",
+          "replay_sha256": "076e94a5f426e6ba96511dfcdab1b2732f3a23bcc51107964a7f6ea9eb22eb08",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "c1c5196a6a0381457cffc03bfd0c1eab28d1509d7027c61c3c983106aa134159",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/34.map",
+          "map_sha256": "ea443f10a63c1a37521cfef814b2e9316acf5e56f29e74b9e2c20987ccd0b72a",
+          "seed": 844,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 19,
+          "b_longest": 16,
+          "a_dragons": 58,
+          "b_dragons": 60,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-aggressive/2-34-844-1-0.replay",
+          "replay_sha256": "27f2a6e10d61f132c6551456016dcbeee940afdd65e0cacdd962f66f34ab9be0",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "c1c5196a6a0381457cffc03bfd0c1eab28d1509d7027c61c3c983106aa134159",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/20.map",
+          "map_sha256": "56341e6577da7429efb6f33b64b79b0c4223c4fbd9df995713ad781bead5f423",
+          "seed": 844,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 6,
+          "b_queen": 3,
+          "a_longest": 12,
+          "b_longest": 3,
+          "a_dragons": 17,
+          "b_dragons": 2,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-aggressive/3-20-844-0-0.replay",
+          "replay_sha256": "51fe412324c4475a40f19b15e227bbb67cdb353ba0077dd960763b9148553797",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "c1c5196a6a0381457cffc03bfd0c1eab28d1509d7027c61c3c983106aa134159",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/20.map",
+          "map_sha256": "56341e6577da7429efb6f33b64b79b0c4223c4fbd9df995713ad781bead5f423",
+          "seed": 844,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 4,
+          "b_queen": 3,
+          "a_longest": 5,
+          "b_longest": 6,
+          "a_dragons": 3,
+          "b_dragons": 24,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-aggressive/3-20-844-1-0.replay",
+          "replay_sha256": "d53c95531384c50970dfa4688ce3f6246ab1358f380f541e08139c0e985cd3f9",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        }
+      ],
+      "strategy_metrics": {
+        "candidate": {
+          "totals": {
+            "turns": 141296,
+            "declared_paid_steps": 698,
+            "children_created": 2726,
+            "sonar_pings": 556072,
+            "sonar_other_ally_hits": 173202,
+            "portal_crossings": 458,
+            "children_dead_within_5_turns": 511,
+            "pearls": 9043,
+            "queen_pearls": 73,
+            "final_queen": 51,
+            "final_longest": 130,
+            "sonar_queen_ally_hits": 2306
+          },
+          "queens_survived": 5,
+          "queen_blockers": {
+            "enemy": 1,
+            "hitHeadToHead": 1,
+            "ally": 1
+          },
+          "median_population": {
+            "25": 8.5,
+            "100": 18.0
+          }
+        },
+        "opponent": {
+          "totals": {
+            "turns": 83712,
+            "declared_paid_steps": 530,
+            "children_created": 1446,
+            "sonar_pings": 93814,
+            "portal_crossings": 116,
+            "children_dead_within_5_turns": 294,
+            "pearls": 4630,
+            "queen_pearls": 27,
+            "sonar_other_ally_hits": 26964,
+            "final_queen": 13,
+            "final_longest": 116,
+            "sonar_queen_ally_hits": 286
+          },
+          "queens_survived": 4,
+          "queen_blockers": {
+            "ally": 1,
+            "self": 3
+          },
+          "median_population": {
+            "25": 7.5,
+            "100": 9.5
+          }
+        }
+      }
+    },
+    "v5-selected-determinism": {
+      "summary": {
+        "outcomes": {
+          "win": 1,
+          "loss": 3
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 63942,
+          "movement_steps": 75662,
+          "sprint": 5330,
+          "split": 1492,
+          "split_segments": 4186
+        },
+        "verified_donations": 0,
+        "verified_head_trades": 22
+      },
+      "matches": [
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/13.map",
+          "map_sha256": "a09e8f2d3bdd1e40fad31a0ecdf00166cd1090c232c56dcc2557729de737f6aa",
+          "seed": 855,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 11,
+          "b_longest": 2,
+          "a_dragons": 51,
+          "b_dragons": 1,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-determinism/0-13-855-0-0.replay",
+          "replay_sha256": "ac307188f12b6df5ac0069f9c136f11ae320c12dd06340a4301ef06b1e4dd118",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/13.map",
+          "map_sha256": "a09e8f2d3bdd1e40fad31a0ecdf00166cd1090c232c56dcc2557729de737f6aa",
+          "seed": 855,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 11,
+          "b_longest": 2,
+          "a_dragons": 51,
+          "b_dragons": 1,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-determinism/0-13-855-0-1.replay",
+          "replay_sha256": "ac307188f12b6df5ac0069f9c136f11ae320c12dd06340a4301ef06b1e4dd118",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/13.map",
+          "map_sha256": "a09e8f2d3bdd1e40fad31a0ecdf00166cd1090c232c56dcc2557729de737f6aa",
+          "seed": 855,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 19,
+          "b_longest": 7,
+          "a_dragons": 41,
+          "b_dragons": 11,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-determinism/0-13-855-1-0.replay",
+          "replay_sha256": "7a0a281a882d348b97aaa29f783149194235447f267ef5519c8bad40d0808233",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/13.map",
+          "map_sha256": "a09e8f2d3bdd1e40fad31a0ecdf00166cd1090c232c56dcc2557729de737f6aa",
+          "seed": 855,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 0,
+          "b_queen": 0,
+          "a_longest": 19,
+          "b_longest": 7,
+          "a_dragons": 41,
+          "b_dragons": 11,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-determinism/0-13-855-1-1.replay",
+          "replay_sha256": "7a0a281a882d348b97aaa29f783149194235447f267ef5519c8bad40d0808233",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/19.map",
+          "map_sha256": "c622b9afe8fea2d034999511f07fc561a4e5e7120615f0f9bf454b3f27fc0a16",
+          "seed": 855,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 4,
+          "b_queen": 53,
+          "a_longest": 56,
+          "b_longest": 53,
+          "a_dragons": 11,
+          "b_dragons": 6,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-determinism/1-19-855-0-0.replay",
+          "replay_sha256": "a6e2909a6f8b03bf39246cae85965a457f2ecb66e9ce92ada125edd116241959",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "A",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/19.map",
+          "map_sha256": "c622b9afe8fea2d034999511f07fc561a4e5e7120615f0f9bf454b3f27fc0a16",
+          "seed": 855,
+          "winner": "B",
+          "rounds": 499,
+          "a_queen": 4,
+          "b_queen": 53,
+          "a_longest": 56,
+          "b_longest": 53,
+          "a_dragons": 11,
+          "b_dragons": 6,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-determinism/1-19-855-0-1.replay",
+          "replay_sha256": "a6e2909a6f8b03bf39246cae85965a457f2ecb66e9ce92ada125edd116241959",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/19.map",
+          "map_sha256": "c622b9afe8fea2d034999511f07fc561a4e5e7120615f0f9bf454b3f27fc0a16",
+          "seed": 855,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 55,
+          "b_queen": 55,
+          "a_longest": 55,
+          "b_longest": 55,
+          "a_dragons": 9,
+          "b_dragons": 8,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-determinism/1-19-855-1-0.replay",
+          "replay_sha256": "8a7761e1d1e90db4c44b8c5e375f1a04f85c23ff3444a95b93f2f6cdcf6175a6",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        },
+        {
+          "candidate_team": "B",
+          "candidate_sha256": "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260",
+          "opponent_sha256": "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826",
+          "benchmark_sha256": "c8a079f83fb023e0454729b6c627df92b98a2c19789faac417d86b1a955d347e",
+          "mode": "native-unmetered",
+          "map": "build/validation/live-v7-maps/19.map",
+          "map_sha256": "c622b9afe8fea2d034999511f07fc561a4e5e7120615f0f9bf454b3f27fc0a16",
+          "seed": 855,
+          "winner": "A",
+          "rounds": 499,
+          "a_queen": 55,
+          "b_queen": 55,
+          "a_longest": 55,
+          "b_longest": 55,
+          "a_dragons": 9,
+          "b_dragons": 8,
+          "points": {
+            "A": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            },
+            "B": {
+              "max": 0,
+              "p50": 0,
+              "p95": 0
+            }
+          },
+          "errors": [],
+          "notices": [],
+          "replay": "build/validation/v5-selected-determinism/1-19-855-1-1.replay",
+          "replay_sha256": "8a7761e1d1e90db4c44b8c5e375f1a04f85c23ff3444a95b93f2f6cdcf6175a6",
+          "live_rules": {
+            "controlled_donation_food": true,
+            "cyclic_turn_order": true,
+            "dead_queen_zero": true,
+            "engine_sha256": "26e68680e45eb0f221db702aead9eefde776c2ad2ba066f4ddf8c12500c6a546",
+            "fixed_start_length": true,
+            "free_sprint_steps": true,
+            "queen_scoring": true,
+            "toolkit": "1.2.5"
+          }
+        }
+      ],
+      "repeat_checks": {
+        "unique_fixtures": 4,
+        "executions": 8,
+        "all_four_pairs_identical": true,
+        "unique_outcomes": {
+          "win": 1,
+          "loss": 3
+        }
+      }
+    }
+  },
+  "stage_comparisons": {
+    "v5-defense-paired": {
+      "summary": {
+        "outcomes": {
+          "win": 6,
+          "loss": 2
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 116776,
+          "movement_steps": 136990,
+          "split": 2256,
+          "split_segments": 6652,
+          "sprint": 8952
+        },
+        "verified_head_trades": 14
+      },
+      "candidate_fingerprints": [
+        "74b3afc2dfb10ad00476e2f8f7c1940487a5e76b70357b8283f9b63ffded2f7e"
+      ],
+      "opponent_fingerprints": [
+        "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826"
+      ],
+      "seeds": [
+        831
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-defense-metered": {
+      "summary": {
+        "outcomes": {
+          "loss": 3,
+          "win": 1
+        },
+        "matches": 4,
+        "passed": true,
+        "mode": "sandbox",
+        "max_points": 65875228,
+        "candidate_max_points": 65875228,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 82512,
+          "movement_steps": 96477,
+          "split": 1732,
+          "split_segments": 4956,
+          "sprint": 6345
+        },
+        "verified_head_trades": 13
+      },
+      "candidate_fingerprints": [
+        "32a7daaba466a9fcfbe3101878e2d6837f772ae13442329bab4b31e2414f090a"
+      ],
+      "opponent_fingerprints": [
+        "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826"
+      ],
+      "seeds": [
+        832
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-expansion-isolated": {
+      "summary": {
+        "outcomes": {
+          "loss": 4,
+          "win": 2
+        },
+        "matches": 6,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "split": 1565,
+          "split_segments": 4698,
+          "move": 76178,
+          "movement_steps": 89674,
+          "sprint": 6050
+        },
+        "verified_head_trades": 11
+      },
+      "candidate_fingerprints": [
+        "d12e060303240fc7d645bb680975a077692bca5f9e68368e6329d4eaa9cacec0"
+      ],
+      "opponent_fingerprints": [
+        "32a7daaba466a9fcfbe3101878e2d6837f772ae13442329bab4b31e2414f090a"
+      ],
+      "seeds": [
+        833
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-sonar-isolated": {
+      "summary": {
+        "outcomes": {
+          "win": 3,
+          "loss": 3
+        },
+        "matches": 6,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 88091,
+          "movement_steps": 99945,
+          "split": 1711,
+          "split_segments": 4780,
+          "sprint": 5418
+        },
+        "verified_head_trades": 14
+      },
+      "candidate_fingerprints": [
+        "f9323928dc66ed3b59f16de3d1956e24fbb1c8f09b4f6f81ba20880d102501f3"
+      ],
+      "opponent_fingerprints": [
+        "d12e060303240fc7d645bb680975a077692bca5f9e68368e6329d4eaa9cacec0"
+      ],
+      "seeds": [
+        834
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-territory-isolated": {
+      "summary": {
+        "outcomes": {
+          "win": 3,
+          "loss": 3
+        },
+        "matches": 6,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 85125,
+          "movement_steps": 98684,
+          "split": 1904,
+          "split_segments": 5396,
+          "sprint": 5975
+        },
+        "verified_head_trades": 6
+      },
+      "candidate_fingerprints": [
+        "ee2fe9efe8113d26da768cdc37f00350b05ecde19fbd0f144a344a93521688e6"
+      ],
+      "opponent_fingerprints": [
+        "f9323928dc66ed3b59f16de3d1956e24fbb1c8f09b4f6f81ba20880d102501f3"
+      ],
+      "seeds": [
+        835
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-territory-broad": {
+      "summary": {
+        "outcomes": {
+          "win": 12,
+          "loss": 12
+        },
+        "matches": 24,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 125040,
+          "movement_steps": 153435,
+          "sprint": 12304,
+          "split": 1636,
+          "split_segments": 5214
+        },
+        "verified_head_trades": 37
+      },
+      "candidate_fingerprints": [
+        "ee2fe9efe8113d26da768cdc37f00350b05ecde19fbd0f144a344a93521688e6"
+      ],
+      "opponent_fingerprints": [
+        "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826"
+      ],
+      "seeds": [
+        836
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-feeding-isolated": {
+      "summary": {
+        "outcomes": {
+          "loss": 3,
+          "win": 3
+        },
+        "matches": 6,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "split": 2139,
+          "split_segments": 6040,
+          "move": 103079,
+          "movement_steps": 121213,
+          "sprint": 8091
+        },
+        "verified_donations": 0,
+        "verified_head_trades": 16
+      },
+      "candidate_fingerprints": [
+        "fdf5ff478a599cd146ff6b440bad62f0e8465048191d68d884969cd165971351"
+      ],
+      "opponent_fingerprints": [
+        "fb80946e6341730f38f8183142faba06c4f3866a0a518402e87b440ccf8fe44e"
+      ],
+      "seeds": [
+        837
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-feeding-verified-isolated": {
+      "summary": {
+        "outcomes": {
+          "loss": 3,
+          "win": 3
+        },
+        "matches": 6,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "split": 2079,
+          "split_segments": 6268,
+          "move": 108093,
+          "movement_steps": 127854,
+          "sprint": 8692
+        },
+        "verified_donations": 0,
+        "verified_head_trades": 14
+      },
+      "candidate_fingerprints": [
+        "09e316c6f567a6362815de76a2cf06773838dd6c79b0693b6317d1fb51e6d6e9"
+      ],
+      "opponent_fingerprints": [
+        "46754a3108b9dc9328f8d7a26a271fd210881a3a26ca2b11ecc0b92e83a670cb"
+      ],
+      "seeds": [
+        838
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-integration-metered-initial": {
+      "summary": {
+        "outcomes": {
+          "loss": 3,
+          "win": 1
+        },
+        "matches": 4,
+        "passed": true,
+        "mode": "sandbox",
+        "max_points": 49591995,
+        "candidate_max_points": 49591995,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 52356,
+          "movement_steps": 59570,
+          "split": 1329,
+          "split_segments": 3680,
+          "sprint": 3362
+        },
+        "verified_donations": 0,
+        "verified_head_trades": 6
+      },
+      "candidate_fingerprints": [
+        "46754a3108b9dc9328f8d7a26a271fd210881a3a26ca2b11ecc0b92e83a670cb"
+      ],
+      "opponent_fingerprints": [
+        "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826"
+      ],
+      "seeds": [
+        839
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-pricing-isolated": {
+      "summary": {
+        "outcomes": {
+          "loss": 3,
+          "win": 3
+        },
+        "matches": 6,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "split": 2091,
+          "split_segments": 6056,
+          "move": 111471,
+          "movement_steps": 132221,
+          "sprint": 9390
+        },
+        "verified_donations": 0,
+        "verified_head_trades": 8
+      },
+      "candidate_fingerprints": [
+        "5c24b1653b1fdb93c85d195702206461eaf4b318260ea4c104d3dc8ca5ebfda8"
+      ],
+      "opponent_fingerprints": [
+        "46754a3108b9dc9328f8d7a26a271fd210881a3a26ca2b11ecc0b92e83a670cb"
+      ],
+      "seeds": [
+        840
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-phase-ablation": {
+      "summary": {
+        "outcomes": {
+          "win": 5,
+          "loss": 1
+        },
+        "matches": 6,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "split": 2128,
+          "split_segments": 6518,
+          "move": 104363,
+          "movement_steps": 124195,
+          "sprint": 8644
+        },
+        "verified_donations": 0,
+        "verified_head_trades": 8
+      },
+      "candidate_fingerprints": [
+        "b83d80044a49d150c00a3344cf3666cb6042d6db91c5923735e4de8c125c3353"
+      ],
+      "opponent_fingerprints": [
+        "5c24b1653b1fdb93c85d195702206461eaf4b318260ea4c104d3dc8ca5ebfda8"
+      ],
+      "seeds": [
+        841
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-final-all-maps": {
+      "summary": {
+        "outcomes": {
+          "loss": 22,
+          "win": 12
+        },
+        "matches": 34,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 250248,
+          "movement_steps": 298119,
+          "sprint": 20863,
+          "split": 3946,
+          "split_segments": 12147
+        },
+        "verified_donations": 0,
+        "verified_head_trades": 30
+      },
+      "candidate_fingerprints": [
+        "cd6ca28be1b16a1cc22901101eaa84ec03a7401e9881b0314790b754ba5a977a"
+      ],
+      "opponent_fingerprints": [
+        "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826"
+      ],
+      "seeds": [
+        842
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-final-metered": {
+      "summary": {
+        "outcomes": {
+          "loss": 4,
+          "win": 4
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "sandbox",
+        "max_points": 67456789,
+        "candidate_max_points": 67456789,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "split": 2219,
+          "split_segments": 6669,
+          "move": 106061,
+          "movement_steps": 123472,
+          "sprint": 7706
+        },
+        "verified_donations": 0,
+        "verified_head_trades": 14
+      },
+      "candidate_fingerprints": [
+        "cd6ca28be1b16a1cc22901101eaa84ec03a7401e9881b0314790b754ba5a977a"
+      ],
+      "opponent_fingerprints": [
+        "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826"
+      ],
+      "seeds": [
+        843
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-final-aggressive": {
+      "summary": {
+        "outcomes": {
+          "loss": 5,
+          "win": 3
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "split": 2560,
+          "split_segments": 7471,
+          "move": 127911,
+          "movement_steps": 150977,
+          "sprint": 10163
+        },
+        "verified_donations": 0,
+        "verified_head_trades": 58
+      },
+      "candidate_fingerprints": [
+        "cd6ca28be1b16a1cc22901101eaa84ec03a7401e9881b0314790b754ba5a977a"
+      ],
+      "opponent_fingerprints": [
+        "c1c5196a6a0381457cffc03bfd0c1eab28d1509d7027c61c3c983106aa134159"
+      ],
+      "seeds": [
+        844
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-final-aggressive-baseline": {
+      "summary": {
+        "outcomes": {
+          "win": 5,
+          "loss": 3
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "split": 2729,
+          "split_segments": 8280,
+          "move": 132262,
+          "movement_steps": 154954,
+          "sprint": 9999
+        },
+        "verified_donations": 0,
+        "verified_head_trades": 55
+      },
+      "candidate_fingerprints": [
+        "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826"
+      ],
+      "opponent_fingerprints": [
+        "c1c5196a6a0381457cffc03bfd0c1eab28d1509d7027c61c3c983106aa134159"
+      ],
+      "seeds": [
+        844
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-final-determinism": {
+      "summary": {
+        "outcomes": {
+          "loss": 3,
+          "win": 1
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 33994,
+          "movement_steps": 41720,
+          "split": 416,
+          "split_segments": 1454,
+          "sprint": 3312
+        },
+        "verified_donations": 0,
+        "verified_head_trades": 18
+      },
+      "candidate_fingerprints": [
+        "cd6ca28be1b16a1cc22901101eaa84ec03a7401e9881b0314790b754ba5a977a"
+      ],
+      "opponent_fingerprints": [
+        "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826"
+      ],
+      "seeds": [
+        845
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-refinement-isolated": {
+      "summary": {
+        "outcomes": {
+          "win": 3,
+          "loss": 3
+        },
+        "matches": 6,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "split": 1285,
+          "split_segments": 3789,
+          "move": 75159,
+          "movement_steps": 88401,
+          "sprint": 5880
+        },
+        "verified_donations": 0,
+        "verified_head_trades": 10
+      },
+      "candidate_fingerprints": [
+        "a5fd07ba2546e7fe13916af28b3d80ebd4ccc6a7139c0b281a93b416844f22f4"
+      ],
+      "opponent_fingerprints": [
+        "cd6ca28be1b16a1cc22901101eaa84ec03a7401e9881b0314790b754ba5a977a"
+      ],
+      "seeds": [
+        846
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-refined-all-maps": {
+      "summary": {
+        "outcomes": {
+          "loss": 20,
+          "win": 14
+        },
+        "matches": 34,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 257482,
+          "movement_steps": 305719,
+          "sprint": 21265,
+          "split": 4301,
+          "split_segments": 13046
+        },
+        "verified_donations": 0,
+        "verified_head_trades": 29
+      },
+      "candidate_fingerprints": [
+        "a5fd07ba2546e7fe13916af28b3d80ebd4ccc6a7139c0b281a93b416844f22f4"
+      ],
+      "opponent_fingerprints": [
+        "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826"
+      ],
+      "seeds": [
+        847
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-refined-metered": {
+      "summary": {
+        "outcomes": {
+          "loss": 5,
+          "win": 3
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "sandbox",
+        "max_points": 60031119,
+        "candidate_max_points": 60031119,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "split": 2336,
+          "split_segments": 6775,
+          "move": 115925,
+          "movement_steps": 135754,
+          "sprint": 8837
+        },
+        "verified_donations": 0,
+        "verified_head_trades": 12
+      },
+      "candidate_fingerprints": [
+        "a5fd07ba2546e7fe13916af28b3d80ebd4ccc6a7139c0b281a93b416844f22f4"
+      ],
+      "opponent_fingerprints": [
+        "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826"
+      ],
+      "seeds": [
+        848
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-defense-selection": {
+      "summary": {
+        "outcomes": {
+          "loss": 6,
+          "win": 2
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 83813,
+          "movement_steps": 101545,
+          "sprint": 7753,
+          "split": 1259,
+          "split_segments": 4181
+        },
+        "verified_donations": 0,
+        "verified_head_trades": 8
+      },
+      "candidate_fingerprints": [
+        "bee1780819a732f6d17a527f7089266d63886574c2ff3244a5da3d52239e70ab"
+      ],
+      "opponent_fingerprints": [
+        "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826"
+      ],
+      "seeds": [
+        847
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-network-selection": {
+      "summary": {
+        "outcomes": {
+          "loss": 5,
+          "win": 3
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 77724,
+          "movement_steps": 94298,
+          "sprint": 7236,
+          "split": 1032,
+          "split_segments": 3239
+        },
+        "verified_donations": 0,
+        "verified_head_trades": 8
+      },
+      "candidate_fingerprints": [
+        "69a4a9d7852023461195f897596c3bc20441fb6a154b3a289981e27e286ad51f"
+      ],
+      "opponent_fingerprints": [
+        "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826"
+      ],
+      "seeds": [
+        847
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-cap-policy-selection": {
+      "summary": {
+        "outcomes": {
+          "loss": 4,
+          "win": 2
+        },
+        "matches": 6,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 70283,
+          "movement_steps": 86322,
+          "sprint": 6885,
+          "split": 987,
+          "split_segments": 3392
+        },
+        "verified_donations": 0,
+        "verified_head_trades": 1
+      },
+      "candidate_fingerprints": [
+        "a1b09f87ba5bc4ebd5798cfc2fbfb4893cbbde71654254750131e0e0f9648e2e"
+      ],
+      "opponent_fingerprints": [
+        "c676e946c763abbb2c60534353fe50be978f667eeb61a022df49b42b90431260"
+      ],
+      "seeds": [
+        850
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-cap-network-all-maps": {
+      "summary": {
+        "outcomes": {
+          "win": 17,
+          "loss": 17
+        },
+        "matches": 34,
+        "passed": true,
+        "mode": "native-unmetered",
+        "max_points": 0,
+        "candidate_max_points": 0,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "move": 273511,
+          "movement_steps": 324331,
+          "split": 4865,
+          "split_segments": 14801,
+          "sprint": 22534
+        },
+        "verified_donations": 0,
+        "verified_head_trades": 34
+      },
+      "candidate_fingerprints": [
+        "a1b09f87ba5bc4ebd5798cfc2fbfb4893cbbde71654254750131e0e0f9648e2e"
+      ],
+      "opponent_fingerprints": [
+        "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826"
+      ],
+      "seeds": [
+        851
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    },
+    "v5-cap-network-metered": {
+      "summary": {
+        "outcomes": {
+          "loss": 6,
+          "win": 2
+        },
+        "matches": 8,
+        "passed": true,
+        "mode": "sandbox",
+        "max_points": 76950398,
+        "candidate_max_points": 76950398,
+        "candidate_errors": 0,
+        "opponent_errors": 0,
+        "median_rounds": 500.0,
+        "candidate_actions": {
+          "split": 2353,
+          "split_segments": 6749,
+          "move": 124408,
+          "movement_steps": 145763,
+          "sprint": 9526
+        },
+        "verified_donations": 0,
+        "verified_head_trades": 6
+      },
+      "candidate_fingerprints": [
+        "a1b09f87ba5bc4ebd5798cfc2fbfb4893cbbde71654254750131e0e0f9648e2e"
+      ],
+      "opponent_fingerprints": [
+        "61500032444809f70cc6f7046efd69f4786fb45c3476b74a2e6711aab696b826"
+      ],
+      "seeds": [
+        852
+      ],
+      "status": "comparison evidence only; not the final acceptance artifact"
+    }
+  },
+  "selection_and_limits": [
+    "Full corrected-cap policy beat reduced network policy 4-2 in a direct six-game comparison; retained as selected configuration.",
+    "Selected source scores 14-20 against uploaded submission 14928 across 17 maps, seed 853, both colours. This does not establish improvement over that upload.",
+    "Metered selected comparison scores 4-4 across four maps, seed 854; zero action errors and peak 75,778,850 instructions.",
+    "Same-seed aggressive comparison scores 4-4; prior upload scored 5-3 against that reference on the same eight fixtures. No claim of competitive superiority.",
+    "Reduced corrected-cap network policy scored 17-17 on another 17-map seed and 2-6 in its metered comparison; different-seed broad results do not directly rank the variants.",
+    "Phase expansion is disabled: isolated expansion scored 2-4 and failed to increase population or income. The earlier 5-1 no-phase ablation was incomplete because the off branch retained experimental crowding; resource-cap rollback was subsequently corrected and tested.",
+    "Controlled feeding is disabled: corrected opt-in comparison scored 3-3 with zero qualifying transfers. Engine recovery is verified in conformance, but match benefit is unproven. The early feeding run predates an emission fix and is superseded.",
+    "Native comparisons are unmetered and provide no CPU guarantee; CPU evidence comes from the sandbox comparison.",
+    "Determinism consists of four unique fixtures repeated twice (eight executions), with identical replay bytes in every pair.",
+    "Public leader replay observations informed changes; local frozen opponents are not current private leader implementations."
+  ]
+}

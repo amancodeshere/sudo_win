@@ -1,0 +1,539 @@
+#include "sudo_win/planner/planner.h"
+
+#include "sudo_win/world/world_model.h"
+#include "sudo_win/planner/simulation.h"
+
+#include "../engine_fixture.h"
+
+#include <catch2/catch.hpp>
+#include <fstream>
+#include <sstream>
+
+TEST_CASE("live leader queen attacks are recognized after the recorded action") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    auto file = std::string{};
+    auto steps = std::vector<unswbc::Direction>{};
+    auto split = 0;
+    auto funded = true;
+    SECTION("Stripes game 864982 exposes the vacated tail to a one-step attack") {
+        fixture.game.width = 24; fixture.game.height = 12;
+        file = "stripes_queen_response";
+        steps = {unswbc::Direction::NORTH,unswbc::Direction::WEST};
+    }
+    SECTION("Slithery game 865145 includes a three-step partial-body attack") {
+        fixture.game.width = 63; fixture.game.height = 27;
+        fixture.controller.head.dragon_id = 1;
+        file = "slithery_queen_response";
+        steps = {unswbc::Direction::NORTH};
+        funded = false;
+    }
+    SECTION("Tower game 864983 exposes a stationary split parent") {
+        fixture.game.width = 32; fixture.game.height = 16;
+        fixture.controller.head.dragon_id = 1;
+        file = "tower_queen_split_response";
+        split = 7;
+    }
+    auto input = std::ifstream{std::string{SUDO_WIN_TEST_SOURCE_DIR} + "/replays/" + file + ".txt"};
+    REQUIRE(input.good());
+    auto* previous = std::cin.rdbuf(input.rdbuf());
+    bool updated = false;
+    try { updated = unswbc::update(fixture.controller,fixture.game); }
+    catch (...) { std::cin.rdbuf(previous); throw; }
+    std::cin.rdbuf(previous);
+    REQUIRE(updated);
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto state = sudo_win::Simulation{}.initial_state(fixture.controller,&world);
+    if (split > 0) {
+        state.unranked_body.assign(state.body.rbegin(),state.body.rbegin() + split);
+        state.body.resize(state.body.size() - static_cast<std::size_t>(split));
+    } else {
+        for (std::size_t i = 0; i < steps.size(); ++i) {
+            auto const next = sudo_win::Simulation{}.advance(fixture.controller,state,steps[i],i > 0,&world);
+            REQUIRE(next);
+            state = *next;
+        }
+    }
+    auto const response = sudo_win::Combat{}.response_threat(fixture.controller,state,world);
+    REQUIRE(response.possible_steps > 0);
+    CHECK(response.possible_steps <= 3);
+    CHECK((response.funded_steps > 0) == funded);
+}
+
+TEST_CASE("baseline planner") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.tile({6, 5}).pearl = true;
+
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller, fixture.game);
+    auto planner = sudo_win::Planner{};
+    auto const action = planner.choose_action(fixture.controller,
+                                              fixture.game,
+                                              world,
+                                              sudo_win::Role::collector);
+
+    SECTION("returns a single movement action") {
+        CHECK(action.kind == sudo_win::ActionKind::move);
+        REQUIRE(action.steps.size() == 1);
+    }
+
+    SECTION("chooses an adjacent pearl") {
+        REQUIRE(action.steps.size() == 1);
+        CHECK(action.steps.front() == unswbc::Direction::EAST);
+    }
+}
+
+TEST_CASE("a long dragon avoids a closed pocket beyond the search horizon") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.length = 20;
+    auto const pocket = std::vector<unswbc::Position>{
+        {6, 5}, {6, 4}, {6, 3}, {7, 3}, {7, 4}, {7, 5},
+        {7, 6}, {6, 6}, {6, 7}, {7, 7}, {8, 7}};
+    for (auto const p : pocket) {
+        for (auto const direction : unswbc::Direction::get_direction_list()) {
+            auto const neighbour = p.add_dir(direction);
+            if (std::find(pocket.begin(), pocket.end(), neighbour) != pocket.end()
+                || (p == unswbc::Position{6, 5} && neighbour == fixture.controller.get_position())) {
+                continue;
+            }
+            fixture.tile(p).get_edge(direction)
+                = unswbc::Edge{false, unswbc::EdgeType::KELP};
+            if (auto* tile = fixture.controller.get_tile(neighbour)) {
+                tile->get_edge(direction.get_opposite()) = unswbc::Edge{false, unswbc::EdgeType::KELP};
+            }
+        }
+    }
+    fixture.tile({6, 5}).pearl = true;
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller, fixture.game);
+    auto const action = sudo_win::Planner{}.choose_action(fixture.controller, fixture.game,
+                                                          world, sudo_win::Role::collector);
+    REQUIRE(!action.steps.empty());
+    CHECK(action.steps.front() != unswbc::Direction::EAST);
+}
+
+TEST_CASE("planner validates and prices every step of short pearl sprints") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    for (auto& tile : fixture.controller.vision.tiles) {
+        tile.pearl_time = -1;
+    }
+    for (auto x = 6; x <= 8; ++x) {
+        fixture.tile({x, 5}).pearl = true;
+    }
+    SECTION("equal net growth retains segments rather than paying for collection tempo") {
+        auto world = sudo_win::WorldModel{fixture.game};
+        world.update(fixture.controller, fixture.game);
+        auto const action = sudo_win::Planner{}.choose_action(fixture.controller, fixture.game,
+                                                              world, sudo_win::Role::collector);
+        REQUIRE(action.kind == sudo_win::ActionKind::move);
+        REQUIRE(action.steps.size() == 1);
+        auto simulation = sudo_win::Simulation{};
+        auto state = simulation.initial_state(fixture.controller, &world);
+        for (std::size_t i = 0; i < action.steps.size(); ++i) {
+            auto const next = simulation.advance(fixture.controller, state, action.steps[i], i > 0, &world);
+            REQUIRE(next);
+            state = *next;
+        }
+        CHECK(state.pearls == 1);
+        CHECK(state.body.size() == 4);
+    }
+    SECTION("blocked intermediate edges prevent oversprinting through a pearl") {
+        fixture.tile({6, 5}).get_edge(unswbc::Direction::EAST)
+            = unswbc::Edge{false, unswbc::EdgeType::KELP};
+        auto world = sudo_win::WorldModel{fixture.game};
+        world.update(fixture.controller, fixture.game);
+        auto const action = sudo_win::Planner{}.choose_action(fixture.controller, fixture.game,
+                                                              world, sudo_win::Role::collector);
+        REQUIRE(action.steps.size() == 1);
+        CHECK(action.steps.front() == unswbc::Direction::EAST);
+    }
+    SECTION("minimum length without pearls cannot afford additional steps") {
+        fixture.controller.length = 2;
+        for (auto& tile : fixture.controller.vision.tiles) {
+            tile.pearl = false;
+        }
+        auto world = sudo_win::WorldModel{fixture.game};
+        world.update(fixture.controller, fixture.game);
+        auto const action = sudo_win::Planner{}.choose_action(fixture.controller, fixture.game,
+                                                              world, sudo_win::Role::collector);
+        CHECK(action.steps.size() == 1);
+    }
+}
+
+TEST_CASE("an uncontested escape outranks a pearl threatened by a later enemy") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.tile({6, 5}).pearl = true;
+    fixture.tile({7, 5}).dragon_part = unswbc::DragonPart{
+        {7, 5}, 4, unswbc::Team::B, unswbc::Direction::WEST, true};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller, fixture.game);
+    auto const action = sudo_win::Planner{}.choose_action(fixture.controller, fixture.game,
+                                                          world, sudo_win::Role::collector);
+    REQUIRE(action.steps.size() == 1);
+    CHECK(action.steps.front() != unswbc::Direction::EAST);
+}
+
+TEST_CASE("planner prefers an escape over a pearl in a closed pocket") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.tile({6, 5}).pearl = true;
+    for (auto const direction : {unswbc::Direction::NORTH, unswbc::Direction::EAST,
+                                 unswbc::Direction::SOUTH}) {
+        fixture.tile({6, 5}).get_edge(direction)
+            = unswbc::Edge{false, unswbc::EdgeType::KELP};
+    }
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller, fixture.game);
+    auto const action = sudo_win::Planner{}.choose_action(fixture.controller, fixture.game,
+                                                          world, sudo_win::Role::collector);
+    REQUIRE(action.steps.size() == 1);
+    CHECK(action.steps.front() != unswbc::Direction::EAST);
+}
+
+TEST_CASE("a funded two step attack outweighs an adjacent pearl") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.tile({6,5}).pearl = true;
+    fixture.tile({8,5}).dragon_part = unswbc::DragonPart{
+        {8,5},4,unswbc::Team::B,unswbc::Direction::WEST,true};
+    fixture.tile({8,6}).dragon_part = unswbc::DragonPart{
+        {8,6},4,unswbc::Team::B,unswbc::Direction::NORTH,false};
+    fixture.tile({8,7}).dragon_part = unswbc::DragonPart{
+        {8,7},4,unswbc::Team::B,unswbc::Direction::NORTH,false};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller, fixture.game);
+    auto const action = sudo_win::Planner{false, false, false, true}.choose_action(fixture.controller, fixture.game,
+                                                             world, sudo_win::Role::champion);
+    REQUIRE(action.steps.size() == 1);
+    CHECK(action.steps.front() != unswbc::Direction::EAST);
+}
+
+TEST_CASE("a shortening sprint escapes a loop that defeats ordinary movement") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.length = 4;
+    for (auto& tile : fixture.controller.vision.tiles) {
+        tile.pearl = false;
+        tile.pearl_time = -1;
+    }
+    for (auto const p : std::vector<unswbc::Position>{{4,5},{3,5},{2,5}}) {
+        fixture.tile(p).dragon_part = unswbc::DragonPart{
+            p,0,unswbc::Team::A,p.x == 2 && p.y == 6 ? unswbc::Direction::NORTH : unswbc::Direction::EAST,false};
+    }
+    auto const loop = std::vector<unswbc::Position>{{5,5},{6,5},{6,4},{5,4}};
+    for (auto const p : loop) {
+        for (auto const d : unswbc::Direction::get_direction_list()) {
+            auto const target = p.add_dir(d);
+            if (std::find(loop.begin(),loop.end(),target) == loop.end()
+                && !(p == unswbc::Position{5,5} && d == unswbc::Direction::WEST)) {
+                fixture.tile(p).get_edge(d) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+            }
+        }
+    }
+    auto with_food = false;
+    SECTION("paid movement is retained for a validated escape") {}
+    SECTION("collected escape food resets starvation despite net spending") {
+        fixture.tile({6,5}).pearl = true;
+        with_food = true;
+    }
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto planner = sudo_win::Planner{};
+    auto const action = planner.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::champion);
+    REQUIRE(action.kind == sudo_win::ActionKind::sprint);
+    REQUIRE(action.steps.size() == (with_food ? 3 : 2));
+    auto simulation = sudo_win::Simulation{};
+    auto state = simulation.initial_state(fixture.controller,&world);
+    for (std::size_t i = 0; i < action.steps.size(); ++i) {
+        auto next = simulation.advance(fixture.controller,state,action.steps[i],i > 0,&world);
+        REQUIRE(next);
+        state = *next;
+    }
+    CHECK(state.body.size() == 3);
+    CHECK(action.reason == "paid validated escape");
+    if (with_food) {
+        REQUIRE(state.pearls > 0);
+        world.remember_action(fixture.controller,fixture.game,action);
+        for (auto& tile : fixture.controller.vision.tiles) { tile.dragon_part.reset(); tile.pearl = false; }
+        fixture.controller.head.position = state.body.front();
+        fixture.controller.head.dir = action.steps.back();
+        fixture.controller.length = static_cast<int>(state.body.size());
+        for (std::size_t i = 0; i < state.body.size(); ++i) {
+            auto d = action.steps.back();
+            if (i > 0) {
+                for (auto const candidate : unswbc::Direction::get_direction_list()) {
+                    if (state.body[i].add_dir(candidate) == state.body[i-1]) { d = candidate; break; }
+                }
+            }
+            fixture.tile(state.body[i]).dragon_part = unswbc::DragonPart{state.body[i],0,unswbc::Team::A,d,i == 0};
+        }
+        fixture.game.round_num = 1;
+        world.update(fixture.controller,fixture.game);
+        static_cast<void>(planner.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::queen));
+        CHECK(planner.resource_progress_round() == 1);
+    }
+    auto budget = 512;
+    CHECK(simulation.survival_depth(fixture.controller,state,6,budget,&world) == 6);
+}
+
+TEST_CASE("long snakes exploit five free steps with bounded profitable routes") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.length = 17;
+    for (auto& tile : fixture.controller.vision.tiles) {
+        tile.pearl_time = -1;
+        tile.pearl = false;
+    }
+    for (auto const p : std::vector<unswbc::Position>{{6,5},{7,5},{8,5},{8,4},{8,3}}) {
+        fixture.tile(p).pearl = true;
+    }
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller, fixture.game);
+    auto const action = sudo_win::Planner{}.choose_action(fixture.controller, fixture.game, world, sudo_win::Role::queen);
+    REQUIRE(action.kind == sudo_win::ActionKind::sprint);
+    REQUIRE(action.steps.size() == 5);
+    auto simulation = sudo_win::Simulation{};
+    auto state = simulation.initial_state(fixture.controller, &world);
+    for (std::size_t i = 0; i < action.steps.size(); ++i) {
+        auto next = simulation.advance(fixture.controller, state, action.steps[i], i > 0, &world);
+        REQUIRE(next);
+        state = *next;
+    }
+    CHECK(state.body.size() == 22);
+    CHECK(state.pearls == 5);
+}
+
+TEST_CASE("queens and last survivors avoid funded later attacks without an experimental flag") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.tile({6,5}).pearl = true;
+    for (auto const p : std::vector<unswbc::Position>{{8,5},{8,6},{8,7},{8,8},{7,8}}) {
+        fixture.tile(p).dragon_part = unswbc::DragonPart{p,7,unswbc::Team::B,unswbc::Direction::NORTH,p == unswbc::Position{8,5}};
+    }
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller, fixture.game);
+    auto const action = sudo_win::Planner{false}.choose_action(fixture.controller, fixture.game, world, sudo_win::Role::queen);
+    REQUIRE(action.steps.size() == 1);
+    CHECK(action.steps.front() != unswbc::Direction::EAST);
+    fixture.controller.head.dragon_id = 9;
+    auto const threats = sudo_win::Combat{}.threats(fixture.controller, &world);
+    CHECK(threats[56].later_affordable_steps == 0);
+    CHECK(threats[56].earlier_affordable_steps == 2);
+}
+
+TEST_CASE("a helper yields the queen's only escape despite an adjacent pearl") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 7;
+    fixture.controller.length = 2;
+    fixture.controller.unit_count = 2;
+    for (auto& tile : fixture.controller.vision.tiles) { tile.pearl_time = -1; }
+    fixture.tile({6,5}).pearl = true;
+    fixture.tile({6,4}).dragon_part = unswbc::DragonPart{
+        {6,4},0,unswbc::Team::A,unswbc::Direction::SOUTH,true};
+    fixture.tile({6,3}).dragon_part = unswbc::DragonPart{
+        {6,3},0,unswbc::Team::A,unswbc::Direction::SOUTH,false};
+    for (auto const direction : {unswbc::Direction::WEST,unswbc::Direction::EAST}) {
+        fixture.tile({6,4}).get_edge(direction) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+    }
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto const action = sudo_win::Planner{false}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::collector);
+    REQUIRE(action.steps.size() == 1);
+    CHECK(action.steps.front() != unswbc::Direction::EAST);
+}
+
+TEST_CASE("helpers retain growth instead of paying it away for collection tempo") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 4;
+    fixture.controller.unit_count = 2;
+    for (auto& tile : fixture.controller.vision.tiles) { tile.pearl_time = -1; }
+    SECTION("a paid pearl step with zero net growth waits for an unpaid next turn") {
+        fixture.controller.length = 3;
+        fixture.tile({7,5}).pearl = true;
+        auto world = sudo_win::WorldModel{fixture.game};
+        world.update(fixture.controller,fixture.game);
+        auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::collector);
+        REQUIRE(action.steps.size() == 1);
+        CHECK(action.steps.front() == unswbc::Direction::EAST);
+    }
+    SECTION("free movement toward income stays available") {
+        fixture.controller.length = 5;
+        for (auto const& [p, direction] : std::vector<std::pair<unswbc::Position,unswbc::Direction>>{
+            {{5,6},unswbc::Direction::NORTH}, {{5,7},unswbc::Direction::NORTH},
+            {{4,7},unswbc::Direction::EAST}, {{4,6},unswbc::Direction::SOUTH}}) {
+            fixture.tile(p).dragon_part = unswbc::DragonPart{p,4,unswbc::Team::A,direction,false};
+        }
+        fixture.tile({8,5}).pearl = true;
+        auto world = sudo_win::WorldModel{fixture.game};
+        world.update(fixture.controller,fixture.game);
+        auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::collector);
+        REQUIRE(action.kind == sudo_win::ActionKind::sprint);
+        REQUIRE(action.steps.size() == 2);
+        CHECK(action.steps.front() == unswbc::Direction::EAST);
+    }
+}
+
+TEST_CASE("a partially observed split child uses free movement to clear queen exits") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.game = unswbc::Game{63,27,64};
+    fixture.controller.head.dragon_id = 14;
+    auto input = std::ifstream{std::string{SUDO_WIN_TEST_SOURCE_DIR} + "/replays/slithery_child_escape.txt"};
+    REQUIRE(input.good());
+    auto* previous = std::cin.rdbuf(input.rdbuf());
+    bool updated = false;
+    try {
+        updated = unswbc::update(fixture.controller,fixture.game);
+    } catch (...) {
+        std::cin.rdbuf(previous);
+        throw;
+    }
+    std::cin.rdbuf(previous);
+    REQUIRE(updated);
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto const initial = sudo_win::Simulation{}.initial_state(fixture.controller,&world);
+    REQUIRE(!initial.unranked_body.empty());
+    auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::champion);
+    REQUIRE(action.steps.size() >= 2);
+    CHECK(action.steps.size() <= static_cast<std::size_t>(sudo_win::Simulation::free_steps(fixture.controller.get_length())));
+    auto state = initial;
+    for (std::size_t i = 0; i < action.steps.size(); ++i) {
+        auto const next = sudo_win::Simulation{}.advance(fixture.controller,state,action.steps[i],i > 0,&world);
+        REQUIRE(next);
+        state = *next;
+    }
+    CHECK(state.body.size() == initial.body.size());
+}
+
+TEST_CASE("a small helper can fund safe movement that releases the queen's sole exit") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.game = unswbc::Game{32,16,64};
+    fixture.controller.head.dragon_id = 4;
+    auto input = std::ifstream{std::string{SUDO_WIN_TEST_SOURCE_DIR} + "/replays/portal_helper_release.txt"};
+    REQUIRE(input.good());
+    auto* previous = std::cin.rdbuf(input.rdbuf());
+    bool updated = false;
+    try {
+        updated = unswbc::update(fixture.controller,fixture.game);
+    } catch (...) {
+        std::cin.rdbuf(previous);
+        throw;
+    }
+    std::cin.rdbuf(previous);
+    REQUIRE(updated);
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    REQUIRE(world.queen_reservations(fixture.controller,38)[46] == 120000);
+    auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::collector);
+    REQUIRE(action.steps.size() >= 2);
+    auto state = sudo_win::Simulation{}.initial_state(fixture.controller,&world);
+    for (std::size_t i = 0; i < action.steps.size(); ++i) {
+        auto const next = sudo_win::Simulation{}.advance(fixture.controller,state,action.steps[i],i > 0,&world);
+        REQUIRE(next);
+        state = *next;
+    }
+    CHECK(std::find(state.body.begin(),state.body.end(),unswbc::Position{14,1}) == state.body.end());
+    auto budget = 512;
+    CHECK(sudo_win::Simulation{}.survival_depth(fixture.controller,state,6,budget,&world) == 6);
+}
+
+TEST_CASE("a protected queen avoids a plausible four step response despite tempting food") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.length = 2;
+    fixture.controller.unit_count = 4;
+    fixture.tile({5,5}).dragon_part = fixture.controller.head;
+    fixture.tile({5,6}).dragon_part = unswbc::DragonPart{{5,6},0,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    fixture.tile({6,5}).pearl = true;
+    for (auto const p : std::vector<unswbc::Position>{{8,3},{8,4},{8,5},{8,6}}) {
+        fixture.tile(p).dragon_part = unswbc::DragonPart{p,7,unswbc::Team::B,unswbc::Direction::NORTH,p.y == 3};
+    }
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto const east = sudo_win::Simulation{}.advance(fixture.controller,
+        sudo_win::Simulation{}.initial_state(fixture.controller,&world),unswbc::Direction::EAST,false,&world);
+    REQUIRE(east);
+    auto const response = sudo_win::Combat{}.response_threat(fixture.controller,*east,world);
+    CHECK(response.funded_steps == 0);
+    CHECK(response.possible_steps == 4);
+    auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::queen);
+    REQUIRE(action.steps.size() == 1);
+    CHECK(action.steps.front() == unswbc::Direction::WEST);
+}
+
+TEST_CASE("fresh remote queen intent outranks a helper's competing food then expires") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 6;
+    fixture.controller.length = 2;
+    fixture.controller.unit_count = 4;
+    fixture.tile({5,5}).dragon_part = fixture.controller.head;
+    fixture.tile({5,6}).dragon_part = unswbc::DragonPart{{5,6},6,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    fixture.tile({5,4}).pearl = true;
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    world.receive_report({sudo_win::MessageType::danger,0,0,5,4,0},0);
+    auto const fresh = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::collector);
+    REQUIRE(fresh.steps.size() == 1);
+    CHECK(fresh.steps.front() != unswbc::Direction::NORTH);
+    fixture.game.round_num = 2;
+    world.update(fixture.controller,fixture.game);
+    auto const expired = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::collector);
+    REQUIRE(expired.steps.size() == 1);
+    CHECK(expired.steps.front() == unswbc::Direction::NORTH);
+}
+
+TEST_CASE("fresh mapped sonar threats affect queen choices without inventing occupancy") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.length = 2;
+    fixture.controller.unit_count = 4;
+    fixture.game.round_num = 18;
+    for (auto& tile : fixture.controller.vision.tiles) { tile.pearl_time = -1; }
+    fixture.tile({5,5}).dragon_part = fixture.controller.head;
+    fixture.tile({5,6}).dragon_part = unswbc::DragonPart{
+        {5,6},0,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    fixture.tile({6,5}).pearl = true;
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto tiles = fixture.controller.vision.tiles;
+    tiles.erase(std::remove_if(tiles.begin(),tiles.end(),[](auto const& tile) {
+        return tile.get_position() == unswbc::Position{7,5};
+    }),tiles.end());
+    fixture.controller.vision = unswbc::Vision{std::move(tiles)};
+    fixture.game.round_num = 20;
+    world.update(fixture.controller,fixture.game);
+    world.receive_report({sudo_win::MessageType::enemy_head,20,8,7,5,6},20);
+    SECTION("an unseen head on a short mapped route outranks adjacent food") {
+        auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::queen);
+        REQUIRE(!action.steps.empty());
+        CHECK(action.steps.front() != unswbc::Direction::EAST);
+        CHECK_FALSE(world.cell({7,5}).occupant);
+    }
+    SECTION("expired sightings cannot indefinitely starve a queen") {
+        fixture.game.round_num = 22;
+        world.update(fixture.controller,fixture.game);
+        auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::queen);
+        REQUIRE(!action.steps.empty());
+        CHECK(action.steps.front() == unswbc::Direction::EAST);
+    }
+    SECTION("current local clearance supersedes a delayed report") {
+        fixture.controller.vision.tiles.emplace_back(unswbc::Position{7,5});
+        fixture.controller.vision = unswbc::Vision{fixture.controller.vision.tiles};
+        world.update(fixture.controller,fixture.game);
+        auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::queen);
+        REQUIRE(!action.steps.empty());
+        CHECK(action.steps.front() == unswbc::Direction::EAST);
+    }
+    SECTION("known walls prevent geometric warnings from certifying an approach") {
+        // Both sides of this edge are known to be closed.
+        fixture.tile({6,5}).get_edge(unswbc::Direction::EAST)
+            = unswbc::Edge{false,unswbc::EdgeType::KELP};
+        fixture.controller.vision.tiles.emplace_back(unswbc::Position{7,5});
+        fixture.controller.vision = unswbc::Vision{fixture.controller.vision.tiles};
+        fixture.tile({7,5}).get_edge(unswbc::Direction::WEST)
+            = unswbc::Edge{false,unswbc::EdgeType::KELP};
+        world.update(fixture.controller,fixture.game);
+        auto visible = fixture.controller.vision.tiles;
+        std::erase_if(visible,[](auto const& tile) { return tile.get_position() == unswbc::Position{7,5}; });
+        fixture.controller.vision = unswbc::Vision{std::move(visible)};
+        fixture.game.round_num = 21;
+        world.update(fixture.controller,fixture.game);
+        world.receive_report({sudo_win::MessageType::enemy_head,21,8,7,5,6},21);
+        auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::queen);
+        REQUIRE(!action.steps.empty());
+        CHECK(action.steps.front() == unswbc::Direction::EAST);
+    }
+}
