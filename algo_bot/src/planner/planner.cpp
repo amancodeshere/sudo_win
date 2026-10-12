@@ -213,7 +213,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         auto const queen_trap = config::enable_queen_exit_viability
             && safety_.blocks_queen_escape(controller,next,world);
         auto const improves_safety = safety_class > best_safety_class
-            || (safety_class == best_safety_class && survival > best_survival && best_sealed_entry);
+            || (safety_class == best_safety_class && survival > best_survival);
         auto const releases_queen = config::enable_queen_release && controller.get_id() > 1
             && controller.get_length() <= 4 && controller.get_unit_count() > 1 && safety_class == 3
             && survival == config::survival_search_depth
@@ -255,10 +255,14 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         }
 
         if (safety_class > best_safety_class
-            || (safety_class == best_safety_class && ((!queen_trap && best_queen_trap)
-                || (queen_trap == best_queen_trap && ((!exposed_continuation && best_exposed_continuation)
-                    || (exposed_continuation == best_exposed_continuation && (survival > best_survival
-                        || (survival == best_survival && candidate.total_score() > best.score)))))))) {
+            || (safety_class == best_safety_class
+                    && ((!queen_trap && best_queen_trap)
+                        || (queen_trap == best_queen_trap
+                            && ((!exposed_continuation && best_exposed_continuation)
+                                || (exposed_continuation == best_exposed_continuation
+                                    && (survival > best_survival
+                                        || (survival == best_survival
+                                            && candidate.total_score() > best.score)))))))) {
             best_safety_class = safety_class;
             best_survival = survival;
             best_sealed_entry = entry_trap;
