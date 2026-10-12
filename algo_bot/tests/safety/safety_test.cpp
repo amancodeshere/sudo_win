@@ -202,6 +202,17 @@ TEST_CASE("helper portal exploration is bounded by role progress and cooldown") 
         fixture.game.round_num = 10;
         CHECK(choose().steps.front() != unswbc::Direction::EAST);
     }
+    SECTION("learning an unseen exit still allows a scout probe and preserves cooldown") {
+        fixture.game.round_num = 0;
+        world.receive_report({sudo_win::MessageType::portal,0,6,0,0,19},0);
+        REQUIRE(world.transition({5,5},unswbc::Direction::EAST) == unswbc::Position{0,0});
+        CHECK(choose().steps.front() != unswbc::Direction::EAST);
+        fixture.game.round_num = 3;
+        world.update(fixture.controller,fixture.game);
+        CHECK(choose().steps.front() == unswbc::Direction::EAST);
+        fixture.game.round_num = 4;
+        CHECK(choose().steps.front() != unswbc::Direction::EAST);
+    }
     SECTION("a designated scout starts exploring after three stalled rounds") {
         fixture.game.round_num = 0;
         choose();

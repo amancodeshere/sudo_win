@@ -537,3 +537,35 @@ TEST_CASE("fresh mapped sonar threats affect queen choices without inventing occ
         CHECK(action.steps.front() == unswbc::Direction::EAST);
     }
 }
+
+TEST_CASE("starved small helpers approach portals they are eligible to probe") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 4;
+    fixture.controller.length = 3;
+    fixture.controller.unit_count = 3;
+    fixture.game.round_num = 0;
+    for (auto& tile : fixture.controller.vision.tiles) { tile.pearl_time = -1; }
+    for (auto const p : std::vector<unswbc::Position>{{5,6},{5,7}}) {
+        fixture.tile(p).dragon_part = unswbc::DragonPart{p,4,unswbc::Team::A,unswbc::Direction::NORTH,false};
+    }
+    fixture.tile({7,5}).get_edge(unswbc::Direction::EAST)
+        = unswbc::Edge{false,unswbc::EdgeType::PORTAL,19};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    auto planner = sudo_win::Planner{false,false,false};
+    auto role = sudo_win::Role::collector;
+    SECTION("collectors approach an unknown pair") {}
+    SECTION("blockers approach an unknown pair") { role = sudo_win::Role::blocker; }
+    SECTION("hunters approach an unknown pair") { role = sudo_win::Role::hunter; }
+    SECTION("topology reports preserve the approach") {
+        world.receive_report({sudo_win::MessageType::portal,0,6,0,0,39},0);
+    }
+    auto const initial = planner.choose_action(fixture.controller,fixture.game,world,role);
+    REQUIRE(!initial.steps.empty());
+    CHECK(initial.steps.front() != unswbc::Direction::EAST);
+    fixture.game.round_num = 9;
+    world.update(fixture.controller,fixture.game);
+    auto const approach = planner.choose_action(fixture.controller,fixture.game,world,role);
+    REQUIRE(approach.steps.size() == 1);
+    CHECK(approach.steps.front() == unswbc::Direction::EAST);
+}
