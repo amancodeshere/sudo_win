@@ -229,6 +229,95 @@ auto Combat::interception_distances(unswbc::Controller const& controller,
     return distances;
 }
 
+auto Combat::assassinate_queen(unswbc::Controller const& controller,
+                               WorldModel const& world) const -> std::optional<PlannedAction> {
+    if (!config::enable_long_queen_assassination || controller.get_id() <= 1 || controller.get_unit_count() <= 1) {
+        return std::nullopt;
+    }
+    auto const width = world.width();
+    auto const area = static_cast<std::size_t>(width * world.height());
+    auto const index = [width](unswbc::Position p) { return static_cast<std::size_t>(p.y * width + p.x); };
+    // Only an enemy queen head we can see right now is a certain, stationary target.
+    auto targets = std::vector<unswbc::Position>{};
+    for (auto const& tile : controller.get_tiles()) {
+        auto const* part = tile.get_dragon();
+        if (part != nullptr && part->is_head() && part->get_id() <= 1 && part->get_team() != controller.get_team()) {
+            targets.push_back(tile.get_position());
+        }
+    }
+    if (targets.empty()) {
+        return std::nullopt;
+    }
+    auto const simulation = Simulation{};
+    auto const initial = simulation.initial_state(controller, &world);
+    // An unknown own-body order cannot certify self collisions along the route.
+    if (!initial.unranked_body.empty() || std::any_of(initial.body.begin(), initial.body.end(), [](auto p) {
+        return p.x < 0 || p.y < 0;
+    })) {
+        return std::nullopt;
+    }
+    auto const length = controller.get_length();
+    auto const affordable = Simulation::free_steps(length) + std::max(0, length - unswbc::Constants::MIN_SIZE);
+    auto const step_cap = std::min(config::assassin_step_cap, affordable);
+    if (step_cap < 1) {
+        return std::nullopt;
+    }
+    struct Node { SimulationState state; std::vector<unswbc::Direction> steps; };
+    auto queue = std::vector<Node>{{initial, {}}};
+    // First arrival with the fewest steps is kept per tile; the final route is still
+    // verified exactly by the simulation, so this only bounds the search.
+    auto reached = std::vector<int>(area, std::numeric_limits<int>::max());
+    reached[index(initial.body.front())] = 0;
+    auto budget = config::assassin_node_budget;
+    for (std::size_t cursor = 0; cursor < queue.size() && budget > 0; ++cursor) {
+        auto const node = queue[cursor];
+        if (static_cast<int>(node.steps.size()) >= step_cap) {
+            continue;
+        }
+        for (auto const direction : unswbc::Direction::get_direction_list()) {
+            if (budget-- <= 0) {
+                break;
+            }
+            auto const target = world.transition(node.state.body.front(), direction);
+            if (!target) {
+                continue;
+            }
+            auto steps = node.steps;
+            steps.push_back(direction);
+            auto const is_target = std::find(targets.begin(), targets.end(), *target) != targets.end();
+            if (is_target) {
+                auto view = controller;
+                auto* attack_tile = view.get_tile(*target);
+                if (attack_tile == nullptr) {
+                    continue;
+                }
+                attack_tile->dragon_part.reset();
+                if (!simulation.advance(view, node.state, direction, !node.steps.empty(), &world)) {
+                    continue;
+                }
+                auto action = PlannedAction{};
+                action.kind = steps.size() > 1 ? ActionKind::sprint : ActionKind::move;
+                action.steps = std::move(steps);
+                action.score = 1000000;
+                action.reason = "helper rams visible enemy queen";
+                return action;
+            }
+            auto const next = simulation.advance(controller, node.state, direction, !node.steps.empty(), &world);
+            if (!next) {
+                continue;
+            }
+            auto const next_index = index(next->body.front());
+            auto const depth = static_cast<int>(steps.size());
+            if (reached[next_index] <= depth) {
+                continue;
+            }
+            reached[next_index] = depth;
+            queue.push_back({*next, std::move(steps)});
+        }
+    }
+    return std::nullopt;
+}
+
 auto Combat::favourable_trade(unswbc::Controller const& controller,
                               WorldModel const& world, bool queen_only) const -> std::optional<PlannedAction> {
     if (controller.get_id() <= 1 || controller.get_length() > 3 || controller.get_unit_count() <= 1) {

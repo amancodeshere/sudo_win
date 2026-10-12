@@ -39,6 +39,11 @@ auto Planner::choose_action(unswbc::Controller const& controller,
         }
         return action;
     };
+    if (config::enable_long_queen_assassination && role != Role::queen) {
+        if (auto const strike = combat_.assassinate_queen(controller, world)) {
+            return finish(*strike);
+        }
+    }
     if ((favourable_trades_ || config::enable_queen_hunting) && role != Role::queen) {
         if (auto const trade = combat_.favourable_trade(controller, world, !favourable_trades_)) {
             return finish(*trade);

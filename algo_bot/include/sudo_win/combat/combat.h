@@ -47,6 +47,10 @@ public:
     [[nodiscard]] auto interception_distances(unswbc::Controller const& controller,
                                                WorldModel const& world, int round, Role role) const
         -> std::vector<int>;
+
+    [[nodiscard]] auto assassinate_queen(unswbc::Controller const& controller,
+                                         WorldModel const& world) const -> std::optional<PlannedAction>;
+                                         
     [[nodiscard]] auto favourable_trade(unswbc::Controller const& controller,
                                                 WorldModel const& world, bool queen_only = false) const -> std::optional<PlannedAction>;
 };
