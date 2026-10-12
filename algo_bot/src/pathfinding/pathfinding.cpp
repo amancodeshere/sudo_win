@@ -132,9 +132,17 @@ auto Pathfinding::remembered_target(unswbc::Controller const& controller,
         auto portal_frontier = false;
         for (auto const direction : unswbc::Direction::get_direction_list()) {
             auto const& edge = cell.edges[geometry::direction_index(direction)];
-            auto const* ends = edge.type == unswbc::EdgeType::PORTAL ? world.portal_endpoints(edge.portal_id) : nullptr;
-            portal_frontier = portal_frontier || (config::enable_portal_routing && portal_scout && edge.seen
-                && edge.type == unswbc::EdgeType::PORTAL && (ends == nullptr || ends->size() < 2U));
+            if (config::enable_portal_routing && portal_scout && edge.seen
+                && edge.type == unswbc::EdgeType::PORTAL) {
+                auto const* ends = world.portal_endpoints(edge.portal_id);
+                auto const exit = world.transition(current, direction);
+                // Endpoint reports describe topology, not explored territory.
+                // Keep a mapped but unseen destination eligible for scouting;
+                // malformed pairs and surveyed hazards are not new frontiers.
+                portal_frontier = portal_frontier || (ends == nullptr || ends->size() < 2U
+                    || (exit && !world.has_seen(*exit)
+                        && (!config::enable_portal_hazards || !world.portal_hazard(*exit, edge.portal_id, round))));
+            }
             if (edge.seen && edge.type == unswbc::EdgeType::EMPTY
                 && !world.has_seen(current.add_dir(direction))) {
                 ++frontier;

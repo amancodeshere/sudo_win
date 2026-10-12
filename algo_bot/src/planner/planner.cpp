@@ -75,9 +75,15 @@ auto Planner::choose_action(unswbc::Controller const& controller,
     if (game.get_round_num() - target_round_ > config::target_max_age) {
         target_.reset();
     }
+    auto const scout_wait = config::enable_portal_routing && role == Role::scout ? 3 : 8;
+    auto const portal_explorer = config::enable_helper_portals && role != Role::queen
+        && (role != Role::champion || config::enable_scoring_coordination)
+        && controller.get_length() <= 4 && controller.get_unit_count() > 1
+        && game.get_round_num() - last_portal_round_ >= 12;
     auto route = pathfinding_.remembered_target(controller, world, game.get_round_num(), target_,
         role == Role::queen || role == Role::champion,
-        role == Role::scout && controller.get_length() <= 4 && controller.get_unit_count() > 1);
+        portal_explorer && (role == Role::scout
+            || game.get_round_num() - resource_progress_round_ >= scout_wait));
     if (config::enable_portal_income && game.get_round_num() < 400
         && game.get_round_num() - last_portal_round_ >= 12
         && game.get_round_num() - resource_progress_round_ >= 8
@@ -335,9 +341,7 @@ auto Planner::choose_action(unswbc::Controller const& controller,
             return finish(best);
         }
     }
-    auto const scout_wait = config::enable_portal_routing && role == Role::scout ? 3 : 8;
-    if (config::enable_helper_portals && role != Role::queen && (role != Role::champion || (config::enable_scoring_coordination && controller.get_length() <= 4))
-        && game.get_round_num() - last_portal_round_ >= 12
+    if (portal_explorer
         && (!initial_queen_trap || best_queen_trap)
         && (best_survival <= 1 || ((!route || !route->pearl || (config::enable_portal_income && route->value < 8000))
             && game.get_round_num() - resource_progress_round_ >= scout_wait

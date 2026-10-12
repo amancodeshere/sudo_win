@@ -289,3 +289,57 @@ TEST_CASE("fresh large champion claims override sender ordering without claiming
     REQUIRE(expired);
     CHECK(expired->target == unswbc::Position{7,5});
 }
+
+TEST_CASE("portal topology reports do not erase unexplored destinations") {
+    auto fixture = sudo_win::test::EngineFixture{};
+    fixture.controller.head.dragon_id = 5;
+    fixture.controller.length = 3;
+    fixture.controller.unit_count = 3;
+    for (auto& tile : fixture.controller.vision.tiles) { tile.pearl_time = -1; }
+    fixture.tile({7,5}).get_edge(unswbc::Direction::EAST)
+        = unswbc::Edge{false,unswbc::EdgeType::PORTAL,19};
+    auto world = sudo_win::WorldModel{fixture.game};
+    world.update(fixture.controller,fixture.game);
+    world.receive_report({sudo_win::MessageType::portal,0,6,0,0,39},0);
+    REQUIRE(world.transition({7,5},unswbc::Direction::EAST) == unswbc::Position{0,0});
+    REQUIRE_FALSE(world.has_seen({0,0}));
+    auto scout = true;
+    SECTION("a mapped unseen exit remains an exploration target") {}
+    SECTION("ordinary collection still beats speculative exploration") {
+        fixture.tile({6,5}).pearl = true;
+        world.update(fixture.controller,fixture.game);
+    }
+    SECTION("negative destination surveys suppress exploration") {
+        world.receive_report({sudo_win::MessageType::empty,0,8,0,0,19},0);
+    }
+    SECTION("non scouts do not acquire speculative routes") { scout = false; }
+    SECTION("incompatible endpoint orientations do not become frontiers") {
+        // A third conflicting endpoint makes the pair unusable.
+        fixture.tile({3,3}).get_edge(unswbc::Direction::NORTH)
+            = unswbc::Edge{false,unswbc::EdgeType::PORTAL,19};
+        world.update(fixture.controller,fixture.game);
+    }
+    SECTION("observed exhausted destinations are no longer frontiers") {
+        auto tiles = fixture.controller.vision.tiles;
+        tiles.emplace_back(unswbc::Position{0,0});
+        tiles.back().pearl_time = -1;
+        fixture.controller.vision = unswbc::Vision{std::move(tiles)};
+        world.update(fixture.controller,fixture.game);
+    }
+    auto const route = sudo_win::Pathfinding{}.remembered_target(
+        fixture.controller,world,0,std::nullopt,false,scout);
+    REQUIRE(route);
+    if (fixture.tile({6,5}).has_pearl()) {
+        CHECK(route->target == unswbc::Position{6,5});
+        CHECK(route->pearl);
+    } else if (!scout || world.has_seen({0,0}) || world.portal_hazard({0,0},19,0)
+        || !world.transition({7,5},unswbc::Direction::EAST)) {
+        CHECK(route->target != unswbc::Position{7,5});
+    } else {
+        CHECK(route->target == unswbc::Position{7,5});
+        CHECK(route->first_direction == unswbc::Direction::EAST);
+        CHECK(route->value == 4000);
+        CHECK_FALSE(route->pearl);
+        CHECK_FALSE(sudo_win::Pathfinding{}.portal_income_route(fixture.controller,world,0,false));
+    }
+}
