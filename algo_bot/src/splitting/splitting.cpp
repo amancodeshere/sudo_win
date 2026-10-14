@@ -16,7 +16,7 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
     -> std::optional<PlannedAction> {
     constexpr auto child_size = unswbc::Constants::MIN_SIZE;
     auto cap = config::enable_territorial_growth
-        ? std::min(controller.unit_limit, std::clamp(world.width() * world.height() / 96, 8, 32))
+        ? std::min(controller.unit_limit, std::clamp(world.width() * world.height() / 64, 12, 64))
         : config::population_unit_cap;
     auto const local_income = std::count_if(controller.get_tiles().begin(), controller.get_tiles().end(), [](auto const& tile) {
         return tile.get_dragon() == nullptr && (tile.has_pearl() || (tile.get_pearl_time() > 0 && tile.get_pearl_time() <= 12));
@@ -30,11 +30,11 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
     if (config::enable_resource_population && config::enable_territorial_growth
         && game.get_round_num() < (config::enable_phase_expansion ? 140 : 100)
         && (config::enable_phase_expansion ? productive_region : local_income >= 4)) {
-        cap = std::min(controller.unit_limit, std::clamp(world.width() * world.height() / 32, 8, 48));
+        cap = std::min(controller.unit_limit, std::clamp(world.width() * world.height() / 32, 16, 64));
     }
-    auto const early_investment = config::enable_territorial_growth && ((game.get_round_num() < 80
-        && controller.get_length() >= (config::enable_scoring_coordination ? 10 : 8)
-        && (!config::enable_scoring_coordination || controller.get_unit_count() < 4))
+    auto const early_investment = config::enable_territorial_growth && ((game.get_round_num() < 150
+        && controller.get_length() >= 5 && controller.get_length() < 24
+        && controller.get_unit_count() < cap)
         || (config::enable_phase_expansion && game.get_round_num() < 140 && productive_region
             && controller.get_length() >= 6 && controller.get_length() < 20));
     auto const reject = [&](std::string_view reason) -> std::optional<PlannedAction> {
@@ -73,7 +73,7 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
         for (auto const direction : unswbc::Direction::get_direction_list()) {
             if (auto const next = simulation.advance(controller, state, direction, false, &world)) {
                 auto budget = 128;
-                if (simulation.survival_depth(controller, *next, 6, budget, &world) == 6) {
+                if (simulation.survival_depth(controller, *next, 10, budget, &world) == 10) {
                     ++escapes;
                 }
             }
@@ -175,7 +175,7 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
             if (distance < parent_target_distance) { parent_target = p; parent_target_distance = distance; }
         } else { ++child_resources; }
     }
-    if (parent_resources < 1 || child_resources < 1) {
+    if (game.get_round_num() < 150 ? (parent_resources + child_resources < 1) : (parent_resources < 1 || child_resources < 1)) {
         return reject("independent income");
     }
     auto view = controller;
