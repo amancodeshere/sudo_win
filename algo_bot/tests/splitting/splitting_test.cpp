@@ -216,6 +216,9 @@ TEST_CASE("early expansion protects the champion and requires separate resources
         fixture.tile({3,4}).pearl = false;
         CHECK(candidate());
         fixture.tile({2,4}).pearl_time = 30;
+        // Early expansion only needs near-term income on one side of the split.
+        CHECK(candidate());
+        fixture.tile({6,4}).pearl_time = 30;
         CHECK_FALSE(candidate());
     }
     SECTION("the map budget allows teams that already start above eight units") {
@@ -223,16 +226,16 @@ TEST_CASE("early expansion protects the champion and requires separate resources
         fixture.game.height = 100;
         fixture.controller.unit_count = 9;
         CHECK(candidate());
-        fixture.controller.unit_count = 21;
+        fixture.controller.unit_count = 40;
         CHECK_FALSE(candidate());
     }
     SECTION("rich early regions can fund population beyond the geometric budget") {
         fixture.game.width = 20;
         fixture.game.height = 100;
-        fixture.controller.unit_count = 21;
+        fixture.controller.unit_count = 40;
         fixture.tile({7,4}).pearl = true;
         CHECK(candidate());
-        fixture.controller.unit_limit = 21;
+        fixture.controller.unit_limit = 40;
         CHECK_FALSE(candidate());
         fixture.controller.unit_limit = 64;
         fixture.game.round_num = 140;
@@ -293,11 +296,12 @@ TEST_CASE("early expansion protects the champion and requires separate resources
         CHECK(candidate(sudo_win::Role::champion));
     }
     SECTION("scarcity and overcrowding prevent expansion") {
+        fixture.tile({6,4}).pearl = false;
         fixture.tile({2,4}).pearl = false;
         fixture.tile({3,4}).pearl = false;
         CHECK_FALSE(candidate());
         fixture.tile({2,4}).pearl = true;
-        fixture.controller.unit_count = sudo_win::config::population_unit_cap;
+        fixture.controller.unit_count = 64;
         CHECK_FALSE(candidate());
     }
     SECTION("unit limits and late rounds prevent invalid or late expansion") {
@@ -338,6 +342,8 @@ TEST_CASE("early expansion protects the champion and requires separate resources
         CHECK(fixture.controller.can_split(split->split_size));
     }
     SECTION("queen claims prevent funding expansion with her reserved income") {
+        fixture.tile({2,4}).pearl = false;
+        fixture.tile({3,4}).pearl = false;
         auto world = sudo_win::WorldModel{fixture.game};
         world.update(fixture.controller,fixture.game);
         world.receive_report({sudo_win::MessageType::feeder,1,0,6,4,1},1);
@@ -355,6 +361,8 @@ TEST_CASE("early expansion protects the champion and requires separate resources
         fixture.tile({2,3}).get_edge(unswbc::Direction::SOUTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
         fixture.tile({3,3}).get_edge(unswbc::Direction::SOUTH) = unswbc::Edge{false,unswbc::EdgeType::KELP};
         fixture.tile({4,4}).get_edge(unswbc::Direction::WEST) = unswbc::Edge{false,unswbc::EdgeType::KELP};
+        // Walled-off food contributes no income, so with no other income the split is rejected.
+        fixture.tile({6,4}).pearl = false;
         CHECK_FALSE(candidate());
     }
 }

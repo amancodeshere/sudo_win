@@ -361,7 +361,7 @@ TEST_CASE("helpers retain growth instead of paying it away for collection tempo"
         fixture.tile({8,5}).pearl = true;
         auto world = sudo_win::WorldModel{fixture.game};
         world.update(fixture.controller,fixture.game);
-        auto const action = sudo_win::Planner{}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::collector);
+        auto const action = sudo_win::Planner{true,false,false}.choose_action(fixture.controller,fixture.game,world,sudo_win::Role::collector);
         REQUIRE(action.kind == sudo_win::ActionKind::sprint);
         REQUIRE(action.steps.size() == 2);
         CHECK(action.steps.front() == unswbc::Direction::EAST);

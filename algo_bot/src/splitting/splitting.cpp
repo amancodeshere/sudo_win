@@ -32,9 +32,9 @@ auto SplittingPolicy::grow_population(unswbc::Controller const& controller,
         && (config::enable_phase_expansion ? productive_region : local_income >= 4)) {
         cap = std::min(controller.unit_limit, std::clamp(world.width() * world.height() / 32, 16, 64));
     }
-    auto const early_investment = config::enable_territorial_growth && ((game.get_round_num() < 150
-        && controller.get_length() >= 5 && controller.get_length() < 24
-        && controller.get_unit_count() < cap)
+    auto const early_investment = config::enable_territorial_growth && ((game.get_round_num() < 80
+        && controller.get_length() >= (config::enable_scoring_coordination ? 10 : 8)
+        && (!config::enable_scoring_coordination || controller.get_unit_count() < 4))
         || (config::enable_phase_expansion && game.get_round_num() < 140 && productive_region
             && controller.get_length() >= 6 && controller.get_length() < 20));
     auto const reject = [&](std::string_view reason) -> std::optional<PlannedAction> {
